@@ -485,15 +485,24 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         Button
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-        <div style="border:1px solid #e0e0e6;border-radius:6px;padding:14px 8px;text-align:center;">
+        <div draggable="true" ondragstart="tplBtnDragStart(event,'normal')" ondragend="tplBtnDragEnd(event)" title="Drag into the email"
+             style="border:1px solid #e0e0e6;border-radius:6px;padding:14px 8px;text-align:center;cursor:grab;background:#fff;"
+             onmouseover="this.style.borderColor='#5464F2';this.style.boxShadow='0 1px 4px rgba(84,100,242,.18)'"
+             onmouseout="this.style.borderColor='#e0e0e6';this.style.boxShadow='none'">
           <div style="height:16px;background:#333;border-radius:2px;margin-bottom:10px;"></div>
           <div style="font-size:10px;font-weight:700;color:#333;letter-spacing:0.4px;">NORMAL</div>
         </div>
-        <div style="border:1px solid #e0e0e6;border-radius:6px;padding:14px 8px;text-align:center;">
+        <div draggable="true" ondragstart="tplBtnDragStart(event,'rounded')" ondragend="tplBtnDragEnd(event)" title="Drag into the email"
+             style="border:1px solid #e0e0e6;border-radius:6px;padding:14px 8px;text-align:center;cursor:grab;background:#fff;"
+             onmouseover="this.style.borderColor='#5464F2';this.style.boxShadow='0 1px 4px rgba(84,100,242,.18)'"
+             onmouseout="this.style.borderColor='#e0e0e6';this.style.boxShadow='none'">
           <div style="height:16px;background:#333;border-radius:8px;margin-bottom:10px;"></div>
           <div style="font-size:10px;font-weight:700;color:#333;letter-spacing:0.4px;">ROUNDED</div>
         </div>
-        <div style="border:1px solid #e0e0e6;border-radius:6px;padding:14px 8px;text-align:center;">
+        <div draggable="true" ondragstart="tplBtnDragStart(event,'oval')" ondragend="tplBtnDragEnd(event)" title="Drag into the email"
+             style="border:1px solid #e0e0e6;border-radius:6px;padding:14px 8px;text-align:center;cursor:grab;background:#fff;"
+             onmouseover="this.style.borderColor='#5464F2';this.style.boxShadow='0 1px 4px rgba(84,100,242,.18)'"
+             onmouseout="this.style.borderColor='#e0e0e6';this.style.boxShadow='none'">
           <div style="height:16px;background:#333;border-radius:10px;margin-bottom:10px;"></div>
           <div style="font-size:10px;font-weight:700;color:#333;letter-spacing:0.4px;">OVAL</div>
         </div>
@@ -511,13 +520,13 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         <span style="font-weight:700;font-size:13px;color:#333;">B</span>
         <span style="font-style:italic;font-size:13px;color:#333;">I</span>
         <span style="text-decoration:underline;font-size:13px;color:#333;">U</span>
-        <span style="font-size:13px;color:#333;">🔗</span>
+        <span onclick="tplOpenLinkModal()" title="Insert link" style="font-size:13px;color:#333;cursor:pointer;padding:2px 4px;border-radius:4px;" onmouseover="this.style.background='#F1F2F6'" onmouseout="this.style.background='transparent'">🔗</span>
         <span style="font-size:13px;color:#333;">🖼️</span>
         <span style="font-size:13px;color:#333;">☰</span>
       </div>
       <!-- canvas body: editable reproduction of the registration-confirmation design -->
       <div style="flex:1;overflow-y:auto;background:#EDEEF2;padding:40px;display:flex;justify-content:center;position:relative;">
-        <div id="tpl-editable-body" contenteditable="true" spellcheck="false" oninput="tplHandleInput(event)" onkeydown="tplHandleKeydown(event)" style="background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-radius:4px;overflow:visible;max-width:640px;width:100%;height:fit-content;padding:32px 36px;font-family:Arial,sans-serif;color:#222;outline:none;line-height:1.5;"></div>
+        <div id="tpl-editable-body" contenteditable="true" spellcheck="false" oninput="tplHandleInput(event)" onkeydown="tplHandleKeydown(event)" ondragover="tplBtnDragOver(event)" ondragleave="tplBtnDragLeave(event)" ondrop="tplBtnDrop(event)" style="background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-radius:4px;overflow:visible;max-width:640px;width:100%;height:fit-content;padding:32px 36px;font-family:Arial,sans-serif;color:#222;outline:none;line-height:1.5;"></div>
         <!-- merge field dropdown, shown when "#" is typed -->
         <div id="tpl-mergefield-dd" style="display:none;position:fixed;z-index:9500;width:240px;background:#181B34;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.35);overflow:hidden;font-family:Arial,sans-serif;">
           <div style="padding:10px 12px;">
@@ -530,6 +539,40 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
           <div id="tpl-mergefield-list" style="max-height:260px;overflow-y:auto;padding-bottom:6px;"></div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Insert Link — opened from the template editor toolbar ═══ -->
+<div id="tpl-link-modal" style="display:none;position:fixed;inset:0;z-index:9600;align-items:center;justify-content:center;background:rgba(49,57,73,0.5);">
+  <div style="background:#fff;border-radius:10px;width:520px;box-shadow:0 4px 9px rgba(49,57,73,0.6);overflow:hidden;font-family:'Zoho Puvi',-apple-system,'Segoe UI',sans-serif;">
+    <div style="padding:22px 26px 6px;display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:19px;font-weight:600;color:#202123;letter-spacing:-0.01em;">Insert Link</span>
+      <span onclick="tplCloseLinkModal()" style="font-size:22px;color:#8C91AB;cursor:pointer;line-height:1;">&times;</span>
+    </div>
+    <div style="padding:14px 26px 22px;">
+      <div style="display:flex;align-items:center;gap:14px;padding:8px 0;">
+        <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link Type</label>
+        <select id="tpl-link-type" onchange="tplLinkTypeChanged()" style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #C0C8E2;border-radius:6px;background:#fff;color:#202123;">
+          <option>Webinar Invitation Link</option>
+          <option>Join Webinar Link</option>
+          <option>Watch Video Link</option>
+          <option>Web URL</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;padding:8px 0;">
+        <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link</label>
+        <input id="tpl-link-url" readonly style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #D2D9F1;border-radius:6px;background:#F5F6F8;color:#434D5E;">
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;padding:8px 0;">
+        <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Text To Display</label>
+        <input id="tpl-link-text" style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #C0C8E2;border-radius:6px;color:#202123;">
+      </div>
+      <div id="tpl-link-note" style="font-size:11.5px;color:#8C91AB;padding:6px 0 0 134px;line-height:1.5;"></div>
+    </div>
+    <div style="padding:13px 26px;border-top:1px solid #E8EAED;background:#FAFAFB;display:flex;justify-content:flex-end;gap:10px;">
+      <button onclick="tplCloseLinkModal()" style="padding:7px 16px;border:1px solid #D5D8E9;border-radius:6px;background:linear-gradient(#fff,#F1F0F7);color:#313949;font-size:13px;cursor:pointer;">Cancel</button>
+      <button onclick="tplInsertLink()" style="padding:7px 18px;border:none;border-radius:6px;background:linear-gradient(#5767F6,#124DC3);color:#fff;font-size:13px;font-weight:600;cursor:pointer;">Insert</button>
     </div>
   </div>
 </div>
@@ -5212,6 +5255,97 @@ function selectWebinarTemplate(key) {
     if (labelSpan) { labelSpan.textContent = meta.label; labelSpan.classList.add('active'); }
   }
   openTemplateEditor(key);
+}
+
+// ── Drag a button style from the left panel into the email ──
+var TPL_BTN_RADIUS = { normal: '3px', rounded: '8px', oval: '999px' };
+function tplBtnDragStart(e, style) {
+  window._tplDragBtn = style;
+  e.dataTransfer.effectAllowed = 'copy';
+  e.dataTransfer.setData('text/plain', 'tpl-button:' + style);
+  e.currentTarget.style.opacity = '0.5';
+}
+function tplBtnDragEnd(e) {
+  e.currentTarget.style.opacity = '1';
+  window._tplDragBtn = null;
+  tplBtnDragLeave(e);
+}
+function tplBtnDragOver(e) {
+  if (!window._tplDragBtn) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'copy';
+  var body = document.getElementById('tpl-editable-body');
+  body.style.boxShadow = '0 0 0 2px #5464F2, 0 1px 4px rgba(0,0,0,0.08)';
+}
+function tplBtnDragLeave(e) {
+  var body = document.getElementById('tpl-editable-body');
+  if (body) body.style.boxShadow = '0 1px 4px rgba(0,0,0,0.08)';
+}
+function tplBtnDrop(e) {
+  var data = (e.dataTransfer && e.dataTransfer.getData('text/plain')) || '';
+  if (data.indexOf('tpl-button:') !== 0) return;
+  e.preventDefault();
+  tplBtnDragLeave(e);
+  var style = data.split(':')[1];
+  var radius = TPL_BTN_RADIUS[style] || '3px';
+  // drop the button where the cursor is
+  var range = null;
+  if (document.caretRangeFromPoint) range = document.caretRangeFromPoint(e.clientX, e.clientY);
+  else if (document.caretPositionFromPoint) {
+    var pos = document.caretPositionFromPoint(e.clientX, e.clientY);
+    if (pos) { range = document.createRange(); range.setStart(pos.offsetNode, pos.offset); range.collapse(true); }
+  }
+  var html = '<div style="margin:14px 0;"><a href="#" onclick="return false" style="display:inline-block;background:#5464F2;color:#fff;font-weight:700;font-size:13.5px;padding:10px 22px;border-radius:' + radius + ';text-decoration:none;">Button</a></div>';
+  var frag = document.createRange().createContextualFragment(html);
+  if (range) {
+    range.insertNode(frag);
+  } else {
+    document.getElementById('tpl-editable-body').appendChild(frag);
+  }
+}
+
+// ── Insert Link — webinar link types plus a plain URL ──
+var TPL_LINK_TYPES = {
+  'Webinar Invitation Link': { url: '#Webinar Invitation Link', text: 'Register Now', note: 'The registration page for this webinar.' },
+  'Join Webinar Link': { url: '#Webinar Link', text: 'Join Webinar', note: 'Unique to each registrant \u2014 resolved when the email is sent.' },
+  'Watch Video Link': { url: '#Webinar Recording Link', text: 'Watch Recording', note: 'Available once the recording is published.' },
+  'Web URL': { url: '', text: '', note: '' }
+};
+function tplOpenLinkModal() {
+  var sel = window.getSelection();
+  window._tplLinkRange = (sel && sel.rangeCount) ? sel.getRangeAt(0).cloneRange() : null;
+  document.getElementById('tpl-link-type').value = 'Webinar Invitation Link';
+  tplLinkTypeChanged();
+  document.getElementById('tpl-link-modal').style.display = 'flex';
+}
+function tplCloseLinkModal() {
+  document.getElementById('tpl-link-modal').style.display = 'none';
+}
+function tplLinkTypeChanged() {
+  var type = document.getElementById('tpl-link-type').value;
+  var meta = TPL_LINK_TYPES[type] || TPL_LINK_TYPES['Web URL'];
+  var url = document.getElementById('tpl-link-url');
+  url.value = meta.url;
+  url.readOnly = type !== 'Web URL';
+  url.style.background = type === 'Web URL' ? '#fff' : '#F5F6F8';
+  url.style.borderColor = type === 'Web URL' ? '#C0C8E2' : '#D2D9F1';
+  url.placeholder = type === 'Web URL' ? 'https://' : '';
+  document.getElementById('tpl-link-text').value = meta.text;
+  document.getElementById('tpl-link-note').textContent = meta.note;
+}
+function tplInsertLink() {
+  var text = document.getElementById('tpl-link-text').value || document.getElementById('tpl-link-url').value || 'Link';
+  var html = '<a href="#" onclick="return false" style="color:#5464F2;text-decoration:underline;">' + text + '</a>';
+  var body = document.getElementById('tpl-editable-body');
+  var range = window._tplLinkRange;
+  var frag = document.createRange().createContextualFragment(html);
+  if (range && body.contains(range.commonAncestorContainer)) {
+    range.deleteContents();
+    range.insertNode(frag);
+  } else {
+    body.appendChild(frag);
+  }
+  tplCloseLinkModal();
 }
 
 // ── "#" merge field picker — module switcher, as in the CRM template editor ──
