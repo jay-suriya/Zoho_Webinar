@@ -19944,8 +19944,8 @@ function SelectTemplateModal({
   // when the send is to one module, this picker lists that module's templates
   // alongside the webinar's own — nothing that can't render for these records
   const source = (module && W)
-    ? [{ name: W.webinarSet[slot || "invite"], folder: "Zoho Webinar", highlighted: true }].concat(
-        (((W.CHOICES[module] || {})[slot || "invite"]) || []).map(n => ({ name: n, folder: module + " Templates" }))
+    ? [{ name: W.webinarSet[slot || "invite"], folder: "Zoho Webinar", openRate: "0%" }].concat(
+        (((W.CHOICES[module] || {})[slot || "invite"]) || []).map(n => ({ name: n, folder: module + " Templates", openRate: "0%" }))
       )
     : TEMPLATE_LIST;
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
@@ -19962,17 +19962,17 @@ function SelectTemplateModal({
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "20px 28px 16px",
+      padding: "26px 30px 6px",
       display: "flex",
       alignItems: "center",
-      justifyContent: "space-between",
-      borderBottom: `1px solid ${COLORS.zohoBorder}`
+      justifyContent: "space-between"
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 20,
+      fontSize: 24,
       fontWeight: 700,
-      color: COLORS.zohoText
+      color: "#1B1A2E",
+      letterSpacing: "-0.01em"
     }
   }, "Select Template"), /*#__PURE__*/React.createElement("button", {
     onClick: onClose,
@@ -19986,11 +19986,10 @@ function SelectTemplateModal({
     }
   }, "\xD7")), /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "14px 28px",
+      padding: "18px 30px 20px",
       display: "flex",
       alignItems: "center",
-      gap: 12,
-      borderBottom: `1px solid ${COLORS.zohoBorder}`
+      gap: 14
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -19998,10 +19997,10 @@ function SelectTemplateModal({
     }
   }, /*#__PURE__*/React.createElement("select", {
     style: {
-      padding: "8px 32px 8px 12px",
-      border: `1px solid ${COLORS.zohoBorder}`,
-      borderRadius: 5,
-      fontSize: 13,
+      padding: "10px 34px 10px 14px",
+      border: "1px solid #C0C8E2",
+      borderRadius: 6,
+      fontSize: 14.5,
       color: COLORS.zohoText,
       background: "white",
       appearance: "none",
@@ -20026,9 +20025,10 @@ function SelectTemplateModal({
       display: "flex",
       alignItems: "center",
       border: "2px solid #C2185B",
-      borderRadius: 5,
-      padding: "6px 12px",
-      gap: 8
+      borderRadius: 6,
+      padding: "8px 14px",
+      gap: 10,
+      maxWidth: 300
     }
   }, /*#__PURE__*/React.createElement("svg", {
     width: "15",
@@ -20054,7 +20054,7 @@ function SelectTemplateModal({
     style: {
       border: "none",
       outline: "none",
-      fontSize: 13,
+      fontSize: 14.5,
       color: COLORS.zohoText,
       flex: 1,
       background: "transparent"
@@ -20063,32 +20063,33 @@ function SelectTemplateModal({
     style: {
       display: "flex",
       alignItems: "center",
-      gap: 2,
+      gap: 1,
       cursor: "pointer",
-      color: "#555",
-      fontSize: 13,
-      border: `1px solid ${COLORS.zohoBorder}`,
-      borderRadius: 5,
-      padding: "7px 12px",
-      fontWeight: 600
+      color: "#3A3F52",
+      padding: "0 4px",
+      flexShrink: 0
     }
-  }, "A", /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 10
+      display: "flex",
+      flexDirection: "column",
+      lineHeight: 0.95,
+      fontSize: 11,
+      fontWeight: 500
     }
-  }, "Z"), /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("span", null, "A"), /*#__PURE__*/React.createElement("span", null, "Z")), /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 12,
-      marginLeft: 1
+      fontSize: 14,
+      marginLeft: 2
     }
   }, "\u2193")), /*#__PURE__*/React.createElement("button", {
     style: {
-      padding: "8px 18px",
-      background: "white",
-      border: "2px solid #C2185B",
+      padding: "9px 18px",
+      background: "#FDEFF5",
+      border: "1px solid #C2185B",
       color: "#C2185B",
-      borderRadius: 5,
-      fontSize: 13,
+      borderRadius: 6,
+      fontSize: 14.5,
       fontWeight: 600,
       cursor: "pointer"
     }
@@ -20106,10 +20107,10 @@ function SelectTemplateModal({
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
-      padding: "16px 28px",
-      borderBottom: `1px solid ${COLORS.zohoBorder}`,
+      padding: "11px 30px",
+      borderBottom: (hovered === i || hovered === i + 1) ? "1px solid transparent" : "1px solid #EFEFF3",
       cursor: "pointer",
-      background: t.highlighted ? "#f5f5f5" : hovered === i ? "#fafafa" : "white",
+      background: hovered === i ? "#FDF3F7" : "white",
       transition: "background 0.1s"
     }
   }, /*#__PURE__*/React.createElement("div", {
@@ -20120,14 +20121,14 @@ function SelectTemplateModal({
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 18,
-      color: "#ccc"
+      fontSize: 19,
+      color: "#C3C8D4"
     }
   }, "\u2606"), /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 14,
+      fontSize: 16.5,
       fontWeight: 600,
-      color: COLORS.zohoText
+      color: "#1B1A2E"
     }
   }, t.name), t.hasAttachment && /*#__PURE__*/React.createElement("span", {
     style: {
@@ -20136,13 +20137,14 @@ function SelectTemplateModal({
     }
   }, "\uD83D\uDCCE"), /*#__PURE__*/React.createElement("span", {
     style: {
-      color: "#ddd",
-      margin: "0 4px"
+      color: "#DCDFE8",
+      margin: "0 2px",
+      fontWeight: 300
     }
   }, "|"), /*#__PURE__*/React.createElement("span", {
     style: {
-      fontSize: 13,
-      color: "#888"
+      fontSize: 15,
+      color: "#7E8CA6"
     }
   }, t.folder)), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -20150,16 +20152,30 @@ function SelectTemplateModal({
       alignItems: "center",
       gap: 16
     }
-  }, t.openRate && /*#__PURE__*/React.createElement("span", {
+  }, t.openRate && hovered === i && /*#__PURE__*/React.createElement("span", {
     style: {
-      color: "#2196F3",
-      fontSize: 13,
-      fontWeight: 600
+      display: "flex",
+      alignItems: "center",
+      gap: 7,
+      color: "#C2185B",
+      fontSize: 14.5,
+      fontWeight: 500
     }
-  }, "\u3030\u3030 Open Rate: ", t.openRate), (t.highlighted || hovered === i) && /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "17",
+    height: "10",
+    viewBox: "0 0 17 10",
+    fill: "none"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M1 8.5 L5 3 L9 6.5 L16 1.5",
+    stroke: "#4F8FE0",
+    strokeWidth: "1.6",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }), /*#__PURE__*/React.createElement("circle", { cx: "1", cy: "8.5", r: "1.6", fill: "#4F8FE0" }), /*#__PURE__*/React.createElement("circle", { cx: "5", cy: "3", r: "1.6", fill: "#4F8FE0" }), /*#__PURE__*/React.createElement("circle", { cx: "9", cy: "6.5", r: "1.6", fill: "#4F8FE0" }), /*#__PURE__*/React.createElement("circle", { cx: "16", cy: "1.5", r: "1.6", fill: "#4F8FE0" })), "Open Rate: ", t.openRate), (hovered === i) && /*#__PURE__*/React.createElement("span", {
     style: {
       color: "#C2185B",
-      fontSize: 13,
+      fontSize: 14.5,
       fontWeight: 600
     },
     onClick: e => {
