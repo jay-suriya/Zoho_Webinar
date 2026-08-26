@@ -20311,19 +20311,15 @@ function MassEmailModal({
       }
     },
     style: {
-      color: COLORS.zohoRed,
+      color: (singleModule || isReInvite) ? COLORS.zohoRed : COLORS.zohoBlue,
       fontSize: 13.5,
       fontWeight: 500,
       cursor: "pointer"
     }
-  }, template), hasTemplate && /*#__PURE__*/React.createElement("span", {
-    title: (singleModule || isReInvite) ? "View / edit this template" : "Edit this template",
+  }, template), hasTemplate && (singleModule || isReInvite) && /*#__PURE__*/React.createElement("span", {
+    title: "View / edit this template",
     onClick: () => {
-      if (singleModule || isReInvite) {
-        if (window.openTemplatePreview) window.openTemplatePreview("sendInvite");
-      } else if (window.openTemplateEditor) {
-        window.openTemplateEditor("sendInvite");
-      }
+      if (window.openTemplatePreview) window.openTemplatePreview("sendInvite");
     },
     style: {
       display: "inline-flex",
@@ -20497,35 +20493,11 @@ function MassEmailModal({
     },
     style: {
       fontSize: 13.5,
-      color: COLORS.zohoRed,
+      color: COLORS.zohoBlue,
       fontWeight: 500,
       cursor: "pointer"
     }
-  }, W.webinarSet[slot]), /*#__PURE__*/React.createElement("span", {
-    title: "Edit this template",
-    onClick: () => {
-      if (window.openTemplateEditor) window.openTemplateEditor(TPL_PREVIEW_KEY[slot]);
-    },
-    style: {
-      display: "inline-flex",
-      alignItems: "center",
-      cursor: "pointer",
-      padding: 3
-    }
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "13",
-    height: "13",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: COLORS.zohoBlue,
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M12 20h9"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z"
-  })))))) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, W.webinarSet[slot])))) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
     style: {
