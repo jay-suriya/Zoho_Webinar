@@ -5092,6 +5092,86 @@ function tplPreviewEdit() {
   openTemplateEditor(key);
 }
 
+// ── Invite + lifecycle templates ────────────────────────────────────────────
+// The module is known for the records you invite, but NOT for whoever eventually
+// registers (a lead can be converted, someone can register through the public
+// link). So the chosen set is STAMPED on each invitee when the invite is sent,
+// and the later emails read the stamp instead of re-deriving the module.
+window.WEBINAR_TPL = {
+  DEFAULT: 'Webinar Invitation',
+  // what the webinar itself is set to send, from the creation form
+  webinarSet: {
+    invite: 'Webinar Invitation',
+    confirmation: 'Webinar Confirmation Template',
+    reminder1: '1st Reminder Template',
+    reminder2: '2nd Reminder Template',
+    reminder3: '3rd Reminder Template',
+    attendeesFollowup: 'Attendees Follow-up Template',
+    absenteesFollowup: 'Absentees Follow-up Template'
+  },
+  // only the emails this webinar will actually send get a row
+  enabled: {
+    confirmation: true,
+    reminder1: true,
+    reminder2: false,
+    reminder3: false,
+    attendeesFollowup: true,
+    absenteesFollowup: true
+  },
+  SLOT_LABEL: {
+    invite: 'Invite',
+    confirmation: 'Confirmation',
+    reminder1: '1st Reminder',
+    reminder2: '2nd Reminder',
+    reminder3: '3rd Reminder',
+    attendeesFollowup: 'Attendees follow-up',
+    absenteesFollowup: 'Absentees follow-up'
+  },
+  // module-specific CRM templates, per email
+  CHOICES: {
+    'Leads': {
+      invite: ['Lead Rich Invite', 'Lead Nurture Invite'],
+      confirmation: ['Lead Confirmation'],
+      reminder1: ['Lead Reminder'],
+      reminder2: ['Lead Reminder'],
+      reminder3: ['Lead Reminder'],
+      attendeesFollowup: ['Lead Thank-you'],
+      absenteesFollowup: ['Lead Recap']
+    },
+    'Contacts': {
+      invite: ['Contact Rich Invite', 'Customer VIP Invite'],
+      confirmation: ['Contact Confirmation'],
+      reminder1: ['Contact Reminder'],
+      reminder2: ['Contact Reminder'],
+      reminder3: ['Contact Reminder'],
+      attendeesFollowup: ['Customer Thank-you'],
+      absenteesFollowup: ['Customer Recap']
+    },
+    'Vendors': {
+      invite: ['Vendor Partner Invite'],
+      confirmation: ['Vendor Confirmation'],
+      attendeesFollowup: ['Vendor Thank-you']
+    },
+    'Custom Module 1': {
+      invite: ['Custom Module Invite']
+    }
+  },
+  slots: function() {
+    var self = this;
+    return ['confirmation','reminder1','reminder2','reminder3','attendeesFollowup','absenteesFollowup']
+      .filter(function(k) { return self.enabled[k]; });
+  },
+  optionsFor: function(module, slot) {
+    var perModule = (this.CHOICES[module] || {})[slot] || [];
+    return [this.webinarSet[slot]].concat(perModule.filter(function(t) { return t !== this.webinarSet[slot]; }, this));
+  },
+  hasModuleOptions: function(module, slot) {
+    return (((this.CHOICES[module] || {})[slot]) || []).length > 0;
+  },
+  // the stamp: what each invitee was promised at the moment they were invited
+  stamps: {}
+};
+
 // ── Create-flow "Select Template" — curated list of the 6 webinar templates ──
 function renderWebinarTplList() {
   var order = ['confirmation','reminder1','reminder2','reminder3','attendeesFollowup','absenteesFollowup'];
@@ -20081,8 +20161,23 @@ function MassEmailModal({
   onSent,
   isReInvite,
   reInviteModule,
-  reInvitePerson
+  reInvitePerson,
+  recipientIds
 }) {
+  const W = window.WEBINAR_TPL;
+  const counts = (recipientIds || []).reduce((acc, id) => {
+    const rec = allLeads.find(l => l.id === id);
+    if (rec) acc[rec.module] = (acc[rec.module] || 0) + 1;
+    return acc;
+  }, {});
+  const sendModules = Object.keys(counts);
+  const singleModule = sendModules.length === 1 ? sendModules[0] : null;
+  const recipientCount = sendModules.reduce((n, m) => n + counts[m], 0);
+  // the later emails can only be tailored when the send has one unambiguous module
+  const lifecycleSlots = W ? W.slots() : [];
+  const [tailorLater, setTailorLater] = useState(false);
+  const [laterSet, setLaterSet] = useState({});
+  const laterChanges = Object.keys(laterSet).filter(k => laterSet[k] && laterSet[k] !== W.webinarSet[k]);
   const [template, setTemplate] = useState(isReInvite ? "" : "Webinar Invitation");
   const [sendOption, setSendOption] = useState("immediate");
   const [showSelectTemplate, setShowSelectTemplate] = useState(false);
@@ -20153,7 +20248,24 @@ function MassEmailModal({
       fontWeight: 600
     },
     onClick: () => setShowSelectTemplate(true)
-  }, "Select Template"), hasTemplate && /*#__PURE__*/React.createElement("span", {
+  }, "Select Template"), hasTemplate && singleModule && W && W.hasModuleOptions(singleModule, "invite") ? /*#__PURE__*/React.createElement("select", {
+    value: template,
+    onChange: e => {
+      setTemplate(e.target.value);
+      if (e.target.value === W.webinarSet.invite) {
+        setTailorLater(false);
+        setLaterSet({});
+      }
+    },
+    style: {
+      ...selectStyle,
+      minWidth: 215,
+      fontSize: 12.5
+    }
+  }, W.optionsFor(singleModule, "invite").map(o => /*#__PURE__*/React.createElement("option", {
+    key: o,
+    value: o
+  }, o))) : hasTemplate && /*#__PURE__*/React.createElement("span", {
     onClick: () => setShowSelectTemplate(true),
     style: {
       color: COLORS.zohoBlue,
@@ -20187,7 +20299,112 @@ function MassEmailModal({
     d: "M12 20h9"
   }), /*#__PURE__*/React.createElement("path", {
     d: "M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z"
-  })))))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  })))))), !isReInvite && recipientCount > 0 && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+    colSpan: 2,
+    style: {
+      padding: "2px 0 14px"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      borderTop: `1px solid ${COLORS.zohoBorder}`,
+      paddingTop: 12
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      letterSpacing: "0.07em",
+      textTransform: "uppercase",
+      color: COLORS.zohoTextLight,
+      marginBottom: 8
+    }
+  }, "Sent later, automatically"), singleModule ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
+    style: {
+      display: "flex",
+      alignItems: "flex-start",
+      gap: 8,
+      fontSize: 13,
+      color: COLORS.zohoText,
+      cursor: "pointer"
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    checked: tailorLater,
+    onChange: e => {
+      setTailorLater(e.target.checked);
+      if (!e.target.checked) setLaterSet({});
+    },
+    style: {
+      marginTop: 3
+    }
+  }), /*#__PURE__*/React.createElement("span", null, "Use ", singleModule, " templates for these emails too")), tailorLater && /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginTop: 10,
+      paddingLeft: 22
+    }
+  }, lifecycleSlots.map(slot => {
+    const current = laterSet[slot] || W.webinarSet[slot];
+    const opts = W.optionsFor(singleModule, slot);
+    const changed = current !== W.webinarSet[slot];
+    return /*#__PURE__*/React.createElement("div", {
+      key: slot,
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "3px 0"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 13,
+        color: COLORS.zohoText,
+        minWidth: 140
+      }
+    }, W.SLOT_LABEL[slot]), /*#__PURE__*/React.createElement("select", {
+      value: current,
+      disabled: opts.length < 2,
+      onChange: e => setLaterSet(ls => ({ ...ls, [slot]: e.target.value })),
+      style: {
+        ...selectStyle,
+        minWidth: 205,
+        fontSize: 12.5,
+        opacity: opts.length < 2 ? 0.6 : 1
+      }
+    }, opts.map(o => /*#__PURE__*/React.createElement("option", {
+      key: o,
+      value: o
+    }, o === W.webinarSet[slot] ? "Keep \u2014 " + o : o))), changed && /*#__PURE__*/React.createElement("span", {
+      style: {
+        fontSize: 11.5,
+        color: COLORS.zohoTextLight
+      }
+    }, "was: ", W.webinarSet[slot]));
+  }), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11.5,
+      color: COLORS.zohoTextLight,
+      marginTop: 8,
+      lineHeight: 1.5,
+      maxWidth: 430
+    }
+  }, "Decided now and kept for these ", recipientCount, " ", singleModule, ". Anyone who registers through the public link, and anyone invited earlier, keeps the webinar\u2019s templates."))) : /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 12.5,
+      color: COLORS.zohoTextLight,
+      background: "#F5F6F8",
+      border: `1px solid ${COLORS.zohoBorder}`,
+      borderRadius: 5,
+      padding: "9px 12px",
+      lineHeight: 1.5,
+      maxWidth: 430
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "checkbox",
+    disabled: true,
+    style: {
+      marginRight: 8,
+      verticalAlign: "middle"
+    }
+  }), "Available when a send goes to a single module. This one covers ", sendModules.join(" and "), ", so all of them keep the webinar\u2019s templates.")))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
     style: {
@@ -20308,7 +20525,21 @@ function MassEmailModal({
       color: "white",
       border: "none"
     },
-    onClick: hasTemplate ? onSent : undefined
+    onClick: hasTemplate ? () => {
+      // stamp what each invitee was promised, so the later emails never have to
+      // re-derive a module that may have changed by then
+      if (!isReInvite && W && singleModule) {
+        const stamp = { invite: template, module: singleModule };
+        lifecycleSlots.forEach(slot => {
+          stamp[slot] = (tailorLater && laterSet[slot]) || W.webinarSet[slot];
+        });
+        (recipientIds || []).forEach(id => { W.stamps[id] = stamp; });
+        W.lastStamp = { module: singleModule, count: recipientCount, tailored: tailorLater && laterChanges.length > 0 };
+      } else if (W) {
+        W.lastStamp = { module: null, count: recipientCount, tailored: false };
+      }
+      onSent();
+    } : undefined
   }, "Send")))));
 }
 
@@ -20896,6 +21127,7 @@ function InvitedTab({
     Name: true,
     Email: true,
     Module: true,
+    Templates: true,
     "Invite Status": true,
     "Invite Sent on": true,
     "Lead Source": false,
@@ -21408,7 +21640,9 @@ function InvitedTab({
     }
   }, opt)))), columns["Invite Sent on"] && /*#__PURE__*/React.createElement("th", {
     style: thStyle
-  }, "Invite Sent on"))), /*#__PURE__*/React.createElement("tbody", null, filtered.length === 0 ? /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, "Invite Sent on"), columns.Templates && /*#__PURE__*/React.createElement("th", {
+    style: thStyle
+  }, "Templates"))), /*#__PURE__*/React.createElement("tbody", null, filtered.length === 0 ? /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     colSpan: 8,
     style: {
       textAlign: "center",
@@ -21527,7 +21761,28 @@ function InvitedTab({
       fontSize: 12,
       color: COLORS.zohoTextLight
     }
-  }, person.sentOn)))))), /*#__PURE__*/React.createElement("div", {
+  }, person.sentOn), columns.Templates && /*#__PURE__*/React.createElement("td", {
+    style: {
+      ...tdStyle,
+      fontSize: 12
+    }
+  }, (() => {
+    const W2 = window.WEBINAR_TPL;
+    const st = W2 && W2.stamps[person.id];
+    const tailored = st && W2.slots().some(sl => st[sl] && st[sl] !== W2.webinarSet[sl]);
+    return /*#__PURE__*/React.createElement("span", {
+      title: st ? "Fixed when this invite was sent" : "Follows the webinar\u2019s templates",
+      style: {
+        fontSize: 11.5,
+        fontWeight: 600,
+        color: tailored ? "#10975E" : COLORS.zohoTextLight,
+        background: tailored ? "#E9FBF4" : "transparent",
+        border: tailored ? "1px solid #19B171" : "1px solid transparent",
+        borderRadius: 3,
+        padding: tailored ? "2px 8px" : "2px 0"
+      }
+    }, tailored ? st.module + " set" : "Webinar default");
+  })())))))), /*#__PURE__*/React.createElement("div", {
     style: {
       padding: "8px 16px",
       borderTop: `1px solid ${COLORS.zohoBorder}`,
@@ -24107,6 +24362,7 @@ function WebinarDetailApp({
   const [activeSection, setActiveSection] = useState("Overview");
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
+  const [emailRecipients, setEmailRecipients] = useState([]);
   const [showRegLinkModal, setShowRegLinkModal] = useState(false);
   const [showReInviteModal, setShowReInviteModal] = useState(false);
   const [reInviteModule, setReInviteModule] = useState(null);
@@ -24219,6 +24475,7 @@ function WebinarDetailApp({
   };
   const handleNext = selectedIds => {
     setShowAddModal(false);
+    setEmailRecipients(selectedIds || []);
     setShowEmailModal(true);
   };
   const handleSent = () => {
@@ -24226,7 +24483,10 @@ function WebinarDetailApp({
     setInvited(invitedPeople);
     setInvitedCount(100);
     setInviteSent(true);
-    setSuccessMsg("Invitation sent successfully");
+    const st = window.WEBINAR_TPL && window.WEBINAR_TPL.lastStamp;
+    setSuccessMsg(st && st.tailored
+      ? "Invitation sent \u2014 " + st.count + " " + st.module + " on the " + st.module + " templates"
+      : "Invitation sent successfully");
     clearTimeout(window._inviteToastTimer);
     window._inviteToastTimer = setTimeout(() => setSuccessMsg(""), 4000);
     // Land the user on the Invited section once it has rendered.
@@ -24313,7 +24573,9 @@ function WebinarDetailApp({
       color: "#616E88",
       marginTop: 2
     }
-  }, "Recipients are listed under Invited below.")), /*#__PURE__*/React.createElement("span", {
+  }, (window.WEBINAR_TPL && window.WEBINAR_TPL.lastStamp && window.WEBINAR_TPL.lastStamp.tailored)
+    ? "Their confirmation and follow-up emails will use those templates too."
+    : "Recipients are listed under Invited below.")), /*#__PURE__*/React.createElement("span", {
     onClick: () => setSuccessMsg(""),
     style: {
       marginLeft: 6,
@@ -24655,6 +24917,7 @@ function WebinarDetailApp({
     onClose: () => setReInviteSinglePerson(null),
     onSent: () => { setReInviteSinglePerson(null); handleSent(); }
   }), showEmailModal && /*#__PURE__*/React.createElement(MassEmailModal, {
+    recipientIds: emailRecipients,
     onClose: () => setShowEmailModal(false),
     onSent: handleSent
   }), showRegLinkModal && /*#__PURE__*/React.createElement(RegistrationLinkModal, {
