@@ -5118,6 +5118,14 @@ window.WEBINAR_TPL = {
     attendeesFollowup: true,
     absenteesFollowup: true
   },
+  SLOT_WHEN: {
+    confirmation: 'on registration',
+    reminder1: '15 mins before the webinar',
+    reminder2: '1 hour before the webinar',
+    reminder3: '1 day before the webinar',
+    attendeesFollowup: '2 days after the webinar',
+    absenteesFollowup: '2 days after the webinar'
+  },
   SLOT_LABEL: {
     invite: 'Invite',
     confirmation: 'Confirmation',
@@ -20383,8 +20391,7 @@ function MassEmailModal({
     style: {
       fontSize: 12.5,
       color: COLORS.zohoTextLight,
-      lineHeight: 1.5,
-      maxWidth: 430
+      lineHeight: 1.5
     }
   }, lifecycleSlots.map(slot => /*#__PURE__*/React.createElement("div", {
     key: slot,
@@ -20392,7 +20399,8 @@ function MassEmailModal({
       display: "flex",
       alignItems: "baseline",
       gap: 10,
-      padding: "3px 0"
+      padding: "3px 0",
+      whiteSpace: "nowrap"
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
@@ -20410,7 +20418,12 @@ function MassEmailModal({
       fontWeight: 500,
       cursor: "pointer"
     }
-  }, W.webinarSet[slot])))) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, W.webinarSet[slot]), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 12,
+      color: COLORS.zohoTextLight
+    }
+  }, "\u00B7 ", W.SLOT_WHEN[slot])))) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
     style: {
