@@ -20209,21 +20209,35 @@ function MassEmailModal({
   const [template, setTemplate] = useState(isReInvite ? "" : "Webinar Invitation");
   const [sendOption, setSendOption] = useState("immediate");
   const [showSelectTemplate, setShowSelectTemplate] = useState(false);
+  const [pickerSlot, setPickerSlot] = useState(null);
   const hasTemplate = !!template;
+  const TPL_PREVIEW_KEY = {
+    invite: "sendInvite",
+    confirmation: "confirmation",
+    reminder1: "reminder1",
+    reminder2: "reminder2",
+    reminder3: "reminder3",
+    attendeesFollowup: "attendeesFollowup",
+    absenteesFollowup: "absenteesFollowup"
+  };
   if (showSelectTemplate) {
+    const slot = pickerSlot || "invite";
     return /*#__PURE__*/React.createElement(SelectTemplateModal, {
       module: singleModule,
-      slot: "invite",
-      onClose: () => setShowSelectTemplate(false),
+      slot: slot,
+      onClose: () => {
+        setShowSelectTemplate(false);
+        setPickerSlot(null);
+      },
       onSelect: name => {
-        setTemplate(name);
-        if (W && name === W.webinarSet.invite) {
-          setTailorLater(false);
-          setLaterSet({});
-          // it is the webinar's own template, so show it: read-only, pencil to edit
-          if (window.openTemplatePreview) setTimeout(() => window.openTemplatePreview("sendInvite"), 60);
+        if (slot === "invite") setTemplate(name);
+        else setLaterSet(ls => ({ ...ls, [slot]: name }));
+        // the webinar's own template can be shown and edited here
+        if (W && name === W.webinarSet[slot] && window.openTemplatePreview) {
+          setTimeout(() => window.openTemplatePreview(TPL_PREVIEW_KEY[slot]), 60);
         }
         setShowSelectTemplate(false);
+        setPickerSlot(null);
       }
     });
   }
@@ -20283,7 +20297,10 @@ function MassEmailModal({
       ...btnStyle,
       fontWeight: 600
     },
-    onClick: () => setShowSelectTemplate(true)
+    onClick: () => {
+      setPickerSlot("invite");
+      setShowSelectTemplate(true);
+    }
   }, "Select Template"), hasTemplate && /*#__PURE__*/React.createElement("span", {
     onClick: () => setShowSelectTemplate(true),
     style: {
@@ -20337,94 +20354,119 @@ function MassEmailModal({
       color: COLORS.zohoTextLight,
       marginBottom: 8
     }
-  }, "Sent later, automatically"), singleModule ? /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    style: {
-      display: "flex",
-      alignItems: "flex-start",
-      gap: 8,
-      fontSize: 13,
-      color: COLORS.zohoText,
-      cursor: "pointer"
-    }
-  }, /*#__PURE__*/React.createElement("input", {
-    type: "checkbox",
-    checked: tailorLater,
-    onChange: e => {
-      setTailorLater(e.target.checked);
-      if (!e.target.checked) setLaterSet({});
-    },
-    style: {
-      marginTop: 3
-    }
-  }), /*#__PURE__*/React.createElement("span", null, "Use ", singleModule, " templates for these emails too")), tailorLater && /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginTop: 10,
-      paddingLeft: 22
-    }
-  }, lifecycleSlots.map(slot => {
-    const current = laterSet[slot] || W.webinarSet[slot];
-    const opts = W.optionsFor(singleModule, slot);
-    const changed = current !== W.webinarSet[slot];
-    return /*#__PURE__*/React.createElement("div", {
-      key: slot,
-      style: {
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        padding: "3px 0"
-      }
-    }, /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 13,
-        color: COLORS.zohoText,
-        minWidth: 140
-      }
-    }, W.SLOT_LABEL[slot]), /*#__PURE__*/React.createElement("select", {
-      value: current,
-      disabled: opts.length < 2,
-      onChange: e => setLaterSet(ls => ({ ...ls, [slot]: e.target.value })),
-      style: {
-        ...selectStyle,
-        minWidth: 205,
-        fontSize: 12.5,
-        opacity: opts.length < 2 ? 0.6 : 1
-      }
-    }, opts.map(o => /*#__PURE__*/React.createElement("option", {
-      key: o,
-      value: o
-    }, o === W.webinarSet[slot] ? "Keep \u2014 " + o : o))), changed && /*#__PURE__*/React.createElement("span", {
-      style: {
-        fontSize: 11.5,
-        color: COLORS.zohoTextLight
-      }
-    }, "was: ", W.webinarSet[slot]));
-  }), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11.5,
-      color: COLORS.zohoTextLight,
-      marginTop: 8,
-      lineHeight: 1.5,
-      maxWidth: 430
-    }
-  }, "Decided now and kept for these ", recipientCount, " ", singleModule, ". Anyone who registers through the public link, and anyone invited earlier, keeps the webinar\u2019s templates."))) : /*#__PURE__*/React.createElement("div", {
+  }, "Sent later, automatically"), singleModule ? /*#__PURE__*/React.createElement("div", null, !tailorLater
+    ? /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          flexWrap: "wrap"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 13,
+          color: COLORS.zohoText
+        }
+      }, "Default templates selected."), /*#__PURE__*/React.createElement("span", {
+        onClick: () => setTailorLater(true),
+        style: {
+          fontSize: 13,
+          color: COLORS.zohoRed,
+          fontWeight: 500,
+          cursor: "pointer"
+        }
+      }, "Use customised ", singleModule, " templates?"))
+    : /*#__PURE__*/React.createElement("div", null, lifecycleSlots.map(slot => {
+        const current = laterSet[slot] || W.webinarSet[slot];
+        return /*#__PURE__*/React.createElement("div", {
+          key: slot,
+          style: {
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "4px 0"
+          }
+        }, /*#__PURE__*/React.createElement("span", {
+          style: {
+            fontSize: 13,
+            color: COLORS.zohoTextLight,
+            minWidth: 132
+          }
+        }, W.SLOT_LABEL[slot]), /*#__PURE__*/React.createElement("button", {
+          style: {
+            ...btnStyle,
+            fontWeight: 600
+          },
+          onClick: () => {
+            setPickerSlot(slot);
+            setShowSelectTemplate(true);
+          }
+        }, "Select Template"), /*#__PURE__*/React.createElement("span", {
+          onClick: () => {
+            setPickerSlot(slot);
+            setShowSelectTemplate(true);
+          },
+          style: {
+            color: COLORS.zohoRed,
+            fontSize: 13.5,
+            fontWeight: 500,
+            cursor: "pointer"
+          }
+        }, current), /*#__PURE__*/React.createElement("span", {
+          title: "View / edit this template",
+          onClick: () => {
+            if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]);
+          },
+          style: {
+            display: "inline-flex",
+            alignItems: "center",
+            cursor: "pointer",
+            padding: 3
+          }
+        }, /*#__PURE__*/React.createElement("svg", {
+          width: "13",
+          height: "13",
+          viewBox: "0 0 24 24",
+          fill: "none",
+          stroke: COLORS.zohoBlue,
+          strokeWidth: "2",
+          strokeLinecap: "round",
+          strokeLinejoin: "round"
+        }, /*#__PURE__*/React.createElement("path", {
+          d: "M12 20h9"
+        }), /*#__PURE__*/React.createElement("path", {
+          d: "M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z"
+        }))));
+      }), /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginTop: 8
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: {
+          fontSize: 11.5,
+          color: COLORS.zohoTextLight
+        }
+      }, "These ", recipientCount, " ", singleModule, " only \u2014 not the webinar default."), /*#__PURE__*/React.createElement("span", {
+        onClick: () => {
+          setTailorLater(false);
+          setLaterSet({});
+        },
+        style: {
+          fontSize: 11.5,
+          color: COLORS.zohoBlue,
+          cursor: "pointer"
+        }
+      }, "Use defaults")))) : /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 12.5,
       color: COLORS.zohoTextLight,
-      background: "#F5F6F8",
-      border: `1px solid ${COLORS.zohoBorder}`,
-      borderRadius: 5,
-      padding: "9px 12px",
       lineHeight: 1.5,
       maxWidth: 430
     }
-  }, /*#__PURE__*/React.createElement("input", {
-    type: "checkbox",
-    disabled: true,
-    style: {
-      marginRight: 8,
-      verticalAlign: "middle"
-    }
-  }), "Available when a send goes to a single module. This one covers ", sendModules.join(" and "), ", so all of them keep the webinar\u2019s templates.")))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, "Default templates selected. Customised templates need one module per send \u2014 this covers ", sendModules.join(" and "), ".")))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
     style: {
