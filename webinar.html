@@ -554,11 +554,15 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
       <div style="display:flex;align-items:center;gap:14px;padding:8px 0;">
         <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link Type</label>
         <select id="tpl-link-type" onchange="tplLinkTypeChanged()" style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #C0C8E2;border-radius:6px;background:#fff;color:#202123;">
-          <option>Webinar Invitation Link</option>
-          <option>Join Webinar Link</option>
-          <option>Watch Video Link</option>
           <option>Web URL</option>
+          <option>Zoho Forms</option>
+          <option>Zoho Survey</option>
+          <option>Zoho Webinar</option>
         </select>
+      </div>
+      <div id="tpl-link-whatrow" style="display:none;align-items:center;gap:14px;padding:8px 0;">
+        <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">What to Link</label>
+        <select id="tpl-link-what" onchange="tplLinkWhatChanged()" style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #C0C8E2;border-radius:6px;background:#fff;color:#202123;"></select>
       </div>
       <div style="display:flex;align-items:center;gap:14px;padding:8px 0;">
         <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link</label>
@@ -5306,15 +5310,24 @@ function tplBtnDrop(e) {
 
 // ── Insert Link — webinar link types plus a plain URL ──
 var TPL_LINK_TYPES = {
-  'Webinar Invitation Link': { url: '#Webinar Invitation Link', text: 'Register Now', note: 'The registration page for this webinar.' },
-  'Join Webinar Link': { url: '#Webinar Link', text: 'Join Webinar', note: 'Unique to each registrant \u2014 resolved when the email is sent.' },
-  'Watch Video Link': { url: '#Webinar Recording Link', text: 'Watch Recording', note: 'Available once the recording is published.' },
-  'Web URL': { url: '', text: '', note: '' }
+  'Web URL':      { what: null },
+  'Zoho Forms':   { what: ['Registration Form', 'Feedback Form'] },
+  'Zoho Survey':  { what: ['Post-Webinar Survey', 'NPS Survey'] },
+  'Zoho Webinar': { what: ['Invitation Link', 'Join Webinar Link', 'Watch Video Link'] }
+};
+var TPL_LINK_WHAT = {
+  'Registration Form':  { url: '#Zoho Forms Link',            text: 'Open Form',        note: 'Links to the selected Zoho Forms form.' },
+  'Feedback Form':      { url: '#Zoho Forms Link',            text: 'Share Feedback',   note: 'Links to the selected Zoho Forms form.' },
+  'Post-Webinar Survey':{ url: '#Zoho Survey Link',           text: 'Take the Survey',  note: 'Links to the selected Zoho Survey.' },
+  'NPS Survey':         { url: '#Zoho Survey Link',           text: 'Rate Us',          note: 'Links to the selected Zoho Survey.' },
+  'Invitation Link':    { url: '#Webinar Invitation Link',    text: 'Register Now',     note: 'The registration page for this webinar.' },
+  'Join Webinar Link':  { url: '#Webinar Link',               text: 'Join Webinar',     note: 'Unique to each registrant \u2014 resolved when the email is sent.' },
+  'Watch Video Link':   { url: '#Webinar Recording Link',     text: 'Watch Recording',  note: 'Available once the recording is published.' }
 };
 function tplOpenLinkModal() {
   var sel = window.getSelection();
   window._tplLinkRange = (sel && sel.rangeCount) ? sel.getRangeAt(0).cloneRange() : null;
-  document.getElementById('tpl-link-type').value = 'Webinar Invitation Link';
+  document.getElementById('tpl-link-type').value = 'Web URL';
   tplLinkTypeChanged();
   document.getElementById('tpl-link-modal').style.display = 'flex';
 }
@@ -5323,13 +5336,34 @@ function tplCloseLinkModal() {
 }
 function tplLinkTypeChanged() {
   var type = document.getElementById('tpl-link-type').value;
-  var meta = TPL_LINK_TYPES[type] || TPL_LINK_TYPES['Web URL'];
+  var meta = TPL_LINK_TYPES[type] || {};
+  var row = document.getElementById('tpl-link-whatrow');
+  var what = document.getElementById('tpl-link-what');
+  if (meta.what) {
+    what.innerHTML = meta.what.map(function(w) { return '<option>' + w + '</option>'; }).join('');
+    row.style.display = 'flex';
+    tplLinkWhatChanged();
+  } else {
+    row.style.display = 'none';
+    var url = document.getElementById('tpl-link-url');
+    url.value = '';
+    url.readOnly = false;
+    url.placeholder = 'https://';
+    url.style.background = '#fff';
+    url.style.borderColor = '#C0C8E2';
+    document.getElementById('tpl-link-text').value = '';
+    document.getElementById('tpl-link-note').textContent = '';
+  }
+}
+function tplLinkWhatChanged() {
+  var w = document.getElementById('tpl-link-what').value;
+  var meta = TPL_LINK_WHAT[w] || { url: '', text: '', note: '' };
   var url = document.getElementById('tpl-link-url');
   url.value = meta.url;
-  url.readOnly = type !== 'Web URL';
-  url.style.background = type === 'Web URL' ? '#fff' : '#F5F6F8';
-  url.style.borderColor = type === 'Web URL' ? '#C0C8E2' : '#D2D9F1';
-  url.placeholder = type === 'Web URL' ? 'https://' : '';
+  url.readOnly = true;
+  url.placeholder = '';
+  url.style.background = '#F5F6F8';
+  url.style.borderColor = '#D2D9F1';
   document.getElementById('tpl-link-text').value = meta.text;
   document.getElementById('tpl-link-note').textContent = meta.note;
 }
