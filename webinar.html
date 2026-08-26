@@ -20303,20 +20303,27 @@ function MassEmailModal({
     }
   }, "Select Template"), hasTemplate && /*#__PURE__*/React.createElement("span", {
     onClick: () => {
-      if (!singleModule && !isReInvite) return;
-      setPickerSlot("invite");
-      setShowSelectTemplate(true);
+      if (singleModule || isReInvite) {
+        setPickerSlot("invite");
+        setShowSelectTemplate(true);
+      } else if (window.openTemplatePreview) {
+        window.openTemplatePreview("sendInvite");
+      }
     },
     style: {
       color: COLORS.zohoRed,
       fontSize: 13.5,
       fontWeight: 500,
-      cursor: (singleModule || isReInvite) ? "pointer" : "default"
+      cursor: "pointer"
     }
-  }, template), (singleModule || isReInvite) && hasTemplate && /*#__PURE__*/React.createElement("span", {
-    title: "View / edit this template",
+  }, template), hasTemplate && /*#__PURE__*/React.createElement("span", {
+    title: (singleModule || isReInvite) ? "View / edit this template" : "Edit this template",
     onClick: () => {
-      if (window.openTemplatePreview) window.openTemplatePreview("sendInvite");
+      if (singleModule || isReInvite) {
+        if (window.openTemplatePreview) window.openTemplatePreview("sendInvite");
+      } else if (window.openTemplateEditor) {
+        window.openTemplateEditor("sendInvite");
+      }
     },
     style: {
       display: "inline-flex",
@@ -20485,11 +20492,40 @@ function MassEmailModal({
       minWidth: 132
     }
   }, W.SLOT_LABEL[slot]), /*#__PURE__*/React.createElement("span", {
+    onClick: () => {
+      if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]);
+    },
     style: {
       fontSize: 13.5,
-      color: COLORS.zohoText
+      color: COLORS.zohoRed,
+      fontWeight: 500,
+      cursor: "pointer"
     }
-  }, W.webinarSet[slot]))))))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, W.webinarSet[slot]), /*#__PURE__*/React.createElement("span", {
+    title: "Edit this template",
+    onClick: () => {
+      if (window.openTemplateEditor) window.openTemplateEditor(TPL_PREVIEW_KEY[slot]);
+    },
+    style: {
+      display: "inline-flex",
+      alignItems: "center",
+      cursor: "pointer",
+      padding: 3
+    }
+  }, /*#__PURE__*/React.createElement("svg", {
+    width: "13",
+    height: "13",
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: COLORS.zohoBlue,
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M12 20h9"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z"
+  })))))) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
     style: {
