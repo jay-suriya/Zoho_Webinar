@@ -20204,6 +20204,7 @@ function MassEmailModal({
   // the later emails can only be tailored when the send has one unambiguous module
   const lifecycleSlots = W ? W.slots() : [];
   const [tailorLater, setTailorLater] = useState(false);
+  const [laterOpen, setLaterOpen] = useState(false);
   const [laterSet, setLaterSet] = useState({});
   const laterChanges = Object.keys(laterSet).filter(k => laterSet[k] && laterSet[k] !== W.webinarSet[k]);
   const [template, setTemplate] = useState(isReInvite ? "" : "Webinar Invitation");
@@ -20354,14 +20355,31 @@ function MassEmailModal({
       paddingTop: 12
     }
   }, /*#__PURE__*/React.createElement("div", {
+    onClick: () => setLaterOpen(o => !o),
     style: {
       fontSize: 11,
       letterSpacing: "0.07em",
       textTransform: "uppercase",
       color: COLORS.zohoTextLight,
-      marginBottom: 8
+      marginBottom: laterOpen ? 8 : 0,
+      cursor: "pointer",
+      display: "flex",
+      alignItems: "center"
     }
-  }, "Sent later, automatically"), singleModule ? /*#__PURE__*/React.createElement("div", null, !tailorLater
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 9,
+      marginRight: 6,
+      color: COLORS.zohoTextLight
+    }
+  }, laterOpen ? "\u25BE" : "\u25B8"), "Sent later, automatically", !laterOpen && /*#__PURE__*/React.createElement("span", {
+    style: {
+      textTransform: "none",
+      letterSpacing: 0,
+      marginLeft: 8,
+      fontSize: 12
+    }
+  }, lifecycleSlots.length, " emails \u00B7 ", (singleModule && laterChanges.length) ? singleModule + " templates" : "default templates")), laterOpen && (singleModule ? /*#__PURE__*/React.createElement("div", null, !tailorLater
     ? /*#__PURE__*/React.createElement("div", {
         style: {
           display: "flex",
@@ -20497,7 +20515,7 @@ function MassEmailModal({
       fontWeight: 500,
       cursor: "pointer"
     }
-  }, W.webinarSet[slot])))) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, W.webinarSet[slot])))) )))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
     style: {
