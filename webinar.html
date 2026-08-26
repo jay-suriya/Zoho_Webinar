@@ -20262,13 +20262,13 @@ function MassEmailModal({
     style: {
       background: "white",
       borderRadius: 8,
-      width: 600,
+      width: 640,
       boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
       overflow: "hidden"
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      padding: "20px 24px"
+      padding: "22px 28px 6px"
     }
   }, isReInvite
     ? React.createElement("div", { style: { fontSize: 18, fontWeight: 700, color: COLORS.zohoText, marginBottom: 4 } },
@@ -20277,7 +20277,7 @@ function MassEmailModal({
           "Select a template to send to contacts who haven't registered yet."
         )
       )
-    : React.createElement("div", { style: { fontSize: 18, fontWeight: 700, color: COLORS.zohoText, marginBottom: 20 } }, "Mass Email"), /*#__PURE__*/React.createElement("table", {
+    : React.createElement("div", { style: { fontSize: 19, fontWeight: 600, color: COLORS.zohoText, marginBottom: 22, letterSpacing: "-0.01em" } }, "Mass Email"), /*#__PURE__*/React.createElement("table", {
     style: {
       width: "100%",
       borderCollapse: "collapse"
@@ -20329,7 +20329,7 @@ function MassEmailModal({
     },
     style: {
       color: (singleModule || isReInvite) ? COLORS.zohoRed : COLORS.zohoBlue,
-      fontSize: 13.5,
+      fontSize: 13,
       fontWeight: 500,
       cursor: "pointer"
     }
@@ -20367,20 +20367,23 @@ function MassEmailModal({
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      borderTop: `1px solid ${COLORS.zohoBorder}`,
-      paddingTop: 12
+      borderTop: "1px solid #E8EAED",
+      paddingTop: 14,
+      marginTop: 2
     }
   }, /*#__PURE__*/React.createElement("div", {
     onClick: () => setLaterOpen(o => !o),
     style: {
-      fontSize: 11,
-      letterSpacing: "0.07em",
+      fontSize: 10.5,
+      fontWeight: 600,
+      letterSpacing: "0.08em",
       textTransform: "uppercase",
-      color: COLORS.zohoTextLight,
-      marginBottom: laterOpen ? 8 : 0,
+      color: COLORS.zohoTextMuted,
+      marginBottom: laterOpen ? 10 : 0,
       cursor: "pointer",
       display: "flex",
-      alignItems: "center"
+      alignItems: "center",
+      userSelect: "none"
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
@@ -20392,8 +20395,10 @@ function MassEmailModal({
     style: {
       textTransform: "none",
       letterSpacing: 0,
-      marginLeft: 8,
-      fontSize: 12
+      marginLeft: 10,
+      fontSize: 12,
+      fontWeight: 400,
+      color: COLORS.zohoTextLight
     }
   }, lifecycleSlots.length, " emails \u00B7 default templates")), laterOpen && /*#__PURE__*/React.createElement("div", {
     style: {
@@ -20403,45 +20408,82 @@ function MassEmailModal({
       paddingTop: 2,
       paddingBottom: 4
     }
-  }, lifecycleSlots.map(slot => /*#__PURE__*/React.createElement("div", {
-    key: slot,
-    style: {
-      display: "flex",
-      alignItems: "flex-start",
-      gap: 16,
-      padding: "8px 0",
-      borderTop: slot === lifecycleSlots[0] ? "none" : "1px solid #F1F2F6"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      minWidth: 150,
-      flexShrink: 0
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      color: COLORS.zohoText,
-      lineHeight: 1.4
-    }
-  }, W.SLOT_LABEL[slot]), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11.5,
-      color: COLORS.zohoTextLight,
-      lineHeight: 1.4,
-      marginTop: 1
-    }
-  }, W.SLOT_WHEN[slot])), /*#__PURE__*/React.createElement("span", {
-    onClick: () => {
-      if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]);
-    },
-    style: {
-      fontSize: 13.5,
-      color: COLORS.zohoBlue,
-      fontWeight: 500,
-      cursor: "pointer",
-      lineHeight: 1.4
-    }
-  }, W.webinarSet[slot])))) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, lifecycleSlots.map((slot, idx) => {
+    const current = laterSet[slot] || W.webinarSet[slot];
+    const changed = current !== W.webinarSet[slot];
+    return /*#__PURE__*/React.createElement("div", {
+      key: slot,
+      style: {
+        display: "flex",
+        alignItems: "flex-start",
+        gap: 14,
+        padding: "10px 0",
+        borderTop: idx === 0 ? "none" : "1px solid #EDEEF0"
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        width: 148,
+        flexShrink: 0,
+        paddingTop: 5
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 13,
+        color: COLORS.zohoText,
+        lineHeight: 1.35
+      }
+    }, W.SLOT_LABEL[slot]), /*#__PURE__*/React.createElement("div", {
+      style: {
+        fontSize: 11.5,
+        color: COLORS.zohoTextMuted,
+        lineHeight: 1.35,
+        marginTop: 2
+      }
+    }, W.SLOT_WHEN[slot])), singleModule && !isReInvite
+      ? /*#__PURE__*/React.createElement("div", {
+          style: {
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            flexWrap: "wrap",
+            minHeight: 30
+          }
+        }, /*#__PURE__*/React.createElement("button", {
+          style: {
+            ...btnStyle,
+            fontWeight: 500,
+            padding: "5px 11px",
+            fontSize: 12.5
+          },
+          onClick: () => {
+            setPickerSlot(slot);
+            setShowSelectTemplate(true);
+          }
+        }, "Select Template"), /*#__PURE__*/React.createElement("span", {
+          onClick: () => {
+            if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]);
+          },
+          style: {
+            fontSize: 13,
+            color: changed ? COLORS.zohoRed : COLORS.zohoBlue,
+            fontWeight: 500,
+            cursor: "pointer"
+          }
+        }, current))
+      : /*#__PURE__*/React.createElement("span", {
+          onClick: () => {
+            if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]);
+          },
+          style: {
+            fontSize: 13,
+            color: COLORS.zohoBlue,
+            fontWeight: 500,
+            cursor: "pointer",
+            paddingTop: 5,
+            lineHeight: 1.35
+          }
+        }, current));
+  })) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
     style: {
@@ -20459,8 +20501,8 @@ function MassEmailModal({
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
-      background: "#fff8e1",
-      border: `1px solid #ffe082`,
+      background: "#FEF7E0",
+      border: "1px solid #FDE293",
       borderRadius: 6,
       padding: "10px 14px",
       fontSize: 12,
@@ -20473,8 +20515,8 @@ function MassEmailModal({
     }
   }, "Learn More")), /*#__PURE__*/React.createElement("div", {
     style: {
-      background: "#fff8e1",
-      border: `1px solid #ffe082`,
+      background: "#FEF7E0",
+      border: "1px solid #FDE293",
       borderRadius: 6,
       padding: "10px 14px",
       fontSize: 12,
@@ -20536,11 +20578,12 @@ function MassEmailModal({
     }
   }), "Schedule Later"))))))), /*#__PURE__*/React.createElement("div", {
     style: {
-      borderTop: `1px solid ${COLORS.zohoBorder}`,
-      padding: "12px 24px",
+      borderTop: "1px solid #E8EAED",
+      padding: "13px 28px",
       display: "flex",
       justifyContent: "space-between",
-      alignItems: "center"
+      alignItems: "center",
+      background: "#FAFAFB"
     }
   }, /*#__PURE__*/React.createElement("span", {
     style: {
