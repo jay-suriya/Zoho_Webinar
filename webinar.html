@@ -520,12 +520,14 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         <div id="tpl-editable-body" contenteditable="true" spellcheck="false" oninput="tplHandleInput(event)" onkeydown="tplHandleKeydown(event)" style="background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.08);border-radius:4px;overflow:visible;max-width:640px;width:100%;height:fit-content;padding:32px 36px;font-family:Arial,sans-serif;color:#222;outline:none;line-height:1.5;"></div>
         <!-- merge field dropdown, shown when "#" is typed -->
         <div id="tpl-mergefield-dd" style="display:none;position:fixed;z-index:9500;width:240px;background:#181B34;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,0.35);overflow:hidden;font-family:Arial,sans-serif;">
-          <div style="padding:10px 14px;border-bottom:1px solid #33365a;">
-            <select disabled style="width:100%;background:#232649;color:#fff;border:1px solid #3a3d66;border-radius:4px;padding:6px 8px;font-size:13px;">
-              <option>Zoho Webinar</option>
-            </select>
+          <div style="padding:10px 12px;">
+            <div id="tpl-merge-modbtn" onclick="tplToggleMergeModules(event)" style="display:flex;align-items:center;justify-content:space-between;gap:8px;background:transparent;color:#fff;border:1px solid #6E7391;border-radius:5px;padding:8px 11px;font-size:13.5px;font-weight:600;cursor:pointer;">
+              <span id="tpl-merge-modname">Leads</span>
+              <span style="font-size:10px;">&#9660;</span>
+            </div>
+            <div id="tpl-merge-modlist" style="display:none;margin-top:4px;background:#2A2E4A;border-radius:5px;overflow:hidden;max-height:210px;overflow-y:auto;"></div>
           </div>
-          <div id="tpl-mergefield-list"></div>
+          <div id="tpl-mergefield-list" style="max-height:260px;overflow-y:auto;padding-bottom:6px;"></div>
         </div>
       </div>
     </div>
@@ -5212,8 +5214,55 @@ function selectWebinarTemplate(key) {
   openTemplateEditor(key);
 }
 
-// ── "#" merge field picker — Zoho Webinar fields ────────────
-var TPL_MERGE_FIELDS = ['Webinar Title','Webinar Date & Time','Webinar Duration','Webinar Link','Webinar Organiser','Co-Organiser','Registrant Name','Registrant Email'];
+// ── "#" merge field picker — module switcher, as in the CRM template editor ──
+var TPL_MERGE_SOURCES = {
+  'Leads': ['Lead Id','Lead Owner','Company','First Name','Last Name','Title','Email','Phone','Mobile','Lead Source','Industry','City','State','Country'],
+  'Zoho Webinar': ['Webinar Title','Webinar Date & Time','Webinar Organiser','Webinar Duration','Description'],
+  'Users': ['User Id','User Name','Email','Role','Profile'],
+  'Organization': ['Company Name','Website','Phone','Street','City','State','Country'],
+  'General': ['Current Date','Current Time','Unsubscribe Link','View in Browser'],
+  'Zoho Bookings': ['Booking Id','Service Name','Appointment Time','Staff'],
+  'Lookup 2': ['Lookup Name','Lookup Owner'],
+  'Personal': ['My Name','My Email','My Phone'],
+  'Lead Owner': ['Owner Name','Owner Email','Owner Phone']
+};
+var TPL_MERGE_MODULES = ['Leads','Zoho Webinar','Users','Organization','General','Zoho Bookings','Lookup 2','Personal','Lead Owner'];
+var tplMergeModule = 'Leads';
+var TPL_MERGE_FIELDS = TPL_MERGE_SOURCES['Leads'];
+
+function tplRenderMergeFields() {
+  var list = document.getElementById('tpl-mergefield-list');
+  if (!list) return;
+  var fields = TPL_MERGE_SOURCES[tplMergeModule] || [];
+  list.innerHTML = fields.map(function(f) {
+    return '<div onmousedown="event.preventDefault();tplInsertMergeField(\'' + f.replace(/'/g, "\\'") + '\')" ' +
+      'style="padding:9px 24px;font-size:14px;color:#E7E9F5;cursor:pointer;" ' +
+      'onmouseover="this.style.background=\'#3A3F63\'" onmouseout="this.style.background=\'transparent\'">' + f + '</div>';
+  }).join('');
+  var name = document.getElementById('tpl-merge-modname');
+  if (name) name.textContent = tplMergeModule;
+}
+function tplToggleMergeModules(e) {
+  if (e) e.stopPropagation();
+  var box = document.getElementById('tpl-merge-modlist');
+  if (!box) return;
+  if (box.style.display === 'block') { box.style.display = 'none'; return; }
+  box.innerHTML = TPL_MERGE_MODULES.map(function(m) {
+    var on = m === tplMergeModule;
+    return '<div onmousedown="event.preventDefault();tplPickMergeModule(\'' + m + '\')" ' +
+      'style="display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:14px;color:#E7E9F5;cursor:pointer;' +
+      (on ? 'background:#3A3F63;' : '') + '" ' +
+      'onmouseover="this.style.background=\'#3A3F63\'" onmouseout="this.style.background=\'' + (on ? '#3A3F63' : 'transparent') + '\'">' +
+      '<span style="width:12px;display:inline-block;">' + (on ? '\u2713' : '') + '</span>' + m + '</div>';
+  }).join('');
+  box.style.display = 'block';
+}
+function tplPickMergeModule(m) {
+  tplMergeModule = m;
+  var box = document.getElementById('tpl-merge-modlist');
+  if (box) box.style.display = 'none';
+  tplRenderMergeFields();
+}
 
 function tplHandleKeydown(e) {
   if (e.key === '#') {
@@ -5235,9 +5284,9 @@ function tplShowMergeDropdown() {
   window._tplMergeRange = range;
   var rect = range.getBoundingClientRect();
   var dd = document.getElementById('tpl-mergefield-dd');
-  document.getElementById('tpl-mergefield-list').innerHTML = TPL_MERGE_FIELDS.map(function(f) {
-    return '<div onmousedown="event.preventDefault();tplInsertMergeField(\'' + f + '\')" style="padding:10px 14px;font-size:13.5px;color:#fff;cursor:pointer;" onmouseover="this.style.background=\'#2B2F55\'" onmouseout="this.style.background=\'transparent\'">' + f + '</div>';
-  }).join('');
+  tplRenderMergeFields();
+  var modbox = document.getElementById('tpl-merge-modlist');
+  if (modbox) modbox.style.display = 'none';
   dd.style.display = 'block';
   var ddH = dd.offsetHeight, ddW = dd.offsetWidth;
   var top = (rect.bottom || rect.top + 18) + 6;
