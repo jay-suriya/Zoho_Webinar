@@ -20391,24 +20391,38 @@ function MassEmailModal({
     style: {
       fontSize: 12.5,
       color: COLORS.zohoTextLight,
-      lineHeight: 1.5
+      lineHeight: 1.5,
+      paddingTop: 2,
+      paddingBottom: 4
     }
   }, lifecycleSlots.map(slot => /*#__PURE__*/React.createElement("div", {
     key: slot,
     style: {
       display: "flex",
-      alignItems: "baseline",
-      gap: 10,
-      padding: "3px 0",
-      whiteSpace: "nowrap"
+      alignItems: "flex-start",
+      gap: 16,
+      padding: "8px 0",
+      borderTop: slot === lifecycleSlots[0] ? "none" : "1px solid #F1F2F6"
     }
-  }, /*#__PURE__*/React.createElement("span", {
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      minWidth: 150,
+      flexShrink: 0
+    }
+  }, /*#__PURE__*/React.createElement("div", {
     style: {
       fontSize: 13,
-      color: COLORS.zohoTextLight,
-      minWidth: 132
+      color: COLORS.zohoText,
+      lineHeight: 1.4
     }
-  }, W.SLOT_LABEL[slot]), /*#__PURE__*/React.createElement("span", {
+  }, W.SLOT_LABEL[slot]), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11.5,
+      color: COLORS.zohoTextLight,
+      lineHeight: 1.4,
+      marginTop: 1
+    }
+  }, W.SLOT_WHEN[slot])), /*#__PURE__*/React.createElement("span", {
     onClick: () => {
       if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]);
     },
@@ -20416,14 +20430,10 @@ function MassEmailModal({
       fontSize: 13.5,
       color: COLORS.zohoBlue,
       fontWeight: 500,
-      cursor: "pointer"
+      cursor: "pointer",
+      lineHeight: 1.4
     }
-  }, W.webinarSet[slot]), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 12,
-      color: COLORS.zohoTextLight
-    }
-  }, "\u00B7 ", W.SLOT_WHEN[slot])))) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, W.webinarSet[slot])))) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
     style: {
