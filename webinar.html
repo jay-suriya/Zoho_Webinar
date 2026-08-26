@@ -20220,6 +20220,8 @@ function MassEmailModal({
         if (W && name === W.webinarSet.invite) {
           setTailorLater(false);
           setLaterSet({});
+          // it is the webinar's own template, so show it: read-only, pencil to edit
+          if (window.openTemplatePreview) setTimeout(() => window.openTemplatePreview("sendInvite"), 60);
         }
         setShowSelectTemplate(false);
       }
