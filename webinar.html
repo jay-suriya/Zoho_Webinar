@@ -19934,11 +19934,21 @@ const TEMPLATE_LIST = [{
 }];
 function SelectTemplateModal({
   onClose,
-  onSelect
+  onSelect,
+  module,
+  slot
 }) {
   const [search, setSearch] = useState("");
   const [hovered, setHovered] = useState(null);
-  const filtered = TEMPLATE_LIST.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
+  const W = window.WEBINAR_TPL;
+  // when the send is to one module, this picker lists that module's templates
+  // alongside the webinar's own — nothing that can't render for these records
+  const source = (module && W)
+    ? [{ name: W.webinarSet[slot || "invite"], folder: "Zoho Webinar", highlighted: true }].concat(
+        (((W.CHOICES[module] || {})[slot || "invite"]) || []).map(n => ({ name: n, folder: module + " Templates" }))
+      )
+    : TEMPLATE_LIST;
+  const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
       background: "white",
@@ -19998,7 +20008,9 @@ function SelectTemplateModal({
       cursor: "pointer",
       minWidth: 180
     }
-  }, /*#__PURE__*/React.createElement("option", null, "All Templates"), /*#__PURE__*/React.createElement("option", null, "Public Email Templates"), /*#__PURE__*/React.createElement("option", null, "Patient Education"), /*#__PURE__*/React.createElement("option", null, "Healthcare"), /*#__PURE__*/React.createElement("option", null, "Meetups")), /*#__PURE__*/React.createElement("span", {
+  }, module
+    ? [/*#__PURE__*/React.createElement("option", { key: "m" }, module + " Templates"), /*#__PURE__*/React.createElement("option", { key: "w" }, "Zoho Webinar")]
+    : [/*#__PURE__*/React.createElement("option", { key: "a" }, "All Templates"), /*#__PURE__*/React.createElement("option", { key: "p" }, "Public Email Templates"), /*#__PURE__*/React.createElement("option", { key: "pe" }, "Patient Education"), /*#__PURE__*/React.createElement("option", { key: "h" }, "Healthcare"), /*#__PURE__*/React.createElement("option", { key: "me" }, "Meetups")]), /*#__PURE__*/React.createElement("span", {
     style: {
       position: "absolute",
       right: 10,
@@ -20184,9 +20196,15 @@ function MassEmailModal({
   const hasTemplate = !!template;
   if (showSelectTemplate) {
     return /*#__PURE__*/React.createElement(SelectTemplateModal, {
+      module: singleModule,
+      slot: "invite",
       onClose: () => setShowSelectTemplate(false),
       onSelect: name => {
         setTemplate(name);
+        if (W && name === W.webinarSet.invite) {
+          setTailorLater(false);
+          setLaterSet({});
+        }
         setShowSelectTemplate(false);
       }
     });
@@ -20232,7 +20250,7 @@ function MassEmailModal({
     }
   }, "JD, Shashank, Jaya 1 suriya 1, jaya 3 suriya 3, j...& 94 more"))), /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
-  }, "Template"), /*#__PURE__*/React.createElement("td", {
+  }, "Invitation Template"), /*#__PURE__*/React.createElement("td", {
     style: {
       padding: "6px 0 14px"
     }
@@ -20242,34 +20260,18 @@ function MassEmailModal({
       alignItems: "center",
       gap: 10
     }
-  }, !hasTemplate && /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("button", {
     style: {
       ...btnStyle,
       fontWeight: 600
     },
     onClick: () => setShowSelectTemplate(true)
-  }, "Select Template"), hasTemplate && singleModule && W && W.hasModuleOptions(singleModule, "invite") ? /*#__PURE__*/React.createElement("select", {
-    value: template,
-    onChange: e => {
-      setTemplate(e.target.value);
-      if (e.target.value === W.webinarSet.invite) {
-        setTailorLater(false);
-        setLaterSet({});
-      }
-    },
-    style: {
-      ...selectStyle,
-      minWidth: 215,
-      fontSize: 12.5
-    }
-  }, W.optionsFor(singleModule, "invite").map(o => /*#__PURE__*/React.createElement("option", {
-    key: o,
-    value: o
-  }, o))) : hasTemplate && /*#__PURE__*/React.createElement("span", {
+  }, "Select Template"), hasTemplate && /*#__PURE__*/React.createElement("span", {
     onClick: () => setShowSelectTemplate(true),
     style: {
-      color: COLORS.zohoBlue,
-      fontSize: 13,
+      color: COLORS.zohoRed,
+      fontSize: 13.5,
+      fontWeight: 500,
       cursor: "pointer"
     }
   }, template), hasTemplate && /*#__PURE__*/React.createElement("span", {
