@@ -464,6 +464,22 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   </div>
 </div>
 
+<!-- ═══ Save Template — names a newly created module template ═══ -->
+<div id="tpl-savemodal" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(49,57,73,0.5);align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:10px;width:440px;box-shadow:0 4px 9px rgba(49,57,73,0.6);overflow:hidden;">
+    <div style="padding:22px 26px 6px;font-size:19px;font-weight:700;color:#202123;">Save Template</div>
+    <div style="padding:14px 26px 6px;">
+      <label style="display:block;font-size:13px;color:#616E88;margin-bottom:6px;">Template Name</label>
+      <input id="tpl-savename" type="text" style="width:100%;height:34px;box-sizing:border-box;padding:0 12px;border:1px solid #C0C8E2;border-left:3px solid #FF5D5A;border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
+      <div style="font-size:12.5px;color:#8C91AB;margin-top:8px;">Saved to <span id="tpl-savefolder" style="color:#C2185B;font-weight:600;">Leads Templates</span></div>
+    </div>
+    <div style="padding:18px 26px 22px;display:flex;justify-content:flex-end;gap:10px;">
+      <button onclick="tplSaveCancel()" style="height:32px;padding:0 14px;border:1px solid #D5D8E9;border-radius:6px;background:linear-gradient(180deg,#FFFFFF,#F1F0F7);color:#313949;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;">Cancel</button>
+      <button onclick="tplSaveConfirm()" style="height:32px;padding:0 16px;border:none;border-radius:6px;background:linear-gradient(180deg,#5767F6,#124DC3);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Save</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ Template Editor — opened from "Customise Template" or the Create Webinar "Select Template" flow ═══ -->
 <!-- Top-level (sibling of settings-modal, not nested inside it) so it can be opened from ANY page, not just Setup. -->
 <div id="modfields-template-editor" style="display:none;position:fixed;inset:0;z-index:9000;flex-direction:column;background:#EDEEF2;">
@@ -486,7 +502,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
       <span style="font-size:13px;color:#C9CCE6;cursor:pointer;">1 Attachments</span>
       <button style="padding:9px 18px;border:1px solid #444868;border-radius:6px;background:transparent;color:#fff;font-size:13px;cursor:pointer;" onclick="closeTemplateEditor()">Cancel</button>
       <button style="padding:9px 18px;border:1px solid #444868;border-radius:6px;background:transparent;color:#fff;font-size:13px;cursor:pointer;">Preview</button>
-      <button style="padding:9px 20px;border:none;border-radius:6px;background:linear-gradient(135deg,#5767F6,#124DC3);color:#fff;font-size:13px;font-weight:600;cursor:pointer;">Save ▾</button>
+      <button onclick="tplSaveClick()" style="padding:9px 20px;border:none;border-radius:6px;background:linear-gradient(135deg,#5767F6,#124DC3);color:#fff;font-size:13px;font-weight:600;cursor:pointer;">Save ▾</button>
     </div>
   </div>
   <!-- body -->
@@ -5419,6 +5435,7 @@ var _tplEditorKey = null;
 function openTemplateEditor(key) {
   var meta = TPL_META[key] || TPL_META.confirmation;
   _tplEditorKey = key;
+  _tplNewModule = null;
   _tplMergeOrderOverride = null;
   tplMergeModule = 'Zoho Webinar';
   document.getElementById('modfields-tpl-subtitle').textContent = 'Welcome to Zoho Webinar';
@@ -5429,14 +5446,37 @@ function openTemplateEditor(key) {
 }
 function closeTemplateEditor() {
   document.getElementById('modfields-template-editor').style.display = 'none';
+  _tplNewModule = null;
+  _tplMergeOrderOverride = null;
   tplHideMergeDropdown();
 }
 
 // ── New module template (created from the Send Invite picker) ──────────────
 // The recipient is a CRM record, so the record's own module comes first in the
 // merge-field picker, then the webinar's fields, then Users and related modules.
+window.MODULE_TEMPLATES = window.MODULE_TEMPLATES || [];
+var _tplNewModule = null;
+function tplSaveClick() {
+  if (!_tplNewModule) { closeTemplateEditor(); return; }
+  document.getElementById('tpl-savename').value = 'Webinar Invite - ' + _tplNewModule;
+  document.getElementById('tpl-savefolder').textContent = _tplNewModule + ' Templates';
+  document.getElementById('tpl-savemodal').style.display = 'flex';
+}
+function tplSaveCancel() {
+  document.getElementById('tpl-savemodal').style.display = 'none';
+}
+function tplSaveConfirm() {
+  var mod = _tplNewModule;
+  var name = (document.getElementById('tpl-savename').value || '').trim() || ('Webinar Invite - ' + mod);
+  window.MODULE_TEMPLATES.push({ name: name, module: mod });
+  document.getElementById('tpl-savemodal').style.display = 'none';
+  closeTemplateEditor();
+  // tell the Send Invite flow so the new template is selected there
+  window.dispatchEvent(new CustomEvent('module-template-created', { detail: { name: name, module: mod } }));
+}
 function openNewModuleTemplate(module) {
   var mod = module || 'Leads';
+  _tplNewModule = mod;
   _tplEditorKey = null;
   _tplMergeOrderOverride = [mod, 'Zoho Webinar', 'Users'].concat(
     TPL_MERGE_REST.filter(function(m) { return m !== 'Users'; })
@@ -20755,8 +20795,11 @@ function SelectTemplateModal({
   // when the send is to one module, this picker lists that module's templates
   // alongside the webinar's own — nothing that can't render for these records
   const webinarTpls = (window.WEBINAR_TEMPLATES || []).map(t => ({ name: t[0], folder: "Zoho Webinar Templates", openRate: "0%" }));
-  // module-scoped invites: this org has no module template carrying an invite link yet
-  const source = moduleOnly ? [] : (webinarTpls.length ? webinarTpls : TEMPLATE_LIST);
+  // module-scoped invites list that module's own templates — empty until one is created
+  const moduleTpls = (window.MODULE_TEMPLATES || [])
+    .filter(t => t.module === (module || "Leads"))
+    .map(t => ({ name: t.name, folder: (module || "Leads") + " Templates", openRate: "0%" }));
+  const source = moduleOnly ? moduleTpls : (webinarTpls.length ? webinarTpls : TEMPLATE_LIST);
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -21078,6 +21121,16 @@ function MassEmailModal({
   const laterChanges = Object.keys(laterSet).filter(k => laterSet[k] && laterSet[k] !== W.webinarSet[k]);
   const inviteModule = singleModule || "Leads";
   const [tplSource, setTplSource] = useState("default");
+  React.useEffect(() => {
+    const onCreated = e => {
+      setTplSource("module");
+      setTemplate(e.detail.name);
+      setShowSelectTemplate(false);
+      setPickerSlot(null);
+    };
+    window.addEventListener("module-template-created", onCreated);
+    return () => window.removeEventListener("module-template-created", onCreated);
+  }, []);
   const [template, setTemplate] = useState(isReInvite ? "" : (W ? W.webinarSet.invite : "Send Invite Template"));
   const [sendOption, setSendOption] = useState("immediate");
   const [showSelectTemplate, setShowSelectTemplate] = useState(false);
