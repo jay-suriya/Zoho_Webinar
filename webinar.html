@@ -21121,10 +21121,18 @@ function MassEmailModal({
   const laterChanges = Object.keys(laterSet).filter(k => laterSet[k] && laterSet[k] !== W.webinarSet[k]);
   const inviteModule = singleModule || "Leads";
   const [tplSource, setTplSource] = useState("default");
+  const [laterSource, setLaterSource] = useState({});
+  const lastSlotRef = React.useRef("invite");
   React.useEffect(() => {
     const onCreated = e => {
-      setTplSource("module");
-      setTemplate(e.detail.name);
+      const slot = lastSlotRef.current || "invite";
+      if (slot === "invite") {
+        setTplSource("module");
+        setTemplate(e.detail.name);
+      } else {
+        setLaterSource(ls => ({ ...ls, [slot]: "module" }));
+        setLaterSet(ls => ({ ...ls, [slot]: e.detail.name }));
+      }
       setShowSelectTemplate(false);
       setPickerSlot(null);
     };
@@ -21145,11 +21153,93 @@ function MassEmailModal({
     attendeesFollowup: "attendeesFollowup",
     absenteesFollowup: "absenteesFollowup"
   };
+  const openPicker = slot => {
+    lastSlotRef.current = slot;
+    setPickerSlot(slot);
+    setShowSelectTemplate(true);
+  };
+  // a choice of where the template comes from, then a card showing the one in play
+  const tplPills = (value, onChange) => /*#__PURE__*/React.createElement("div", {
+    style: { display: "flex", gap: 4, marginBottom: 8 }
+  }, [["default", "Webinar default"], ["module", inviteModule + " template"]].map(o => /*#__PURE__*/React.createElement("span", {
+    key: o[0],
+    onClick: () => onChange(o[0]),
+    style: {
+      padding: "4px 14px",
+      borderRadius: 100,
+      fontSize: 12.5,
+      cursor: "pointer",
+      fontWeight: value === o[0] ? 600 : 400,
+      background: value === o[0] ? "#EBEDFF" : "transparent",
+      border: "1px solid " + (value === o[0] ? "#A3ACFF" : "transparent"),
+      color: value === o[0] ? "#3A4BD8" : COLORS.zohoTextLight
+    }
+  }, o[1])));
+  const tplCard = (name, folder, onPick, onPreview, emptyLabel) => name
+    ? /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          border: "1px solid #C0C8E2",
+          borderRadius: 8,
+          padding: "10px 14px",
+          background: "#fff"
+        }
+      }, /*#__PURE__*/React.createElement("svg", {
+        width: "17", height: "17", viewBox: "0 0 24 24", fill: "none",
+        stroke: COLORS.zohoBlue, strokeWidth: "1.7", style: { flexShrink: 0 }
+      }, /*#__PURE__*/React.createElement("rect", { x: "2", y: "4", width: "20", height: "16", rx: "2" }),
+         /*#__PURE__*/React.createElement("polyline", { points: "2,4 12,13 22,4" })),
+      /*#__PURE__*/React.createElement("div", { style: { flex: 1, minWidth: 0 } },
+        /*#__PURE__*/React.createElement("div", {
+          style: { fontSize: 13.5, fontWeight: 600, color: COLORS.zohoText }
+        }, name),
+        /*#__PURE__*/React.createElement("div", {
+          style: { fontSize: 11.5, color: COLORS.zohoTextMuted, marginTop: 2 }
+        }, folder)),
+      /*#__PURE__*/React.createElement("span", {
+        onClick: onPreview,
+        style: { fontSize: 12.5, color: COLORS.zohoTextLight, cursor: "pointer" }
+      }, "Preview"),
+      /*#__PURE__*/React.createElement("span", {
+        onClick: onPick,
+        style: { fontSize: 12.5, color: COLORS.zohoBlue, fontWeight: 600, cursor: "pointer" }
+      }, "Change"))
+    : /*#__PURE__*/React.createElement("div", {
+        style: {
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 12,
+          border: "1px dashed #C0C8E2",
+          borderRadius: 8,
+          padding: "10px 14px",
+          background: "#FAFBFF"
+        }
+      }, /*#__PURE__*/React.createElement("span", {
+        style: { fontSize: 12.5, color: COLORS.zohoTextLight }
+      }, emptyLabel), /*#__PURE__*/React.createElement("button", {
+        onClick: onPick,
+        style: { ...tplPickBtn, height: 30, fontSize: 12.5, padding: "0 14px" }
+      }, "Select Template"));
+  const inviteTplControl = /*#__PURE__*/React.createElement("div", { style: { maxWidth: 440 } },
+    tplPills(tplSource, v => {
+      setTplSource(v);
+      setTemplate(v === "default" ? (W ? W.webinarSet.invite : "Send Invite Template") : "");
+    }),
+    tplCard(
+      template,
+      tplSource === "default" ? "Zoho Webinar Templates" : inviteModule + " Templates",
+      () => openPicker("invite"),
+      () => { if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY.invite); },
+      "No " + inviteModule + " template chosen yet"
+    ));
   if (showSelectTemplate) {
     const slot = pickerSlot || "invite";
     return /*#__PURE__*/React.createElement(SelectTemplateModal, {
       module: inviteModule,
-      moduleOnly: slot === "invite" && tplSource === "module",
+      moduleOnly: (slot === "invite" ? tplSource : (laterSource[slot] || "default")) === "module",
       slot: slot,
       onClose: () => {
         setShowSelectTemplate(false);
@@ -21212,63 +21302,7 @@ function MassEmailModal({
     style: {
       padding: "6px 0 14px"
     }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: tplFieldBox
-  }, /*#__PURE__*/React.createElement("select", {
-    value: tplSource,
-    onChange: e => {
-      const v = e.target.value;
-      setTplSource(v);
-      setTemplate(v === "default" ? (W ? W.webinarSet.invite : "Send Invite Template") : "");
-    },
-    style: {
-      ...selectStyle,
-      minWidth: 150,
-      marginRight: 2
-    }
-  }, /*#__PURE__*/React.createElement("option", { value: "default" }, "Default template"), /*#__PURE__*/React.createElement("option", { value: "module" }, inviteModule + " template")), /*#__PURE__*/React.createElement("button", {
-    style: tplPickBtn,
-    onClick: () => {
-      setPickerSlot("invite");
-      setShowSelectTemplate(true);
-    }
-  }, "Select Template"), hasTemplate && /*#__PURE__*/React.createElement("span", {
-    onClick: () => {
-      if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY.invite);
-    },
-    style: {
-      color: "#C2185B",
-      fontSize: 14,
-      cursor: "pointer"
-    }
-  }, template), hasTemplate && (singleModule || isReInvite) && /*#__PURE__*/React.createElement("span", {
-    title: "View / edit this template",
-    onClick: () => {
-      if (window.openTemplatePreview) window.openTemplatePreview("sendInvite");
-    },
-    style: {
-      display: "inline-flex",
-      alignItems: "center",
-      cursor: "pointer",
-      padding: 3,
-      borderRadius: 4
-    },
-    onMouseEnter: e => e.currentTarget.style.background = "#EEEFFF",
-    onMouseLeave: e => e.currentTarget.style.background = "transparent"
-  }, /*#__PURE__*/React.createElement("svg", {
-    width: "14",
-    height: "14",
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: COLORS.zohoBlue,
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M12 20h9"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z"
-  })))))), !isReInvite && recipientCount > 0 && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
+  }, inviteTplControl)), !isReInvite && recipientCount > 0 && /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     colSpan: 2,
     style: {
       padding: "2px 0 14px"
@@ -21317,7 +21351,8 @@ function MassEmailModal({
       paddingBottom: 4
     }
   }, lifecycleSlots.map((slot, idx) => {
-    const current = laterSet[slot] || W.webinarSet[slot];
+    const src = laterSource[slot] || "default";
+    const current = src === "module" ? (laterSet[slot] || "") : (laterSet[slot] || W.webinarSet[slot]);
     const changed = current !== W.webinarSet[slot];
     return /*#__PURE__*/React.createElement("div", {
       key: slot,
@@ -21348,23 +21383,17 @@ function MassEmailModal({
         marginTop: 2
       }
     }, W.SLOT_WHEN[slot])), /*#__PURE__*/React.createElement("div", {
-          style: { ...tplFieldBox, minWidth: 300 }
-        }, /*#__PURE__*/React.createElement("button", {
-          style: { ...tplPickBtn, height: 28, fontSize: 12.5, padding: "0 12px" },
-          onClick: () => {
-            setPickerSlot(slot);
-            setShowSelectTemplate(true);
-          }
-        }, "Select Template"), /*#__PURE__*/React.createElement("span", {
-          onClick: () => {
-            if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]);
-          },
-          style: {
-            fontSize: 13.5,
-            color: "#C2185B",
-            cursor: "pointer"
-          }
-        }, current)));
+      style: { flex: 1, minWidth: 0, maxWidth: 440 }
+    }, tplPills(laterSource[slot] || "default", v => {
+      setLaterSource(ls => ({ ...ls, [slot]: v }));
+      setLaterSet(ls => ({ ...ls, [slot]: v === "default" ? W.webinarSet[slot] : "" }));
+    }), tplCard(
+      current,
+      (laterSource[slot] || "default") === "default" ? "Zoho Webinar Templates" : inviteModule + " Templates",
+      () => openPicker(slot),
+      () => { if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]); },
+      "No " + inviteModule + " template chosen yet"
+    )));
   })) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
