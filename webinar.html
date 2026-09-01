@@ -478,9 +478,9 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
       </div>
       <div>
         <div id="modfields-tpl-title" style="font-size:15px;font-weight:700;">Webinar Confirmation</div>
-        <div style="font-size:12px;color:#9EA1BE;">Welcome to Zoho Webinar</div>
+        <div id="modfields-tpl-subtitle" style="font-size:12px;color:#9EA1BE;">Welcome to Zoho Webinar</div>
       </div>
-      <span style="font-size:11.5px;font-weight:600;color:#C9CCE6;background:#2B2F55;border-radius:4px;padding:4px 10px;margin-left:6px;">Zoho Webinar</span>
+      <span id="modfields-tpl-modtag" style="font-size:11.5px;font-weight:600;color:#C9CCE6;background:#2B2F55;border-radius:4px;padding:4px 10px;margin-left:6px;">Zoho Webinar</span>
     </div>
     <div style="display:flex;align-items:center;gap:14px;">
       <span style="font-size:13px;color:#C9CCE6;cursor:pointer;">1 Attachments</span>
@@ -5419,7 +5419,10 @@ var _tplEditorKey = null;
 function openTemplateEditor(key) {
   var meta = TPL_META[key] || TPL_META.confirmation;
   _tplEditorKey = key;
+  _tplMergeOrderOverride = null;
   tplMergeModule = 'Zoho Webinar';
+  document.getElementById('modfields-tpl-subtitle').textContent = 'Welcome to Zoho Webinar';
+  document.getElementById('modfields-tpl-modtag').textContent = 'Zoho Webinar';
   document.getElementById('modfields-tpl-title').textContent = meta.label;
   document.getElementById('tpl-editable-body').innerHTML = meta.body();
   document.getElementById('modfields-template-editor').style.display = 'flex';
@@ -5427,6 +5430,24 @@ function openTemplateEditor(key) {
 function closeTemplateEditor() {
   document.getElementById('modfields-template-editor').style.display = 'none';
   tplHideMergeDropdown();
+}
+
+// ── New module template (created from the Send Invite picker) ──────────────
+// The recipient is a CRM record, so the record's own module comes first in the
+// merge-field picker, then the webinar's fields, then Users and related modules.
+function openNewModuleTemplate(module) {
+  var mod = module || 'Leads';
+  _tplEditorKey = null;
+  _tplMergeOrderOverride = [mod, 'Zoho Webinar', 'Users'].concat(
+    TPL_MERGE_REST.filter(function(m) { return m !== 'Users'; })
+  );
+  tplMergeModule = mod;
+  document.getElementById('modfields-tpl-title').textContent = 'New Template';
+  document.getElementById('modfields-tpl-subtitle').textContent = 'Invite email for ' + mod;
+  document.getElementById('modfields-tpl-modtag').textContent = mod;
+  document.getElementById('tpl-editable-body').innerHTML =
+    '<p style="color:#8C91AB;">Write the invite here. Type # to insert a merge field \u2014 add the webinar\'s Registration URL so recipients can sign up.</p>';
+  document.getElementById('modfields-template-editor').style.display = 'flex';
 }
 
 // ── Template Preview — read-only, shown first; pencil icon opens the real editor ──
@@ -5819,7 +5840,9 @@ var TPL_MERGE_SOURCES = {
 var TPL_MERGE_REST = ['Users','Organization','General','Zoho Bookings','Lookup 2','Personal','Lead Owner'];
 // Send Invite goes out to CRM records, so the record modules come right after Zoho Webinar.
 // Every other lifecycle template goes to a registrant, so Registrations sits next to Zoho Webinar.
+var _tplMergeOrderOverride = null;
 function tplMergeModules() {
+  if (_tplMergeOrderOverride) return _tplMergeOrderOverride;
   var head = (_tplEditorKey === 'sendInvite')
     ? ['Zoho Webinar','Leads','Contacts','Custom Module 1','Custom Module 2']
     : ['Zoho Webinar','Registrations','Leads','Contacts','Custom Module 1','Custom Module 2'];
@@ -20723,7 +20746,8 @@ function SelectTemplateModal({
   onClose,
   onSelect,
   module,
-  slot
+  slot,
+  moduleOnly
 }) {
   const [search, setSearch] = useState("");
   const [hovered, setHovered] = useState(null);
@@ -20731,7 +20755,8 @@ function SelectTemplateModal({
   // when the send is to one module, this picker lists that module's templates
   // alongside the webinar's own — nothing that can't render for these records
   const webinarTpls = (window.WEBINAR_TEMPLATES || []).map(t => ({ name: t[0], folder: "Zoho Webinar Templates", openRate: "0%" }));
-  const source = webinarTpls.length ? webinarTpls : TEMPLATE_LIST;
+  // module-scoped invites: this org has no module template carrying an invite link yet
+  const source = moduleOnly ? [] : (webinarTpls.length ? webinarTpls : TEMPLATE_LIST);
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -20791,7 +20816,9 @@ function SelectTemplateModal({
       cursor: "pointer",
       minWidth: 180
     }
-  }, [/*#__PURE__*/React.createElement("option", { key: "w" }, "Zoho Webinar Templates"), /*#__PURE__*/React.createElement("option", { key: "a" }, "All Templates")]), /*#__PURE__*/React.createElement("span", {
+  }, moduleOnly
+    ? [/*#__PURE__*/React.createElement("option", { key: "m" }, (module || "Leads") + " Templates")]
+    : [/*#__PURE__*/React.createElement("option", { key: "w" }, "Zoho Webinar Templates"), /*#__PURE__*/React.createElement("option", { key: "a" }, "All Templates")]), /*#__PURE__*/React.createElement("span", {
     style: {
       position: "absolute",
       right: 10,
@@ -20880,7 +20907,42 @@ function SelectTemplateModal({
       flex: 1,
       overflowY: "auto"
     }
-  }, filtered.map((t, i) => /*#__PURE__*/React.createElement("div", {
+  }, (moduleOnly && filtered.length === 0)
+    ? /*#__PURE__*/React.createElement("div", {
+        style: {
+          padding: "56px 30px 64px",
+          textAlign: "center"
+        }
+      }, /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 15,
+          color: COLORS.zohoText,
+          marginBottom: 6
+        }
+      }, "No " + (module || "Leads") + " template with an invite link is found."), /*#__PURE__*/React.createElement("div", {
+        style: {
+          fontSize: 13.5,
+          color: COLORS.zohoTextLight,
+          marginBottom: 20
+        }
+      }, "Click Create New to create."), /*#__PURE__*/React.createElement("button", {
+        onClick: () => {
+          onClose();
+          if (window.openNewModuleTemplate) setTimeout(() => window.openNewModuleTemplate(module || "Leads"), 60);
+        },
+        style: {
+          padding: "10px 22px",
+          background: "#FDEFF5",
+          border: "1px solid #C2185B",
+          color: "#C2185B",
+          borderRadius: 6,
+          fontSize: 14.5,
+          fontWeight: 600,
+          cursor: "pointer",
+          fontFamily: "inherit"
+        }
+      }, "Create New"))
+    : filtered.map((t, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
     onMouseEnter: () => setHovered(i),
     onMouseLeave: () => setHovered(null),
@@ -21014,6 +21076,8 @@ function MassEmailModal({
   const [laterOpen, setLaterOpen] = useState(false);
   const [laterSet, setLaterSet] = useState({});
   const laterChanges = Object.keys(laterSet).filter(k => laterSet[k] && laterSet[k] !== W.webinarSet[k]);
+  const inviteModule = singleModule || "Leads";
+  const [tplSource, setTplSource] = useState("default");
   const [template, setTemplate] = useState(isReInvite ? "" : (W ? W.webinarSet.invite : "Send Invite Template"));
   const [sendOption, setSendOption] = useState("immediate");
   const [showSelectTemplate, setShowSelectTemplate] = useState(false);
@@ -21031,7 +21095,8 @@ function MassEmailModal({
   if (showSelectTemplate) {
     const slot = pickerSlot || "invite";
     return /*#__PURE__*/React.createElement(SelectTemplateModal, {
-      module: singleModule,
+      module: inviteModule,
+      moduleOnly: slot === "invite" && tplSource === "module",
       slot: slot,
       onClose: () => {
         setShowSelectTemplate(false);
@@ -21096,7 +21161,19 @@ function MassEmailModal({
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: tplFieldBox
-  }, /*#__PURE__*/React.createElement("button", {
+  }, /*#__PURE__*/React.createElement("select", {
+    value: tplSource,
+    onChange: e => {
+      const v = e.target.value;
+      setTplSource(v);
+      setTemplate(v === "default" ? (W ? W.webinarSet.invite : "Send Invite Template") : "");
+    },
+    style: {
+      ...selectStyle,
+      minWidth: 150,
+      marginRight: 2
+    }
+  }, /*#__PURE__*/React.createElement("option", { value: "default" }, "Default template"), /*#__PURE__*/React.createElement("option", { value: "module" }, inviteModule + " template")), /*#__PURE__*/React.createElement("button", {
     style: tplPickBtn,
     onClick: () => {
       setPickerSlot("invite");
