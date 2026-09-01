@@ -20799,7 +20799,7 @@ function SelectTemplateModal({
   const moduleTpls = (window.MODULE_TEMPLATES || [])
     .filter(t => t.module === (module || "Leads"))
     .map(t => ({ name: t.name, folder: (module || "Leads") + " Templates", openRate: "0%" }));
-  const [scope, setScope] = useState(moduleOnly ? "module" : "webinar");
+  const scope = moduleOnly ? "module" : "webinar";
   const source = scope === "module" ? moduleTpls : (webinarTpls.length ? webinarTpls : TEMPLATE_LIST);
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
@@ -20860,9 +20860,7 @@ function SelectTemplateModal({
       cursor: "pointer",
       minWidth: 180
     },
-    value: scope,
-    onChange: e => setScope(e.target.value)
-  }, [/*#__PURE__*/React.createElement("option", { key: "w", value: "webinar" }, "Zoho Webinar Templates"), /*#__PURE__*/React.createElement("option", { key: "m", value: "module" }, (module || "Leads") + " Templates")]), /*#__PURE__*/React.createElement("span", {
+  }, [/*#__PURE__*/React.createElement("option", { key: "s" }, scope === "module" ? (module || "Leads") + " Templates" : "Zoho Webinar Templates")]), /*#__PURE__*/React.createElement("span", {
     style: {
       position: "absolute",
       right: 10,
@@ -21159,8 +21157,8 @@ function MassEmailModal({
     setPickerSlot(slot);
     setShowSelectTemplate(true);
   };
-  // one dropdown per email: the webinar's own template, any module template that has been
-  // created, and "Browse templates..." to open the full picker.
+  // per email: a two-option dropdown; the default shows its template, the module option
+  // shows a Select Template button (and the chosen template once picked).
   const applyPick = (slot, src, name) => {
     if (slot === "invite") { setTplSource(src); setTemplate(name); }
     else {
@@ -21168,25 +21166,34 @@ function MassEmailModal({
       setLaterSet(ls => ({ ...ls, [slot]: name }));
     }
   };
-  const tplSelect = (slot, value, source) => {
-    const webinarName = slot === "invite" ? (W ? W.webinarSet.invite : "") : W.webinarSet[slot];
-    const moduleTpls = (window.MODULE_TEMPLATES || []).filter(t => t.module === inviteModule);
-    const opts = [/*#__PURE__*/React.createElement("option", { key: "w", value: "w:" + webinarName }, webinarName + "  (default)")];
-    moduleTpls.forEach((t, i) => opts.push(/*#__PURE__*/React.createElement("option", { key: "m" + i, value: "m:" + t.name }, t.name + "  (" + inviteModule + ")")));
-    if (!value) opts.unshift(/*#__PURE__*/React.createElement("option", { key: "none", value: "" }, "Select template..."));
-    opts.push(/*#__PURE__*/React.createElement("option", { key: "br", value: "__browse" }, "Browse templates..."));
-    return /*#__PURE__*/React.createElement("select", {
-      value: value ? (source === "module" ? "m:" : "w:") + value : "",
+  const tplRow = (slot, value, source) => {
+    const defaultName = slot === "invite" ? (W ? W.webinarSet.invite : "") : W.webinarSet[slot];
+    return /*#__PURE__*/React.createElement("div", {
+      style: { display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }
+    }, /*#__PURE__*/React.createElement("select", {
+      value: source,
       onChange: e => {
         const v = e.target.value;
-        if (v === "__browse") { openPicker(slot); return; }
-        if (!v) return;
-        applyPick(slot, v.slice(0, 2) === "m:" ? "module" : "default", v.slice(2));
+        applyPick(slot, v, v === "default" ? defaultName : "");
       },
-      style: { ...selectStyle, minWidth: 250, maxWidth: 320 }
-    }, opts);
+      style: { ...selectStyle, minWidth: 150 }
+    }, /*#__PURE__*/React.createElement("option", { value: "default" }, "Default template"),
+       /*#__PURE__*/React.createElement("option", { value: "module" }, inviteModule + " template")),
+    source === "default"
+      ? /*#__PURE__*/React.createElement("span", {
+          onClick: () => { if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]); },
+          title: "Preview",
+          style: { fontSize: 13, color: COLORS.zohoText, cursor: "pointer" }
+        }, defaultName)
+      : /*#__PURE__*/React.createElement("button", {
+          onClick: () => openPicker(slot),
+          style: { ...tplPickBtn, height: 30, fontSize: 12.5, padding: "0 14px" }
+        }, "Select Template"),
+    source === "module" && value && /*#__PURE__*/React.createElement("span", {
+      style: { fontSize: 13, color: "#C2185B" }
+    }, value));
   };
-  const inviteTplControl = tplSelect("invite", template, tplSource);
+  const inviteTplControl = tplRow("invite", template, tplSource);
   if (showSelectTemplate) {
     const slot = pickerSlot || "invite";
     return /*#__PURE__*/React.createElement(SelectTemplateModal, {
@@ -21340,7 +21347,7 @@ function MassEmailModal({
       }
     }, W.SLOT_WHEN[slot])), /*#__PURE__*/React.createElement("div", {
       style: { flex: 1, minWidth: 0, paddingTop: 2 }
-    }, tplSelect(slot, current, laterSource[slot] || "default")));
+    }, tplRow(slot, current, laterSource[slot] || "default")));
   })) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
