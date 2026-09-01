@@ -429,7 +429,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         <span id="tplpv-title" style="font-size:26px;font-weight:800;color:#222;"></span>
         <span style="display:inline-flex;align-items:center;gap:6px;border:1px solid #d6d6e3;border-radius:6px;padding:5px 10px;font-size:12.5px;color:#555;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-          Zoho Webinar Templates
+          <span id="tplpv-folder">Zoho Webinar Templates</span>
         </span>
       </div>
       <div style="display:flex;align-items:center;gap:14px;">
@@ -5474,6 +5474,37 @@ function tplSaveConfirm() {
   // tell the Send Invite flow so the new template is selected there
   window.dispatchEvent(new CustomEvent('module-template-created', { detail: { name: name, module: mod } }));
 }
+function moduleTplBody(module) {
+  return '<p>Hi #' + module + '.First Name,</p>' +
+    '<p>You are invited to <b>#Webinar Title</b> on <b>#Webinar Date &amp; Time</b>.</p>' +
+    tplJoinCard('<b>Note:</b> Seats are limited \u2014 register early to confirm your spot.').replace('Join Webinar', 'Register Now') +
+    '<p>Hosted by #Webinar Organiser. Once you register, we\'ll email you the join link.</p>' +
+    '<hr style="border:none;border-top:1px solid #eee;margin:22px 0 14px;">' +
+    '<p style="margin:0;font-size:11.5px;color:#999;">This invitation was sent to #' + module + '.Email regarding #Webinar Title.</p>';
+}
+var _tplPreviewModuleTpl = null;
+function openModuleTemplatePreview(name, module) {
+  _tplPreviewKey = null;
+  _tplPreviewModuleTpl = { name: name, module: module };
+  document.getElementById('tplpv-title').textContent = name;
+  document.getElementById('tplpv-folder').textContent = module + ' Templates';
+  document.getElementById('tplpv-subtitle').textContent = module + ' Templates';
+  document.getElementById('tplpv-body').innerHTML = moduleTplBody(module);
+  document.getElementById('modfields-template-preview').style.display = 'flex';
+}
+function openModuleTemplateEditor(name, module) {
+  _tplNewModule = module;
+  _tplEditorKey = null;
+  _tplMergeOrderOverride = [module, 'Zoho Webinar', 'Users'].concat(
+    TPL_MERGE_REST.filter(function(m) { return m !== 'Users'; })
+  );
+  tplMergeModule = module;
+  document.getElementById('modfields-tpl-title').textContent = name;
+  document.getElementById('modfields-tpl-subtitle').textContent = 'Invite email for ' + module;
+  document.getElementById('modfields-tpl-modtag').textContent = module;
+  document.getElementById('tpl-editable-body').innerHTML = moduleTplBody(module);
+  document.getElementById('modfields-template-editor').style.display = 'flex';
+}
 function openNewModuleTemplate(module) {
   var mod = module || 'Leads';
   _tplNewModule = mod;
@@ -5496,6 +5527,7 @@ function openTemplatePreview(key) {
   var meta = TPL_META[key] || TPL_META.confirmation;
   _tplPreviewKey = key;
   document.getElementById('tplpv-title').textContent = meta.label;
+  document.getElementById('tplpv-folder').textContent = 'Zoho Webinar Templates';
   document.getElementById('tplpv-subtitle').textContent = 'Zoho Webinar';
   document.getElementById('tplpv-body').innerHTML = meta.body();
   document.getElementById('modfields-template-preview').style.display = 'flex';
@@ -5503,8 +5535,15 @@ function openTemplatePreview(key) {
 function closeTemplatePreview() {
   document.getElementById('modfields-template-preview').style.display = 'none';
   _tplPreviewKey = null;
+  _tplPreviewModuleTpl = null;
 }
 function tplPreviewEdit() {
+  if (_tplPreviewModuleTpl) {
+    var t = _tplPreviewModuleTpl;
+    closeTemplatePreview();
+    openModuleTemplateEditor(t.name, t.module);
+    return;
+  }
   var key = _tplPreviewKey;
   closeTemplatePreview();
   openTemplateEditor(key);
@@ -21182,15 +21221,35 @@ function MassEmailModal({
     source === "default"
       ? /*#__PURE__*/React.createElement("span", {
           onClick: () => { if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]); },
-          title: "Preview",
-          style: { fontSize: 13, color: COLORS.zohoText, cursor: "pointer" }
+          title: "Click to preview",
+          style: {
+            fontSize: 13,
+            color: COLORS.zohoBlue,
+            cursor: "pointer",
+            textDecoration: "underline",
+            textUnderlineOffset: 3,
+            textDecorationColor: "#C6CDF7"
+          },
+          onMouseEnter: e => e.currentTarget.style.textDecorationColor = COLORS.zohoBlue,
+          onMouseLeave: e => e.currentTarget.style.textDecorationColor = "#C6CDF7"
         }, defaultName)
       : /*#__PURE__*/React.createElement("button", {
           onClick: () => openPicker(slot),
           style: { ...tplPickBtn, height: 30, fontSize: 12.5, padding: "0 14px" }
         }, "Select Template"),
     source === "module" && value && /*#__PURE__*/React.createElement("span", {
-      style: { fontSize: 13, color: "#C2185B" }
+      onClick: () => { if (window.openModuleTemplatePreview) window.openModuleTemplatePreview(value, inviteModule); },
+      title: "Click to preview",
+      style: {
+        fontSize: 13,
+        color: "#C2185B",
+        cursor: "pointer",
+        textDecoration: "underline",
+        textUnderlineOffset: 3,
+        textDecorationColor: "#EFB8CE"
+      },
+      onMouseEnter: e => e.currentTarget.style.textDecorationColor = "#C2185B",
+      onMouseLeave: e => e.currentTarget.style.textDecorationColor = "#EFB8CE"
     }, value));
   };
   const inviteTplControl = tplRow("invite", template, tplSource);
