@@ -235,6 +235,19 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .tpl-toggle span:not(.active){background:#fff;color:#1B2B6B}
 .tpl-fixed{display:inline-flex;align-items:center;gap:6px;border:1px solid #1B2B6B;border-radius:3px;overflow:hidden;font-size:12px;background:#1B2B6B;color:#fff;padding:5px 10px;cursor:pointer;width:fit-content}
 .tpl-fixed:hover{background:#15224f}
+.tpl-field{display:flex;align-items:center;gap:14px;position:relative;background:#fff;border:1px solid #C0C8E2;border-radius:6px;padding:5px 14px 5px 10px;width:fit-content;min-width:360px;overflow:hidden}
+.tpl-field::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:#F1685E}
+.tpl-select-btn{height:32px;padding:0 16px;border:1px solid #D5D8E9;border-radius:6px;background:linear-gradient(180deg,#FFFFFF,#F1F0F7);color:#1B1A2E;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap}
+.tpl-select-btn:hover{background:linear-gradient(180deg,#FFFFFF,#EAEBF5)}
+.tpl-field-name{font-size:14.5px;color:#C2185B;cursor:pointer}
+.stpl-row{display:flex;align-items:center;justify-content:space-between;padding:15px 28px;border-bottom:1px solid #EFEFF2;cursor:pointer}
+.stpl-row:hover{background:#FDF4F8}
+.stpl-row .stpl-meta{visibility:hidden;display:flex;align-items:center;gap:26px}
+.stpl-row:hover .stpl-meta,.stpl-row.selected .stpl-meta{visibility:visible}
+.stpl-row.selected{background:#FDF4F8}
+.stpl-star{flex-shrink:0}
+.stpl-name{font-size:15px;font-weight:700;color:#1B1A2E}
+.stpl-folder{font-size:14.5px;color:#8C93B0}
 .btn-row{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid #ccc}
 .btn-cancel{padding:8px 20px;background:#fff;border:1px solid #ccc;border-radius:4px;font-size:13px;cursor:pointer;color:#333}
 .btn-cancel:hover{background:#f5f5f5}
@@ -746,7 +759,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
             <a href="#" onclick="return false" style="font-size:13px;color:#333;text-decoration:none;" onmouseover="this.style.color='#1a73e8'" onmouseout="this.style.color='#333'">Canvas ✨</a>
             <a href="#" onclick="return false" style="font-size:13px;color:#333;text-decoration:none;" onmouseover="this.style.color='#1a73e8'" onmouseout="this.style.color='#333'">Customize Home page</a>
             <a href="#" onclick="return false" style="font-size:13px;color:#333;text-decoration:none;" onmouseover="this.style.color='#1a73e8'" onmouseout="this.style.color='#333'">Translations</a>
-            <a href="#" onclick="return false" style="font-size:13px;color:#333;text-decoration:none;" onmouseover="this.style.color='#1a73e8'" onmouseout="this.style.color='#333'">Templates</a>
+            <a href="#" onclick="openTemplatesPage();return false" style="font-size:13px;color:#333;text-decoration:none;" onmouseover="this.style.color='#1a73e8'" onmouseout="this.style.color='#333'">Templates</a>
             <a href="#" onclick="return false" style="font-size:13px;color:#333;text-decoration:none;" onmouseover="this.style.color='#1a73e8'" onmouseout="this.style.color='#333'">Teamspace ✨</a>
           </div>
         </div>
@@ -914,6 +927,80 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
       </div>
 
     </div><!-- end settings-grid-view -->
+
+    <!-- ═══ Customization › Templates ═══ -->
+    <div id="templates-overlay" style="display:none;flex:1;overflow:hidden;flex-direction:column;background:#f2f3f5;">
+      <!-- breadcrumb bar -->
+      <div style="background:#fff;border-bottom:1px solid #e8e8e8;padding:0 24px;height:44px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#555;flex-shrink:0;">
+        <span onclick="templatesBack()" style="cursor:pointer;display:flex;align-items:center;gap:6px;color:#C2185B;font-weight:700;font-size:14px;" onmouseover="this.style.opacity='0.75'" onmouseout="this.style.opacity='1'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          Setup Home
+        </span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.8"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+      </div>
+
+      <div style="flex:1;display:flex;overflow:hidden;">
+        <!-- left setup nav sidebar -->
+        <div style="width:230px;flex-shrink:0;border-right:1px solid #eee;overflow-y:auto;padding:16px 0;background:#fff;">
+          <div style="padding:0 16px;margin-bottom:16px;">
+            <div style="display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:12.5px;color:#888;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Search
+            </div>
+          </div>
+          <div id="tplpage-setupnav" style="display:flex;flex-direction:column;"></div>
+        </div>
+
+        <!-- right content -->
+        <div style="flex:1;overflow-y:auto;padding:18px 22px;">
+          <div style="background:#fff;border:1px solid #e8e8e8;border-radius:10px;overflow:hidden;">
+            <!-- header row: title + tabs + module filter + search -->
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;gap:18px;">
+              <div style="display:flex;align-items:center;gap:26px;">
+                <span style="font-size:20px;font-weight:800;color:#111;">Templates</span>
+                <div id="tplpage-tabs" style="display:flex;align-items:center;border:1px solid #e0e0e6;border-radius:22px;padding:3px;"></div>
+              </div>
+              <div style="display:flex;align-items:center;gap:14px;position:relative;">
+                <div onclick="tplPageToggleModuleMenu()" style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:#111;cursor:pointer;padding:7px 12px;border-radius:6px;" onmouseover="this.style.background='#f5f5f7'" onmouseout="this.style.background='transparent'">
+                  <span id="tplpage-module-label">All Modules</span>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div id="tplpage-module-menu" style="display:none;position:absolute;top:40px;left:0;min-width:220px;background:#fff;border:1px solid #e0e0e6;border-radius:8px;box-shadow:0 6px 18px rgba(49,57,73,0.18);padding:6px 0;z-index:60;"></div>
+                <div style="display:flex;align-items:center;gap:7px;border:1px solid #d6d6e3;border-radius:22px;padding:8px 16px;font-size:13px;min-width:210px;color:#aaa;">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#aaa" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  Search Template
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;border-top:1px solid #eee;">
+              <!-- category column -->
+              <div style="width:280px;flex-shrink:0;border-right:1px solid #eee;padding:18px 22px 26px;">
+                <button style="padding:11px 20px;border:none;border-radius:6px;background:linear-gradient(180deg,#A02059,#7C1544);color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;margin-bottom:18px;">+ New Template</button>
+                <div id="tplpage-categories" style="display:flex;flex-direction:column;gap:14px;"></div>
+              </div>
+              <!-- table -->
+              <div style="flex:1;min-width:0;">
+                <table style="width:100%;border-collapse:collapse;font-size:13.5px;">
+                  <thead>
+                    <tr style="border-bottom:1px solid #eee;">
+                      <th style="text-align:left;padding:14px 20px;color:#333;font-weight:700;">
+                        <span style="display:inline-block;width:13px;height:13px;border:1.5px solid #C0C8E2;border-radius:3px;margin-right:12px;vertical-align:middle;"></span>Template Name
+                      </th>
+                      <th style="text-align:left;padding:14px 16px;color:#333;font-weight:700;width:150px;">Modified By</th>
+                      <th style="text-align:left;padding:14px 16px;color:#333;font-weight:700;width:130px;">Last Used</th>
+                      <th style="text-align:left;padding:14px 20px;color:#333;font-weight:700;width:110px;">Stats</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tplpage-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- ═══ Modules and Fields — list page ═══ -->
     <div id="modfields-overlay" style="display:none;flex:1;overflow:hidden;flex-direction:column;background:#fff;">
@@ -3862,7 +3949,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 <div class="form-row" id="confirmationTemplateRow">
   <div class="form-group">
     <label>Confirmation Email Template</label>
-    <div class="tpl-fixed" onclick="openTemplatePreview('confirmation')">Webinar Confirmation Template</div>
+    <div class="tpl-field"><button type="button" class="tpl-select-btn" onclick="openSlotTemplatePicker('conf')">Select Template</button><span class="tpl-field-name" id="tplchip-conf" onclick="tplSlotPreview('conf')">Webinar Confirmation Template</span></div>
   </div>
 </div>
 
@@ -3929,7 +4016,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   <div class="form-row" id="confirmationTemplateRowWithout">
     <div class="form-group">
       <label>Thank You Email Template</label>
-      <div class="tpl-fixed" onclick="openTemplatePreview('attendeesFollowup')">Attendees Follow-up Template</div>
+      <div class="tpl-field"><button type="button" class="tpl-select-btn" onclick="openSlotTemplatePicker('thankyou')">Select Template</button><span class="tpl-field-name" id="tplchip-thankyou" onclick="tplSlotPreview('thankyou')">Attendees Follow-up Template</span></div>
     </div>
   </div>
 
@@ -3995,7 +4082,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   <div class="form-row">
     <div class="form-group">
       <label>1st Reminder Template</label>
-      <div class="tpl-fixed" onclick="openTemplatePreview('reminder1')">1st Reminder Template</div>
+      <div class="tpl-field"><button type="button" class="tpl-select-btn" onclick="openSlotTemplatePicker('r1')">Select Template</button><span class="tpl-field-name" id="tplchip-r1" onclick="tplSlotPreview('r1')">1st Reminder Template</span></div>
     </div>
   </div>
 
@@ -4026,7 +4113,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   <div class="form-row hidden" id="reminder2TemplateRow">
     <div class="form-group">
       <label>2nd Reminder Template</label>
-      <div class="tpl-fixed" onclick="openTemplatePreview('reminder2')">2nd Reminder Template</div>
+      <div class="tpl-field"><button type="button" class="tpl-select-btn" onclick="openSlotTemplatePicker('r2')">Select Template</button><span class="tpl-field-name" id="tplchip-r2" onclick="tplSlotPreview('r2')">2nd Reminder Template</span></div>
     </div>
   </div>
 
@@ -4057,7 +4144,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   <div class="form-row hidden" id="reminder3TemplateRow">
     <div class="form-group">
       <label>3rd Reminder Template</label>
-      <div class="tpl-fixed" onclick="openTemplatePreview('reminder3')">3rd Reminder Template</div>
+      <div class="tpl-field"><button type="button" class="tpl-select-btn" onclick="openSlotTemplatePicker('r3')">Select Template</button><span class="tpl-field-name" id="tplchip-r3" onclick="tplSlotPreview('r3')">3rd Reminder Template</span></div>
     </div>
   </div>
 </div>
@@ -4110,11 +4197,11 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 <div class="form-row" id="followupTemplateRow">
   <div class="form-group" id="followupAttendeesTemplateGroup">
     <label>Attendees Follow-up Template</label>
-    <div class="tpl-fixed" onclick="openTemplatePreview('attendeesFollowup')">Attendees Follow-up Template</div>
+    <div class="tpl-field"><button type="button" class="tpl-select-btn" onclick="openSlotTemplatePicker('fuAtt')">Select Template</button><span class="tpl-field-name" id="tplchip-fuAtt" onclick="tplSlotPreview('fuAtt')">Attendees Follow-up Template</span></div>
   </div>
   <div class="form-group" id="followupAbsenteesTemplateGroup">
     <label>Absentees Follow-up Template</label>
-    <div class="tpl-fixed" onclick="openTemplatePreview('absenteesFollowup')">Absentees Follow-up Template</div>
+    <div class="tpl-field"><button type="button" class="tpl-select-btn" onclick="openSlotTemplatePicker('fuAbs')">Select Template</button><span class="tpl-field-name" id="tplchip-fuAbs" onclick="tplSlotPreview('fuAbs')">Absentees Follow-up Template</span></div>
   </div>
 </div>
 
@@ -4641,11 +4728,28 @@ function _syncCrmFormPicker(label){
 <div id="selectTemplateModal" class="modal-overlay" onclick="if(event.target===this)closeSelectTemplateModal()">
   <div class="modal" style="width:860px;max-height:90vh;display:flex;flex-direction:column;border-radius:8px;overflow:hidden;">
     <!-- Header -->
-    <div style="padding:20px 28px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;">
-      <h2 style="font-size:20px;font-weight:700;color:#1B1A2E;margin:0;">Select Template</h2>
-      <button onclick="closeSelectTemplateModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:#888;line-height:1;">&times;</button>
+    <div style="padding:24px 28px 0;display:flex;align-items:flex-start;justify-content:space-between;">
+      <h2 style="font-size:23px;font-weight:800;color:#1B1A2E;margin:0;">Select Template</h2>
+      <button onclick="closeSelectTemplateModal()" style="background:none;border:none;font-size:24px;cursor:pointer;color:#555;line-height:1;">&times;</button>
     </div>
-    <!-- Template list: only the 6 Zoho Webinar lifecycle templates -->
+    <!-- Toolbar: folder filter + search + A-Z + Create Template -->
+    <div style="padding:18px 28px 16px;display:flex;align-items:center;gap:14px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #C0C8E2;border-radius:6px;padding:10px 14px;min-width:230px;font-size:15px;color:#1B1A2E;cursor:pointer;">
+        <span id="stpl-folder-filter">All Templates</span>
+        <span style="color:#555;font-size:11px;">&#9660;</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;border:1px solid #C2185B;border-radius:6px;padding:10px 14px;min-width:270px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa0b8" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <span style="font-size:15px;color:#9aa0b8;">Search Template</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:2px;color:#555;cursor:pointer;">
+        <span style="display:flex;flex-direction:column;align-items:center;line-height:0.95;font-size:11px;"><span>A</span><span>Z</span></span>
+        <span style="font-size:15px;">&#8595;</span>
+      </div>
+      <div style="flex:1;"></div>
+      <button style="padding:11px 20px;border:1px solid #C2185B;border-radius:6px;background:#fff;color:#C2185B;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">+ Create Template</button>
+    </div>
+    <!-- Template list -->
     <div style="flex:1;overflow-y:auto;" id="webinarTplListBody"></div>
   </div>
 </div>
@@ -4804,6 +4908,8 @@ function openSettingsModal() {
   if (gridView) gridView.style.display = 'block';
   if (searchBar) searchBar.style.display = 'flex';
   if (integOverlay) integOverlay.style.display = 'none';
+  var tplOverlay = document.getElementById('templates-overlay');
+  if (tplOverlay) tplOverlay.style.display = 'none';
 }
 function closeSettingsModal() {
   document.getElementById('settings-modal').style.display = 'none';
@@ -5023,6 +5129,171 @@ function modfieldsDetailBack() {
   document.getElementById('modfields-overlay').style.display = 'flex';
 }
 
+
+// ── Customization › Templates ──────────────────────────────
+var TPLPAGE_MODULES = ['Contacts','Accounts','Potentials','Financial Services','Tasks','Meetings','Calls','Zoho Webinar'];
+var TPLPAGE_TYPES = ['Email','Inventory','Mail Merge'];
+var TPLPAGE_CATEGORIES = [
+  ['All Templates', false], ['Favorites', false], ['Associated Templates', false],
+  ['Created by me', false], ['Shared with me', false], ['Public Email Templates', true],
+  ['Managerial templates', false], ['Test', true], ['Donor Management', false],
+  ['zoho survey', true], ['Halloween Email Tem…', true], ['Zoho Sign', true],
+  ['Healthcare', true], ['Saas - Updates', true], ['Real Estate', true],
+  ['Meetups', true], ['Patient Education', true]
+];
+var TPLPAGE_SETUPNAV = [
+  {group:null, items:[['Active Directory Sync',0],['Login History',0],['Audit Log',0]]},
+  {group:'Customization', items:[['Modules and Fields',1],['Pipelines',0],['Wizards',0],['Kiosk Studio',0],['Canvas ✨',0],['Customize Home page',0],['Translations',0],['Templates',2],['Teamspace ✨',0]]},
+  {group:'Channels', items:[['Email',0],['Telephony',0],['Business Messaging',0],['Notification SMS',0],['Webforms',0],['Social',0],['Chat',0],['Portals',0]]},
+  {group:'Automation', items:[['Workflow Rules',0],['Actions',0],['Schedules',0],['Assignment',0]]}
+];
+// name, module, sub-label, modifiedBy, modified date, last used, stats, stats sub
+var TPLPAGE_ROWS = [
+  ['Closed lost',                'Potentials',       'Closed lost',                            'Rao Priya','Aug 25',      '',            '',     ''],
+  ['Closed won',                 'Potentials',       'Closed won',                             'Rao Priya','Aug 25',      'Aug 25',      '50%',  '1/2'],
+  ['Zooho Survey Test Template', 'Leads',            'Zoho Survey Test Template',              'Rao Priya','Jan 28',      'Jan 28',      '100%', '1/1'],
+  ['Test',                       'Donor Manag…','test22',                                 'Rao Priya','Jan 12',      '',            '',     ''],
+  ['Survey 2',                   'Contacts',         'test',                                   'Rao Priya','Jan 06',      '',            '',     ''],
+  ['Zoho Survey',                'Contacts',         'test',                                   'Rao Priya','Jan 06',      'Jan 06',      '100%', '1/1'],
+  ['Donor Welcome Email',        'Donor Manag…','Donor Welcome Email',                    'Rao Priya','Nov 21, 2025','Nov 23, 2025','',     ''],
+  ['Test Template',              'AI Creative Mo…','Test Template',                       'Rao Priya','Nov 20, 2025','',            '',     ''],
+  ['Welcome lead',               'Leads',            'Send email when a new lead is created.', 'Rao Priya','Oct 28, 2025','Oct 28, 2025','',     '']
+];
+var tplPageModule = 'All Modules';
+var tplPageType = 'Email';
+var tplPageCategory = 'All Templates';
+
+function openTemplatesPage() {
+  document.getElementById('settings-grid-view').style.display = 'none';
+  document.getElementById('setup-search-bar').style.display = 'none';
+  var integOverlay = document.getElementById('integ-overlay');
+  if (integOverlay) integOverlay.style.display = 'none';
+  document.getElementById('modfields-overlay').style.display = 'none';
+  document.getElementById('modfields-detail-overlay').style.display = 'none';
+  var ov = document.getElementById('templates-overlay');
+  ov.style.display = 'flex';
+  tplPageModule = 'All Modules';
+  tplPageType = 'Email';
+  tplPageCategory = 'All Templates';
+  document.getElementById('tplpage-module-label').textContent = 'All Modules';
+  document.getElementById('tplpage-module-menu').style.display = 'none';
+  tplPageRenderSetupNav();
+  tplPageRenderTabs();
+  tplPageRenderCategories();
+  tplPageRenderModuleMenu();
+  tplPageRenderRows();
+}
+function templatesBack() {
+  document.getElementById('templates-overlay').style.display = 'none';
+  document.getElementById('settings-grid-view').style.display = 'block';
+  document.getElementById('setup-search-bar').style.display = 'flex';
+}
+function tplPageGoModules() {
+  document.getElementById('templates-overlay').style.display = 'none';
+  openModulesAndFields();
+}
+
+function tplPageRenderSetupNav() {
+  document.getElementById('tplpage-setupnav').innerHTML = TPLPAGE_SETUPNAV.map(function(sec) {
+    var head = sec.group ? '<div style="padding:14px 20px 8px;font-size:12px;font-weight:700;color:#888;display:flex;align-items:center;gap:8px;">' +
+      (sec.group === 'Customization' ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3"/></svg>' : '') +
+      sec.group + '</div>' : '';
+    return head + sec.items.map(function(it) {
+      var name = it[0], kind = it[1];
+      var style = 'padding:7px 20px 7px 34px;font-size:13px;cursor:' + (kind ? 'pointer' : 'default') + ';';
+      if (kind === 2) style += 'background:#fde8ef;color:#C2185B;font-weight:600;';
+      else style += 'color:#333;';
+      var click = kind === 1 ? ' onclick="tplPageGoModules()"' : '';
+      return '<div' + click + ' style="' + style + '">' + name + '</div>';
+    }).join('');
+  }).join('');
+}
+
+function tplPageRenderTabs() {
+  document.getElementById('tplpage-tabs').innerHTML = TPLPAGE_TYPES.map(function(t) {
+    var active = t === tplPageType;
+    return '<span onclick="tplPageSwitchType(\'' + t + '\')" style="font-size:13.5px;padding:7px 22px;border-radius:20px;cursor:pointer;' +
+      (active ? 'background:#fff;border:1px solid #C2185B;color:#111;font-weight:600;' : 'color:#555;border:1px solid transparent;') + '">' + t + '</span>';
+  }).join('');
+}
+function tplPageSwitchType(t) { tplPageType = t; tplPageRenderTabs(); tplPageRenderRows(); }
+
+function tplPageRenderCategories() {
+  document.getElementById('tplpage-categories').innerHTML = TPLPAGE_CATEGORIES.map(function(c) {
+    var active = c[0] === tplPageCategory;
+    var people = c[1] ? ' <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.8" style="vertical-align:-2px;margin-left:6px;"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5"/><path d="M16 11a3 3 0 100-6"/><path d="M18 20c0-2-.7-3.6-2-4.6"/></svg>' : '';
+    return '<div onclick="tplPageSwitchCategory(\'' + c[0].replace(/'/g, "\\'") + '\')" style="font-size:14px;cursor:pointer;' +
+      (active ? 'color:#C2185B;font-weight:600;' : 'color:#333;') + '">' + c[0] + people + '</div>';
+  }).join('');
+}
+function tplPageSwitchCategory(c) { tplPageCategory = c; tplPageRenderCategories(); tplPageRenderRows(); }
+
+function tplPageToggleModuleMenu() {
+  var m = document.getElementById('tplpage-module-menu');
+  m.style.display = m.style.display === 'none' ? 'block' : 'none';
+}
+function tplPageRenderModuleMenu() {
+  document.getElementById('tplpage-module-menu').innerHTML = ['All Modules'].concat(TPLPAGE_MODULES).map(function(m) {
+    var active = m === tplPageModule;
+    return '<div onclick="tplPagePickModule(\'' + m + '\')" style="padding:10px 20px;font-size:14px;cursor:pointer;' +
+      (active ? 'background:#fdeff4;color:#C2185B;font-weight:600;' : 'color:#333;') + '"' +
+      (active ? '' : ' onmouseover="this.style.background=\'#fdeff4\'" onmouseout="this.style.background=\'transparent\'"') + '>' + m + '</div>';
+  }).join('');
+}
+function tplPagePickModule(m) {
+  tplPageModule = m;
+  document.getElementById('tplpage-module-label').textContent = m;
+  document.getElementById('tplpage-module-menu').style.display = 'none';
+  tplPageRenderModuleMenu();
+  tplPageRenderRows();
+}
+
+// Zoho Webinar's lifecycle templates — the same set shown in
+// Setup > Modules and Fields > Zoho Webinar > Preferences (WEBINAR_TEMPLATES),
+// from the invite template right through to the cancellation template.
+function tplPageWebinarRows() {
+  return WEBINAR_TEMPLATES.map(function(t) {
+    return [t[0], 'Zoho Webinar', t[0].replace(/ Template$/, ''), 'Jay', t[2], t[3], '', ''];
+  });
+}
+function tplPageRows() {
+  if (tplPageModule === 'Zoho Webinar') return tplPageWebinarRows();
+  var rows = TPLPAGE_ROWS.concat(tplPageWebinarRows());
+  if (tplPageModule === 'All Modules') return rows;
+  return rows.filter(function(r) { return r[1] === tplPageModule; });
+}
+function tplPageRenderRows() {
+  var rows = tplPageRows();
+  var tbody = document.getElementById('tplpage-tbody');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr><td colspan="4" style="padding:40px 20px;text-align:center;color:#888;">No templates found for this module.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = rows.map(function(r) {
+    var key = (typeof TPL_KEY_BY_NAME !== 'undefined') ? TPL_KEY_BY_NAME[r[0]] : null;
+    var nameClick = key ? ' onclick="openTemplatePreview(\'' + key + '\')"' : '';
+    var nameStyle = 'font-size:14px;color:#111;font-weight:500;' + (key ? 'cursor:pointer;' : '');
+    var stats = r[6]
+      ? '<div style="color:#C2185B;font-weight:600;">' + r[6] + '</div><div style="color:#C2185B;font-size:12.5px;">' + r[7] + '</div>'
+      : '<span style="color:#888;">-</span>';
+    return '<tr style="border-bottom:1px solid #f2f2f5;" onmouseover="this.style.background=\'#fdf6f9\'" onmouseout="this.style.background=\'transparent\'">' +
+      '<td style="padding:14px 20px;">' +
+        '<div style="display:flex;align-items:flex-start;gap:12px;">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c9c9d4" stroke-width="1.8" style="margin-top:3px;flex-shrink:0;"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg>' +
+          '<div>' +
+            '<div' + nameClick + ' style="' + nameStyle + '">' + r[0] + '</div>' +
+            '<div style="margin-top:4px;font-size:13px;"><span style="color:#0F935B;">' + r[1] + '</span>' +
+              '<span style="color:#bbb;margin:0 8px;">·</span><span style="color:#8b7bd8;">' + r[2] + '</span></div>' +
+          '</div>' +
+        '</div>' +
+      '</td>' +
+      '<td style="padding:14px 16px;"><div style="color:#111;">' + r[3] + '</div><div style="color:#8b7bd8;font-size:12.5px;">' + r[4] + '</div></td>' +
+      '<td style="padding:14px 16px;color:#111;">' + (r[5] || '') + '</td>' +
+      '<td style="padding:14px 20px;">' + stats + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
 // ── Template Editor ────────────────────────────────────────
 var TPL_KEY_BY_NAME = {
   'Send Invite Template': 'sendInvite',
@@ -5151,8 +5422,11 @@ var TPL_META = {
   }
 };
 
+var _tplEditorKey = null;
 function openTemplateEditor(key) {
   var meta = TPL_META[key] || TPL_META.confirmation;
+  _tplEditorKey = key;
+  tplMergeModule = 'Zoho Webinar';
   document.getElementById('modfields-tpl-title').textContent = meta.label;
   document.getElementById('tpl-editable-body').innerHTML = meta.body();
   document.getElementById('modfields-template-editor').style.display = 'flex';
@@ -5188,10 +5462,10 @@ function tplPreviewEdit() {
 // link). So the chosen set is STAMPED on each invitee when the invite is sent,
 // and the later emails read the stamp instead of re-deriving the module.
 window.WEBINAR_TPL = {
-  DEFAULT: 'Webinar Invitation',
+  DEFAULT: 'Send Invite Template',
   // what the webinar itself is set to send, from the creation form
   webinarSet: {
-    invite: 'Webinar Invitation',
+    invite: 'Send Invite Template',
     confirmation: 'Webinar Confirmation Template',
     reminder1: '1st Reminder Template',
     reminder2: '2nd Reminder Template',
@@ -5269,6 +5543,65 @@ window.WEBINAR_TPL = {
   // the stamp: what each invitee was promised at the moment they were invited
   stamps: {}
 };
+
+// ── Create-flow template slots — each slot starts on the template meant for it,
+//    and "Select Template" opens the Zoho Webinar template list from Setup > Templates ──
+var TPL_SLOT_DEFAULTS = {
+  conf:     'Webinar Confirmation Template',
+  thankyou: 'Attendees Follow-up Template',
+  r1:       '1st Reminder Template',
+  r2:       '2nd Reminder Template',
+  r3:       '3rd Reminder Template',
+  fuAtt:    'Attendees Follow-up Template',
+  fuAbs:    'Absentees Follow-up Template'
+};
+var tplSlotSelection = {};
+Object.keys(TPL_SLOT_DEFAULTS).forEach(function(k) { tplSlotSelection[k] = TPL_SLOT_DEFAULTS[k]; });
+var _activeTplSlot = null;
+
+function tplSlotPreview(slot) {
+  var key = TPL_KEY_BY_NAME[tplSlotSelection[slot]];
+  if (key) openTemplatePreview(key);
+}
+function openSlotTemplatePicker(slot) {
+  _activeTplSlot = slot;
+  _activeTplToggle = null;
+  renderSlotTplList();
+  document.getElementById('selectTemplateModal').classList.add('open');
+}
+function renderSlotTplList() {
+  var current = tplSlotSelection[_activeTplSlot];
+  var star = '<svg class="stpl-star" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c9c9d4" stroke-width="1.6"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg>';
+  var spark = '<svg width="20" height="14" viewBox="0 0 24 16" fill="none" stroke="#5B8FF9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,12 6,5 11,10 16,3 23,9"/></svg>';
+  document.getElementById('webinarTplListBody').innerHTML = WEBINAR_TEMPLATES.map(function(t) {
+    var name = t[0];
+    var on = name === current;
+    return '<div class="stpl-row' + (on ? ' selected' : '') + '" onclick="pickSlotTemplate(\'' + name.replace(/'/g, "\\'") + '\')">' +
+        '<div style="display:flex;align-items:center;gap:14px;">' + star +
+          '<span class="stpl-name">' + name + '</span>' +
+          '<span style="color:#D8D8E2;">|</span>' +
+          '<span class="stpl-folder">Zoho Webinar Templates</span>' +
+        '</div>' +
+        '<div class="stpl-meta">' +
+          '<span style="display:flex;align-items:center;gap:8px;color:#C2185B;font-size:14.5px;">' + spark + 'Open Rate: 0%</span>' +
+          '<span onclick="event.stopPropagation();tplRowPreview(\'' + name.replace(/'/g, "\\'") + '\')" style="color:#C2185B;font-size:14.5px;">Preview</span>' +
+        '</div>' +
+      '</div>';
+  }).join('');
+}
+function tplRowPreview(name) {
+  var key = TPL_KEY_BY_NAME[name];
+  if (key) openTemplatePreview(key);
+}
+function pickSlotTemplate(name) {
+  if (_activeTplSlot) {
+    tplSlotSelection[_activeTplSlot] = name;
+    var chip = document.getElementById('tplchip-' + _activeTplSlot);
+    if (chip) chip.textContent = name;
+  }
+  closeSelectTemplateModal();
+  _activeTplSlot = null;
+}
 
 // ── Create-flow "Select Template" — curated list of the 6 webinar templates ──
 function renderWebinarTplList() {
@@ -5473,6 +5806,15 @@ function tplInsertLink() {
 var TPL_MERGE_SOURCES = {
   'Leads': ['Lead Id','Lead Owner','Company','First Name','Last Name','Title','Email','Phone','Mobile','Lead Source','Industry','City','State','Country'],
   'Zoho Webinar': ['Webinar Title','Webinar Date & Time','Webinar Organiser','Webinar Duration','Description'],
+  // Registrations — the registrant record created once someone signs up. Available on every
+  // lifecycle template EXCEPT Send Invite (at invite time nobody has registered yet).
+  'Registrations': ['Registration Id','Country','Created By','Created Time','Email','First Name','Modified By',
+                    'Timezone','Add To Google Calendar','Add To Yahoo Calendar','Add To Outlook Calendar',
+                    'Add To Zoho Calendar','Add To Calendar','Join URL','Handouts','Cancel Registration',
+                    'Audio Details','Registration URL','Full Name','Last Name','Abuse Email','iOS app URL'],
+  'Contacts': ['Contact Id','Contact Owner','Account Name','First Name','Last Name','Title','Email','Phone','Mobile','Department','Mailing City','Mailing State','Mailing Country'],
+  'Custom Module 1': ['Record Id','Record Name','Record Owner','Email','Phone','Created Time'],
+  'Custom Module 2': ['Record Id','Record Name','Record Owner','Email','Phone','Created Time'],
   'Users': ['User Id','User Name','Email','Role','Profile'],
   'Organization': ['Company Name','Website','Phone','Street','City','State','Country'],
   'General': ['Current Date','Current Time','Unsubscribe Link','View in Browser'],
@@ -5481,8 +5823,17 @@ var TPL_MERGE_SOURCES = {
   'Personal': ['My Name','My Email','My Phone'],
   'Lead Owner': ['Owner Name','Owner Email','Owner Phone']
 };
-var TPL_MERGE_MODULES = ['Leads','Zoho Webinar','Users','Organization','General','Zoho Bookings','Lookup 2','Personal','Lead Owner'];
-var tplMergeModule = 'Leads';
+var TPL_MERGE_REST = ['Users','Organization','General','Zoho Bookings','Lookup 2','Personal','Lead Owner'];
+// Send Invite goes out to CRM records, so the record modules come right after Zoho Webinar.
+// Every other lifecycle template goes to a registrant, so Registrations sits next to Zoho Webinar.
+function tplMergeModules() {
+  var head = (_tplEditorKey === 'sendInvite')
+    ? ['Zoho Webinar','Leads','Contacts','Custom Module 1','Custom Module 2']
+    : ['Zoho Webinar','Registrations','Leads','Contacts','Custom Module 1','Custom Module 2'];
+  return head.concat(TPL_MERGE_REST);
+}
+var TPL_MERGE_MODULES = tplMergeModules();
+var tplMergeModule = 'Zoho Webinar';
 var TPL_MERGE_FIELDS = TPL_MERGE_SOURCES['Leads'];
 
 function tplRenderMergeFields() {
@@ -5502,7 +5853,7 @@ function tplToggleMergeModules(e) {
   var box = document.getElementById('tpl-merge-modlist');
   if (!box) return;
   if (box.style.display === 'block') { box.style.display = 'none'; return; }
-  box.innerHTML = TPL_MERGE_MODULES.map(function(m) {
+  box.innerHTML = tplMergeModules().map(function(m) {
     var on = m === tplMergeModule;
     return '<div onmousedown="event.preventDefault();tplPickMergeModule(\'' + m + '\')" ' +
       'style="display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:14px;color:#E7E9F5;cursor:pointer;' +
@@ -7198,6 +7549,7 @@ function openSelectTemplateModal(tplToggle) {
 function closeSelectTemplateModal() {
   document.getElementById('selectTemplateModal').classList.remove('open');
   _activeTplToggle = null;
+  _activeTplSlot = null;
 }
 function openDefaultTemplateModal(tplToggle) {
   _activeTplToggle = tplToggle;
@@ -19709,7 +20061,7 @@ function AddParticipantsModal({
   const [added, setAdded] = useState(preSelected || []);
   const [search, setSearch] = useState("");
   const [moduleFilter, setModuleFilter] = useState(initialModule || "Leads");
-  const [step, setStep] = useState(1); // 1=select, 2=confirm
+  const [step, setStep] = useState(0); // 0=pick module, 1=select records, 2=confirm
   const filtered = allLeads.filter(l => (moduleFilter === "All" || l.module === moduleFilter) && (l.name.toLowerCase().includes(search.toLowerCase()) || l.email.toLowerCase().includes(search.toLowerCase())));
   const commitAdded = () => setAdded(a => [...new Set([...a, ...selected])]);
   const selectedByModule = INVITE_MODULES.map(m => ({
@@ -19725,6 +20077,130 @@ function AddParticipantsModal({
     if (allChecked) setSelected(selected.filter(id => !filtered.find(l => l.id === id)));else setSelected([...new Set([...selected, ...filtered.map(l => l.id)])]);
   };
   const toggle = id => setSelected(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]);
+  // ── STEP 0: pick the module to invite from (custom modules included) ──
+  const moduleList = INVITE_MODULES.filter(m => m.toLowerCase().includes(search.toLowerCase()));
+  if (step === 0) return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
+    style: {
+      background: "white",
+      borderRadius: 8,
+      width: 620,
+      maxHeight: "82vh",
+      display: "flex",
+      flexDirection: "column",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.18)"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "16px 22px 14px",
+      borderBottom: `1px solid ${COLORS.zohoBorder}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      gap: 12,
+      alignItems: "center"
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 32,
+      height: 32,
+      background: COLORS.zohoBlueLight,
+      borderRadius: 6,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+    }
+  }, /*#__PURE__*/React.createElement(Icon.Filter, null)), /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 600,
+      fontSize: 16,
+      color: COLORS.zohoText
+    }
+  }, isReInvite ? "Re-Invite" : "Send Invite")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 13,
+      color: COLORS.zohoTextLight,
+      marginTop: 8
+    }
+  }, "Which module do you want to invite records from?")), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 22px",
+      borderBottom: `1px solid ${COLORS.zohoBorder}`
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "center",
+      border: `1px solid ${COLORS.zohoBorder}`,
+      borderRadius: 4,
+      padding: "6px 10px",
+      gap: 6
+    }
+  }, /*#__PURE__*/React.createElement(Icon.Search, null), /*#__PURE__*/React.createElement("input", {
+    value: search,
+    onChange: e => setSearch(e.target.value),
+    placeholder: "Search modules",
+    style: {
+      border: "none",
+      outline: "none",
+      fontSize: 13,
+      flex: 1,
+      color: COLORS.zohoText,
+      fontFamily: "inherit"
+    }
+  }))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      overflowY: "auto"
+    }
+  }, moduleList.length === 0 ? /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "28px 22px",
+      fontSize: 13,
+      color: COLORS.zohoTextLight,
+      textAlign: "center"
+    }
+  }, "No modules match that search.") : moduleList.map(m => /*#__PURE__*/React.createElement("div", {
+    key: m,
+    onClick: () => {
+      setModuleFilter(m);
+      setSearch("");
+      setStep(1);
+    },
+    onMouseEnter: e => e.currentTarget.style.background = "#f5f8ff",
+    onMouseLeave: e => e.currentTarget.style.background = "white",
+    style: {
+      display: "flex",
+      alignItems: "center",
+      gap: 14,
+      padding: "14px 22px",
+      borderBottom: `1px solid ${COLORS.zohoBorder}`,
+      cursor: "pointer",
+      background: "white"
+    }
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      flex: 1,
+      fontSize: 14,
+      fontWeight: 600,
+      color: COLORS.zohoText
+    }
+  }, m), /*#__PURE__*/React.createElement("span", {
+    style: {
+      color: COLORS.zohoTextLight,
+      fontSize: 16
+    }
+  }, "\u203A")))), /*#__PURE__*/React.createElement("div", {
+    style: {
+      padding: "12px 22px",
+      borderTop: `1px solid ${COLORS.zohoBorder}`,
+      display: "flex",
+      justifyContent: "flex-end"
+    }
+  }, /*#__PURE__*/React.createElement("button", {
+    style: btnStyle,
+    onClick: onClose
+  }, "Cancel"))));
   if (step === 2) return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
       background: "white",
@@ -19765,18 +20241,17 @@ function AddParticipantsModal({
       fontSize: 16,
       color: COLORS.zohoText
     }
-  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("select", {
-    value: moduleFilter,
-    onChange: e => setModuleFilter(e.target.value),
+  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("span", {
     style: {
-      ...selectStyle,
+      fontSize: 13,
       fontWeight: 600,
-      color: COLORS.zohoText
+      color: COLORS.zohoBlue,
+      background: COLORS.zohoBlueLight,
+      border: `1px solid ${COLORS.zohoBorder}`,
+      borderRadius: 12,
+      padding: "3px 12px"
     }
-  }, INVITE_MODULES.map(m => /*#__PURE__*/React.createElement("option", {
-    key: m,
-    value: m
-  }, m))), /*#__PURE__*/React.createElement("select", {
+  }, moduleFilter), /*#__PURE__*/React.createElement("select", {
     style: selectStyle
   }, /*#__PURE__*/React.createElement("option", null, "All " + moduleFilter), /*#__PURE__*/React.createElement("option", null, moduleFilter + " in Review"), /*#__PURE__*/React.createElement("option", null, "New This Week"), /*#__PURE__*/React.createElement("option", null, "New Last Week"), /*#__PURE__*/React.createElement("option", null, "Created by Me"), /*#__PURE__*/React.createElement("option", null, "Important " + moduleFilter))), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -19991,18 +20466,17 @@ function AddParticipantsModal({
       fontSize: 16,
       color: COLORS.zohoText
     }
-  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("select", {
-    value: moduleFilter,
-    onChange: e => setModuleFilter(e.target.value),
+  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("span", {
     style: {
-      ...selectStyle,
+      fontSize: 13,
       fontWeight: 600,
-      color: COLORS.zohoText
+      color: COLORS.zohoBlue,
+      background: COLORS.zohoBlueLight,
+      border: `1px solid ${COLORS.zohoBorder}`,
+      borderRadius: 12,
+      padding: "3px 12px"
     }
-  }, INVITE_MODULES.map(m => /*#__PURE__*/React.createElement("option", {
-    key: m,
-    value: m
-  }, m))), /*#__PURE__*/React.createElement("select", {
+  }, moduleFilter), /*#__PURE__*/React.createElement("select", {
     style: selectStyle
   }, /*#__PURE__*/React.createElement("option", null, "All " + moduleFilter), /*#__PURE__*/React.createElement("option", null, moduleFilter + " in Review"), /*#__PURE__*/React.createElement("option", null, "New This Week"), /*#__PURE__*/React.createElement("option", null, "New Last Week"), /*#__PURE__*/React.createElement("option", null, "Created by Me"), /*#__PURE__*/React.createElement("option", null, "Important " + moduleFilter)), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -20263,11 +20737,8 @@ function SelectTemplateModal({
   const W = window.WEBINAR_TPL;
   // when the send is to one module, this picker lists that module's templates
   // alongside the webinar's own — nothing that can't render for these records
-  const source = (module && W)
-    ? [{ name: W.webinarSet[slot || "invite"], folder: "Zoho Webinar", openRate: "0%" }].concat(
-        (((W.CHOICES[module] || {})[slot || "invite"]) || []).map(n => ({ name: n, folder: module + " Templates", openRate: "0%" }))
-      )
-    : TEMPLATE_LIST;
+  const webinarTpls = (window.WEBINAR_TEMPLATES || []).map(t => ({ name: t[0], folder: "Zoho Webinar Templates", openRate: "0%" }));
+  const source = webinarTpls.length ? webinarTpls : TEMPLATE_LIST;
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -20327,9 +20798,7 @@ function SelectTemplateModal({
       cursor: "pointer",
       minWidth: 180
     }
-  }, module
-    ? [/*#__PURE__*/React.createElement("option", { key: "m" }, module + " Templates"), /*#__PURE__*/React.createElement("option", { key: "w" }, "Zoho Webinar")]
-    : [/*#__PURE__*/React.createElement("option", { key: "a" }, "All Templates"), /*#__PURE__*/React.createElement("option", { key: "p" }, "Public Email Templates"), /*#__PURE__*/React.createElement("option", { key: "pe" }, "Patient Education"), /*#__PURE__*/React.createElement("option", { key: "h" }, "Healthcare"), /*#__PURE__*/React.createElement("option", { key: "me" }, "Meetups")]), /*#__PURE__*/React.createElement("span", {
+  }, [/*#__PURE__*/React.createElement("option", { key: "w" }, "Zoho Webinar Templates"), /*#__PURE__*/React.createElement("option", { key: "a" }, "All Templates")]), /*#__PURE__*/React.createElement("span", {
     style: {
       position: "absolute",
       right: 10,
@@ -20504,6 +20973,31 @@ function SelectTemplateModal({
     }
   }, "Preview")))))));
 }
+const tplFieldBox = {
+  display: "flex",
+  alignItems: "center",
+  gap: 12,
+  background: "white",
+  border: "1px solid #C0C8E2",
+  borderLeft: "3px solid #F1685E",
+  borderRadius: 6,
+  padding: "5px 14px 5px 10px",
+  width: "fit-content",
+  minWidth: 340
+};
+const tplPickBtn = {
+  height: 32,
+  padding: "0 16px",
+  border: "1px solid #D5D8E9",
+  borderRadius: 6,
+  background: "linear-gradient(180deg,#FFFFFF,#F1F0F7)",
+  color: "#1B1A2E",
+  fontSize: 13.5,
+  fontWeight: 700,
+  cursor: "pointer",
+  fontFamily: "inherit",
+  whiteSpace: "nowrap"
+};
 function MassEmailModal({
   onClose,
   onSent,
@@ -20527,7 +21021,7 @@ function MassEmailModal({
   const [laterOpen, setLaterOpen] = useState(false);
   const [laterSet, setLaterSet] = useState({});
   const laterChanges = Object.keys(laterSet).filter(k => laterSet[k] && laterSet[k] !== W.webinarSet[k]);
-  const [template, setTemplate] = useState(isReInvite ? "" : "Webinar Invitation");
+  const [template, setTemplate] = useState(isReInvite ? "" : (W ? W.webinarSet.invite : "Send Invite Template"));
   const [sendOption, setSendOption] = useState("immediate");
   const [showSelectTemplate, setShowSelectTemplate] = useState(false);
   const [pickerSlot, setPickerSlot] = useState(null);
@@ -20608,33 +21102,20 @@ function MassEmailModal({
       padding: "6px 0 14px"
     }
   }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 10
-    }
-  }, (singleModule || isReInvite) && /*#__PURE__*/React.createElement("button", {
-    style: {
-      ...btnStyle,
-      fontWeight: 600
-    },
+    style: tplFieldBox
+  }, /*#__PURE__*/React.createElement("button", {
+    style: tplPickBtn,
     onClick: () => {
       setPickerSlot("invite");
       setShowSelectTemplate(true);
     }
   }, "Select Template"), hasTemplate && /*#__PURE__*/React.createElement("span", {
     onClick: () => {
-      if (singleModule || isReInvite) {
-        setPickerSlot("invite");
-        setShowSelectTemplate(true);
-      } else if (window.openTemplatePreview) {
-        window.openTemplatePreview("sendInvite");
-      }
+      if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY.invite);
     },
     style: {
-      color: (singleModule || isReInvite) ? COLORS.zohoRed : COLORS.zohoBlue,
-      fontSize: 13,
-      fontWeight: 500,
+      color: "#C2185B",
+      fontSize: 14,
       cursor: "pointer"
     }
   }, template), hasTemplate && (singleModule || isReInvite) && /*#__PURE__*/React.createElement("span", {
@@ -20743,22 +21224,10 @@ function MassEmailModal({
         lineHeight: 1.35,
         marginTop: 2
       }
-    }, W.SLOT_WHEN[slot])), singleModule && !isReInvite
-      ? /*#__PURE__*/React.createElement("div", {
-          style: {
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            flexWrap: "wrap",
-            minHeight: 30
-          }
+    }, W.SLOT_WHEN[slot])), /*#__PURE__*/React.createElement("div", {
+          style: { ...tplFieldBox, minWidth: 300 }
         }, /*#__PURE__*/React.createElement("button", {
-          style: {
-            ...btnStyle,
-            fontWeight: 500,
-            padding: "5px 11px",
-            fontSize: 12.5
-          },
+          style: { ...tplPickBtn, height: 28, fontSize: 12.5, padding: "0 12px" },
           onClick: () => {
             setPickerSlot(slot);
             setShowSelectTemplate(true);
@@ -20768,25 +21237,11 @@ function MassEmailModal({
             if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]);
           },
           style: {
-            fontSize: 13,
-            color: changed ? COLORS.zohoRed : COLORS.zohoBlue,
-            fontWeight: 500,
+            fontSize: 13.5,
+            color: "#C2185B",
             cursor: "pointer"
           }
-        }, current))
-      : /*#__PURE__*/React.createElement("span", {
-          onClick: () => {
-            if (window.openTemplatePreview) window.openTemplatePreview(TPL_PREVIEW_KEY[slot]);
-          },
-          style: {
-            fontSize: 13,
-            color: COLORS.zohoBlue,
-            fontWeight: 500,
-            cursor: "pointer",
-            paddingTop: 5,
-            lineHeight: 1.35
-          }
-        }, current));
+        }, current)));
   })) ))), hasTemplate && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("td", {
     style: fieldLabel
   }, "From"), /*#__PURE__*/React.createElement("td", {
