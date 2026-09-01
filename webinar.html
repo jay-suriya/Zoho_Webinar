@@ -1145,7 +1145,8 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
           </div>
           <!-- PREFERENCES tab content: Zoho Webinar — email template customisation (no toggle bar, no providers section) -->
           <div id="modfields-webinar-settings" style="display:none;flex:1;overflow-y:auto;background:#fff;padding:28px;">
-            <div style="font-size:14.5px;font-weight:700;color:#111;margin-bottom:16px;">Customise Email Notifications</div>
+            <div style="font-size:14.5px;font-weight:700;color:#111;">Customise Email Notifications</div>
+            <div style="font-size:12.5px;color:#888;margin:4px 0 16px;">The emails Zoho Webinar sends — from the invite through to cancellation. They belong to this module and are managed here, not under Setup &rsaquo; Templates.</div>
             <table style="width:100%;border-collapse:collapse;font-size:13.5px;">
               <thead>
                 <tr style="border-bottom:1px solid #e8e8e8;">
@@ -5131,7 +5132,7 @@ function modfieldsDetailBack() {
 
 
 // ── Customization › Templates ──────────────────────────────
-var TPLPAGE_MODULES = ['Contacts','Accounts','Potentials','Financial Services','Tasks','Meetings','Calls','Zoho Webinar'];
+var TPLPAGE_MODULES = ['Contacts','Accounts','Potentials','Financial Services','Tasks','Meetings','Calls'];
 var TPLPAGE_TYPES = ['Email','Inventory','Mail Merge'];
 var TPLPAGE_CATEGORIES = [
   ['All Templates', false], ['Favorites', false], ['Associated Templates', false],
@@ -5248,19 +5249,11 @@ function tplPagePickModule(m) {
   tplPageRenderRows();
 }
 
-// Zoho Webinar's lifecycle templates — the same set shown in
-// Setup > Modules and Fields > Zoho Webinar > Preferences (WEBINAR_TEMPLATES),
-// from the invite template right through to the cancellation template.
-function tplPageWebinarRows() {
-  return WEBINAR_TEMPLATES.map(function(t) {
-    return [t[0], 'Zoho Webinar', t[0].replace(/ Template$/, ''), 'Jay', t[2], t[3], '', ''];
-  });
-}
+// The webinar's own lifecycle templates are NOT listed here — they belong to the
+// Zoho Webinar module and are managed in Modules and Fields > Zoho Webinar > Preferences.
 function tplPageRows() {
-  if (tplPageModule === 'Zoho Webinar') return tplPageWebinarRows();
-  var rows = TPLPAGE_ROWS.concat(tplPageWebinarRows());
-  if (tplPageModule === 'All Modules') return rows;
-  return rows.filter(function(r) { return r[1] === tplPageModule; });
+  if (tplPageModule === 'All Modules') return TPLPAGE_ROWS;
+  return TPLPAGE_ROWS.filter(function(r) { return r[1] === tplPageModule; });
 }
 function tplPageRenderRows() {
   var rows = tplPageRows();
