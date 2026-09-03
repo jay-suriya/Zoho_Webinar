@@ -20212,17 +20212,18 @@ function AddParticipantsModal({
       fontSize: 16,
       color: COLORS.zohoText
     }
-  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("span", {
+  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("select", {
+    value: moduleFilter,
+    onChange: e => setModuleFilter(e.target.value),
     style: {
-      fontSize: 13,
+      ...selectStyle,
       fontWeight: 600,
-      color: COLORS.zohoBlue,
-      background: COLORS.zohoBlueLight,
-      border: `1px solid ${COLORS.zohoBorder}`,
-      borderRadius: 12,
-      padding: "3px 12px"
+      color: COLORS.zohoText
     }
-  }, moduleFilter), /*#__PURE__*/React.createElement("select", {
+  }, INVITE_MODULES.map(m => /*#__PURE__*/React.createElement("option", {
+    key: m,
+    value: m
+  }, m))), /*#__PURE__*/React.createElement("select", {
     style: selectStyle
   }, /*#__PURE__*/React.createElement("option", null, "All " + moduleFilter), /*#__PURE__*/React.createElement("option", null, moduleFilter + " in Review"), /*#__PURE__*/React.createElement("option", null, "New This Week"), /*#__PURE__*/React.createElement("option", null, "New Last Week"), /*#__PURE__*/React.createElement("option", null, "Created by Me"), /*#__PURE__*/React.createElement("option", null, "Important " + moduleFilter))), /*#__PURE__*/React.createElement("div", {
     style: {
@@ -20437,17 +20438,18 @@ function AddParticipantsModal({
       fontSize: 16,
       color: COLORS.zohoText
     }
-  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("span", {
+  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("select", {
+    value: moduleFilter,
+    onChange: e => setModuleFilter(e.target.value),
     style: {
-      fontSize: 13,
+      ...selectStyle,
       fontWeight: 600,
-      color: COLORS.zohoBlue,
-      background: COLORS.zohoBlueLight,
-      border: `1px solid ${COLORS.zohoBorder}`,
-      borderRadius: 12,
-      padding: "3px 12px"
+      color: COLORS.zohoText
     }
-  }, moduleFilter), /*#__PURE__*/React.createElement("select", {
+  }, INVITE_MODULES.map(m => /*#__PURE__*/React.createElement("option", {
+    key: m,
+    value: m
+  }, m))), /*#__PURE__*/React.createElement("select", {
     style: selectStyle
   }, /*#__PURE__*/React.createElement("option", null, "All " + moduleFilter), /*#__PURE__*/React.createElement("option", null, moduleFilter + " in Review"), /*#__PURE__*/React.createElement("option", null, "New This Week"), /*#__PURE__*/React.createElement("option", null, "New Last Week"), /*#__PURE__*/React.createElement("option", null, "Created by Me"), /*#__PURE__*/React.createElement("option", null, "Important " + moduleFilter)), /*#__PURE__*/React.createElement("div", {
     style: {
