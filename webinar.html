@@ -20144,6 +20144,7 @@ function OverviewTab({
 
 // ─── ADD PARTICIPANTS MODAL ───────────────────────────────────────────────────
 const INVITE_MODULES = ["Leads", "Contacts", "Vendors", "Custom Module 1"];
+const PICK_MODULES = ["Leads", "Contacts", "Custom Module 1"];
 const moduleSingular = m => m === "Leads" ? "Lead" : m === "Contacts" ? "Contact" : m === "Vendors" ? "Vendor" : m;
 function AddParticipantsModal({
   onClose,
@@ -20155,9 +20156,20 @@ function AddParticipantsModal({
   const [selected, setSelected] = useState(preSelected || []);
   const [added, setAdded] = useState(preSelected || []);
   const [search, setSearch] = useState("");
-  const [moduleFilter, setModuleFilter] = useState(initialModule || "Leads");
-  const [step, setStep] = useState(0); // 0=pick module, 1=select records, 2=confirm
-  const filtered = allLeads.filter(l => (moduleFilter === "All" || l.module === moduleFilter) && (l.name.toLowerCase().includes(search.toLowerCase()) || l.email.toLowerCase().includes(search.toLowerCase())));
+  const [modules, setModules] = useState([initialModule || "Leads"]);
+  const [modOpen, setModOpen] = useState(false);
+  const moduleFilter = modules[0] || "Leads";
+  const [step, setStep] = useState(1); // 1=select records, 2=confirm
+  const filtered = allLeads.filter(l => modules.indexOf(l.module) !== -1 && (l.name.toLowerCase().includes(search.toLowerCase()) || l.email.toLowerCase().includes(search.toLowerCase())));
+  const toggleModule = m => setModules(ms => ms.indexOf(m) !== -1 ? (ms.length > 1 ? ms.filter(x => x !== m) : ms) : ms.concat([m]));
+  const modRef = React.useRef(null);
+  React.useEffect(() => {
+    if (!modOpen) return;
+    const away = e => { if (modRef.current && !modRef.current.contains(e.target)) setModOpen(false); };
+    document.addEventListener("mousedown", away);
+    return () => document.removeEventListener("mousedown", away);
+  }, [modOpen]);
+  const modulesLabel = modules.length === 1 ? modules[0] : modules.length + " modules";
   const commitAdded = () => setAdded(a => [...new Set([...a, ...selected])]);
   const selectedByModule = INVITE_MODULES.map(m => ({
     module: m,
@@ -20172,130 +20184,73 @@ function AddParticipantsModal({
     if (allChecked) setSelected(selected.filter(id => !filtered.find(l => l.id === id)));else setSelected([...new Set([...selected, ...filtered.map(l => l.id)])]);
   };
   const toggle = id => setSelected(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]);
-  // ── STEP 0: pick the module to invite from (custom modules included) ──
-  const moduleList = INVITE_MODULES.filter(m => m.toLowerCase().includes(search.toLowerCase()));
-  if (step === 0) return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
-    style: {
-      background: "white",
-      borderRadius: 8,
-      width: 620,
-      maxHeight: "82vh",
-      display: "flex",
-      flexDirection: "column",
-      boxShadow: "0 8px 32px rgba(0,0,0,0.18)"
-    }
+  // records can come from more than one module, so the header carries a multi-select
+  const moduleChooserEl = /*#__PURE__*/React.createElement("div", {
+    ref: modRef,
+    style: { position: "relative" }
   }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "16px 22px 14px",
-      borderBottom: `1px solid ${COLORS.zohoBorder}`
-    }
-  }, /*#__PURE__*/React.createElement("div", {
+    onClick: () => setModOpen(o => !o),
     style: {
       display: "flex",
-      gap: 12,
-      alignItems: "center"
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 32,
-      height: 32,
+      alignItems: "center",
+      gap: 8,
+      fontSize: 13,
+      fontWeight: 600,
+      color: COLORS.zohoBlue,
       background: COLORS.zohoBlueLight,
-      borderRadius: 6,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center"
-    }
-  }, /*#__PURE__*/React.createElement(Icon.Filter, null)), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontWeight: 600,
-      fontSize: 16,
-      color: COLORS.zohoText
-    }
-  }, isReInvite ? "Re-Invite" : "Send Invite")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 13,
-      color: COLORS.zohoTextLight,
-      marginTop: 8
-    }
-  }, "Which module do you want to invite records from?")), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "12px 22px",
-      borderBottom: `1px solid ${COLORS.zohoBorder}`
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      display: "flex",
-      alignItems: "center",
       border: `1px solid ${COLORS.zohoBorder}`,
-      borderRadius: 4,
-      padding: "6px 10px",
-      gap: 6
-    }
-  }, /*#__PURE__*/React.createElement(Icon.Search, null), /*#__PURE__*/React.createElement("input", {
-    value: search,
-    onChange: e => setSearch(e.target.value),
-    placeholder: "Search modules",
-    style: {
-      border: "none",
-      outline: "none",
-      fontSize: 13,
-      flex: 1,
-      color: COLORS.zohoText,
-      fontFamily: "inherit"
-    }
-  }))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      overflowY: "auto"
-    }
-  }, moduleList.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "28px 22px",
-      fontSize: 13,
-      color: COLORS.zohoTextLight,
-      textAlign: "center"
-    }
-  }, "No modules match that search.") : moduleList.map(m => /*#__PURE__*/React.createElement("div", {
-    key: m,
-    onClick: () => {
-      setModuleFilter(m);
-      setSearch("");
-      setStep(1);
-    },
-    onMouseEnter: e => e.currentTarget.style.background = "#f5f8ff",
-    onMouseLeave: e => e.currentTarget.style.background = "white",
-    style: {
-      display: "flex",
-      alignItems: "center",
-      gap: 14,
-      padding: "14px 22px",
-      borderBottom: `1px solid ${COLORS.zohoBorder}`,
+      borderRadius: 12,
+      padding: "3px 12px",
       cursor: "pointer",
-      background: "white"
+      whiteSpace: "nowrap"
     }
-  }, /*#__PURE__*/React.createElement("span", {
+  }, modulesLabel, /*#__PURE__*/React.createElement("span", {
+    style: { fontSize: 9, color: COLORS.zohoBlue }
+  }, "\u25BE")), modOpen && /*#__PURE__*/React.createElement("div", {
     style: {
-      flex: 1,
-      fontSize: 14,
-      fontWeight: 600,
-      color: COLORS.zohoText
+      position: "absolute",
+      top: 28,
+      left: 0,
+      minWidth: 210,
+      background: "white",
+      border: `1px solid ${COLORS.zohoBorder}`,
+      borderRadius: 6,
+      boxShadow: "0 6px 18px rgba(49,57,73,0.18)",
+      padding: "6px 0",
+      zIndex: 60
     }
-  }, m), /*#__PURE__*/React.createElement("span", {
-    style: {
-      color: COLORS.zohoTextLight,
-      fontSize: 16
-    }
-  }, "\u203A")))), /*#__PURE__*/React.createElement("div", {
-    style: {
-      padding: "12px 22px",
-      borderTop: `1px solid ${COLORS.zohoBorder}`,
-      display: "flex",
-      justifyContent: "flex-end"
-    }
-  }, /*#__PURE__*/React.createElement("button", {
-    style: btnStyle,
-    onClick: onClose
-  }, "Cancel"))));
+  }, PICK_MODULES.map(m => {
+    const on = modules.indexOf(m) !== -1;
+    return /*#__PURE__*/React.createElement("div", {
+      key: m,
+      onClick: () => toggleModule(m),
+      onMouseEnter: e => e.currentTarget.style.background = "#f5f8ff",
+      onMouseLeave: e => e.currentTarget.style.background = "white",
+      style: {
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        padding: "8px 14px",
+        fontSize: 13,
+        color: COLORS.zohoText,
+        cursor: "pointer",
+        background: "white"
+      }
+    }, /*#__PURE__*/React.createElement("span", {
+      style: {
+        width: 14,
+        height: 14,
+        borderRadius: 3,
+        border: "1.5px solid " + (on ? COLORS.zohoBlue : "#C0C8E2"),
+        background: on ? COLORS.zohoBlue : "white",
+        color: "white",
+        fontSize: 10,
+        lineHeight: "12px",
+        textAlign: "center",
+        flexShrink: 0
+      }
+    }, on ? "\u2713" : ""), m);
+  })));
   if (step === 2) return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
       background: "white",
@@ -20336,19 +20291,9 @@ function AddParticipantsModal({
       fontSize: 16,
       color: COLORS.zohoText
     }
-  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 13,
-      fontWeight: 600,
-      color: COLORS.zohoBlue,
-      background: COLORS.zohoBlueLight,
-      border: `1px solid ${COLORS.zohoBorder}`,
-      borderRadius: 12,
-      padding: "3px 12px"
-    }
-  }, moduleFilter), /*#__PURE__*/React.createElement("select", {
+  }, isReInvite ? "Re-Invite" : "Send Invite"), moduleChooserEl, /*#__PURE__*/React.createElement("select", {
     style: selectStyle
-  }, /*#__PURE__*/React.createElement("option", null, "All " + moduleFilter), /*#__PURE__*/React.createElement("option", null, moduleFilter + " in Review"), /*#__PURE__*/React.createElement("option", null, "New This Week"), /*#__PURE__*/React.createElement("option", null, "New Last Week"), /*#__PURE__*/React.createElement("option", null, "Created by Me"), /*#__PURE__*/React.createElement("option", null, "Important " + moduleFilter))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("option", null, modules.length === 1 ? "All " + moduleFilter : "All Records"), /*#__PURE__*/React.createElement("option", null, moduleFilter + " in Review"), /*#__PURE__*/React.createElement("option", null, "New This Week"), /*#__PURE__*/React.createElement("option", null, "New Last Week"), /*#__PURE__*/React.createElement("option", null, "Created by Me"), /*#__PURE__*/React.createElement("option", null, "Important " + moduleFilter))), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       gap: 12,
@@ -20455,7 +20400,9 @@ function AddParticipantsModal({
     type: "checkbox",
     checked: allChecked,
     onChange: toggleAll
-  })), [moduleSingular(moduleFilter) + " Name", "Email ID", "Company Name", "Phone Number", moduleSingular(moduleFilter) + " Owner"].map(h => /*#__PURE__*/React.createElement("th", {
+  })), (modules.length > 1
+    ? ["Name", "Module", "Email ID", "Company Name", "Phone Number", "Owner"]
+    : [moduleSingular(moduleFilter) + " Name", "Email ID", "Company Name", "Phone Number", moduleSingular(moduleFilter) + " Owner"]).map(h => /*#__PURE__*/React.createElement("th", {
     key: h,
     style: thStyle
   }, h)))), /*#__PURE__*/React.createElement("tbody", null, filtered.map(lead => /*#__PURE__*/React.createElement("tr", {
@@ -20478,7 +20425,18 @@ function AddParticipantsModal({
       color: COLORS.zohoBlue,
       cursor: "pointer"
     }
-  }, lead.name), /*#__PURE__*/React.createElement("td", {
+  }, lead.name), modules.length > 1 && /*#__PURE__*/React.createElement("td", {
+    style: tdStyle
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11.5,
+      fontWeight: 600,
+      color: COLORS.zohoBlue,
+      background: COLORS.zohoBlueLight,
+      borderRadius: 10,
+      padding: "2px 9px"
+    }
+  }, lead.module)), /*#__PURE__*/React.createElement("td", {
     style: tdStyle
   }, lead.email), /*#__PURE__*/React.createElement("td", {
     style: tdStyle
@@ -20561,19 +20519,9 @@ function AddParticipantsModal({
       fontSize: 16,
       color: COLORS.zohoText
     }
-  }, isReInvite ? "Re-Invite" : "Send Invite"), /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 13,
-      fontWeight: 600,
-      color: COLORS.zohoBlue,
-      background: COLORS.zohoBlueLight,
-      border: `1px solid ${COLORS.zohoBorder}`,
-      borderRadius: 12,
-      padding: "3px 12px"
-    }
-  }, moduleFilter), /*#__PURE__*/React.createElement("select", {
+  }, isReInvite ? "Re-Invite" : "Send Invite"), moduleChooserEl, /*#__PURE__*/React.createElement("select", {
     style: selectStyle
-  }, /*#__PURE__*/React.createElement("option", null, "All " + moduleFilter), /*#__PURE__*/React.createElement("option", null, moduleFilter + " in Review"), /*#__PURE__*/React.createElement("option", null, "New This Week"), /*#__PURE__*/React.createElement("option", null, "New Last Week"), /*#__PURE__*/React.createElement("option", null, "Created by Me"), /*#__PURE__*/React.createElement("option", null, "Important " + moduleFilter)), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("option", null, modules.length === 1 ? "All " + moduleFilter : "All Records"), /*#__PURE__*/React.createElement("option", null, moduleFilter + " in Review"), /*#__PURE__*/React.createElement("option", null, "New This Week"), /*#__PURE__*/React.createElement("option", null, "New Last Week"), /*#__PURE__*/React.createElement("option", null, "Created by Me"), /*#__PURE__*/React.createElement("option", null, "Important " + moduleFilter)), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "center",
@@ -20640,7 +20588,9 @@ function AddParticipantsModal({
     type: "checkbox",
     checked: allChecked,
     onChange: toggleAll
-  })), [moduleSingular(moduleFilter) + " Name", "Email ID", "Company Name", "Phone Number", moduleSingular(moduleFilter) + " Owner"].map(h => /*#__PURE__*/React.createElement("th", {
+  })), (modules.length > 1
+    ? ["Name", "Module", "Email ID", "Company Name", "Phone Number", "Owner"]
+    : [moduleSingular(moduleFilter) + " Name", "Email ID", "Company Name", "Phone Number", moduleSingular(moduleFilter) + " Owner"]).map(h => /*#__PURE__*/React.createElement("th", {
     key: h,
     style: thStyle
   }, h, " ", /*#__PURE__*/React.createElement("span", {
@@ -20667,7 +20617,18 @@ function AddParticipantsModal({
       color: COLORS.zohoBlue,
       cursor: "pointer"
     }
-  }, lead.name), /*#__PURE__*/React.createElement("td", {
+  }, lead.name), modules.length > 1 && /*#__PURE__*/React.createElement("td", {
+    style: tdStyle
+  }, /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontSize: 11.5,
+      fontWeight: 600,
+      color: COLORS.zohoBlue,
+      background: COLORS.zohoBlueLight,
+      borderRadius: 10,
+      padding: "2px 9px"
+    }
+  }, lead.module)), /*#__PURE__*/React.createElement("td", {
     style: tdStyle
   }, lead.email), /*#__PURE__*/React.createElement("td", {
     style: tdStyle
