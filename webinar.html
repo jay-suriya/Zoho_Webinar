@@ -4836,7 +4836,7 @@ function _syncCrmFormPicker(label){
         <span style="font-size:15px;">&#8595;</span>
       </div>
       <div style="flex:1;"></div>
-      <button style="padding:11px 20px;border:1px solid #C2185B;border-radius:6px;background:#fff;color:#C2185B;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">+ Create Template</button>
+      <button onclick="slotCreateTemplate()" style="padding:11px 20px;border:1px solid #C2185B;border-radius:6px;background:#fff;color:#C2185B;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">+ Create Template</button>
     </div>
     <!-- Template list -->
     <div style="flex:1;overflow-y:auto;" id="webinarTplListBody"></div>
@@ -5520,6 +5520,7 @@ var _tplEditorKey = null;
 function openTemplateEditor(key) {
   var meta = TPL_META[key] || TPL_META.confirmation;
   _tplEditorKey = key;
+  _tplTypeName = TPL_TYPE_BY_KEY[key] || 'Webinar Invitation';
   _tplNewModule = null;
   _tplMergeOrderOverride = null;
   tplMergeModule = 'Webinar Details';
@@ -5578,6 +5579,7 @@ function openModuleTemplatePreview(name, module) {
   document.getElementById('modfields-template-preview').style.display = 'flex';
 }
 function openModuleTemplateEditor(name, module) {
+  _tplTypeName = 'Webinar Invitation';
   _tplNewModule = module;
   _tplEditorKey = null;
   _tplMergeOrderOverride = null;
@@ -5590,6 +5592,7 @@ function openModuleTemplateEditor(name, module) {
 }
 function openNewModuleTemplate(module) {
   var mod = module || 'Leads';
+  _tplTypeName = 'Webinar Invitation';
   _tplNewModule = mod;
   _tplEditorKey = null;
   _tplMergeOrderOverride = null;
@@ -5747,7 +5750,9 @@ function renderSlotTplList() {
   var current = tplSlotSelection[_activeTplSlot];
   var star = '<svg class="stpl-star" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c9c9d4" stroke-width="1.6"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg>';
   var spark = '<svg width="20" height="14" viewBox="0 0 24 16" fill="none" stroke="#5B8FF9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,12 6,5 11,10 16,3 23,9"/></svg>';
-  document.getElementById('webinarTplListBody').innerHTML = WEBINAR_TEMPLATES.map(function(t) {
+  var allowed = TPL_SLOT_DEFAULTS[_activeTplSlot];
+  var rows = WEBINAR_TEMPLATES.filter(function(t) { return !allowed || t[0] === allowed; });
+  document.getElementById('webinarTplListBody').innerHTML = rows.map(function(t) {
     var name = t[0];
     var on = name === current;
     return '<div class="stpl-row' + (on ? ' selected' : '') + '" onclick="pickSlotTemplate(\'' + name.replace(/'/g, "\\'") + '\')">' +
@@ -5766,6 +5771,23 @@ function renderSlotTplList() {
 function tplRowPreview(name) {
   var key = TPL_KEY_BY_NAME[name];
   if (key) openTemplatePreview(key);
+}
+var TPL_SLOT_TYPE = {
+  conf: 'Confirmation Email',
+  thankyou: 'Attendees Follow-up',
+  r1: '1st Reminder',
+  r2: '2nd Reminder',
+  r3: '3rd Reminder',
+  fuAtt: 'Attendees Follow-up',
+  fuAbs: 'Absentees Follow-up'
+};
+function slotCreateTemplate() {
+  var type = TPL_SLOT_TYPE[_activeTplSlot] || 'Webinar Invitation';
+  closeSelectTemplateModal();
+  if (window.openCreateTemplateModal) {
+    openCreateTemplateModal('Zoho Webinar');
+    document.getElementById('ct-type').value = type;
+  }
 }
 function pickSlotTemplate(name) {
   if (_activeTplSlot) {
@@ -5845,7 +5867,7 @@ function tplBtnDrop(e) {
 function tplOpenBtnModal() {
   var style = window._tplBtnStyle || 'normal';
   document.getElementById('tpl-btn-name').value = '';
-  document.getElementById('tpl-btn-type').value = 'Web URL';
+  tplFillLinkOptions(document.getElementById('tpl-btn-type'));
   document.getElementById('tpl-btn-stylenote').textContent = style.charAt(0).toUpperCase() + style.slice(1) + ' button';
   tplBtnTypeChanged();
   document.getElementById('tpl-btn-modal').style.display = 'flex';
@@ -5971,6 +5993,7 @@ function tgPick(i) {
 
 // a brand-new template of the chosen type, opened in the editor
 function openNewWebinarTemplate(type, module, layout) {
+  _tplTypeName = type || 'Webinar Invitation';
   _tplNewModule = module || 'Leads';
   _tplEditorKey = null;
   _tplMergeOrderOverride = null;
@@ -5988,6 +6011,9 @@ var TPL_LINK_TYPES = {
   'Web URL': { free: true, placeholder: 'https://' },
   'Email':   { free: true, placeholder: 'name@example.com' },
   'Registration Link':      { url: '#Registration URL',        text: 'Register Now',            note: 'The registration page for this webinar.' },
+  'Join URL':               { url: '#Join URL',                 text: 'Join Webinar',            note: 'Unique to each registrant \u2014 resolved when the email is sent.' },
+  'Cancel Registration':    { url: '#Cancel Registration',      text: 'Cancel Registration',     note: 'Lets the registrant give up their spot.' },
+  'Recording Link':         { url: '#Recording Link',           text: 'Watch Recording',         note: 'Available once the recording is published.' },
   'Add To Calendar':        { url: '#Add To Calendar',         text: 'Add to Calendar',         note: 'Lets the recipient pick their own calendar.' },
   'Add To Google Calendar': { url: '#Add To Google Calendar',  text: 'Add to Google Calendar',  note: 'Adds the webinar to Google Calendar.' },
   'Add To Yahoo Calendar':  { url: '#Add To Yahoo Calendar',   text: 'Add to Yahoo Calendar',   note: 'Adds the webinar to Yahoo Calendar.' },
@@ -6003,10 +6029,39 @@ var TPL_LINK_WHAT = {
   'Join Webinar Link':  { url: '#Webinar Link',               text: 'Join Webinar',     note: 'Unique to each registrant \u2014 resolved when the email is sent.' },
   'Watch Video Link':   { url: '#Webinar Recording Link',     text: 'Watch Recording',  note: 'Available once the recording is published.' }
 };
+// what each template type is allowed to link to
+var TPL_CAL_LINKS = ['Add To Calendar', 'Add To Google Calendar', 'Add To Yahoo Calendar', 'Add To Outlook Calendar', 'Add To Zoho Calendar'];
+var TPL_TYPE_LINKS = {
+  'Webinar Invitation':  ['Web URL', 'Email', 'Registration Link'].concat(TPL_CAL_LINKS),
+  'Confirmation Email':  ['Web URL', 'Join URL', 'Cancel Registration'].concat(TPL_CAL_LINKS),
+  '1st Reminder':        ['Web URL', 'Join URL', 'Cancel Registration'].concat(TPL_CAL_LINKS),
+  '2nd Reminder':        ['Web URL', 'Join URL', 'Cancel Registration'].concat(TPL_CAL_LINKS),
+  '3rd Reminder':        ['Web URL', 'Join URL', 'Cancel Registration'].concat(TPL_CAL_LINKS),
+  'Attendees Follow-up': ['Web URL', 'Join URL', 'Recording Link'].concat(TPL_CAL_LINKS),
+  'Absentees Follow-up': ['Web URL', 'Join URL', 'Recording Link'].concat(TPL_CAL_LINKS)
+};
+// which type the editor currently holds
+var _tplTypeName = 'Webinar Invitation';
+var TPL_TYPE_BY_KEY = {
+  sendInvite: 'Webinar Invitation',
+  confirmation: 'Confirmation Email',
+  reminder1: '1st Reminder',
+  reminder2: '2nd Reminder',
+  reminder3: '3rd Reminder',
+  attendeesFollowup: 'Attendees Follow-up',
+  absenteesFollowup: 'Absentees Follow-up'
+};
+function tplAllowedLinks() {
+  return TPL_TYPE_LINKS[_tplTypeName] || TPL_TYPE_LINKS['Webinar Invitation'];
+}
+function tplFillLinkOptions(sel) {
+  sel.innerHTML = tplAllowedLinks().map(function(t) { return '<option>' + t + '</option>'; }).join('');
+  sel.value = tplAllowedLinks()[0];
+}
 function tplOpenLinkModal() {
   var sel = window.getSelection();
   window._tplLinkRange = (sel && sel.rangeCount) ? sel.getRangeAt(0).cloneRange() : null;
-  document.getElementById('tpl-link-type').value = 'Web URL';
+  tplFillLinkOptions(document.getElementById('tpl-link-type'));
   tplLinkTypeChanged();
   document.getElementById('tpl-link-modal').style.display = 'flex';
 }
