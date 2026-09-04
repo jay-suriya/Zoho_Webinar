@@ -8424,6 +8424,8 @@ function TopNavBar() {
     fill: "none",
     stroke: COLORS.zohoTextLight,
     strokeWidth: "2",
+    title: "Settings",
+    onClick: () => { if (window.openSettingsModal) window.openSettingsModal(); },
     style: {
       cursor: "pointer"
     }
