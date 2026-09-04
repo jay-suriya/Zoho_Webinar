@@ -597,7 +597,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link to</label>
         <select id="tpl-link-what" onchange="tplLinkWhatChanged()" style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #C0C8E2;border-radius:6px;background:#fff;color:#202123;"></select>
       </div>
-      <div style="display:flex;align-items:center;gap:14px;padding:8px 0;">
+      <div id="tpl-link-urlrow" style="display:flex;align-items:center;gap:14px;padding:8px 0;">
         <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link Address</label>
         <input id="tpl-link-url" readonly style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #D2D9F1;border-radius:6px;background:#F5F6F8;color:#434D5E;">
       </div>
@@ -643,7 +643,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link to</label>
         <select id="tpl-btn-what" onchange="tplBtnWhatChanged()" style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #C0C8E2;border-radius:6px;background:#fff;color:#202123;"></select>
       </div>
-      <div style="display:flex;align-items:center;gap:14px;padding:8px 0;">
+      <div id="tpl-btn-urlrow" style="display:flex;align-items:center;gap:14px;padding:8px 0;">
         <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link Address</label>
         <input id="tpl-btn-url" readonly style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #D2D9F1;border-radius:6px;background:#F5F6F8;color:#434D5E;">
       </div>
@@ -5790,6 +5790,7 @@ function tplBtnTypeChanged() {
   document.getElementById('tpl-btn-whatrow').style.display = 'none';
   var url = document.getElementById('tpl-btn-url');
   var name = document.getElementById('tpl-btn-name');
+  document.getElementById('tpl-btn-urlrow').style.display = meta.free ? 'flex' : 'none';
   if (meta.free) {
     url.value = '';
     url.readOnly = false;
@@ -5870,6 +5871,7 @@ function tplLinkTypeChanged() {
   var meta = TPL_LINK_TYPES[type] || {};
   document.getElementById('tpl-link-whatrow').style.display = 'none';
   var url = document.getElementById('tpl-link-url');
+  document.getElementById('tpl-link-urlrow').style.display = meta.free ? 'flex' : 'none';
   if (meta.free) {
     url.value = '';
     url.readOnly = false;
