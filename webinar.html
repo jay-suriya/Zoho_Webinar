@@ -572,6 +572,67 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   </div>
 </div>
 
+<!-- ═══ Create Email Template — module + template type, then the gallery ═══ -->
+<div id="ct-modal" style="display:none;position:fixed;inset:0;z-index:9600;align-items:center;justify-content:center;background:rgba(49,57,73,0.5);">
+  <div style="background:#fff;border-radius:10px;width:520px;box-shadow:0 4px 9px rgba(49,57,73,0.6);overflow:hidden;font-family:'Zoho Puvi',-apple-system,'Segoe UI',sans-serif;">
+    <div style="padding:26px 30px 6px;">
+      <span style="font-size:23px;font-weight:800;color:#202123;letter-spacing:-0.01em;">Create Email Template</span>
+    </div>
+    <div style="padding:18px 30px 26px;">
+      <div style="display:flex;align-items:center;gap:16px;padding:8px 0;">
+        <label style="font-size:15px;color:#434D5E;width:130px;flex-shrink:0;">Select Module</label>
+        <select id="ct-module" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:150px;">
+          <option>Leads</option>
+          <option>Contacts</option>
+          <option>Vendors</option>
+          <option>Custom Module 1</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:8px 0;">
+        <label style="font-size:15px;color:#434D5E;width:130px;flex-shrink:0;">Template Type</label>
+        <select id="ct-type" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:220px;">
+          <option>Webinar Invitation</option>
+          <option>1st Reminder</option>
+          <option>2nd Reminder</option>
+          <option>3rd Reminder</option>
+          <option>Attendees Follow-up</option>
+          <option>Absentees Follow-up</option>
+        </select>
+      </div>
+    </div>
+    <div style="padding:0 30px 26px;display:flex;justify-content:flex-end;gap:12px;">
+      <button onclick="closeCreateTemplateModal()" style="padding:9px 22px;border:1px solid #D5D8E9;border-radius:8px;background:#fff;color:#313949;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">Cancel</button>
+      <button onclick="ctNext()" style="padding:9px 26px;border:none;border-radius:8px;background:#8E1B4E;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ Template Gallery ═══ -->
+<div id="tpl-gallery" style="display:none;position:fixed;inset:0;z-index:9550;flex-direction:column;background:#fff;font-family:'Zoho Puvi',-apple-system,'Segoe UI',sans-serif;">
+  <div style="height:64px;flex-shrink:0;border-bottom:1px solid #E8EAED;display:flex;align-items:center;justify-content:space-between;padding:0 26px;">
+    <div style="display:flex;align-items:center;gap:36px;">
+      <span onclick="closeTemplateGallery()" style="display:flex;align-items:center;gap:14px;cursor:pointer;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#202123" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span style="font-size:21px;font-weight:800;color:#202123;">Template Gallery</span>
+      </span>
+      <span id="tg-module" style="font-size:15px;color:#434D5E;display:flex;align-items:center;gap:6px;cursor:pointer;">Leads <span style="font-size:10px;color:#8C91AB;">&#9660;</span></span>
+    </div>
+    <button style="padding:9px 20px;border:1px solid #C2185B;border-radius:8px;background:#FDEFF5;color:#C2185B;font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;">Insert HTML / Plain Text</button>
+  </div>
+  <div style="flex:1;display:flex;overflow:hidden;">
+    <div style="width:230px;flex-shrink:0;border-right:1px solid #E8EAED;padding:26px 0;">
+      <div style="padding:8px 26px;font-size:15px;font-weight:600;color:#202123;background:#F5F6FB;border-left:3px solid #C2185B;">Basic</div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:26px 30px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px;">
+        <span style="font-size:16px;font-weight:700;color:#202123;">Basic</span>
+        <span style="font-size:12.5px;color:#C2185B;background:#FDEFF5;border-radius:12px;padding:2px 10px;font-weight:600;">6</span>
+      </div>
+      <div id="tg-cards" style="display:flex;flex-wrap:wrap;gap:26px;"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ Insert Link — opened from the template editor toolbar ═══ -->
 <div id="tpl-link-modal" style="display:none;position:fixed;inset:0;z-index:9600;align-items:center;justify-content:center;background:rgba(49,57,73,0.5);">
   <div style="background:#fff;border-radius:10px;width:520px;box-shadow:0 4px 9px rgba(49,57,73,0.6);overflow:hidden;font-family:'Zoho Puvi',-apple-system,'Segoe UI',sans-serif;">
@@ -5836,6 +5897,80 @@ function tplInsertButton() {
   else body.appendChild(frag);
   tplCloseBtnModal();
   window._tplBtnRange = null;
+}
+
+
+// ── Create Email Template → Template Gallery → editor ───────────────────────
+var _ctModule = 'Leads';
+var _ctType = 'Webinar Invitation';
+function openCreateTemplateModal(module) {
+  _ctModule = module || 'Leads';
+  document.getElementById('ct-module').value = _ctModule;
+  document.getElementById('ct-type').value = 'Webinar Invitation';
+  document.getElementById('ct-modal').style.display = 'flex';
+}
+function closeCreateTemplateModal() {
+  document.getElementById('ct-modal').style.display = 'none';
+}
+function ctNext() {
+  _ctModule = document.getElementById('ct-module').value;
+  _ctType = document.getElementById('ct-type').value;
+  closeCreateTemplateModal();
+  openTemplateGallery();
+}
+
+// wireframe thumbnails for the six basic layouts
+var TG_BAR = function(h, w, c) {
+  return '<div style="height:' + h + 'px;width:' + (w || 100) + '%;background:' + (c || '#DCDDE3') + ';border-radius:2px;"></div>';
+};
+var TG_LINES = function(n) {
+  var out = '';
+  for (var i = 0; i < n; i++) out += '<div style="height:4px;background:#DCDDE3;border-radius:2px;margin-bottom:5px;width:' + (i === n - 1 ? 60 : 100) + '%;"></div>';
+  return out;
+};
+var TG_LAYOUTS = [
+  { name: 'Blank',                 body: '' },
+  { name: 'One column',            body: TG_BAR(14) + '<div style="height:8px;"></div>' + TG_BAR(52) + '<div style="height:10px;"></div>' + TG_LINES(5) + '<div style="height:10px;"></div>' + TG_BAR(9, 30, '#CFD0D8') },
+  { name: 'Two column',            body: TG_BAR(14) + '<div style="height:8px;"></div>' + TG_BAR(46) + '<div style="height:10px;"></div>' + TG_LINES(2) + '<div style="display:flex;gap:8px;">' + '<div style="flex:1;">' + TG_LINES(3) + '</div><div style="flex:1;">' + TG_LINES(3) + '</div></div>' },
+  { name: 'Two column with image 1', body: TG_BAR(14) + '<div style="height:8px;"></div>' + TG_BAR(46) + '<div style="height:10px;"></div>' + TG_LINES(2) + '<div style="display:flex;gap:8px;align-items:flex-start;"><div style="width:26px;">' + TG_BAR(22) + '</div><div style="flex:1;">' + TG_LINES(2) + '</div></div><div style="height:6px;"></div><div style="display:flex;gap:8px;align-items:flex-start;"><div style="width:26px;">' + TG_BAR(22) + '</div><div style="flex:1;">' + TG_LINES(2) + '</div></div>' },
+  { name: 'Two column with image 2', body: TG_BAR(14) + '<div style="height:8px;"></div>' + TG_BAR(40) + '<div style="height:10px;"></div><div style="display:flex;gap:8px;"><div style="flex:1;">' + TG_BAR(34) + '</div><div style="flex:1;">' + TG_BAR(34) + '</div></div><div style="height:8px;"></div><div style="display:flex;gap:8px;"><div style="flex:1;">' + TG_LINES(3) + '</div><div style="flex:1;">' + TG_LINES(3) + '</div></div>' },
+  { name: 'Three column',          body: TG_BAR(14) + '<div style="height:8px;"></div>' + TG_BAR(46) + '<div style="height:10px;"></div><div style="display:flex;gap:6px;"><div style="flex:1;">' + TG_BAR(26) + '</div><div style="flex:1;">' + TG_BAR(26) + '</div><div style="flex:1;">' + TG_BAR(26) + '</div></div><div style="height:8px;"></div><div style="display:flex;gap:6px;"><div style="flex:1;">' + TG_LINES(3) + '</div><div style="flex:1;">' + TG_LINES(3) + '</div><div style="flex:1;">' + TG_LINES(3) + '</div></div>' }
+];
+
+function openTemplateGallery() {
+  document.getElementById('tg-module').innerHTML = _ctModule + ' <span style="font-size:10px;color:#8C91AB;">▼</span>';
+  document.getElementById('tg-cards').innerHTML = TG_LAYOUTS.map(function(l, i) {
+    return '<div onclick="tgPick(' + i + ')" style="cursor:pointer;width:180px;">' +
+        '<div style="height:250px;border:1px solid #E0E1E8;border-radius:6px;background:#fff;padding:' + (l.body ? '10px' : '0') + ';overflow:hidden;"' +
+          ' onmouseover="this.style.borderColor=\'#C2185B\'" onmouseout="this.style.borderColor=\'#E0E1E8\'">' +
+          (l.body ? '<div style="background:#F1F1F5;height:100%;padding:10px;">' + l.body + '</div>' : '') +
+        '</div>' +
+        '<div style="text-align:center;font-size:13.5px;color:#434D5E;margin-top:10px;">' + l.name + '</div>' +
+      '</div>';
+  }).join('');
+  document.getElementById('tpl-gallery').style.display = 'flex';
+}
+function closeTemplateGallery() {
+  document.getElementById('tpl-gallery').style.display = 'none';
+}
+function tgPick(i) {
+  var layout = TG_LAYOUTS[i] || TG_LAYOUTS[0];
+  closeTemplateGallery();
+  openNewWebinarTemplate(_ctType, _ctModule, layout.name);
+}
+
+// a brand-new template of the chosen type, opened in the editor
+function openNewWebinarTemplate(type, module, layout) {
+  _tplNewModule = module || 'Leads';
+  _tplEditorKey = null;
+  _tplMergeOrderOverride = null;
+  tplMergeModule = 'Webinar Details';
+  document.getElementById('modfields-tpl-title').textContent = type;
+  document.getElementById('modfields-tpl-subtitle').textContent = (layout ? layout + ' · ' : '') + module;
+  document.getElementById('modfields-tpl-modtag').textContent = module;
+  document.getElementById('tpl-editable-body').innerHTML =
+    '<p style="color:#8C91AB;">Write the ' + type.toLowerCase() + ' email here. Type # to insert a merge field.</p>';
+  document.getElementById('modfields-template-editor').style.display = 'flex';
 }
 
 // ── Insert Link — webinar link types plus a plain URL ──
@@ -20881,6 +21016,10 @@ function SelectTemplateModal({
       fontSize: 14.5,
       fontWeight: 600,
       cursor: "pointer"
+    },
+    onClick: () => {
+      onClose();
+      setTimeout(() => { if (window.openCreateTemplateModal) window.openCreateTemplateModal(module || "Leads"); }, 60);
     }
   }, "+ Create Template")), /*#__PURE__*/React.createElement("div", {
     style: {
