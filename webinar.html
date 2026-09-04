@@ -5444,7 +5444,7 @@ function openTemplateEditor(key) {
   _tplEditorKey = key;
   _tplNewModule = null;
   _tplMergeOrderOverride = null;
-  tplMergeModule = 'Zoho Webinar';
+  tplMergeModule = 'Webinar Details';
   document.getElementById('modfields-tpl-subtitle').textContent = 'Welcome to Zoho Webinar';
   document.getElementById('modfields-tpl-modtag').textContent = 'Zoho Webinar';
   document.getElementById('modfields-tpl-title').textContent = meta.label;
@@ -5502,10 +5502,8 @@ function openModuleTemplatePreview(name, module) {
 function openModuleTemplateEditor(name, module) {
   _tplNewModule = module;
   _tplEditorKey = null;
-  _tplMergeOrderOverride = [module, 'Zoho Webinar', 'Users'].concat(
-    TPL_MERGE_REST.filter(function(m) { return m !== 'Users'; })
-  );
-  tplMergeModule = module;
+  _tplMergeOrderOverride = null;
+  tplMergeModule = 'Webinar Details';
   document.getElementById('modfields-tpl-title').textContent = name;
   document.getElementById('modfields-tpl-subtitle').textContent = 'Invite email for ' + module;
   document.getElementById('modfields-tpl-modtag').textContent = module;
@@ -5516,10 +5514,8 @@ function openNewModuleTemplate(module) {
   var mod = module || 'Leads';
   _tplNewModule = mod;
   _tplEditorKey = null;
-  _tplMergeOrderOverride = [mod, 'Zoho Webinar', 'Users'].concat(
-    TPL_MERGE_REST.filter(function(m) { return m !== 'Users'; })
-  );
-  tplMergeModule = mod;
+  _tplMergeOrderOverride = null;
+  tplMergeModule = 'Webinar Details';
   document.getElementById('modfields-tpl-title').textContent = 'New Template';
   document.getElementById('modfields-tpl-subtitle').textContent = 'Invite email for ' + mod;
   document.getElementById('modfields-tpl-modtag').textContent = mod;
@@ -5905,7 +5901,7 @@ function tplInsertLink() {
 // ── "#" merge field picker — module switcher, as in the CRM template editor ──
 var TPL_MERGE_SOURCES = {
   'Leads': ['Lead Id','Lead Owner','Company','First Name','Last Name','Title','Email','Phone','Mobile','Lead Source','Industry','City','State','Country'],
-  'Zoho Webinar': ['Webinar Title','Webinar Date & Time','Webinar Organiser','Webinar Duration','Description'],
+  'Webinar Details': ['Webinar Title','Webinar Date & Time','Webinar Organiser','Webinar Duration','Description'],
   // Registrations — the registrant record created once someone signs up. Available on every
   // lifecycle template EXCEPT Send Invite (at invite time nobody has registered yet).
   'Registrations': ['Registration Id','Country','Created By','Created Time','Email','First Name','Modified By',
@@ -5923,19 +5919,16 @@ var TPL_MERGE_SOURCES = {
   'Personal': ['My Name','My Email','My Phone'],
   'Lead Owner': ['Owner Name','Owner Email','Owner Phone']
 };
-var TPL_MERGE_REST = ['Users','Organization','General','Zoho Bookings','Lookup 2','Personal','Lead Owner'];
-// Send Invite goes out to CRM records, so the record modules come right after Zoho Webinar.
-// Every other lifecycle template goes to a registrant, so Registrations sits next to Zoho Webinar.
+var TPL_MERGE_REST = ['Users','Organization'];
+// A webinar email can only rely on what the webinar itself knows, so the picker offers
+// the webinar's own fields plus Users and Organization.
 var _tplMergeOrderOverride = null;
 function tplMergeModules() {
   if (_tplMergeOrderOverride) return _tplMergeOrderOverride;
-  var head = (_tplEditorKey === 'sendInvite')
-    ? ['Zoho Webinar','Leads','Contacts','Custom Module 1','Custom Module 2']
-    : ['Zoho Webinar','Registrations','Leads','Contacts','Custom Module 1','Custom Module 2'];
-  return head.concat(TPL_MERGE_REST);
+  return ['Webinar Details'].concat(TPL_MERGE_REST);
 }
 var TPL_MERGE_MODULES = tplMergeModules();
-var tplMergeModule = 'Zoho Webinar';
+var tplMergeModule = 'Webinar Details';
 var TPL_MERGE_FIELDS = TPL_MERGE_SOURCES['Leads'];
 
 function tplRenderMergeFields() {
