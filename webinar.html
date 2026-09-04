@@ -483,6 +483,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 <!-- ═══ Template Editor — opened from "Customise Template" or the Create Webinar "Select Template" flow ═══ -->
 <!-- Top-level (sibling of settings-modal, not nested inside it) so it can be opened from ANY page, not just Setup. -->
 <div id="modfields-template-editor" style="display:none;position:fixed;inset:0;z-index:9000;flex-direction:column;background:#EDEEF2;">
+  <div id="tpl-save-error" style="display:none;position:absolute;top:78px;left:50%;transform:translateX(-50%);z-index:20;background:#FFF2F3;border:1px solid #FF4D5B;color:#C0392B;font-size:13.5px;font-weight:600;border-radius:8px;padding:10px 18px;box-shadow:0 4px 12px rgba(49,57,73,0.18);"></div>
   <!-- dark header bar -->
   <div style="background:#181B34;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:64px;flex-shrink:0;">
     <div style="display:flex;align-items:center;gap:16px;">
@@ -5545,8 +5546,38 @@ function closeTemplateEditor() {
 // merge-field picker, then the webinar's fields, then Users and related modules.
 window.MODULE_TEMPLATES = window.MODULE_TEMPLATES || [];
 var _tplNewModule = null;
+// every webinar email has to carry the one link that makes it useful
+var TPL_REQUIRED_LINK = {
+  'Webinar Invitation':  'Registration Link',
+  'Confirmation Email':  'Join URL',
+  '1st Reminder':        'Join URL',
+  '2nd Reminder':        'Join URL',
+  '3rd Reminder':        'Join URL',
+  'Attendees Follow-up': 'Recording Link',
+  'Absentees Follow-up': 'Recording Link'
+};
+function tplMissingRequiredLink() {
+  var needed = TPL_REQUIRED_LINK[_tplTypeName];
+  if (!needed) return null;
+  var body = document.getElementById('tpl-editable-body');
+  var found = body && body.querySelector('[data-link-type="' + needed + '"]');
+  return found ? null : needed;
+}
+function tplShowSaveError(msg) {
+  var el = document.getElementById('tpl-save-error');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(window._tplErrT);
+  window._tplErrT = setTimeout(function() { el.style.display = 'none'; }, 5000);
+}
 function tplSaveClick() {
   if (!_tplNewModule) { closeTemplateEditor(); return; }
+  var missing = tplMissingRequiredLink();
+  if (missing) {
+    tplShowSaveError('A ' + _tplTypeName + ' template must contain a ' + missing + '. Insert one before saving.');
+    return;
+  }
   document.getElementById('tpl-savename').value = _ctSlot ? (_ctType + ' Template') : ('Webinar Invite - ' + _tplNewModule);
   document.getElementById('tpl-savefolder').textContent = _tplNewModule + ' Templates';
   document.getElementById('tpl-savemodal').style.display = 'flex';
@@ -5944,7 +5975,8 @@ function tplInsertButton() {
   var radius = TPL_BTN_RADIUS[style] || '3px';
   var nameField = document.getElementById('tpl-btn-name');
   var label = nameField.value || nameField.placeholder || 'Button';
-  var html = '<div style="margin:14px 0;"><a href="#" onclick="return false" style="display:inline-block;background:#5464F2;color:#fff;font-weight:700;font-size:13.5px;padding:10px 22px;border-radius:' + radius + ';text-decoration:none;">' + label + '</a></div>';
+  var btnType = document.getElementById('tpl-btn-type').value;
+  var html = '<div style="margin:14px 0;"><a href="#" onclick="return false" data-link-type="' + btnType + '" style="display:inline-block;background:#5464F2;color:#fff;font-weight:700;font-size:13.5px;padding:10px 22px;border-radius:' + radius + ';text-decoration:none;">' + label + '</a></div>';
   var frag = document.createRange().createContextualFragment(html);
   var body = document.getElementById('tpl-editable-body');
   var range = window._tplBtnRange;
@@ -6137,8 +6169,9 @@ function tplLinkWhatChanged() {
   document.getElementById('tpl-link-note').textContent = meta.note;
 }
 function tplInsertLink() {
+  var type = document.getElementById('tpl-link-type').value;
   var text = document.getElementById('tpl-link-text').value || document.getElementById('tpl-link-url').value || 'Link';
-  var html = '<a href="#" onclick="return false" style="color:#5464F2;text-decoration:underline;">' + text + '</a>';
+  var html = '<a href="#" onclick="return false" data-link-type="' + type + '" style="color:#5464F2;text-decoration:underline;">' + text + '</a>';
   var body = document.getElementById('tpl-editable-body');
   var range = window._tplLinkRange;
   var frag = document.createRange().createContextualFragment(html);
