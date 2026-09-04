@@ -4839,7 +4839,10 @@ function _syncCrmFormPicker(label){
       <button onclick="slotCreateTemplate()" style="padding:11px 20px;border:1px solid #C2185B;border-radius:6px;background:#fff;color:#C2185B;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">+ Create Template</button>
     </div>
     <!-- Template list -->
-    <div style="flex:1;overflow-y:auto;" id="webinarTplListBody"></div>
+    <div style="position:relative;flex:1;overflow-y:auto;">
+      <div id="stpl-refresh" style="display:none;position:absolute;top:10px;left:50%;transform:translateX(-50%);background:#A02059;color:#fff;font-size:14px;font-weight:700;border-radius:20px;padding:8px 20px;box-shadow:0 2px 8px rgba(49,57,73,0.25);z-index:5;">Refresh to see the changes</div>
+      <div id="webinarTplListBody"></div>
+    </div>
   </div>
 </div>
 
@@ -5544,7 +5547,7 @@ window.MODULE_TEMPLATES = window.MODULE_TEMPLATES || [];
 var _tplNewModule = null;
 function tplSaveClick() {
   if (!_tplNewModule) { closeTemplateEditor(); return; }
-  document.getElementById('tpl-savename').value = 'Webinar Invite - ' + _tplNewModule;
+  document.getElementById('tpl-savename').value = _ctSlot ? (_ctType + ' Template') : ('Webinar Invite - ' + _tplNewModule);
   document.getElementById('tpl-savefolder').textContent = _tplNewModule + ' Templates';
   document.getElementById('tpl-savemodal').style.display = 'flex';
 }
@@ -5554,11 +5557,27 @@ function tplSaveCancel() {
 function tplSaveConfirm() {
   var mod = _tplNewModule;
   var name = (document.getElementById('tpl-savename').value || '').trim() || ('Webinar Invite - ' + mod);
-  window.MODULE_TEMPLATES.push({ name: name, module: mod });
   document.getElementById('tpl-savemodal').style.display = 'none';
   closeTemplateEditor();
+  if (_ctSlot) {
+    // created from a step in the create-webinar form: back to that step's list
+    window.WEBINAR_CREATED.push({ name: name, type: _ctType });
+    var slot = _ctSlot;
+    _ctSlot = null;
+    openSlotTemplatePicker(slot);
+    tplShowRefreshPill();
+    return;
+  }
+  window.MODULE_TEMPLATES.push({ name: name, module: mod });
   // tell the Send Invite flow so the new template is selected there
   window.dispatchEvent(new CustomEvent('module-template-created', { detail: { name: name, module: mod } }));
+}
+function tplShowRefreshPill() {
+  var pill = document.getElementById('stpl-refresh');
+  if (!pill) return;
+  pill.style.display = 'inline-block';
+  clearTimeout(window._stplPillT);
+  window._stplPillT = setTimeout(function() { pill.style.display = 'none'; }, 4000);
 }
 function moduleTplBody(module) {
   return '<p>Hi #' + module + '.First Name,</p>' +
@@ -5751,7 +5770,11 @@ function renderSlotTplList() {
   var star = '<svg class="stpl-star" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#c9c9d4" stroke-width="1.6"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg>';
   var spark = '<svg width="20" height="14" viewBox="0 0 24 16" fill="none" stroke="#5B8FF9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1,12 6,5 11,10 16,3 23,9"/></svg>';
   var allowed = TPL_SLOT_DEFAULTS[_activeTplSlot];
+  var type = TPL_SLOT_TYPE[_activeTplSlot];
   var rows = WEBINAR_TEMPLATES.filter(function(t) { return !allowed || t[0] === allowed; });
+  rows = rows.concat((window.WEBINAR_CREATED || [])
+    .filter(function(c) { return c.type === type; })
+    .map(function(c) { return [c.name, 'Jay - ', 'Just now', '\u2014']; }));
   document.getElementById('webinarTplListBody').innerHTML = rows.map(function(t) {
     var name = t[0];
     var on = name === current;
@@ -5781,13 +5804,16 @@ var TPL_SLOT_TYPE = {
   fuAtt: 'Attendees Follow-up',
   fuAbs: 'Absentees Follow-up'
 };
+// created templates, kept per type so the right picker can list them
+window.WEBINAR_CREATED = window.WEBINAR_CREATED || [];
+var _ctSlot = null;
 function slotCreateTemplate() {
-  var type = TPL_SLOT_TYPE[_activeTplSlot] || 'Webinar Invitation';
+  // the step the call came from decides the type, so there is nothing to ask
+  _ctSlot = _activeTplSlot;
+  _ctModule = 'Zoho Webinar';
+  _ctType = TPL_SLOT_TYPE[_activeTplSlot] || 'Webinar Invitation';
   closeSelectTemplateModal();
-  if (window.openCreateTemplateModal) {
-    openCreateTemplateModal('Zoho Webinar');
-    document.getElementById('ct-type').value = type;
-  }
+  openTemplateGallery();
 }
 function pickSlotTemplate(name) {
   if (_activeTplSlot) {
@@ -5984,10 +6010,16 @@ function openTemplateGallery() {
 }
 function closeTemplateGallery() {
   document.getElementById('tpl-gallery').style.display = 'none';
+  if (_ctSlot) {
+    var slot = _ctSlot;
+    _ctSlot = null;
+    openSlotTemplatePicker(slot);
+  }
 }
 function tgPick(i) {
   var layout = TG_LAYOUTS[i] || TG_LAYOUTS[0];
-  closeTemplateGallery();
+  // hide without the back-arrow behaviour, the pending slot is still needed on save
+  document.getElementById('tpl-gallery').style.display = 'none';
   openNewWebinarTemplate(_ctType, _ctModule, layout.name);
 }
 
