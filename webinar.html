@@ -1838,11 +1838,8 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:14px;">Choose the Revenue Attribution Type</div>
               <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
 
-                <!-- First Interaction (default selected) -->
-                <div class="attrib-card" data-model="first" onclick="setupSelectAttribModel(this,'first')" style="position:relative;border:1.5px solid #C2185B;border-radius:10px;padding:16px;background:#fdf0f4;cursor:pointer;transition:all .15s;">
-                  <div class="attrib-check" style="position:absolute;top:10px;left:10px;width:22px;height:22px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="6,12 10,16 18,8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </div>
+                <!-- First Interaction -->
+                <div class="attrib-card" data-model="first" onclick="setupSelectAttribModel(this,'first')" style="position:relative;border:1.5px solid #e0e4ef;border-radius:10px;padding:16px;background:#fff;cursor:pointer;transition:all .15s;">
                   <div class="attrib-info" onmouseenter="document.getElementById('setup-tip-first').style.display='block'" onmouseleave="document.getElementById('setup-tip-first').style.display='none'" style="position:absolute;top:10px;right:10px;cursor:pointer;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#888" stroke-width="1.5" fill="none"/><line x1="12" y1="8" x2="12" y2="12" stroke="#888" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="#888"/></svg>
                     <div id="setup-tip-first" style="display:none;position:absolute;right:0;top:22px;background:#111;color:#fff;font-size:12px;border-radius:6px;padding:10px 12px;width:240px;z-index:200;line-height:1.55;box-shadow:0 4px 16px rgba(0,0,0,.25);">A record attends webinars A → B → C, and then the deal closes. <strong>Webinar A</strong> gets 100% of the revenue because it was the first webinar attended.</div>
@@ -1875,7 +1872,10 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                 </div>
 
                 <!-- Linear -->
-                <div class="attrib-card" data-model="linear" onclick="setupSelectAttribModel(this,'linear')" style="position:relative;border:1.5px solid #e0e4ef;border-radius:10px;padding:16px;background:#fff;cursor:pointer;transition:all .15s;">
+                <div class="attrib-card" data-model="linear" onclick="setupSelectAttribModel(this,'linear')" style="position:relative;border:1.5px solid #C2185B;border-radius:10px;padding:16px;background:#fdf0f4;cursor:pointer;transition:all .15s;">
+                  <div class="attrib-check" style="position:absolute;top:10px;left:10px;width:22px;height:22px;background:#22c55e;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><polyline points="6,12 10,16 18,8" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
                   <div class="attrib-info" onmouseenter="document.getElementById('setup-tip-linear').style.display='block'" onmouseleave="document.getElementById('setup-tip-linear').style.display='none'" style="position:absolute;top:10px;right:10px;cursor:pointer;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#888" stroke-width="1.5" fill="none"/><line x1="12" y1="8" x2="12" y2="12" stroke="#888" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="#888"/></svg>
                     <div id="setup-tip-linear" style="display:none;position:absolute;right:0;top:22px;background:#111;color:#fff;font-size:12px;border-radius:6px;padding:10px 12px;width:240px;z-index:200;line-height:1.55;box-shadow:0 4px 16px rgba(0,0,0,.25);">A record attends webinars A → B → C → D, and the deal closes. Each webinar gets <strong>25%</strong> of the revenue equally.</div>
@@ -2074,7 +2074,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 
             // Attribution: toggle enable
             window._setupAttribEnabled = false;
-            window._setupAttribModel = 'first';
+            window._setupAttribModel = 'linear';
             function setupToggleAttrib() {
               window._setupAttribEnabled = !window._setupAttribEnabled;
               var track = document.getElementById('setup-attrib-toggle');
@@ -2204,7 +2204,8 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 
               // Sync attribution state to the post-activation panel
               var enabled = window._setupAttribEnabled;
-              var modelKey = window._setupAttribModel || 'first';
+              var modelKey = window._setupAttribModel || 'linear';
+              window._selModel = ({ 'inc-decay': 'inc', 'dec-decay': 'dec' })[modelKey] || modelKey;
               var modelInfo = {
                 'first':     { title: 'First Webinar Interaction',      desc: 'Attributes 100% of the deal revenue to the earliest webinar attended.' },
                 'last':      { title: 'Last Webinar Interaction',       desc: 'Attributes 100% of the deal revenue to the most recent webinar attended.' },
@@ -2224,6 +2225,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                 if (onSec) onSec.style.display = 'block';
                 if (titleEl && modelInfo) titleEl.textContent = modelInfo.title;
                 if (descEl && modelInfo) descEl.textContent = modelInfo.desc;
+                if (typeof _refreshModelCard === 'function') _refreshModelCard();
               } else {
                 if (offRow) offRow.style.display = 'flex';
                 if (onSec) onSec.style.display = 'none';
@@ -2675,7 +2677,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               <!-- SECTION 3: Attribution -->
               <div id="post-attribution-card" style="background:#fff;border:1px solid #e8ebf2;border-radius:12px;padding:24px 28px;">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                  <span style="font-size:15px;font-weight:700;color:#111;">Webinar Deal Attribution</span>
+                  <span id="attrib-section-title" style="font-size:15px;font-weight:700;color:#111;">Webinar Deal Revenue Attribution</span>
                   <div style="position:relative;display:inline-flex;" onmouseenter="document.getElementById('attrib-tip-3').style.display='block'" onmouseleave="document.getElementById('attrib-tip-3').style.display='none'">
                     <svg width="16" height="16" viewBox="0 0 24 24" style="cursor:pointer;" fill="none"><circle cx="12" cy="12" r="10" fill="#888"/><text x="12" y="17" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" font-family="serif">i</text></svg>
                     <div id="attrib-tip-3" style="display:none;position:absolute;left:22px;top:-6px;background:#111;color:#fff;font-size:12px;border-radius:6px;padding:10px 14px;width:300px;z-index:200;line-height:1.6;box-shadow:0 4px 16px rgba(0,0,0,.25);">Connects webinar attendees to CRM deals and shows how much revenue each webinar contributed.</div>
@@ -2700,9 +2702,12 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                   </div>
                   <div style="display:flex;align-items:flex-start;gap:24px;">
                     <span style="font-size:13px;color:#666;min-width:140px;padding-top:8px;">Attribution Model</span>
-                    <div id="attrib-model-card" style="background:#f2ede7;border-radius:9px;padding:14px 18px;min-width:240px;max-width:360px;">
-                      <div style="display:flex;align-items:center;gap:7px;margin-bottom:8px;"><span id="model-card-title" style="font-size:13.5px;font-weight:700;color:#111;">First Webinar Interaction</span></div>
-                      <p id="model-card-desc" style="font-size:12px;color:#555;line-height:1.6;margin:0;">Attributes 100% of the deal revenue to the earliest webinar attended by the associated record prior to deal closure.</p>
+                    <div id="attrib-model-card" style="background:#f2ede7;border-radius:9px;padding:16px 18px;min-width:240px;max-width:420px;display:flex;align-items:flex-start;gap:16px;">
+                      <div id="model-card-chart" style="background:#f0f4ff;border-radius:7px;padding:10px 12px;display:flex;align-items:flex-end;justify-content:center;flex-shrink:0;"></div>
+                      <div>
+                        <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px;"><span id="model-card-title" style="font-size:13.5px;font-weight:700;color:#111;">Linear</span></div>
+                        <p id="model-card-desc" style="font-size:12px;color:#555;line-height:1.6;margin:0;">Distributes the deal revenue equally across all webinars attended by the associated record before the deal was closed.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -6370,8 +6375,9 @@ document.addEventListener('click', function(e) {
 });
 
 // ── Integration state ─────────────────────────────────────
-window._selModel = 'first';
-window._attribOn = false;
+window._selModel = 'linear';
+window._attribOn = true;
+window._modelSaved = true;
 var _MODELS = {
   first:  ['First Webinar Interaction',  'Attributes 100% of the deal revenue to the earliest webinar attended by the associated record prior to deal closure.'],
   last:   ['Last Webinar Interaction',   'Attributes 100% of the deal revenue to the most recent webinar attended by the associated record before the deal was closed.'],
@@ -6451,7 +6457,18 @@ function integShowPanel(id) {
       el.style.display = 'none';
     }
   });
-  if (id === 'integ-enabled-panel' && typeof window.imRender === 'function') imRender();
+  if (id === 'integ-enabled-panel') {
+    if (typeof window.imRender === 'function') imRender();
+    if (window._attribOn) {
+      var offRow = document.getElementById('toggle-off-row');
+      var onSec = document.getElementById('toggle-on-section');
+      var title = document.getElementById('attrib-section-title');
+      if (offRow) offRow.style.display = 'none';
+      if (onSec) onSec.style.display = 'block';
+      if (title) title.textContent = 'Webinar Deal Revenue Attribution';
+    }
+    if (typeof _refreshModelCard === 'function') _refreshModelCard();
+  }
   // When showing the historical (Sync & User Permissions) panel, apply product visibility
   if (id === 'integ-historical-panel' && typeof window.histApplyProductVisibility === 'function') {
     window.histApplyProductVisibility();
@@ -6745,9 +6762,12 @@ function integToggleAttrib() {
     integOpenAttribPicker();
   } else {
     // Turning off: reset to plain enabled panel, toggle off state
-    document.getElementById('toggle-off-row').style.display = 'flex';
-    document.getElementById('toggle-on-section').style.display = 'none';
-    document.getElementById('attrib-section-title').textContent = 'Webinar Deal Attribution';
+    var _off = document.getElementById('toggle-off-row');
+    var _on = document.getElementById('toggle-on-section');
+    var _t = document.getElementById('attrib-section-title');
+    if (_off) _off.style.display = 'flex';
+    if (_on) _on.style.display = 'none';
+    if (_t) _t.textContent = 'Webinar Deal Attribution';
   }
   postDirty();
 }
@@ -6858,6 +6878,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function integOpenAttribPicker() {
+  if (!window._selModel) window._selModel = 'linear';
   integShowPanel('integ-attrib-panel');
   _highlightModel(window._selModel);
 }
@@ -6871,9 +6892,12 @@ function integSaveModel() {
   window._modelSaved = true;
   _refreshModelCard();
   // Show the enabled panel with toggle-on state visible
-  document.getElementById('toggle-off-row').style.display = 'none';
-  document.getElementById('toggle-on-section').style.display = 'block';
-  document.getElementById('attrib-section-title').textContent = 'Webinar Deal Revenue Attribution';
+  var _off = document.getElementById('toggle-off-row');
+  var _on = document.getElementById('toggle-on-section');
+  var _t = document.getElementById('attrib-section-title');
+  if (_off) _off.style.display = 'none';
+  if (_on) _on.style.display = 'block';
+  if (_t) _t.textContent = 'Webinar Deal Revenue Attribution';
   integShowPanel('integ-enabled-panel');
 }
 
@@ -6881,9 +6905,12 @@ function integCloseAttribPicker() {
   // If user cancels without ever saving a model selection, revert toggle to off
   if (!window._modelSaved) {
     window._attribOn = false;
-    document.getElementById('toggle-off-row').style.display = 'flex';
-    document.getElementById('toggle-on-section').style.display = 'none';
-    document.getElementById('attrib-section-title').textContent = 'Webinar Deal Attribution';
+    var _off = document.getElementById('toggle-off-row');
+    var _on = document.getElementById('toggle-on-section');
+    var _t = document.getElementById('attrib-section-title');
+    if (_off) _off.style.display = 'flex';
+    if (_on) _on.style.display = 'none';
+    if (_t) _t.textContent = 'Webinar Deal Attribution';
   }
   integShowPanel('integ-enabled-panel');
 }
@@ -6903,12 +6930,23 @@ function _highlightModel(key) {
   });
 }
 
+var _MODEL_CHARTS = {
+  first:    '<rect x="4" y="8" width="12" height="40" rx="2" fill="#1565C0"/><rect x="22" y="40" width="12" height="8" rx="2" fill="#90CAF9"/><rect x="40" y="40" width="12" height="8" rx="2" fill="#90CAF9"/><rect x="58" y="40" width="12" height="8" rx="2" fill="#90CAF9"/>',
+  last:     '<rect x="4" y="40" width="12" height="8" rx="2" fill="#90CAF9"/><rect x="22" y="40" width="12" height="8" rx="2" fill="#90CAF9"/><rect x="40" y="40" width="12" height="8" rx="2" fill="#90CAF9"/><rect x="58" y="8" width="12" height="40" rx="2" fill="#1565C0"/>',
+  linear:   '<rect x="4" y="22" width="12" height="26" rx="2" fill="#1565C0"/><rect x="22" y="22" width="12" height="26" rx="2" fill="#1565C0"/><rect x="40" y="22" width="12" height="26" rx="2" fill="#1565C0"/><rect x="58" y="22" width="12" height="26" rx="2" fill="#1565C0"/>',
+  inc:      '<rect x="4" y="8" width="12" height="40" rx="2" fill="#1565C0"/><rect x="22" y="18" width="12" height="30" rx="2" fill="#1E88E5"/><rect x="40" y="28" width="12" height="20" rx="2" fill="#64B5F6"/><rect x="58" y="38" width="12" height="10" rx="2" fill="#90CAF9"/>',
+  dec:      '<rect x="4" y="38" width="12" height="10" rx="2" fill="#90CAF9"/><rect x="22" y="28" width="12" height="20" rx="2" fill="#64B5F6"/><rect x="40" y="18" width="12" height="30" rx="2" fill="#1E88E5"/><rect x="58" y="8" width="12" height="40" rx="2" fill="#1565C0"/>',
+  position: '<rect x="4" y="12" width="12" height="36" rx="2" fill="#1565C0"/><rect x="22" y="34" width="12" height="14" rx="2" fill="#90CAF9"/><rect x="40" y="34" width="12" height="14" rx="2" fill="#90CAF9"/><rect x="58" y="12" width="12" height="36" rx="2" fill="#1565C0"/>'
+};
 function _refreshModelCard() {
-  var d = _MODELS[window._selModel] || _MODELS.first;
+  var key = window._selModel || 'linear';
+  var d = _MODELS[key] || _MODELS.linear;
   var t = document.getElementById('model-card-title');
   var desc = document.getElementById('model-card-desc');
+  var chart = document.getElementById('model-card-chart');
   if (t) t.textContent = d[0];
   if (desc) desc.textContent = d[1];
+  if (chart) chart.innerHTML = '<svg width="80" height="52" viewBox="0 0 80 52" fill="none">' + (_MODEL_CHARTS[key] || _MODEL_CHARTS.linear) + '</svg>';
 }
 
 // ── Navigate from Leads → Webinar List ──────────────────
