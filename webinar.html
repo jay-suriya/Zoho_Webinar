@@ -5228,7 +5228,13 @@ var TPLPAGE_MODULES = ['Contacts','Accounts','Potentials','Financial Services','
 // the only webinar template that lives here — the lifecycle set is in
 // Modules and Fields > Zoho Webinar > Preferences
 var TPLPAGE_WEBINAR_ROWS = [
-  ['Invitation Template', 'Zoho Webinar', 'Sent when you invite CRM records to a webinar', 'Jay', '28 Dec 2025', '15 Jan 2026', '', '']
+  ['Webinar Invitation Template',   'Zoho Webinar', 'Sent when you invite CRM records to a webinar',   'Jay', '28 Dec 2025', '15 Jan 2026', '', ''],
+  ['Confirmation Template',         'Zoho Webinar', 'Sent as soon as someone registers',              'Jay', '02 Jan 2026', '12 Jan 2026', '', ''],
+  ['1st Reminder Template',         'Zoho Webinar', 'Sent before the webinar starts',                 'Jay', '21 Dec 2025', '07 Jan 2026', '', ''],
+  ['2nd Reminder Template',         'Zoho Webinar', 'Sent before the webinar starts',                 'Jay', '21 Dec 2025', '10 Jan 2026', '', ''],
+  ['3rd Reminder Template',         'Zoho Webinar', 'Sent before the webinar starts',                 'Jay', '05 Dec 2025', '02 Jan 2026', '', ''],
+  ['Attendees Follow-up Template',  'Zoho Webinar', 'Sent after the webinar to those who attended',   'Jay', '05 Dec 2025', '02 Jan 2026', '', ''],
+  ['Absentees Follow-up Template',  'Zoho Webinar', 'Sent after the webinar to those who missed it',  'Jay', '05 Dec 2025', '02 Jan 2026', '', '']
 ];
 var TPLPAGE_TYPES = ['Email','Inventory','Mail Merge'];
 var TPLPAGE_CATEGORIES = [
@@ -5366,7 +5372,7 @@ function tplPageRenderRows() {
   }
   tbody.innerHTML = rows.map(function(r) {
     var key = (typeof TPL_KEY_BY_NAME !== 'undefined') ? TPL_KEY_BY_NAME[r[0]] : null;
-    if (!key && r[0] === 'Invitation Template') key = 'sendInvite';
+    if (!key && r[0] === 'Confirmation Template') key = 'confirmation';
     var nameClick = key ? ' onclick="openTemplatePreview(\'' + key + '\')"' : '';
     var nameStyle = 'font-size:14px;color:#111;font-weight:500;' + (key ? 'cursor:pointer;' : '');
     var stats = r[6]
@@ -5395,6 +5401,7 @@ var TPL_KEY_BY_NAME = {
   'Send Invite Template': 'sendInvite',
   'Webinar Invitation Template': 'sendInvite',
   'Invitation Template': 'sendInvite',
+  'Confirmation Template': 'confirmation',
   'Webinar Confirmation Template': 'confirmation',
   '1st Reminder Template': 'reminder1',
   '2nd Reminder Template': 'reminder2',
