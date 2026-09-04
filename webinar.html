@@ -5534,7 +5534,7 @@ function openTemplateEditor(key) {
   _tplTypeName = TPL_TYPE_BY_KEY[key] || 'Webinar Invitation';
   _tplNewModule = null;
   _tplMergeOrderOverride = null;
-  tplMergeModule = 'Webinar Details';
+  tplMergeModule = tplDefaultMergeModule();
   document.getElementById('modfields-tpl-subtitle').textContent = 'Welcome to Zoho Webinar';
   document.getElementById('modfields-tpl-modtag').textContent = 'Zoho Webinar';
   document.getElementById('modfields-tpl-title').textContent = meta.label;
@@ -5640,7 +5640,7 @@ function openModuleTemplateEditor(name, module) {
   _tplNewModule = module;
   _tplEditorKey = null;
   _tplMergeOrderOverride = null;
-  tplMergeModule = 'Webinar Details';
+  tplMergeModule = tplDefaultMergeModule();
   document.getElementById('modfields-tpl-title').textContent = name;
   document.getElementById('modfields-tpl-subtitle').textContent = 'Invite email for ' + module;
   document.getElementById('modfields-tpl-modtag').textContent = module;
@@ -5653,7 +5653,7 @@ function openNewModuleTemplate(module) {
   _tplNewModule = mod;
   _tplEditorKey = null;
   _tplMergeOrderOverride = null;
-  tplMergeModule = 'Webinar Details';
+  tplMergeModule = tplDefaultMergeModule();
   document.getElementById('modfields-tpl-title').textContent = 'New Template';
   document.getElementById('modfields-tpl-subtitle').textContent = 'Invite email for ' + mod;
   document.getElementById('modfields-tpl-modtag').textContent = mod;
@@ -6068,7 +6068,7 @@ function openNewWebinarTemplate(type, module, layout) {
   _tplNewModule = module || 'Leads';
   _tplEditorKey = null;
   _tplMergeOrderOverride = null;
-  tplMergeModule = 'Webinar Details';
+  tplMergeModule = tplDefaultMergeModule();
   document.getElementById('modfields-tpl-title').textContent = type;
   document.getElementById('modfields-tpl-subtitle').textContent = (layout ? layout + ' · ' : '') + module;
   document.getElementById('modfields-tpl-modtag').textContent = module;
@@ -6218,7 +6218,14 @@ var TPL_MERGE_REST = ['Users','Organization'];
 var _tplMergeOrderOverride = null;
 function tplMergeModules() {
   if (_tplMergeOrderOverride) return _tplMergeOrderOverride;
-  return ['Webinar Details'].concat(TPL_MERGE_REST);
+  // every email after the invite goes to a registrant, so Registrations leads the list
+  var head = (_tplTypeName === 'Webinar Invitation')
+    ? ['Webinar Details']
+    : ['Registrations', 'Webinar Details'];
+  return head.concat(TPL_MERGE_REST);
+}
+function tplDefaultMergeModule() {
+  return tplMergeModules()[0];
 }
 var TPL_MERGE_MODULES = tplMergeModules();
 var tplMergeModule = 'Webinar Details';
