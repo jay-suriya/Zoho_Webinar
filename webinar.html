@@ -5321,6 +5321,8 @@ function tplPageRenderRows() {
 // ── Template Editor ────────────────────────────────────────
 var TPL_KEY_BY_NAME = {
   'Send Invite Template': 'sendInvite',
+  'Webinar Invitation Template': 'sendInvite',
+  'Invitation Template': 'sendInvite',
   'Webinar Confirmation Template': 'confirmation',
   '1st Reminder Template': 'reminder1',
   '2nd Reminder Template': 'reminder2',
@@ -20732,13 +20734,9 @@ function SelectTemplateModal({
   const W = window.WEBINAR_TPL;
   // when the send is to one module, this picker lists that module's templates
   // alongside the webinar's own — nothing that can't render for these records
-  const webinarTpls = (window.WEBINAR_TEMPLATES || []).map(t => ({ name: t[0], folder: "Zoho Webinar Templates", openRate: "0%" }));
-  // module-scoped invites list that module's own templates — empty until one is created
-  const moduleTpls = (window.MODULE_TEMPLATES || [])
-    .filter(t => t.module === (module || "Leads"))
-    .map(t => ({ name: t.name, folder: (module || "Leads") + " Templates", openRate: "0%" }));
-  const [scope, setScope] = useState(moduleOnly ? "module" : "webinar");
-  const source = scope === "module" ? moduleTpls : (webinarTpls.length ? webinarTpls : TEMPLATE_LIST);
+  const TPL_FOLDERS = ["All Templates", "Favorites", "Associated Templates", "Created by me", "Shared with me", "Public Email Templates", "Managerial templates"];
+  const [folder, setFolder] = useState("All Templates");
+  const source = [{ name: "Webinar Invitation Template", folder: "Zoho Webinar", openRate: "0%" }];
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -20798,9 +20796,9 @@ function SelectTemplateModal({
       cursor: "pointer",
       minWidth: 180
     },
-    value: scope,
-    onChange: e => setScope(e.target.value)
-  }, [/*#__PURE__*/React.createElement("option", { key: "w", value: "webinar" }, "Zoho Webinar Templates"), /*#__PURE__*/React.createElement("option", { key: "m", value: "module" }, (module || "Leads") + " Templates")]), /*#__PURE__*/React.createElement("span", {
+    value: folder,
+    onChange: e => setFolder(e.target.value)
+  }, TPL_FOLDERS.map(f => /*#__PURE__*/React.createElement("option", { key: f, value: f }, f))), /*#__PURE__*/React.createElement("span", {
     style: {
       position: "absolute",
       right: 10,
@@ -20889,46 +20887,11 @@ function SelectTemplateModal({
       flex: 1,
       overflowY: "auto"
     }
-  }, (scope === "module" && filtered.length === 0)
-    ? /*#__PURE__*/React.createElement("div", {
-        style: {
-          padding: "56px 30px 64px",
-          textAlign: "center"
-        }
-      }, /*#__PURE__*/React.createElement("div", {
-        style: {
-          fontSize: 15,
-          color: COLORS.zohoText,
-          marginBottom: 6
-        }
-      }, "No " + (module || "Leads") + " template with an invite link is found."), /*#__PURE__*/React.createElement("div", {
-        style: {
-          fontSize: 13.5,
-          color: COLORS.zohoTextLight,
-          marginBottom: 20
-        }
-      }, "Click Create New to create."), /*#__PURE__*/React.createElement("button", {
-        onClick: () => {
-          onClose();
-          if (window.openNewModuleTemplate) setTimeout(() => window.openNewModuleTemplate(module || "Leads"), 60);
-        },
-        style: {
-          padding: "10px 22px",
-          background: "#FDEFF5",
-          border: "1px solid #C2185B",
-          color: "#C2185B",
-          borderRadius: 6,
-          fontSize: 14.5,
-          fontWeight: 600,
-          cursor: "pointer",
-          fontFamily: "inherit"
-        }
-      }, "Create New"))
-    : filtered.map((t, i) => /*#__PURE__*/React.createElement("div", {
+  }, filtered.map((t, i) => /*#__PURE__*/React.createElement("div", {
     key: i,
     onMouseEnter: () => setHovered(i),
     onMouseLeave: () => setHovered(null),
-    onClick: () => onSelect(t.name, scope),
+    onClick: () => onSelect(t.name),
     style: {
       display: "flex",
       alignItems: "center",
@@ -21006,7 +20969,7 @@ function SelectTemplateModal({
     },
     onClick: e => {
       e.stopPropagation();
-      onSelect(t.name, scope);
+      onSelect(t.name);
     }
   }, "Preview")))))));
 }
@@ -21142,8 +21105,8 @@ function MassEmailModal({
         setShowSelectTemplate(false);
         setPickerSlot(null);
       },
-      onSelect: (name, scope) => {
-        const src = scope === "module" ? "module" : "default";
+      onSelect: name => {
+        const src = "default";
         if (slot === "invite") { setTplSource(src); setTemplate(name); }
         else {
           setLaterSource(ls => ({ ...ls, [slot]: src }));
