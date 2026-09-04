@@ -616,6 +616,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         <span style="font-size:21px;font-weight:800;color:#202123;">Template Gallery</span>
       </span>
       <span id="tg-module" style="font-size:15px;color:#434D5E;display:flex;align-items:center;gap:6px;cursor:pointer;">Leads <span style="font-size:10px;color:#8C91AB;">&#9660;</span></span>
+      <span id="tg-context" style="display:flex;align-items:center;gap:8px;"></span>
     </div>
     <button style="padding:9px 20px;border:1px solid #C2185B;border-radius:8px;background:#FDEFF5;color:#C2185B;font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;">Insert HTML / Plain Text</button>
   </div>
@@ -5943,6 +5944,9 @@ var TG_LAYOUTS = [
 
 function openTemplateGallery() {
   document.getElementById('tg-module').innerHTML = _ctModule + ' <span style="font-size:10px;color:#8C91AB;">▼</span>';
+  document.getElementById('tg-context').innerHTML =
+    '<span style="font-size:12.5px;font-weight:600;color:#5464F2;background:#F0F1FF;border:1px solid #D2D7FF;border-radius:12px;padding:3px 12px;">Zoho Webinar</span>' +
+    '<span style="font-size:12.5px;font-weight:600;color:#C2185B;background:#FDEFF5;border:1px solid #F0C3D6;border-radius:12px;padding:3px 12px;">' + _ctType + '</span>';
   document.getElementById('tg-cards').innerHTML = TG_LAYOUTS.map(function(l, i) {
     return '<div onclick="tgPick(' + i + ')" style="cursor:pointer;width:180px;">' +
         '<div style="height:250px;border:1px solid #E0E1E8;border-radius:6px;background:#fff;padding:' + (l.body ? '10px' : '0') + ';overflow:hidden;"' +
