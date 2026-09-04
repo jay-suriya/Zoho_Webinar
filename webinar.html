@@ -1061,7 +1061,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
             <div style="display:flex;border-top:1px solid #eee;">
               <!-- category column -->
               <div style="width:280px;flex-shrink:0;border-right:1px solid #eee;padding:18px 22px 26px;">
-                <button style="padding:11px 20px;border:none;border-radius:6px;background:linear-gradient(180deg,#A02059,#7C1544);color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;margin-bottom:18px;">+ New Template</button>
+                <button onclick="tplPageNewTemplate()" style="padding:11px 20px;border:none;border-radius:6px;background:linear-gradient(180deg,#A02059,#7C1544);color:#fff;font-size:13.5px;font-weight:700;cursor:pointer;margin-bottom:18px;">+ New Template</button>
                 <div id="tplpage-categories" style="display:flex;flex-direction:column;gap:14px;"></div>
               </div>
               <!-- table -->
@@ -5341,6 +5341,10 @@ function tplPagePickModule(m) {
 
 // The webinar's lifecycle templates (confirmation, reminders, follow-ups) are NOT listed
 // here — they belong to the module and are managed in Zoho Webinar > Preferences.
+function tplPageNewTemplate() {
+  var mod = (tplPageModule && tplPageModule !== 'All Modules' && tplPageModule !== 'Zoho Webinar') ? tplPageModule : 'Leads';
+  if (window.openCreateTemplateModal) openCreateTemplateModal(mod);
+}
 function tplPageRows() {
   var rows = TPLPAGE_ROWS.concat(TPLPAGE_WEBINAR_ROWS);
   if (tplPageModule === 'All Modules') return rows;
