@@ -584,9 +584,13 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link Type</label>
         <select id="tpl-link-type" onchange="tplLinkTypeChanged()" style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #C0C8E2;border-radius:6px;background:#fff;color:#202123;">
           <option>Web URL</option>
-          <option>Zoho Forms</option>
-          <option>Zoho Survey</option>
-          <option>Zoho Webinar</option>
+          <option>Email</option>
+          <option>Registration Link</option>
+          <option>Add To Calendar</option>
+          <option>Add To Google Calendar</option>
+          <option>Add To Yahoo Calendar</option>
+          <option>Add To Outlook Calendar</option>
+          <option>Add To Zoho Calendar</option>
         </select>
       </div>
       <div id="tpl-link-whatrow" style="display:none;align-items:center;gap:14px;padding:8px 0;">
@@ -626,9 +630,13 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         <label style="font-size:13px;color:#616E88;width:120px;flex-shrink:0;">Link Type</label>
         <select id="tpl-btn-type" onchange="tplBtnTypeChanged()" style="flex:1;font-size:13.5px;padding:8px 10px;border:1px solid #C0C8E2;border-radius:6px;background:#fff;color:#202123;">
           <option>Web URL</option>
-          <option>Zoho Forms</option>
-          <option>Zoho Survey</option>
-          <option>Zoho Webinar</option>
+          <option>Email</option>
+          <option>Registration Link</option>
+          <option>Add To Calendar</option>
+          <option>Add To Google Calendar</option>
+          <option>Add To Yahoo Calendar</option>
+          <option>Add To Outlook Calendar</option>
+          <option>Add To Zoho Calendar</option>
         </select>
       </div>
       <div id="tpl-btn-whatrow" style="display:none;align-items:center;gap:14px;padding:8px 0;">
@@ -5779,21 +5787,24 @@ function tplCloseBtnModal() {
 function tplBtnTypeChanged() {
   var type = document.getElementById('tpl-btn-type').value;
   var meta = TPL_LINK_TYPES[type] || {};
-  var row = document.getElementById('tpl-btn-whatrow');
-  var what = document.getElementById('tpl-btn-what');
-  if (meta.what) {
-    what.innerHTML = meta.what.map(function(w) { return '<option>' + w + '</option>'; }).join('');
-    row.style.display = 'flex';
-    tplBtnWhatChanged();
-  } else {
-    row.style.display = 'none';
-    var url = document.getElementById('tpl-btn-url');
+  document.getElementById('tpl-btn-whatrow').style.display = 'none';
+  var url = document.getElementById('tpl-btn-url');
+  var name = document.getElementById('tpl-btn-name');
+  if (meta.free) {
     url.value = '';
     url.readOnly = false;
-    url.placeholder = 'https://';
+    url.placeholder = meta.placeholder || 'https://';
     url.style.background = '#fff';
     url.style.borderColor = '#C0C8E2';
     document.getElementById('tpl-btn-note').textContent = '';
+  } else {
+    url.value = meta.url || '';
+    url.readOnly = true;
+    url.placeholder = '';
+    url.style.background = '#F5F6F8';
+    url.style.borderColor = '#D2D9F1';
+    if (!name.value) name.placeholder = meta.text || 'Register Now';
+    document.getElementById('tpl-btn-note').textContent = meta.note || '';
   }
 }
 function tplBtnWhatChanged() {
@@ -5826,10 +5837,14 @@ function tplInsertButton() {
 
 // ── Insert Link — webinar link types plus a plain URL ──
 var TPL_LINK_TYPES = {
-  'Web URL':      { what: null },
-  'Zoho Forms':   { what: ['Registration Form', 'Feedback Form'] },
-  'Zoho Survey':  { what: ['Post-Webinar Survey', 'NPS Survey'] },
-  'Zoho Webinar': { what: ['Invitation Link', 'Join Webinar Link', 'Watch Video Link'] }
+  'Web URL': { free: true, placeholder: 'https://' },
+  'Email':   { free: true, placeholder: 'name@example.com' },
+  'Registration Link':      { url: '#Registration URL',        text: 'Register Now',            note: 'The registration page for this webinar.' },
+  'Add To Calendar':        { url: '#Add To Calendar',         text: 'Add to Calendar',         note: 'Lets the recipient pick their own calendar.' },
+  'Add To Google Calendar': { url: '#Add To Google Calendar',  text: 'Add to Google Calendar',  note: 'Adds the webinar to Google Calendar.' },
+  'Add To Yahoo Calendar':  { url: '#Add To Yahoo Calendar',   text: 'Add to Yahoo Calendar',   note: 'Adds the webinar to Yahoo Calendar.' },
+  'Add To Outlook Calendar':{ url: '#Add To Outlook Calendar', text: 'Add to Outlook Calendar', note: 'Adds the webinar to Outlook Calendar.' },
+  'Add To Zoho Calendar':   { url: '#Add To Zoho Calendar',    text: 'Add to Zoho Calendar',    note: 'Adds the webinar to Zoho Calendar.' }
 };
 var TPL_LINK_WHAT = {
   'Registration Form':  { url: '#Zoho Forms Link',            text: 'Open Form',        note: 'Links to the selected Zoho Forms form.' },
@@ -5853,22 +5868,24 @@ function tplCloseLinkModal() {
 function tplLinkTypeChanged() {
   var type = document.getElementById('tpl-link-type').value;
   var meta = TPL_LINK_TYPES[type] || {};
-  var row = document.getElementById('tpl-link-whatrow');
-  var what = document.getElementById('tpl-link-what');
-  if (meta.what) {
-    what.innerHTML = meta.what.map(function(w) { return '<option>' + w + '</option>'; }).join('');
-    row.style.display = 'flex';
-    tplLinkWhatChanged();
-  } else {
-    row.style.display = 'none';
-    var url = document.getElementById('tpl-link-url');
+  document.getElementById('tpl-link-whatrow').style.display = 'none';
+  var url = document.getElementById('tpl-link-url');
+  if (meta.free) {
     url.value = '';
     url.readOnly = false;
-    url.placeholder = 'https://';
+    url.placeholder = meta.placeholder || 'https://';
     url.style.background = '#fff';
     url.style.borderColor = '#C0C8E2';
     document.getElementById('tpl-link-text').value = '';
     document.getElementById('tpl-link-note').textContent = '';
+  } else {
+    url.value = meta.url || '';
+    url.readOnly = true;
+    url.placeholder = '';
+    url.style.background = '#F5F6F8';
+    url.style.borderColor = '#D2D9F1';
+    document.getElementById('tpl-link-text').value = meta.text || '';
+    document.getElementById('tpl-link-note').textContent = meta.note || '';
   }
 }
 function tplLinkWhatChanged() {
