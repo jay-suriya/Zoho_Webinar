@@ -593,6 +593,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
       <div style="display:flex;align-items:center;gap:16px;padding:8px 0;">
         <label style="font-size:15px;color:#434D5E;width:130px;flex-shrink:0;">Template Type</label>
         <select id="ct-type" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:220px;">
+          <option>None</option>
           <option>Webinar Invitation</option>
           <option>Confirmation Email</option>
           <option>1st Reminder</option>
@@ -6257,6 +6258,7 @@ var TPL_LINK_WHAT = {
 // what each template type is allowed to link to
 var TPL_CAL_LINKS = ['Add To Calendar', 'Add To Google Calendar', 'Add To Yahoo Calendar', 'Add To Outlook Calendar', 'Add To Zoho Calendar'];
 var TPL_TYPE_LINKS = {
+  'None':                ['Web URL', 'Email', 'Registration Link', 'Join URL', 'Cancel Registration', 'Recording Link'].concat(TPL_CAL_LINKS),
   'Webinar Invitation':  ['Web URL', 'Email', 'Registration Link'].concat(TPL_CAL_LINKS),
   'Confirmation Email':  ['Web URL', 'Join URL', 'Cancel Registration'].concat(TPL_CAL_LINKS),
   '1st Reminder':        ['Web URL', 'Join URL', 'Cancel Registration'].concat(TPL_CAL_LINKS),
