@@ -581,7 +581,8 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
     <div style="padding:18px 30px 26px;">
       <div style="display:flex;align-items:center;gap:16px;padding:8px 0;">
         <label style="font-size:15px;color:#434D5E;width:130px;flex-shrink:0;">Select Module</label>
-        <select id="ct-module" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:150px;">
+        <select id="ct-module" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:170px;">
+          <option>Zoho Webinar</option>
           <option>Leads</option>
           <option>Contacts</option>
           <option>Vendors</option>
@@ -5343,7 +5344,7 @@ function tplPagePickModule(m) {
 // The webinar's lifecycle templates (confirmation, reminders, follow-ups) are NOT listed
 // here — they belong to the module and are managed in Zoho Webinar > Preferences.
 function tplPageNewTemplate() {
-  var mod = (tplPageModule && tplPageModule !== 'All Modules' && tplPageModule !== 'Zoho Webinar') ? tplPageModule : 'Leads';
+  var mod = (tplPageModule && tplPageModule !== 'All Modules') ? tplPageModule : 'Zoho Webinar';
   if (window.openCreateTemplateModal) openCreateTemplateModal(mod);
 }
 function tplPageRows() {
@@ -5909,7 +5910,8 @@ function tplInsertButton() {
 var _ctModule = 'Leads';
 var _ctType = 'Webinar Invitation';
 function openCreateTemplateModal(module) {
-  _ctModule = module || 'Leads';
+  // Zoho Webinar is itself a module, so it leads the list
+  _ctModule = module || 'Zoho Webinar';
   document.getElementById('ct-module').value = _ctModule;
   document.getElementById('ct-type').value = 'Webinar Invitation';
   document.getElementById('ct-modal').style.display = 'flex';
@@ -5945,7 +5947,6 @@ var TG_LAYOUTS = [
 function openTemplateGallery() {
   document.getElementById('tg-module').innerHTML = _ctModule + ' <span style="font-size:10px;color:#8C91AB;">▼</span>';
   document.getElementById('tg-context').innerHTML =
-    '<span style="font-size:12.5px;font-weight:600;color:#5464F2;background:#F0F1FF;border:1px solid #D2D7FF;border-radius:12px;padding:3px 12px;">Zoho Webinar</span>' +
     '<span style="font-size:12.5px;font-weight:600;color:#C2185B;background:#FDEFF5;border:1px solid #F0C3D6;border-radius:12px;padding:3px 12px;">' + _ctType + '</span>';
   document.getElementById('tg-cards').innerHTML = TG_LAYOUTS.map(function(l, i) {
     return '<div onclick="tgPick(' + i + ')" style="cursor:pointer;width:180px;">' +
@@ -21027,7 +21028,7 @@ function SelectTemplateModal({
     },
     onClick: () => {
       onClose();
-      setTimeout(() => { if (window.openCreateTemplateModal) window.openCreateTemplateModal(module || "Leads"); }, 60);
+      setTimeout(() => { if (window.openCreateTemplateModal) window.openCreateTemplateModal("Zoho Webinar"); }, 60);
     }
   }, "+ Create Template")), /*#__PURE__*/React.createElement("div", {
     style: {
