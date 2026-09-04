@@ -1822,19 +1822,19 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
             <!-- Enable toggle -->
             <div style="display:flex;align-items:center;gap:16px;margin-bottom:22px;">
               <span style="font-size:14px;font-weight:700;color:#111;">Enable Deal Revenue Attribution</span>
-              <div id="setup-attrib-toggle" onclick="setupToggleAttrib()" style="width:46px;height:26px;background:#cfd2d8;border-radius:13px;cursor:pointer;position:relative;transition:background .18s ease;">
-                <div id="setup-attrib-knob" style="position:absolute;left:2px;top:2px;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:left .18s ease;"></div>
+              <div id="setup-attrib-toggle" onclick="setupToggleAttrib()" style="width:46px;height:26px;background:#27ae60;border-radius:13px;cursor:pointer;position:relative;transition:background .18s ease;">
+                <div id="setup-attrib-knob" style="position:absolute;left:22px;top:2px;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,.2);transition:left .18s ease;"></div>
               </div>
             </div>
 
             <!-- Disabled state: skip note -->
-            <div id="setup-attrib-off-note" style="display:flex;align-items:flex-start;gap:10px;padding:14px 18px;background:#fafbff;border:1px solid #e8ebf2;border-radius:10px;margin-bottom:24px;">
+            <div id="setup-attrib-off-note" style="display:none;align-items:flex-start;gap:10px;padding:14px 18px;background:#fafbff;border:1px solid #e8ebf2;border-radius:10px;margin-bottom:24px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10" stroke="#888" stroke-width="1.5" fill="none"/><line x1="12" y1="8" x2="12" y2="12" stroke="#888" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="#888"/></svg>
               <span style="font-size:12.5px;color:#555;line-height:1.6;">Deal Attribution is optional. You can enable it later from the integration settings if you'd prefer to skip this for now.</span>
             </div>
 
-            <!-- Enabled state: 6 model cards (hidden by default) -->
-            <div id="setup-attrib-on-section" style="display:none;">
+            <!-- Enabled state: 6 model cards, on by default with Linear picked -->
+            <div id="setup-attrib-on-section" style="display:block;">
               <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:14px;">Choose the Revenue Attribution Type</div>
               <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;">
 
@@ -1985,16 +1985,17 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               // Track which case we're in
               window._setupSyncApplies = (caseNum === 2 || caseNum === 3);
 
-              // Reset attribution to OFF state
-              window._setupAttribEnabled = false;
+              // Attribution starts on, with Linear picked
+              window._setupAttribEnabled = true;
+              window._setupAttribModel = 'linear';
               var track = document.getElementById('setup-attrib-toggle');
               var knob = document.getElementById('setup-attrib-knob');
               var offNote = document.getElementById('setup-attrib-off-note');
               var onSection = document.getElementById('setup-attrib-on-section');
-              if (track) track.style.background = '#cfd2d8';
-              if (knob) knob.style.left = '2px';
-              if (offNote) offNote.style.display = 'flex';
-              if (onSection) onSection.style.display = 'none';
+              if (track) track.style.background = '#22c55e';
+              if (knob) knob.style.left = '22px';
+              if (offNote) offNote.style.display = 'none';
+              if (onSection) onSection.style.display = 'block';
 
               var portalInput = document.getElementById('setup-portal-input');
               var portalDropdown = document.getElementById('setup-portal-dropdown');
@@ -2073,7 +2074,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
             window._syncTimeframe = '18M';
 
             // Attribution: toggle enable
-            window._setupAttribEnabled = false;
+            window._setupAttribEnabled = true;
             window._setupAttribModel = 'linear';
             function setupToggleAttrib() {
               window._setupAttribEnabled = !window._setupAttribEnabled;
