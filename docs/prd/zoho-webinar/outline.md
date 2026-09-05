@@ -94,3 +94,30 @@ enabled-state integration page, Cases 3–5.
 `create-fields.md` — every Create Webinar label, control type, default and picklist values,
 parsed from the markup. Needs a pass in the browser to fix two parser artefacts (section
 attribution lags one row; the Duration row absorbs nested dropdowns).
+
+---
+
+## Rewritten as a single readable document (2026-09-05, later)
+
+The six-part Writer set was rejected: the user wants **one** document, and the
+spec-style original was "nearly impossible for a dev to read and understand".
+
+Reference style supplied by the user: the *Messages Workflow Doc*
+(https://writer.zohopublic.in/writer/published/dt5lhf99aa4b27a26476f8efc0986cd06cba0) —
+narrative prose that explains the flow, a screenshot directly under the sentence that
+describes it, "Sample use case" blocks, a linked table of contents, and almost no tables.
+
+Rewritten to match:
+
+- `prd-source.md` — the narrative source (~7,650 words, a ~30-minute read).
+- `build_prd.py` — converts it to a single self-contained HTML, embedding each screenshot
+  as base64 and auto-numbering figures.
+- `prd.html` — **the deliverable.** 2.6 MB, 49 figures, 12 tables (down from 40+),
+  21 callouts. Imports into Writer in one action.
+- `screens-web/` — the screenshots re-encoded at 1100px / q45 for embedding (2.3 MB total).
+
+Tables were cut back to the places they genuinely help — the attribution models, the
+template-type link rules, the state comparison, and the appendix. Everything else became
+prose with a screenshot.
+
+`body.md` is kept as the earlier spec-style version. It is no longer the deliverable.
