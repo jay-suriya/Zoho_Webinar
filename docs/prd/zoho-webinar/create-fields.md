@@ -45,3 +45,28 @@
 | Follow-Ups | Send Follow-up Email to Absentees (optional) | Picklist | 2 mins after the webinar ends | None · 2 mins after the webinar ends · 5 mins after the webinar ends · 10 mins after the webinar ends · 15 mins after the webinar ends · 1 hour after the webinar ends · 2 hours after the webinar ends · 6 hours after the webinar ends · 1 day after the webinar ends |
 | Follow-Ups | Attendees Follow-up Template (optional) | Template picker | Attendees Follow-up Template |  |
 | Follow-Ups | Absentees Follow-up Template (optional) | Picklist | None | None · Daily · Weekly · Monthly · Yearly · Custom · 1 · 2 · 3 · 4 · 5 · 6 · 7 · days · weeks · months · first · second · third · fourth · last · Sunday · Monday · Tuesday · Wednesday · Thursday · Friday · Saturday · 8:00 AM · 9:00 AM · 10:00 AM · 11:00 AM · 12:00 PM · 1:00 PM · 2:00 PM · 3:00 PM · 4:00 PM · 5:00 PM · 1 hr · 2 hr · 3 hr · 4 hr · 5 hr · 6 hr · 7 hr · 8 hr · 00 min · 15 min · 30 min · 45 min |
+
+---
+
+## Corrections from walking the running form (2026-09-05)
+
+This file was parsed from the markup and carries three artefacts. `body.md` §3.2–3.6 is the
+corrected source; keep those, not the rows above, where they disagree.
+
+1. **Section attribution lagged one row.** *Confirmation Email Template*, *Who can Join*,
+   *Send thank you email to attendees* belong to Registration Setup; *Thank You Email Template*,
+   *Post Redirection URL* and *Auto Reply for questions* are **not** in Preferences. Preferences
+   is eight checkboxes only: Allow attendees to ask questions, Allow anonymous questions, Show
+   questions to all, Automatic session recording (**on**), Video recording (**on**), Display
+   attendee list to all, Use Emoji reactions (**on**), Post webinar Re-direction.
+2. **Webinar Date & Time and Webinar Duration are compound.** Date & Time is a native date input
+   + a time picklist + a timezone picklist (default **(-6) Central**). Duration is two picklists,
+   hours (**1 hr**) and minutes (**00 min**). The single "Duration" row above absorbed both plus
+   the recording-source options, which belong to other controls.
+3. **The Absentees Follow-up Template options were the Repeat dialog's.** None/Daily/Weekly/
+   Monthly/Yearly/Custom, 1–7, days/weeks/months, first–last, weekdays and times come from
+   `#repeatModal`, not from that field.
+
+Also corrected: the checkbox is labelled **Push Webinar Registrants to CRM** on the form
+(*Push to CRM* on the record and in list filters), and **Allow access to join link only through
+mail** ships **on**.

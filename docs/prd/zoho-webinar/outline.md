@@ -42,7 +42,17 @@ Source of truth: `webinar.html` walked at http://localhost:8090/webinar.html
    - Merge fields (Webinar Details / Users / Organization; Registrations on every post-invite email)
 9. **Appendices** — screen inventory · field reference · open questions and assumptions
 
-## Screens captured so far (13)
+## STATUS — complete (2026-09-05)
+
+All flows walked, **57 screens** captured, body written to `body.md` (74,666 chars).
+Writer document created: https://writer.zoho.com/writer/open/uksfwb7dbc7598ba54d6191d351338b6aa10b
+The body could not be pushed through the MCP (see `body.md` header and the Writer doc's own
+"How to complete this document" block): `Create_Document` rejects a payload that size
+(`MORE_THAN_MAX_LENGTH`) and the server exposes no append, insert-content or file-upload tool.
+Completion is a three-step manual pass in Writer: import `body.md`, insert + refresh the TOC,
+place the 57 figures from `screens/`.
+
+## Screens captured in the first pass (13)
 
 | # | File | Screen |
 |---|---|---|
