@@ -19,33 +19,39 @@ states change.
 
 ---
 
-## 1. Deliverable
+## 1. Deliverable — the document is written in Zoho Writer
 
-A **.docx**, produced through **Zoho Writer**, plus the sources that made it:
+**Write the PRD in Zoho Writer itself, through the `zoho-writer` MCP server.** Writer is
+where the document lives, is edited and is shared; the .docx is simply exported from it.
+Do not author a local document and hand that over.
 
 ```
+Zoho Writer  ← the PRD: created, structured and captioned here; exported as DOCX
 docs/prd/<integration-slug>/
-  prd.md              ← authored source (also the Writer import file)
-  prd.html            ← optional: same content with screenshots embedded, for image-safe import
-  screens/            ← every screenshot, numbered in reading order
-    01-marketplace-zoho.png
-    02-integration-intro.png
+  screens/          ← screenshots captured from the mock, inserted into Writer
+  outline.md        ← working file only: the index you get approved before writing
 ```
 
-Two ways to get the .docx — try them in this order:
+**Before you start**, check the server. If `zoho-writer` is missing, or reports *Needs
+authentication*, stop and ask the user to run `/mcp`, authenticate, and restart the
+session if the tools still do not appear. Do not silently produce a markdown PRD instead —
+that is not the deliverable.
 
-**A. Zoho Writer MCP (preferred when connected).** Create the document in Writer directly,
-apply Heading 1/2/3 styles, insert the table of contents, insert the screenshots, then
-download as DOCX. Check the connection first — if the server is listed but says *Needs
-authentication*, ask the user to run `/mcp` and authenticate, and fall back to B meanwhile.
+**Discover the tools at runtime** rather than assuming names: search the available
+`mcp__zoho-writer__*` tools and read their schemas, then map them onto this sequence.
 
-**B. Import route (always works).** Author `prd.md`, then in Writer:
-`File > Import > From Computer` → pick the file → `Insert > Table of Contents` →
-`File > Download as > DOCX`. Markdown is a supported import format, and `#/##/###` map to
-Heading 1/2/3, which is what the TOC is built from.
+1. **Create the document** — title it `<Product> ⇌ Zoho CRM Integration — PRD`.
+2. **Write section by section**, in reading order, applying real **Heading 1 / 2 / 3**
+   styles (heading index → H2, sub-index → H3). Never bold text in place of a heading.
+3. **Insert the screenshots** from `screens/` at the point each is referenced, and caption
+   each as **Figure N — <what to look at>**.
+4. **Insert the table of contents** once the headings exist, then refresh it.
+5. **Export as DOCX**, and hand back the Writer document link plus the .docx.
 
-Never hand over only a markdown file when a .docx was asked for. Say which route produced
-it, and hand back the Writer link plus the downloaded .docx path.
+If a step has no MCP tool (for example, no API for inserting a TOC), do everything the
+tools allow, then tell the user the exact manual step to finish it —
+`Insert > Table of Contents`, then Refresh → *Update entire table* — rather than pretending
+it is done.
 
 ---
 
@@ -66,21 +72,20 @@ Confirmed from Zoho Writer help:
   numbered item or captioned object; refresh with *Update Field*.
 - **Bookmarks**: `Insert > Bookmark` (manage under Advanced options).
 
-Consequences for what you author:
+Consequences for how you write in Writer:
 
-- Use `#` for the document title, `##` for heading indexes, `###` for sub-indexes, `####`
-  at most for a field group. **Never** fake a heading with bold text — it will not reach
-  the TOC.
-- Plain pipe tables only. No merged cells, no nested tables, no raw HTML inside markdown,
-  no footnotes, no nested blockquotes — they either drop or arrive malformed.
-- Keep the authored index at the top as a plain nested list *and* insert Writer's own TOC
-  after import. The list survives any conversion; the TOC gives real page numbers.
-- Markdown image links do **not** carry local files into Writer. Either (a) author
-  `prd.html` with the screenshots embedded as base64 `data:` URIs and import that, or
-  (b) import the markdown and insert the PNGs from `screens/` at the marked figure
-  placeholders. State which you did.
-- Caption every screenshot as **Figure N — <what to look at>**; if the document is
-  finished inside Writer, apply the captions with `Insert > References > Captions`.
+- Apply **real heading styles** — document title as Heading 1, heading indexes as
+  Heading 2, sub-indexes as Heading 3, field groups no deeper than Heading 4. Bold text is
+  not a heading and will not reach the TOC.
+- Keep a plain nested **Index list** at the top as well as Writer's TOC: the list survives
+  any export, the TOC gives real page numbers.
+- Tables: plain grids only — no merged cells, no nested tables. They must stay readable
+  after a DOCX export.
+- Screenshots are inserted into the document, not linked. Caption each with
+  `Insert > References > Captions` (type *Figure*) so numbering renumbers itself.
+- If a fallback ever becomes necessary because the MCP cannot write (see §1), markdown is
+  an accepted **import** format — `#/##/###` map to Heading 1/2/3 — but local image links
+  do not carry, so the screenshots still have to be inserted in Writer afterwards.
 
 ---
 
@@ -232,9 +237,10 @@ assumptions**, each with an owner.
 
 - Every flow, every screen, every state that changes the UI, every dialog.
 - Captured from the running mock; saved as `screens/NN-short-name.png`, numbered in
-  reading order.
-- Referenced at the point being described, with a caption that says what to look at:
-  `![Figure 7 — Create Webinar, Registration Setup with "Without Registration" selected](screens/07-create-without-registration.png)`
+  reading order, then **inserted into the Writer document** at the point each is
+  described.
+- Captioned so the caption says what to look at — e.g. *Figure 7 — Create Webinar,
+  Registration Setup with "Without Registration" selected*.
 - A screenshot never replaces the words: the field table and rules still get written.
 - If a screen cannot be reached in the mock, say so rather than substituting a lookalike.
 
@@ -269,9 +275,12 @@ assumptions**, each with an owner.
 
 ## 10. Before handing it over
 
+- The document exists in Zoho Writer, not only on disk, and its headings use real heading
+  styles.
 - The index matches the headings in the body, in order, and the Writer TOC is inserted and
   refreshed.
-- Every flow in scope has screenshots; every screenshot is in the inventory and captioned.
+- Every flow in scope has screenshots, inserted in Writer; every one is in the inventory
+  and captioned.
 - Every field in every form is tabled with type, mandatory, default and options.
 - Each control's purpose is stated, or listed as an open question.
 - Record states are differentiated, not duplicated.
