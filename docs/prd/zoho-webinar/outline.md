@@ -1,6 +1,6 @@
 # Zoho Webinar ⇌ Zoho CRM Integration — PRD outline (for approval)
 
-Target Writer document: **test webinar prd**
+Target: six Zoho Writer documents — links in the STATUS section below.
 Source of truth: `webinar.html` walked at http://localhost:8090/webinar.html
 
 ## Index
@@ -42,15 +42,30 @@ Source of truth: `webinar.html` walked at http://localhost:8090/webinar.html
    - Merge fields (Webinar Details / Users / Organization; Registrations on every post-invite email)
 9. **Appendices** — screen inventory · field reference · open questions and assumptions
 
-## STATUS — complete (2026-09-05)
+## STATUS — delivered (2026-09-05)
 
 All flows walked, **57 screens** captured, body written to `body.md` (74,666 chars).
-Writer document created: https://writer.zoho.com/writer/open/uksfwb7dbc7598ba54d6191d351338b6aa10b
-The body could not be pushed through the MCP (see `body.md` header and the Writer doc's own
-"How to complete this document" block): `Create_Document` rejects a payload that size
-(`MORE_THAN_MAX_LENGTH`) and the server exposes no append, insert-content or file-upload tool.
-Completion is a three-step manual pass in Writer: import `body.md`, insert + refresh the TOC,
-place the 57 figures from `screens/`.
+
+**The PRD lives in Zoho Writer as six sequential documents.** A single document was not
+possible through the MCP: `Create_Document` rejects a payload that size
+(`MORE_THAN_MAX_LENGTH`, cap sits somewhere above ~15 KB), the server exposes no append,
+insert-content or file-upload tool, and `Combine_*` handles PDFs only and needs publicly
+reachable URLs. So the body was split at section boundaries and pushed part by part.
+
+| Part | Contents | Writer link |
+|---|---|---|
+| 1 | Why CRM–Webinar integration; Integration settings (§1–2) | https://writer.zoho.com/writer/open/uksfwd5cb362cbd1545c7aada7351d64b1488 |
+| 2 | Create webinar (§3) | https://writer.zoho.com/writer/open/uksfwbe1307b4c9ae4af8921736040ff2bc43 |
+| 3 | Scheduled webinar — live (§4) | https://writer.zoho.com/writer/open/uksfw7ac7cb2c6dbd483cad42e3a164c6c367 |
+| 4 | On-demand, completed, completed on-demand (§5–7) | https://writer.zoho.com/writer/open/uksfwac5dcfee2698417eb1186be5406a31c1 |
+| 5 | Templates, merge fields, registration forms (§8) | https://writer.zoho.com/writer/open/uksfwe198e62ed7724106a18c009477a7b838 |
+| 6 | Appendices: screen inventory, field reference, open questions (§9) | https://writer.zoho.com/writer/open/uksfw86dbba14bc7043f5a8b73a35c725d19a |
+
+Part 1 carries the full index across all six parts. Figure placeholders are in place; the
+57 images in `screens/` still need inserting (Insert > Image, then Insert > References >
+Captions). If a single unified document with one TOC is ever wanted, `File > Import >
+From Computer` on `body.md` produces it in one step — Writer maps Markdown headings to
+Heading 1/2/3.
 
 ## Screens captured in the first pass (13)
 
