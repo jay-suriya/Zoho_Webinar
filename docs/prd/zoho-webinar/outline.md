@@ -121,3 +121,27 @@ template-type link rules, the state comparison, and the appendix. Everything els
 prose with a screenshot.
 
 `body.md` is kept as the earlier spec-style version. It is no longer the deliverable.
+
+## .docx export (2026-09-05, later still)
+
+`build_docx.py` writes **`Zoho Webinar in Zoho CRM.docx`** (1.37 MB, 49 embedded images)
+straight from `prd-source.md`, using only the Python standard library.
+
+Why hand-rolled rather than a converter: `textutil` is the only converter on the machine
+and it silently drops every image (30 KB output, zero media) whether the HTML uses
+base64 or file paths. pandoc and LibreOffice aren't installed, and installing them for one
+conversion wasn't worth changing the machine over. A .docx is a zip of OOXML, so the
+script writes the parts directly.
+
+What it produces: real Heading 1/2/3 styles (1 + 11 + 36) so Word and Writer can build a
+TOC from them, JPEGs scaled to 6.1in with italic captions, tables with a shaded header
+row and repeating header, bullets and numbered lists, and the note / use-case / open-question
+callouts as shaded single-cell tables.
+
+Verified: all six XML parts parse, 49 media files present, textutil round-trips it back to
+text, and macOS Quick Look renders it — so it opens.
+
+Rebuild both outputs after editing `prd-source.md`:
+
+    python3 build_prd.py     # -> prd.html
+    python3 build_docx.py    # -> Zoho Webinar in Zoho CRM.docx

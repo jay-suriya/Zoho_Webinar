@@ -16,7 +16,8 @@ Inline: **bold**, *italic*, `code`.
 """
 import base64, html, os, re, sys
 
-SRC, OUT, IMGDIR = 'prd-source.md', 'prd.html', 'screens-web'
+SRC, IMGDIR = 'prd-source.md', 'screens-web'
+OUT = os.environ.get('PRD_OUT', 'prd.html')
 fig = 0
 
 def inline(t):
@@ -38,10 +39,13 @@ def img(spec):
     p = os.path.join(IMGDIR, fn)
     if not os.path.exists(p):
         sys.exit(f'MISSING IMAGE: {fn}')
-    b = base64.b64encode(open(p, 'rb').read()).decode()
     label = f'Figure {fig}' + (f' — {cap}' if cap else '')
-    return (f'<figure><img alt="{html.escape(label)}" '
-            f'src="data:image/jpeg;base64,{b}">'
+    if os.environ.get('PRD_LOCAL_IMAGES'):
+        src = p                      # relative path, for converters that fetch files
+    else:
+        b = base64.b64encode(open(p, 'rb').read()).decode()
+        src = f'data:image/jpeg;base64,{b}'
+    return (f'<figure><img alt="{html.escape(label)}" src="{src}">'
             f'<figcaption>{inline(label)}</figcaption></figure>')
 
 def render_call(kind, buf):
