@@ -19,39 +19,65 @@ states change.
 
 ---
 
-## 1. Deliverable — the document is written in Zoho Writer
+## 1. Deliverable — the PRD is written inside Zoho Writer
 
-**Write the PRD in Zoho Writer itself, through the `zoho-writer` MCP server.** Writer is
-where the document lives, is edited and is shared; the .docx is simply exported from it.
-Do not author a local document and hand that over.
+**The document is authored in Zoho Writer, through the `zoho-writer` MCP server.** Writer
+is where the PRD lives, is read, commented on and shared; the `.docx` is only an export of
+it. There is no local-markdown deliverable — a `.md` file on disk is a scratch artefact,
+never the thing you hand over.
 
 ```
-Zoho Writer  ← the PRD: created, structured and captioned here; exported as DOCX
+Zoho Writer  ← the PRD itself: created, structured, captioned and exported here
 docs/prd/<integration-slug>/
-  screens/          ← screenshots captured from the mock, inserted into Writer
-  outline.md        ← working file only: the index you get approved before writing
+  screens/          ← screenshots captured from the mock, uploaded into the Writer doc
+  outline.md        ← working file: the index you get approved before writing
+  body.html         ← working file: staged content, only if the MCP writes by import
 ```
 
-**Before you start**, check the server. If `zoho-writer` is missing, or reports *Needs
-authentication*, stop and ask the user to run `/mcp`, authenticate, and restart the
-session if the tools still do not appear. Do not silently produce a markdown PRD instead —
-that is not the deliverable.
+### 1.1 Pre-flight — do this before writing a single sentence
 
-**Discover the tools at runtime** rather than assuming names: search the available
-`mcp__zoho-writer__*` tools and read their schemas, then map them onto this sequence.
+1. Run the equivalent of `claude mcp get zoho-writer`. It must report **Connected**.
+2. Load the tools: `ToolSearch "select:..."` / search `zoho-writer` and read the schemas of
+   every `mcp__zoho-writer__*` tool before calling any of them.
+3. If the server is missing, reports *Needs authentication*, or exposes no tools, **stop
+   and say so**: ask the user to run `/mcp`, authenticate Zoho Writer, and restart the
+   session (MCP tools only load at session start). Do not carry on and produce a markdown
+   PRD instead — that is not the deliverable, and silently substituting it is the one
+   failure mode this section exists to prevent.
 
-1. **Create the document** — title it `<Product> ⇌ Zoho CRM Integration — PRD`.
-2. **Write section by section**, in reading order, applying real **Heading 1 / 2 / 3**
-   styles (heading index → H2, sub-index → H3). Never bold text in place of a heading.
-3. **Insert the screenshots** from `screens/` at the point each is referenced, and caption
-   each as **Figure N — <what to look at>**.
-4. **Insert the table of contents** once the headings exist, then refresh it.
-5. **Export as DOCX**, and hand back the Writer document link plus the .docx.
+### 1.2 Authoring sequence in Writer
 
-If a step has no MCP tool (for example, no API for inserting a TOC), do everything the
-tools allow, then tell the user the exact manual step to finish it —
-`Insert > Table of Contents`, then Refresh → *Update entire table* — rather than pretending
-it is done.
+Map the discovered tools onto this sequence — the names differ between servers, the order
+does not:
+
+1. **Create the document** first, titled `<Product> ⇌ Zoho CRM Integration — PRD`, and keep
+   its document id / URL for every later call.
+2. **Write the body in Writer, section by section, in reading order.** Two shapes are
+   possible depending on what the server exposes, in order of preference:
+   - *Incremental*: an append/insert-content tool — write one heading index per call, so a
+     long PRD never depends on one giant payload, and so a failure loses one section.
+   - *Import*: only a create-from-content tool — stage the whole body as HTML in
+     `body.html` using real `<h1>/<h2>/<h3>` and plain `<table>` grids (or markdown, whose
+     `#/##/###` map to Heading 1/2/3), create the document from it, then continue with
+     images and TOC in Writer.
+3. **Apply real heading styles** — document title Heading 1, heading index Heading 2,
+   sub-index Heading 3, field group no deeper than Heading 4. Bold text is not a heading
+   and never reaches the TOC.
+4. **Upload and place the screenshots** from `screens/` at the point each is referenced,
+   captioned `Figure N — <what to look at>`. Images are embedded, never linked to a local
+   path — a linked image is a broken image the moment the doc is shared.
+5. **Insert the table of contents** once every heading exists, then refresh it
+   (*Update entire table*).
+6. **Export as DOCX** and hand back both the Writer link and the exported file.
+
+### 1.3 When a step has no tool
+
+Do everything the tools allow, then tell the user the exact manual step in Writer to
+finish it — `Insert > Table of Contents` → Refresh → *Update entire table*,
+`Insert > References > Captions`, `File > Download as > DOCX`. Name the step; never report
+it as done. If images cannot be uploaded through the MCP, say which figures are missing and
+where they belong, and leave a numbered placeholder line for each so the doc still reads in
+order.
 
 ---
 
@@ -83,9 +109,9 @@ Consequences for how you write in Writer:
   after a DOCX export.
 - Screenshots are inserted into the document, not linked. Caption each with
   `Insert > References > Captions` (type *Figure*) so numbering renumbers itself.
-- If a fallback ever becomes necessary because the MCP cannot write (see §1), markdown is
-  an accepted **import** format — `#/##/###` map to Heading 1/2/3 — but local image links
-  do not carry, so the screenshots still have to be inserted in Writer afterwards.
+- If the server writes by import rather than by append (§1.2), HTML and markdown both
+  carry heading structure — `#/##/###` map to Heading 1/2/3 — but local image links do not,
+  so screenshots are still uploaded and placed in Writer afterwards.
 
 ---
 
