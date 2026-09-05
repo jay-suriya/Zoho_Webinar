@@ -111,6 +111,10 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
   `http.server` sends no cache headers and Chrome will happily serve a stale copy.
 - Every edit to `webinar.html` gets committed, and the Mock Edit Log below gets an entry
   in the same commit saying what changed and why.
+- **Push after every commit** — `git push` to `origin` (github.com/jay-suriya/Zoho_Webinar,
+  private) as soon as the commit is made, so GitHub always matches the working copy. This
+  applies to any file in the repo, not just the mock: `.claude/`, skills, docs. If a push
+  fails or is rejected, say so rather than silently leaving commits local.
 - Work happens on a branch (currently `templates-flow`); `master` is the pre-session
   baseline.
 - The React portions are compiled `React.createElement` code: keep parentheses balanced,
