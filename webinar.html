@@ -21699,20 +21699,23 @@ function SelectTemplateModal({
   // The invitation templates come from the module, not Setup > Templates: whatever is
   // set up under Zoho Webinar > Preferences > Send Invite — its Default (Quick) card and
   // the customs saved under it. One source of truth, so the two screens cannot disagree.
+  // second column is the CRM template folder, not the module — every row here is
+  // already a webinar invitation template, so the module would say nothing
+  const TPL_FOLDER = "Public Email Templates";
   const ucInvite = (window.TPL_UC_STATE || {}).sendInvite;
   const source = ucInvite
     ? [{
         name: "Send Invite Template",
-        folder: "Zoho Webinar \u00b7 Send Invite",
+        folder: TPL_FOLDER,
         live: ucInvite.active === "quick",
         openRate: "0%"
       }].concat(ucInvite.customs.map((c, i) => ({
         name: c.name,
-        folder: "Zoho Webinar \u00b7 Send Invite",
+        folder: TPL_FOLDER,
         live: ucInvite.active === "custom:" + i,
         openRate: "0%"
       })))
-    : [{ name: "Send Invite Template", folder: "Zoho Webinar \u00b7 Send Invite", live: true, openRate: "0%" }];
+    : [{ name: "Send Invite Template", folder: TPL_FOLDER, live: true, openRate: "0%" }];
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
