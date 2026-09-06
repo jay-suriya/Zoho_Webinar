@@ -125,6 +125,12 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-06 — **Send Invite picker's second column is the template folder.** It was
+  printing the module ("Zoho Webinar", "Leads Templates"); in CRM's Select Template that
+  column is the folder the template sits in — Public Email Templates, Managerial
+  templates, Zoho Sign. Every row in this picker is a webinar invitation template
+  already, so the module said nothing. Same change on `template-flow-fixes`, where rows
+  read "Zoho Webinar · Send Invite". Why: the user pointed at the real dialog.
 - 2026-09-06 — **A template you create now always shows in Send Invite** (branch
   `templates-flow`). The picker filtered `MODULE_TEMPLATES` to `t.module === module`, so a
   template saved under Zoho Webinar — or under any module other than the one being

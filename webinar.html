@@ -21334,12 +21334,16 @@ function SelectTemplateModal({
   // The invitation templates come from Setup > Templates: the Zoho Webinar rows listed
   // there whose type can be sent as an invite, plus anything created in that section
   // (including module templates saved for the records being invited).
+  // The second column is the CRM template folder the template sits in, the way the
+  // Templates page groups them — not the module. Every row here is a webinar template
+  // already, so printing "Zoho Webinar" would say nothing.
+  const TPL_FOLDER = "Public Email Templates";
   const setupRows = (window.TPLPAGE_WEBINAR_ROWS || [])
     .filter(r => (window.TPL_KEY_BY_NAME || {})[r[0]] === "sendInvite")
-    .map(r => ({ name: r[0], folder: r[1], desc: r[2], openRate: "0%" }));
+    .map(r => ({ name: r[0], folder: TPL_FOLDER, desc: r[2], openRate: "0%" }));
   const createdHere = (window.WEBINAR_CREATED || [])
     .filter(c => c.type === "Webinar Invitation")
-    .map(c => ({ name: c.name, folder: "Zoho Webinar", openRate: "0%" }));
+    .map(c => ({ name: c.name, folder: TPL_FOLDER, openRate: "0%" }));
   // Every template created here is listed, whichever module it was saved under — a
   // template you just made should never silently fail to appear. One saved against the
   // webinar itself works for any send; one saved against a CRM module resolves its merge
@@ -21347,14 +21351,14 @@ function SelectTemplateModal({
   // a different module, with the reason on the row.
   const moduleHere = (window.MODULE_TEMPLATES || []).map(t => ({
     name: t.name,
-    folder: (t.module === "Zoho Webinar" ? "Zoho Webinar" : t.module + " Templates"),
+    folder: TPL_FOLDER,
     openRate: "0%",
     blocked: t.module !== "Zoho Webinar" && !!module && t.module !== module,
     blockedNote: t.module + " only"
   }));
   const seen = {};
   const source = setupRows.concat(createdHere, moduleHere)
-    .filter(t => (seen[t.folder + "/" + t.name] ? false : (seen[t.folder + "/" + t.name] = true)));
+    .filter(t => (seen[t.name] ? false : (seen[t.name] = true)));
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
