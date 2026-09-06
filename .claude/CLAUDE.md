@@ -125,6 +125,21 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-06 — **New templates start blank and actually land in the list** (branch
+  `templates-flow`). Creating from Setup ▸ Templates used to open the editor with the
+  template *type* as the name and "One column · Leads" as the subtitle, then prefill the
+  Save dialog with "Webinar Invite - <module>" — three defaults the user never chose. The
+  header's name and subject are now real inputs (`tplSetHeader` / `tplHeaderName` /
+  `tplHeaderSubject`), blank for a new template with "Untitled template" and "Add a
+  subject" placeholders, and the Save dialog carries whatever was typed instead of
+  inventing a name. Saving with no name is refused inline in the dialog (the editor's
+  toast sits behind that modal's scrim, so the error had to live in the dialog). Saving
+  now also pushes a row into `TPLPAGE_CREATED`, concatenated ahead of `TPLPAGE_ROWS` in
+  `tplPageRows()`, so the template appears at the top of Setup ▸ Templates with its module
+  and subject — previously it only went into `MODULE_TEMPLATES` and vanished. The body's
+  "Write the … email here" prompt became a real CSS placeholder (`:empty:before`) rather
+  than grey content that typing merged into and that saved into the email.
+  Why: the user asked for an empty, typable name and subject, and for the save to show up.
 - 2026-09-05 — Added `.claude/` (this file + the CRM design rules) so the webinar mock
   carries its own product context, matching the Zoho Survey repo.
 - 2026-09-04 — **Integration flow rebuilt**: choosing Zoho Webinar now opens an
