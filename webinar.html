@@ -21288,10 +21288,21 @@ function SelectTemplateModal({
   // alongside the webinar's own — nothing that can't render for these records
   const TPL_FOLDERS = ["All Templates", "Favorites", "Associated Templates", "Created by me", "Shared with me", "Public Email Templates", "Managerial templates"];
   const [folder, setFolder] = useState("All Templates");
-  const source = [{ name: "Webinar Invitation Template", folder: "Zoho Webinar", openRate: "0%" }]
-    .concat((window.WEBINAR_CREATED || [])
-      .filter(c => c.type === "Webinar Invitation")
-      .map(c => ({ name: c.name, folder: "Zoho Webinar", openRate: "0%" })));
+  // The invitation templates come from Setup > Templates: the Zoho Webinar rows listed
+  // there whose type can be sent as an invite, plus anything created in that section
+  // (including module templates saved for the records being invited).
+  const setupRows = (window.TPLPAGE_WEBINAR_ROWS || [])
+    .filter(r => (window.TPL_KEY_BY_NAME || {})[r[0]] === "sendInvite")
+    .map(r => ({ name: r[0], folder: r[1], desc: r[2], openRate: "0%" }));
+  const createdHere = (window.WEBINAR_CREATED || [])
+    .filter(c => c.type === "Webinar Invitation")
+    .map(c => ({ name: c.name, folder: "Zoho Webinar", openRate: "0%" }));
+  const moduleHere = (window.MODULE_TEMPLATES || [])
+    .filter(t => !module || t.module === module)
+    .map(t => ({ name: t.name, folder: t.module + " Templates", openRate: "0%" }));
+  const seen = {};
+  const source = setupRows.concat(createdHere, moduleHere)
+    .filter(t => (seen[t.folder + "/" + t.name] ? false : (seen[t.folder + "/" + t.name] = true)));
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
