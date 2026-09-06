@@ -129,8 +129,8 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   branch.** It used to be a hardcoded `[{name:'Webinar Invitation Template'}]` in
   `SelectTemplateModal`, which is why a template created anywhere never showed up in it.
   On `template-flow-fixes` it reads `TPL_UC_STATE.sendInvite` — the module's Send Invite
-  Default (Quick) card plus the customs saved under it — tagging each row Default/Custom
-  and marking the one Preferences has live as **In use**; a template created from the
+  Default (Quick) card plus the customs saved under it, marking the one Preferences has
+  live as **In use**; a template created from the
   picker now lands in those customs too, so the two screens cannot disagree. On
   `templates-flow` it instead derives from Setup ▸ Templates: the Zoho Webinar rows whose
   type is invitation, plus anything created there (`WEBINAR_CREATED`) and the module

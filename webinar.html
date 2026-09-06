@@ -21704,17 +21704,15 @@ function SelectTemplateModal({
     ? [{
         name: "Send Invite Template",
         folder: "Zoho Webinar \u00b7 Send Invite",
-        tag: "Default",
         live: ucInvite.active === "quick",
         openRate: "0%"
       }].concat(ucInvite.customs.map((c, i) => ({
         name: c.name,
         folder: "Zoho Webinar \u00b7 Send Invite",
-        tag: "Custom",
         live: ucInvite.active === "custom:" + i,
         openRate: "0%"
       })))
-    : [{ name: "Send Invite Template", folder: "Zoho Webinar \u00b7 Send Invite", tag: "Default", live: true, openRate: "0%" }];
+    : [{ name: "Send Invite Template", folder: "Zoho Webinar \u00b7 Send Invite", live: true, openRate: "0%" }];
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -21917,17 +21915,7 @@ function SelectTemplateModal({
       fontSize: 15,
       color: "#7E8CA6"
     }
-  }, t.folder), t.tag && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 11.5,
-      fontWeight: 600,
-      color: t.tag === "Default" ? "#5464F2" : "#F57C00",
-      background: t.tag === "Default" ? "#F0F1FF" : "#FFF9ED",
-      border: "1px solid " + (t.tag === "Default" ? "#D2D7FF" : "#E28C27"),
-      borderRadius: 10,
-      padding: "2px 9px"
-    }
-  }, t.tag), t.live && /*#__PURE__*/React.createElement("span", {
+  }, t.folder), t.live && /*#__PURE__*/React.createElement("span", {
     style: {
       fontSize: 11.5,
       fontWeight: 600,
