@@ -125,6 +125,23 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-06 — **Webinar emails moved to the module** (branch `template-flow-fixes`): the
+  lifecycle set no longer lives in Setup ▸ Templates — Zoho Webinar is gone from that
+  page's module filter and its seven rows are removed, so the Preferences line "managed
+  here, not under Setup › Templates" is finally true. All 8 rows in **Modules and Fields ▸
+  Zoho Webinar ▸ Preferences** now open a new full-screen **Email Notification gallery**
+  (`#tpl-uc-gallery`): a left rail of the 8 use cases, and per use case **Quick Templates**
+  (the shipped Default), **Custom Templates** (what's saved under it) and **Basic** (the 6
+  layouts). Clicking a Default/Custom card makes it live immediately; a Basic layout opens
+  the editor stamped with that use case's type, so the allowed link types and merge-field
+  categories are the ones that use case permits — Send Invite keeps Registration Link and
+  no Registrations fields, everything after it gets Join URL / Recording Link plus
+  Registrations. Also: the cancellation email became a real type (`cancellation`, renamed
+  from "Meetings Cancelled" to "Webinar Cancelled", carrying no webinar links since the
+  session is off), the Basic layouts now seed real starter content instead of a blank box,
+  and saving refuses a name already used under that use case. Why: the user wanted the
+  standalone Zoho Webinar chooser (three reference screenshots) to be the one place these
+  emails are managed, instead of the Setup ▸ Templates list.
 - 2026-09-05 — Added `.claude/` (this file + the CRM design rules) so the webinar mock
   carries its own product context, matching the Zoho Survey repo.
 - 2026-09-04 — **Integration flow rebuilt**: choosing Zoho Webinar now opens an
