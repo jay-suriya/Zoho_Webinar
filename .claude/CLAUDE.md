@@ -125,6 +125,17 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-06 — **Send Invite's Select Template now has a real source, different per
+  branch.** It used to be a hardcoded `[{name:'Webinar Invitation Template'}]` in
+  `SelectTemplateModal`, which is why a template created anywhere never showed up in it.
+  On `template-flow-fixes` it reads `TPL_UC_STATE.sendInvite` — the module's Send Invite
+  Default (Quick) card plus the customs saved under it — tagging each row Default/Custom
+  and marking the one Preferences has live as **In use**; a template created from the
+  picker now lands in those customs too, so the two screens cannot disagree. On
+  `templates-flow` it instead derives from Setup ▸ Templates: the Zoho Webinar rows whose
+  type is invitation, plus anything created there (`WEBINAR_CREATED`) and the module
+  templates saved for the records being invited (`MODULE_TEMPLATES`), de-duplicated.
+  Why: the user wanted the two branches to demo the two sources of truth side by side.
 - 2026-09-06 — **Webinar emails moved to the module** (branch `template-flow-fixes`): the
   lifecycle set no longer lives in Setup ▸ Templates — Zoho Webinar is gone from that
   page's module filter and its seven rows are removed, so the Preferences line "managed
