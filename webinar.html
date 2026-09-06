@@ -21345,16 +21345,11 @@ function SelectTemplateModal({
     .filter(c => c.type === "Webinar Invitation")
     .map(c => ({ name: c.name, folder: TPL_FOLDER, openRate: "0%" }));
   // Every template created here is listed, whichever module it was saved under — a
-  // template you just made should never silently fail to appear. One saved against the
-  // webinar itself works for any send; one saved against a CRM module resolves its merge
-  // fields against that module's record, so it is shown but not selectable for a send to
-  // a different module, with the reason on the row.
+  // template you just made should never silently fail to appear.
   const moduleHere = (window.MODULE_TEMPLATES || []).map(t => ({
     name: t.name,
     folder: TPL_FOLDER,
-    openRate: "0%",
-    blocked: t.module !== "Zoho Webinar" && !!module && t.module !== module,
-    blockedNote: t.module + " only"
+    openRate: "0%"
   }));
   const seen = {};
   const source = setupRows.concat(createdHere, moduleHere)
@@ -21517,17 +21512,15 @@ function SelectTemplateModal({
     key: i,
     onMouseEnter: () => setHovered(i),
     onMouseLeave: () => setHovered(null),
-    onClick: () => { if (!t.blocked) onSelect(t.name); },
-    title: t.blocked ? ("This template's merge fields resolve against " + t.blockedNote.replace(" only", "") + ", so it can't be used for this send.") : "",
+    onClick: () => onSelect(t.name),
     style: {
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
       padding: "11px 30px",
       borderBottom: (hovered === i || hovered === i + 1) ? "1px solid transparent" : "1px solid #EFEFF3",
-      cursor: t.blocked ? "not-allowed" : "pointer",
-      opacity: t.blocked ? 0.55 : 1,
-      background: (hovered === i && !t.blocked) ? "#FDF3F7" : "white",
+      cursor: "pointer",
+      background: hovered === i ? "#FDF3F7" : "white",
       transition: "background 0.1s"
     }
   }, /*#__PURE__*/React.createElement("div", {
@@ -21563,17 +21556,7 @@ function SelectTemplateModal({
       fontSize: 15,
       color: "#7E8CA6"
     }
-  }, t.folder), t.blocked && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 11.5,
-      fontWeight: 600,
-      color: "#8C91AB",
-      background: "#F5F6F8",
-      border: "1px solid #D6D6E3",
-      borderRadius: 10,
-      padding: "2px 9px"
-    }
-  }, t.blockedNote)), /*#__PURE__*/React.createElement("div", {
+  }, t.folder)), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "center",
