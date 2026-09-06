@@ -125,6 +125,15 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-06 — **A template you create now always shows in Send Invite** (branch
+  `templates-flow`). The picker filtered `MODULE_TEMPLATES` to `t.module === module`, so a
+  template saved under Zoho Webinar — or under any module other than the one being
+  invited — was dropped with no explanation. It now lists every created template: one
+  saved against the webinar itself is selectable for any send, one saved against a CRM
+  module is selectable when the send matches, and otherwise it is still listed but dimmed
+  and unselectable with a "<Module> only" chip and a tooltip saying its merge fields
+  resolve against that module. Why: the user created a template and could not find it in
+  the picker.
 - 2026-09-06 — **New templates start blank and actually land in the list** (branch
   `templates-flow`). Creating from Setup ▸ Templates used to open the editor with the
   template *type* as the name and "One column · Leads" as the subtitle, then prefill the
