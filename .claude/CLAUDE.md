@@ -67,7 +67,7 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
      Invite Modules**, and **Webinar Deal Attribution** (Linear selected by default).
    - **Enabled page**: the same connection details, invite modules and attribution, with
      a dirty-state Save bar.
-2. **Invite Modules**: the list of CRM modules a webinar invite may be sent to. It drives
+2. **Modules You Can Invite**: the list of CRM modules a webinar invite may be sent to. It drives
    the module picker in Send Invite — turn a module off here and it disappears there.
 3. **Send Invite** (from a scheduled webinar): record picker (module dropdown → records)
    → Next → **Mass Email**, whose Invitation Template is chosen through **Select
@@ -97,7 +97,7 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 | Term | Belongs to | Meaning |
 |---|---|---|
 | Module | CRM | Object type (Leads, Contacts, custom, Zoho Webinar) |
-| Invite Modules | Integration | Which modules a webinar invite can be sent to |
+| Modules You Can Invite | Integration | Which modules a webinar invite can be sent to |
 | Registrant | Webinar | Someone who signed up; becomes attendee or absentee |
 | Template Type | Integration | Which lifecycle email a template is for |
 | Join URL / Registration Link / Recording Link | Webinar | Per-registrant links a template can carry |
@@ -125,6 +125,14 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-07 — **"Zoho Webinar Invite Modules" renamed to "Modules You Can Invite"**
+  (both branches), on the setup page and the enabled page, plus the two code comments that
+  named it. The old label repeated the product name on a page you can only reach inside
+  the Zoho Webinar integration, and "Invite Modules" read as a category rather than a
+  choice. The subline changed from restating the heading to naming the consequence:
+  "Records from these modules can be invited to a webinar. Turn one off and it disappears
+  from the module list in Send Invite." Why: the user asked for a better name and picked
+  this one from a slate.
 - 2026-09-07 — **Save Template asks which folder** (both branches). The dialog said
   "Saved to <module> Templates" — a statement, not a choice. It now has Template Name plus
   a **Save To** dropdown listing the CRM template folders (`TPLPAGE_CATEGORIES.slice(5)` —
