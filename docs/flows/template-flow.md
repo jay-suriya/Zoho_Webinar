@@ -1,89 +1,68 @@
 # Template flow — branch `templates-flow`
 
-How an email template is browsed, created, edited and saved in the mock, and how the
-four entry points converge on one editor. Derived from `webinar.html`; function names are
-given so the chart can be checked against the code.
+The whole life of an email template in one chart: where you start, what you decide, where
+you write it, what has to be true before it saves, where it lands, and when it gets sent.
 
 On this branch templates live in **Setup ▸ Templates**. (On `template-flow-fixes` they
-live in the module instead, under Zoho Webinar ▸ Preferences — a different chart.)
-
-## Browse, create, edit
+belong to the module instead, managed under Zoho Webinar ▸ Preferences — a different flow.)
 
 ```mermaid
 flowchart TD
   classDef entry fill:#F0F1FF,stroke:#A3ACFF,color:#202123
-  classDef screen fill:#FFFFFF,stroke:#C5C4D3,color:#202123
-  classDef editor fill:#181B34,stroke:#181B34,color:#FFFFFF
-  classDef gate fill:#FFF2F3,stroke:#FF4D5B,color:#202123
-  classDef store fill:#E9FBF4,stroke:#19B171,color:#202123
+  classDef ask   fill:#FFFFFF,stroke:#8C91AB,color:#202123
+  classDef step  fill:#FFFFFF,stroke:#C5C4D3,color:#202123
+  classDef write fill:#181B34,stroke:#181B34,color:#FFFFFF
+  classDef stop  fill:#FFF2F3,stroke:#FF4D5B,color:#202123
+  classDef land  fill:#E9FBF4,stroke:#19B171,color:#202123
 
-  E1["Setup ▸ Templates<br/><i>openTemplatesPage()</i>"]:::entry
-  E2["Modules and Fields ▸<br/>Zoho Webinar ▸ Preferences<br/><i>8 lifecycle rows</i>"]:::entry
-  E3["Create Webinar form<br/><i>Confirmation · Reminders 1-3 ·<br/>Attendees / Absentees Follow-up</i>"]:::entry
-  E4["Webinar ▸ Send Invite ▸<br/>Mass Email"]:::entry
+  A["Setup ▸ Templates<br/><b>+ New Template</b>"]:::entry
+  B["Zoho Webinar ▸ Preferences<br/><b>Customise Template</b>"]:::entry
+  C["Create Webinar — confirmation,<br/>reminder or follow-up slot<br/><b>Select Template</b>"]:::entry
+  D["Send Invite ▸ Mass Email<br/><b>Select Template</b>"]:::entry
 
-  L1["Template list<br/><i>TPLPAGE_CREATED + TPLPAGE_ROWS<br/>+ TPLPAGE_WEBINAR_ROWS</i>"]:::screen
-  PV["Preview (read-only)<br/><i>openTemplatePreview(key)</i>"]:::screen
-  P3["Select Template<br/><i>openSlotTemplatePicker(slot)</i><br/>filtered to TPL_SLOT_TYPE[slot]"]:::screen
-  P4["Select Template<br/><i>SelectTemplateModal</i><br/>invitation templates"]:::screen
+  A --> Q
+  B --> Q
+  C --> Q
+  D --> Q
 
-  CT["Create Email Template<br/><i>Select Module + Template Type</i>"]:::screen
-  GAL["Template Gallery<br/><i>Basic × 6 layouts</i>"]:::screen
-  ED["Editor — name, subject,<br/>Insert Link, merge fields<br/><i>type-scoped</i>"]:::editor
+  Q{"Write a new one,<br/>or edit one that exists?"}:::ask
+  Q -- "edit an existing one" --> EX["Opens read-only<br/><i>pencil to start editing</i>"]:::step
+  Q -- "write a new one" --> T{"Is the type already<br/>settled by where I came from?"}:::ask
 
-  E1 --> L1
-  L1 -- "click a name" --> PV
-  PV -- "pencil" --> ED
-  L1 -- "+ New Template" --> CT
-  CT -- "Next" --> GAL
+  T -- "no — could be any email" --> M["Choose module<br/>+ template type"]:::step
+  T -- "yes — the step implies it" --> GAL
+  M --> GAL["Template Gallery —<br/>pick a Basic layout"]:::step
 
-  E2 -- "Customise Template" --> PV
+  EX --> ED
+  GAL --> ED
+  ED["<b>Editor</b> — name · subject · body<br/><i>the type limits which links you can insert<br/>and which merge-field groups you get</i>"]:::write
 
-  E3 -- "Select Template" --> P3
-  P3 -- "+ Create Template<br/>type implied, no module dialog" --> GAL
+  ED -- "Save" --> G1{"Does it carry the link<br/>its type requires?"}:::ask
+  G1 -- "no" --> X1["Refused —<br/>insert that link first"]:::stop
+  X1 -. "back to editing" .-> ED
 
-  E4 -- "Select Template" --> P4
-  P4 -- "+ Create Template<br/><i>openInviteTemplateGallery()</i>" --> GAL
+  G1 -- "yes" --> DLG["<b>Save Template</b><br/>Template Name<br/>Save To folder, or + New Folder"]:::step
+  DLG --> G2{"Name and folder<br/>both given?"}:::ask
+  G2 -- "no" --> X2["Refused —<br/>fill them in"]:::stop
+  X2 -. "back to the dialog" .-> DLG
 
-  GAL -- "pick a layout<br/><i>tgPick(i)</i>" --> ED
-```
+  G2 -- "yes" --> W{"Where did it start?"}:::ask
+  W -- "Setup ▸ Templates" --> L1["Top of the Templates list"]:::land
+  W -- "a webinar slot" --> L2["Back on that slot,<br/>ready to pick"]:::land
+  W -- "Send Invite" --> L3["Back in Send Invite,<br/>already chosen"]:::land
 
-## Saving
-
-```mermaid
-flowchart TD
-  classDef screen fill:#FFFFFF,stroke:#C5C4D3,color:#202123
-  classDef editor fill:#181B34,stroke:#181B34,color:#FFFFFF
-  classDef gate fill:#FFF2F3,stroke:#FF4D5B,color:#202123
-  classDef store fill:#E9FBF4,stroke:#19B171,color:#202123
-
-  ED["Editor · Save<br/><i>tplSaveClick()</i>"]:::editor
-  G1{"Carries the link<br/>its type requires?<br/><i>TPL_REQUIRED_LINK</i>"}:::gate
-  ERR["Refused inline<br/><i>“must contain a Join URL”</i>"]:::gate
-  DLG["Save Template<br/>Template Name + Save To folder<br/><i>+ New Folder</i>"]:::screen
-  G2{"Name and folder<br/>both given?"}:::gate
-  G3{"Where was it<br/>created from?"}:::gate
-
-  S1["WEBINAR_CREATED<br/>→ back to the slot picker"]:::store
-  S2["WEBINAR_CREATED<br/>→ back to Send Invite, selected"]:::store
-  S3["MODULE_TEMPLATES + TPLPAGE_CREATED<br/>→ top of the Templates list"]:::store
-
-  ED --> G1
-  G1 -- "no" --> ERR --> ED
-  G1 -- "yes" --> DLG --> G2
-  G2 -- "no" --> DLG
-  G2 -- "yes" --> G3
-  G3 -- "create-webinar step<br/><i>_ctSlot</i>" --> S1
-  G3 -- "Send Invite<br/><i>_ctFromInvite</i>" --> S2
-  G3 -- "Setup ▸ Templates" --> S3
+  L1 --> USE
+  L2 --> USE
+  L3 --> USE
+  USE["The webinar sends it<br/>at that email's moment"]:::land
 ```
 
 ## What the type decides
 
-The template type is stamped when the template is created and never asked again. It
-governs what the editor offers and what the save refuses.
+The type is stamped when the template is created and never asked again. It governs what
+the editor offers, and what step 5 refuses.
 
-| Type | May link to | Must contain | Merge categories |
+| Type | May link to | Must contain | Merge-field groups |
 |---|---|---|---|
 | Webinar Invitation | Web URL, Email, Registration Link, calendars | Registration Link | Webinar Details, Users, Organization |
 | Confirmation Email | Web URL, Join URL, Cancel Registration, calendars | Join URL | **Registrations**, Webinar Details, Users, Organization |
@@ -92,5 +71,22 @@ governs what the editor offers and what the save refuses.
 | Webinar Cancelled | Web URL, Email | — | **Registrations**, Webinar Details, Users, Organization |
 | None | all of the above | — | as above |
 
-Registrations is absent from the invitation because at invite time nobody has registered
-yet (`tplMergeModules()`).
+Registrations is missing from the invitation because at invite time nobody has registered
+yet, so there is no registrant record to merge from (`tplMergeModules()`).
+
+## Where each step lives in the code
+
+| Step | Function / data in `webinar.html` |
+|---|---|
+| 1 · Setup ▸ Templates | `openTemplatesPage()`, list from `TPLPAGE_CREATED + TPLPAGE_ROWS + TPLPAGE_WEBINAR_ROWS` |
+| 1 · Preferences | rows from `WEBINAR_TEMPLATES`, button calls `openTemplatePreview(key)` |
+| 1 · webinar slot | `openSlotTemplatePicker(slot)`, filtered to `TPL_SLOT_TYPE[slot]` |
+| 1 · Send Invite | `SelectTemplateModal` (React) |
+| 2 · module + type | `openCreateTemplateModal()` → `ctNext()` |
+| 2 · type implied | `slotCreateTemplate()` / `openInviteTemplateGallery()` |
+| 3 · layouts | `openTemplateGallery()`, `TG_LAYOUTS`, `tgPick(i)` |
+| 4 · editor | `openNewWebinarTemplate()` / `openTemplateEditor()`; rules from `TPL_TYPE_LINKS`, `tplMergeModules()` |
+| 5 · link gate | `tplSaveClick()` → `tplMissingRequiredLink()` |
+| 5 · dialog + folder | `tplResetFolderPicker()`, `tplFolderList()`, `tplPickFolder()`, `tplCreateFolder()` |
+| 5 · name/folder gate | `tplSaveConfirm()` → `tplMissingFolder()` |
+| 6 · routing | `tplSaveConfirm()`: `_ctSlot` → slot picker, `_ctFromInvite` → Send Invite, else `MODULE_TEMPLATES` + `tplPageAddCreatedRow()` |
