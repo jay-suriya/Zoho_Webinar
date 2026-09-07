@@ -466,12 +466,27 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 
 <!-- ═══ Save Template — names a newly created module template ═══ -->
 <div id="tpl-savemodal" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(49,57,73,0.5);align-items:center;justify-content:center;">
-  <div style="background:#fff;border-radius:10px;width:440px;box-shadow:0 4px 9px rgba(49,57,73,0.6);overflow:hidden;">
+  <div style="background:#fff;border-radius:10px;width:470px;box-shadow:0 4px 9px rgba(49,57,73,0.6);">
     <div style="padding:22px 26px 6px;font-size:19px;font-weight:700;color:#202123;">Save Template</div>
-    <div style="padding:14px 26px 6px;">
-      <label style="display:block;font-size:13px;color:#616E88;margin-bottom:6px;">Template Name</label>
-      <input id="tpl-savename" type="text" style="width:100%;height:34px;box-sizing:border-box;padding:0 12px;border:1px solid #C0C8E2;border-left:3px solid #FF5D5A;border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
-      <div style="font-size:12.5px;color:#8C91AB;margin-top:8px;">Saved to <span id="tpl-savefolder" style="color:#C2185B;font-weight:600;">Leads Templates</span></div>
+    <div style="padding:18px 26px 8px;">
+      <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:16px;">
+        <label style="width:104px;flex-shrink:0;text-align:right;font-size:13.5px;color:#616E88;padding-top:9px;">Template Name</label>
+        <div style="flex:1;">
+          <input id="tpl-savename" type="text" style="width:100%;height:34px;box-sizing:border-box;padding:0 12px;border:1px solid #C0C8E2;border-left:3px solid #FF5D5A;border-radius:6px;font-size:14px;font-family:inherit;outline:none;">
+          <div id="tpl-savename-err" style="display:none;font-size:11px;color:#FF5D5A;margin-top:5px;">Give the template a name before saving.</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:flex-start;gap:14px;">
+        <label style="width:104px;flex-shrink:0;text-align:right;font-size:13.5px;color:#616E88;padding-top:9px;">Save To</label>
+        <div style="flex:1;position:relative;">
+          <div id="tpl-savefolder-btn" onclick="tplToggleFolderMenu()" style="height:34px;box-sizing:border-box;padding:0 10px 0 12px;border:1px solid #C0C8E2;border-left:3px solid #FF5D5A;border-radius:6px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:#fff;">
+            <span id="tpl-savefolder" style="font-size:14px;color:#8C91AB;">Select Folder</span>
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#616E88" stroke-width="2.4"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div id="tpl-savefolder-menu" style="display:none;position:absolute;top:38px;left:0;right:0;background:#fff;border:1px solid #D6D6E3;border-radius:8px;box-shadow:0 6px 18px rgba(49,57,73,0.18);z-index:6;overflow:hidden;"></div>
+          <div id="tpl-savefolder-err" style="display:none;font-size:11px;color:#FF5D5A;margin-top:5px;">Choose a folder to save this template in.</div>
+        </div>
+      </div>
     </div>
     <div style="padding:18px 26px 22px;display:flex;justify-content:flex-end;gap:10px;">
       <button onclick="tplSaveCancel()" style="height:32px;padding:0 14px;border:1px solid #D5D8E9;border-radius:6px;background:linear-gradient(180deg,#FFFFFF,#F1F0F7);color:#313949;font-size:14px;font-weight:500;cursor:pointer;font-family:inherit;">Cancel</button>
@@ -5767,7 +5782,7 @@ function tplSaveClick() {
       return;
     }
     document.getElementById('tpl-savename').value = ucSuggestName();
-    document.getElementById('tpl-savefolder').textContent = 'Zoho Webinar \u00b7 ' + ucMeta().label;
+    tplResetFolderPicker();
     document.getElementById('tpl-savemodal').style.display = 'flex';
     return;
   }
@@ -5778,9 +5793,93 @@ function tplSaveClick() {
     return;
   }
   document.getElementById('tpl-savename').value = (_ctSlot || _ctFromInvite) ? (_ctType + ' Template') : ('Webinar Invite - ' + _tplNewModule);
-  document.getElementById('tpl-savefolder').textContent = _tplNewModule + ' Templates';
+  tplResetFolderPicker();
   document.getElementById('tpl-savemodal').style.display = 'flex';
 }
+// ── Save To — the CRM template folders a template can be filed in ──
+// The first five entries of TPLPAGE_CATEGORIES are views (All Templates, Favorites,
+// Created by me...), not folders, so the real folders start after them.
+function tplFolderList() {
+  return (typeof TPLPAGE_CATEGORIES !== 'undefined') ? TPLPAGE_CATEGORIES.slice(5) : [['Public Email Templates', true]];
+}
+var _tplSaveFolder = null;
+function tplSharedIcon() {
+  return '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#8C91AB" stroke-width="2" style="flex-shrink:0;">' +
+    '<path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/>' +
+    '<path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+}
+function tplResetFolderPicker() {
+  _tplSaveFolder = null;
+  var d = document.getElementById('tpl-savefolder');
+  if (d) { d.textContent = 'Select Folder'; d.style.color = '#8C91AB'; }
+  var m = document.getElementById('tpl-savefolder-menu'); if (m) m.style.display = 'none';
+  var e = document.getElementById('tpl-savefolder-err'); if (e) e.style.display = 'none';
+  var b = document.getElementById('tpl-savefolder-btn'); if (b) b.style.borderColor = '#C0C8E2';
+  var n = document.getElementById('tpl-savename-err'); if (n) n.style.display = 'none';
+  var i = document.getElementById('tpl-savename'); if (i) i.style.borderColor = '#C0C8E2';
+}
+function tplRenderFolderMenu() {
+  var m = document.getElementById('tpl-savefolder-menu');
+  if (!m) return;
+  m.innerHTML =
+    '<div style="max-height:232px;overflow-y:auto;">' +
+      tplFolderList().map(function(f) {
+        var nm = String(f[0]);
+        return '<div onclick="tplPickFolder(\'' + nm.replace(/'/g, "\\'") + '\')" ' +
+          'onmouseover="this.style.background=\'#F2F4FF\'" onmouseout="this.style.background=\'#fff\'" ' +
+          'style="display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:14px;color:#313949;cursor:pointer;background:#fff;">' +
+          '<span>' + nm + '</span>' + (f[1] ? tplSharedIcon() : '') + '</div>';
+      }).join('') +
+    '</div>' +
+    '<div id="tpl-newfolder-row" style="border-top:1px solid #EFEFF5;padding:11px 16px;text-align:center;">' +
+      '<span onclick="tplStartNewFolder()" style="font-size:14px;font-weight:600;color:#C2185B;cursor:pointer;">+ New Folder</span>' +
+    '</div>';
+}
+function tplToggleFolderMenu() {
+  var m = document.getElementById('tpl-savefolder-menu');
+  if (!m) return;
+  if (m.style.display === 'block') { m.style.display = 'none'; return; }
+  tplRenderFolderMenu();
+  m.style.display = 'block';
+}
+function tplPickFolder(name) {
+  _tplSaveFolder = name;
+  var d = document.getElementById('tpl-savefolder');
+  if (d) { d.textContent = name; d.style.color = '#313949'; }
+  document.getElementById('tpl-savefolder-menu').style.display = 'none';
+  var e = document.getElementById('tpl-savefolder-err'); if (e) e.style.display = 'none';
+  var b = document.getElementById('tpl-savefolder-btn'); if (b) b.style.borderColor = '#C0C8E2';
+}
+function tplStartNewFolder() {
+  var row = document.getElementById('tpl-newfolder-row');
+  if (!row) return;
+  row.innerHTML =
+    '<div style="display:flex;gap:8px;align-items:center;">' +
+      '<input id="tpl-newfolder-name" type="text" placeholder="Folder name" ' +
+        'onkeydown="if(event.key===\'Enter\'){event.preventDefault();tplCreateFolder();}" ' +
+        'style="flex:1;height:30px;box-sizing:border-box;padding:0 10px;border:1px solid #C0C8E2;border-radius:6px;font-size:13.5px;font-family:inherit;outline:none;">' +
+      '<button onclick="tplCreateFolder()" style="height:30px;padding:0 12px;border:none;border-radius:6px;background:linear-gradient(180deg,#5767F6,#124DC3);color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">Add</button>' +
+    '</div>';
+  var f = document.getElementById('tpl-newfolder-name'); if (f) f.focus();
+}
+function tplCreateFolder() {
+  var box = document.getElementById('tpl-newfolder-name');
+  var nm = box ? (box.value || '').trim() : '';
+  if (!nm) { if (box) box.style.borderColor = '#FF5D5A'; return; }
+  var exists = tplFolderList().some(function(f) { return String(f[0]).toLowerCase() === nm.toLowerCase(); });
+  if (!exists && typeof TPLPAGE_CATEGORIES !== 'undefined') TPLPAGE_CATEGORIES.push([nm, false]);
+  tplPickFolder(nm);
+}
+// a folder has to be chosen before the template can be filed
+function tplMissingFolder() {
+  if (_tplSaveFolder) return false;
+  var e = document.getElementById('tpl-savefolder-err');
+  var b = document.getElementById('tpl-savefolder-btn');
+  if (e) e.style.display = 'block';
+  if (b) b.style.borderColor = '#FF5D5A';
+  return true;
+}
+
 function tplSaveCancel() {
   document.getElementById('tpl-savemodal').style.display = 'none';
 }
@@ -5794,8 +5893,9 @@ function tplSaveConfirm() {
       tplShowSaveError('A ' + ucMeta().label + ' template named "' + ucName + '" already exists. Give this one a different name.');
       return;
     }
+    if (tplMissingFolder()) return;
     document.getElementById('tpl-savemodal').style.display = 'none';
-    st.customs.push({ name: ucName });
+    st.customs.push({ name: ucName, folder: _tplSaveFolder });
     st.active = 'custom:' + (st.customs.length - 1);
     _ucKey = _ucSlot;
     _ucSlot = null;
@@ -21711,7 +21811,7 @@ function SelectTemplateModal({
         openRate: "0%"
       }].concat(ucInvite.customs.map((c, i) => ({
         name: c.name,
-        folder: TPL_FOLDER,
+        folder: c.folder || TPL_FOLDER,
         live: ucInvite.active === "custom:" + i,
         openRate: "0%"
       })))

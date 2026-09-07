@@ -136,6 +136,15 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   type is invitation, plus anything created there (`WEBINAR_CREATED`) and the module
   templates saved for the records being invited (`MODULE_TEMPLATES`), de-duplicated.
   Why: the user wanted the two branches to demo the two sources of truth side by side.
+- 2026-09-07 — **Save Template asks which folder** (both branches). The dialog said
+  "Saved to <module> Templates" — a statement, not a choice. It now has Template Name plus
+  a **Save To** dropdown listing the CRM template folders (`TPLPAGE_CATEGORIES.slice(5)` —
+  the first five entries are views, not folders), each with the shared-folder icon where
+  it applies, and a separated **+ New Folder** row that takes a name inline and selects
+  it. A folder is required: saving without one is refused with the field outlined and an
+  inline message, matching the name guard. The chosen folder is stored on the template and
+  is what the Send Invite picker's second column shows, so `TPL_FOLDER` is now only a
+  fallback for the shipped defaults. Why: the user supplied the real dialog as reference.
 - 2026-09-06 — **Webinar emails moved to the module** (branch `template-flow-fixes`): the
   lifecycle set no longer lives in Setup ▸ Templates — Zoho Webinar is gone from that
   page's module filter and its seven rows are removed, so the Preferences line "managed
