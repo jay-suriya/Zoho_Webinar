@@ -125,6 +125,16 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-07 — **Save Template asks which folder** (both branches). The dialog said
+  "Saved to <module> Templates" — a statement, not a choice. It now has Template Name plus
+  a **Save To** dropdown listing the CRM template folders (`TPLPAGE_CATEGORIES.slice(5)` —
+  the first five entries are views, not folders), each with the shared-folder icon where
+  it applies, and a separated **+ New Folder** row that takes a name inline and selects
+  it. A folder is required: saving without one is refused with the field outlined and an
+  inline message, matching the name guard. The chosen folder is stored on the template
+  (and on its Templates-list row) and is what the Send Invite picker's second column
+  shows, so `TPL_FOLDER` is now only a fallback for the shipped defaults.
+  Why: the user supplied the real dialog as reference.
 - 2026-09-06 — **Send Invite picker's second column is the template folder.** It was
   printing the module ("Zoho Webinar", "Leads Templates"); in CRM's Select Template that
   column is the folder the template sits in — Public Email Templates, Managerial
