@@ -125,6 +125,14 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-07 — **Create Email Template: "Template Type" is now "Email Type", and "None"
+  is gone** (branch `templates-flow`). The field names which lifecycle email the template
+  is, so "Email Type" says it directly; "Template Type" restated the noun already in the
+  dialog title. Dropping None means every template created here is one of the seven
+  webinar emails and always carries a required link — nothing can be saved as an untyped
+  template from this dialog any more. `TPL_TYPE_LINKS['None']` is left in place as a
+  harmless fallback, since it is no longer reachable from the UI.
+  Why: the user asked for both.
 - 2026-09-07 — **"Zoho Webinar Invite Modules" renamed to "Modules You Can Invite"**
   (both branches), on the setup page and the enabled page, plus the two code comments that
   named it. The old label repeated the product name on a page you can only reach inside
