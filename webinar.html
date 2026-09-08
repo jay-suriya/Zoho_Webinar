@@ -606,7 +606,6 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
       <div style="display:flex;align-items:center;gap:16px;padding:8px 0;">
         <label style="font-size:15px;color:#434D5E;width:130px;flex-shrink:0;">Select Module</label>
         <select id="ct-module" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:170px;">
-          <option>Zoho Webinar</option>
           <option>Leads</option>
           <option>Contacts</option>
           <option>Vendors</option>
@@ -5575,11 +5574,16 @@ function tplPagePickModule(m) {
   tplPageRenderRows();
 }
 
-// Creating a template starts from the webinar's own emails: the Email Notification
-// gallery's rail picks the use case, and that stamps the type — so there is no
-// module + type dialog on the way in any more.
+// Zoho Webinar's emails are picked by use case, not by module, so they start in the
+// Email Notification gallery. Every other module is an ordinary CRM template and
+// still goes through the module + type dialog.
 function tplPageNewTemplate() {
-  if (window.openUsecaseGallery) openUsecaseGallery('sendInvite');
+  if (tplPageModule === 'Zoho Webinar') {
+    if (window.openUsecaseGallery) openUsecaseGallery('sendInvite');
+    return;
+  }
+  var mod = (tplPageModule && tplPageModule !== 'All Modules') ? tplPageModule : 'Leads';
+  if (window.openCreateTemplateModal) openCreateTemplateModal(mod);
 }
 // templates created from this page, newest first, so a save is visible straight away
 var TPLPAGE_CREATED = [];
@@ -6817,8 +6821,8 @@ function ucStartFromLayout(i) {
 var _ctModule = 'Leads';
 var _ctType = 'Webinar Invitation';
 function openCreateTemplateModal(module) {
-  // Zoho Webinar is itself a module, so it leads the list
-  _ctModule = module || 'Zoho Webinar';
+  // Zoho Webinar is not offered here — its emails are created in the gallery
+  _ctModule = (module && module !== 'Zoho Webinar') ? module : 'Leads';
   document.getElementById('ct-module').value = _ctModule;
   document.getElementById('ct-type').value = 'Webinar Invitation';
   document.getElementById('ct-modal').style.display = 'flex';

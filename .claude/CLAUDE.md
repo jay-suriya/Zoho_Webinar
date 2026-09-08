@@ -125,6 +125,15 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **The gallery is the Zoho Webinar path only; other modules keep the module
+  picker** (branch `templates-flow`). Sending every `+ New Template` to the gallery removed
+  the module picker altogether, so an ordinary CRM template — Contacts, Potentials — could
+  no longer be created. `tplPageNewTemplate` now branches: filter on **Zoho Webinar** opens
+  the Email Notification gallery, anything else (including All Modules, which hasn't named
+  a module yet) opens the Create Email Template dialog as before. The dialog also stopped
+  offering **Zoho Webinar** as a module, and `openCreateTemplateModal` no longer defaults
+  to it — otherwise there were two different UIs for creating the same webinar template.
+  Why: the user pointed out the missing module picker.
 - 2026-09-08 — **Creating a template now starts from the Email Notification gallery**
   (branch `templates-flow`). `+ New Template` opened a Create Email Template dialog asking
   for module + Email Type, then the six Basic layouts. It now opens branch 2's use-case
