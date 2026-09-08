@@ -125,7 +125,16 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
-
+- 2026-09-08 — **"Sync past webinars" now appears on the enabled page too** (both
+  branches). It never had it: `postRenderSyncPastData` looks for `post-sync-yes-state`
+  and siblings, and that markup has never existed — not on `master`, not at the branch
+  point — so the function was a permanent no-op and the field was simply absent after
+  enabling. Added as a row in the enabled page's connection block with the same Yes/No
+  radios as the setup page; `setupActivateIntegration` carries the setup answer across,
+  and `postSyncPastSet` updates `_syncPast` / `_syncImportScope` and marks the page dirty.
+  `postRenderSyncPastData` is still dead code — it wants a richer imported-count display
+  that has no markup; left alone rather than half-wired.
+  Why: the user reported the field missing after Enable Integration.
 - 2026-09-08 — **Only person-shaped modules are listed** (both branches). After the locked
   Leads and Contacts, the picker held Accounts, Potentials, Cases, Campaigns and Meetings
   — a company, a deal, a ticket, a campaign, an event. None is a person, so none can
