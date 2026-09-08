@@ -605,12 +605,18 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
     <div style="padding:18px 30px 26px;">
       <div style="display:flex;align-items:center;gap:16px;padding:8px 0;">
         <label style="font-size:15px;color:#434D5E;width:130px;flex-shrink:0;">Select Module</label>
-        <select id="ct-module" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:170px;">
+        <select id="ct-module" onchange="ctModuleChanged()" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:170px;">
           <option>Leads</option>
           <option>Contacts</option>
           <option>Vendors</option>
           <option>Custom Module 1</option>
+          <option>Zoho Webinar</option>
         </select>
+      </div>
+      <!-- Email Type only means something for Zoho Webinar, so it appears with it -->
+      <div id="ct-etype-row" style="display:none;align-items:center;gap:16px;padding:8px 0;">
+        <label style="font-size:15px;color:#434D5E;width:130px;flex-shrink:0;">Email Type</label>
+        <select id="ct-etype" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:170px;"></select>
       </div>
     </div>
     <div style="padding:0 30px 26px;display:flex;justify-content:flex-end;gap:12px;">
@@ -5572,10 +5578,8 @@ function tplPagePickModule(m) {
 // Email Notification gallery. Every other module is an ordinary CRM template and
 // still goes through the module + type dialog.
 function tplPageNewTemplate() {
-  if (tplPageModule === 'Zoho Webinar') {
-    if (window.openUsecaseGallery) openUsecaseGallery('sendInvite');
-    return;
-  }
+  // always the Create Email Template dialog: module first, and Email Type with it when
+  // the module is Zoho Webinar. The chosen type is what the next page opens on.
   var mod = (tplPageModule && tplPageModule !== 'All Modules') ? tplPageModule : 'Leads';
   if (window.openCreateTemplateModal) openCreateTemplateModal(mod);
 }
@@ -6889,20 +6893,43 @@ function ucStartFromLayout(i) {
 // ── Create Email Template → Template Gallery → editor ───────────────────────
 var _ctModule = 'Leads';
 var _ctType = 'Webinar Invitation';
+var _ctUsecase = 'sendInvite';
 function openCreateTemplateModal(module) {
-  // Zoho Webinar is not offered here — its emails are created in the gallery
-  _ctModule = (module && module !== 'Zoho Webinar') ? module : 'Leads';
-  document.getElementById('ct-module').value = _ctModule;
+  _ctModule = module || 'Leads';
+  var sel = document.getElementById('ct-module');
+  sel.value = _ctModule;
+  if (sel.value !== _ctModule) { _ctModule = 'Leads'; sel.value = 'Leads'; }
+  // Email Type options are the eight lifecycle emails, labelled as the Templates list
+  // labels them, valued by the use case the gallery opens on
+  var et = document.getElementById('ct-etype');
+  et.innerHTML = TPL_USECASES.map(function(u) {
+    return '<option value="' + u.key + '">' + (TPLPAGE_ETYPE_BY_KEY[u.key] || u.label) + '</option>';
+  }).join('');
+  et.value = _ctUsecase;
+  ctModuleChanged();
   document.getElementById('ct-modal').style.display = 'flex';
+}
+// the Email Type row belongs to Zoho Webinar and nothing else
+function ctModuleChanged() {
+  var isWebinar = document.getElementById('ct-module').value === 'Zoho Webinar';
+  document.getElementById('ct-etype-row').style.display = isWebinar ? 'flex' : 'none';
 }
 function closeCreateTemplateModal() {
   document.getElementById('ct-modal').style.display = 'none';
 }
 function ctNext() {
   _ctModule = document.getElementById('ct-module').value;
-  // a template created here has no webinar lifecycle type
-  _ctType = 'None';
   closeCreateTemplateModal();
+  if (_ctModule === 'Zoho Webinar') {
+    // carry the chosen Email Type through: the gallery opens on that use case, which is
+    // also what stamps the template's type and its link rules
+    _ctUsecase = document.getElementById('ct-etype').value || 'sendInvite';
+    _ctType = TPL_TYPE_BY_KEY[_ctUsecase] || 'Webinar Invitation';
+    if (window.openUsecaseGallery) openUsecaseGallery(_ctUsecase);
+    return;
+  }
+  // a template created for an ordinary CRM module has no webinar lifecycle type
+  _ctType = 'None';
   openTemplateGallery();
 }
 

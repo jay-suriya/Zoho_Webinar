@@ -125,6 +125,20 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **Create Email Template asks for the module, and Email Type with it**
+  (branch 1). `+ New Template` went straight to the gallery whenever the list was filtered
+  to Zoho Webinar, so the module was never actually chosen. It now always opens the dialog:
+  **Select Module** first, with **Zoho Webinar** back in the list, and an **Email Type** row
+  that appears only when Zoho Webinar is the module (`ctModuleChanged`) — the type means
+  nothing for an ordinary CRM module. Its options are the eight lifecycle emails, labelled
+  the way the Templates list labels them (Invitation, Confirmation, 1st–3rd Reminder,
+  Attendees/Absentees Follow-up, Webinar Cancelled) but valued by use-case key, built from
+  `TPL_USECASES` so the dialog cannot drift from the gallery's rail. Next carries the choice
+  through: `openUsecaseGallery(_ctUsecase)` opens the gallery on that use case — rail entry,
+  chip and note — and `_ctType` / `_tplTypeName` are stamped from it, so the required link
+  and allowed link types are the chosen email's from the start. A non-webinar module still
+  gets `_ctType = 'None'` and the old Template Gallery. Why: the user asked for the module
+  box, Email Type under Zoho Webinar, and the chosen type to be what the next page shows.
 - 2026-09-08 — **Selecting a template in the gallery lists it under Templates** (branch 1).
   Picking a card in the Email Notifications gallery only flipped the "In use" badge — the
   use case's seeded customs ("Long-form invite", "twsd") existed in `TPL_UC_STATE` and
