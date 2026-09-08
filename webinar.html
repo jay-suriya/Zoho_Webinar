@@ -612,18 +612,6 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
           <option>Custom Module 1</option>
         </select>
       </div>
-      <div style="display:flex;align-items:center;gap:16px;padding:8px 0;">
-        <label style="font-size:15px;color:#434D5E;width:130px;flex-shrink:0;">Email Type</label>
-        <select id="ct-type" style="font-size:14.5px;padding:9px 12px;border:1px solid #C0C8E2;border-radius:8px;background:#fff;color:#202123;min-width:220px;">
-          <option>Webinar Invitation</option>
-          <option>Confirmation Email</option>
-          <option>1st Reminder</option>
-          <option>2nd Reminder</option>
-          <option>3rd Reminder</option>
-          <option>Attendees Follow-up</option>
-          <option>Absentees Follow-up</option>
-        </select>
-      </div>
     </div>
     <div style="padding:0 30px 26px;display:flex;justify-content:flex-end;gap:12px;">
       <button onclick="closeCreateTemplateModal()" style="padding:9px 22px;border:1px solid #D5D8E9;border-radius:8px;background:#fff;color:#313949;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">Cancel</button>
@@ -6824,7 +6812,6 @@ function openCreateTemplateModal(module) {
   // Zoho Webinar is not offered here — its emails are created in the gallery
   _ctModule = (module && module !== 'Zoho Webinar') ? module : 'Leads';
   document.getElementById('ct-module').value = _ctModule;
-  document.getElementById('ct-type').value = 'Webinar Invitation';
   document.getElementById('ct-modal').style.display = 'flex';
 }
 function closeCreateTemplateModal() {
@@ -6832,7 +6819,8 @@ function closeCreateTemplateModal() {
 }
 function ctNext() {
   _ctModule = document.getElementById('ct-module').value;
-  _ctType = document.getElementById('ct-type').value;
+  // a template created here has no webinar lifecycle type
+  _ctType = 'None';
   closeCreateTemplateModal();
   openTemplateGallery();
 }
@@ -6857,8 +6845,9 @@ var TG_LAYOUTS = [
 
 function openTemplateGallery() {
   document.getElementById('tg-module').innerHTML = _ctModule + ' <span style="font-size:10px;color:#8C91AB;">▼</span>';
-  document.getElementById('tg-context').innerHTML =
-    '<span style="font-size:12.5px;font-weight:600;color:#C2185B;background:#FDEFF5;border:1px solid #F0C3D6;border-radius:12px;padding:3px 12px;">' + _ctType + '</span>';
+  document.getElementById('tg-context').innerHTML = (_ctType && _ctType !== 'None')
+    ? '<span style="font-size:12.5px;font-weight:600;color:#C2185B;background:#FDEFF5;border:1px solid #F0C3D6;border-radius:12px;padding:3px 12px;">' + _ctType + '</span>'
+    : '';
   document.getElementById('tg-cards').innerHTML = TG_LAYOUTS.map(function(l, i) {
     return '<div onclick="tgPick(' + i + ')" style="cursor:pointer;width:180px;">' +
         '<div style="height:250px;border:1px solid #E0E1E8;border-radius:6px;background:#fff;padding:' + (l.body ? '10px' : '0') + ';overflow:hidden;"' +

@@ -125,6 +125,16 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **Email Type removed from Create Email Template** (branch `templates-flow`).
+  With Zoho Webinar out of that dialog's module list, Email Type had nothing left to
+  describe — it named a webinar lifecycle email, and those are created in the gallery now.
+  The dialog is a single **Select Module** row. `ctNext` sets `_ctType = 'None'`, the
+  untyped type that already existed: no required link, every link type available. The
+  Template Gallery's type chip is suppressed when the type is None, so it no longer shows
+  a "None" pill. Known gap left alone: `tplMergeModules` still leads with Registrations
+  for anything that isn't a Webinar Invitation, so a plain Contacts template offers
+  registrant merge fields rather than the module's own — pre-existing, and outside what
+  was asked. Why: the user asked for it once Zoho Webinar was gone from the dialog.
 - 2026-09-08 — **The gallery is the Zoho Webinar path only; other modules keep the module
   picker** (branch `templates-flow`). Sending every `+ New Template` to the gallery removed
   the module picker altogether, so an ordinary CRM template — Contacts, Potentials — could
