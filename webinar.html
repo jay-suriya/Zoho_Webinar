@@ -1907,13 +1907,19 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
             </div>
 
             <div style="margin-bottom:12px;">
-              <label style="display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:8px;">Sync past webinars?</label>
-              <div style="position:relative;max-width:340px;">
-                <select id="setup-sync-past-select" style="width:100%;padding:11px 40px 11px 14px;border:1.5px solid #C2185B;border-radius:8px;font-size:14px;outline:none;appearance:none;background:#fff;color:#111;cursor:pointer;font-weight:500;font-family:inherit;">
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
-                <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:#888;font-size:11px;">▼</span>
+              <label style="display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:10px;">Sync past webinars?</label>
+              <!-- The radios are the control. This hidden field keeps the id and the
+                   yes/no value that the rest of the setup code already reads and writes. -->
+              <input type="hidden" id="setup-sync-past-select" value="yes">
+              <div style="display:flex;align-items:center;gap:28px;">
+                <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:#313949;cursor:pointer;">
+                  <input type="radio" name="setup-sync-past" value="yes" checked onchange="setupSyncPastSet('yes')" style="accent-color:#C2185B;width:16px;height:16px;margin:0;cursor:pointer;">
+                  <span>Yes</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:#313949;cursor:pointer;">
+                  <input type="radio" name="setup-sync-past" value="no" onchange="setupSyncPastSet('no')" style="accent-color:#C2185B;width:16px;height:16px;margin:0;cursor:pointer;">
+                  <span>No</span>
+                </label>
               </div>
             </div>
 
@@ -2159,8 +2165,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               window._syncWebinarOn = true;
               window._syncMeetingOn = false;
 
-              var syncPastSel = document.getElementById('setup-sync-past-select');
-              if (syncPastSel) syncPastSel.value = window._setupSyncApplies ? 'yes' : 'no';
+              setupSyncPastSet(window._setupSyncApplies ? 'yes' : 'no');
             }
 
             function setupRevealSection(n) {
@@ -2174,6 +2179,16 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
             }
 
             // Section 1 Next — reads the Sync past webinars? Yes/No answer, then goes straight to Webinar Deal Attribution
+            // Sync past webinars? is a Yes/No radio pair; this keeps the radios and the
+            // hidden value in step whichever way the answer is set.
+            function setupSyncPastSet(v) {
+              var h = document.getElementById('setup-sync-past-select');
+              if (h) h.value = v;
+              var r = document.querySelector('input[name="setup-sync-past"][value="' + v + '"]');
+              if (r) r.checked = true;
+            }
+            window.setupSyncPastSet = setupSyncPastSet;
+
             function setupNextFromSection1() {
               var syncPastSel = document.getElementById('setup-sync-past-select');
               var syncPast = syncPastSel ? (syncPastSel.value === 'yes') : true;

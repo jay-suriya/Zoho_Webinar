@@ -136,6 +136,16 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   type is invitation, plus anything created there (`WEBINAR_CREATED`) and the module
   templates saved for the records being invited (`MODULE_TEMPLATES`), de-duplicated.
   Why: the user wanted the two branches to demo the two sources of truth side by side.
+- 2026-09-08 — **"Sync past webinars?" is a Yes/No radio pair, not a dropdown** (both
+  branches). A picklist for a binary question hid one of the two answers behind a click.
+  The radios are the control now, with **Yes** preselected; a hidden input keeps the id
+  `setup-sync-past-select` and its `yes`/`no` value so the three existing read/write sites
+  need no change, and `setupSyncPastSet()` keeps radios and hidden value in step when the
+  answer is set programmatically. Note: this field was never removed — it only *looked*
+  removed in verification screenshots, because forcing the integration panel visible
+  squashes that row into a ~116px column where the dropdown collapses to a sliver. Give
+  the panel real width before judging that section by screenshot.
+  Why: the user asked for radios.
 - 2026-09-08 — **Who Can Participate From CRM is now the standard CRM module picker**
   (both branches). The chips + search + grouped-grid picker is replaced by the reference
   pattern: one card, a Search field, a flat scrollable checkbox list. Heading and subline
