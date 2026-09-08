@@ -125,14 +125,17 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
-- 2026-09-08 — **Once set up, the integration's introduction page says "Setup", not
-  "Enable Integration"** (branch `templates-flow`). That page is reachable again from
-  Marketplace after the integration is on, and it was still offering to enable something
-  already enabled — with a "NOT ENABLED" badge next to it. A `window._webinarIntegEnabled`
-  flag is set by `setupActivateIntegration()`, and `integIntroRenderHeader()` renders the
-  header from it: badge becomes a green **ENABLED**, the action becomes **Setup**, and
-  clicking it goes straight to the enabled settings panel instead of re-running the enable
-  flow. Why: the user asked for it.
+- 2026-09-08 — **Integration intro page: the action is "Setup", and Case 2 is the demo
+  default** (branch `templates-flow`). The introduction page's top-right action said
+  "Enable Integration", but it doesn't enable anything — it opens the setup form, and
+  enabling happens on the button at the end of that form. It now reads **Setup** in both
+  states: before setup it opens the form, after setup it opens the enabled settings panel.
+  A `window._webinarIntegEnabled` flag set by `setupActivateIntegration()` drives that,
+  and also flips the badge from "NOT ENABLED" to a green **ENABLED** so the page stops
+  contradicting itself when you come back to it from Marketplace. Separately,
+  `window._selectedCase` now defaults to **2 (single org)** with the demo switcher
+  preselected to match — case 2 goes straight to the setup page, so the walkthrough
+  doesn't detour through the create-account modal. Why: the user asked for both.
 - 2026-09-08 — **Templates list: an Email Type column, only under Zoho Webinar**
   (branch `templates-flow`). A new column between Template Name and Modified By showing
   each lifecycle email's type as a chip, with a caret on the header that opens a filter —

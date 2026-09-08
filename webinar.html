@@ -1349,7 +1349,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                 <span style="color:#999;font-weight:600;text-transform:uppercase;letter-spacing:.5px;">Demo</span>
                 <select id="case-switcher" onchange="switchCaseSelection(this.value)" style="border:none;background:transparent;font-size:12px;color:#111;font-weight:600;cursor:pointer;outline:none;font-family:inherit;">
                   <option value="1">Case 1 — No account</option>
-                  <option value="2">Case 2 — Single org</option>
+                  <option value="2" selected>Case 2 — Single org</option>
                   <option value="3">Case 3 — Multiple orgs</option>
                   <option value="4">Case 4 — Not an admin</option>
                   <option value="5">Case 5 — Trial expired</option>
@@ -1804,7 +1804,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                 <span style="font-size:19px;font-weight:800;color:#111;">Zoho Webinar Integration</span>
                 <span id="integ-intro-status" style="background:#f1f2f6;color:#666;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;">NOT ENABLED</span>
               </div>
-              <button id="integ-intro-cta" onclick="integIntroEnable()" style="padding:10px 22px;background:#C2185B;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;" onmouseover="this.style.background='#9c1349'" onmouseout="this.style.background='#C2185B'">Enable Integration</button>
+              <button id="integ-intro-cta" onclick="integIntroEnable()" style="padding:10px 22px;background:#C2185B;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;" onmouseover="this.style.background='#9c1349'" onmouseout="this.style.background='#C2185B'">Setup</button>
             </div>
 
             <div style="padding:36px 32px 56px;">
@@ -6820,7 +6820,8 @@ function integShowDetail() {
   integShowPanel(window._attribOn ? 'integ-enabled-panel' : 'integ-grid-panel');
 }
 
-window._selectedCase = 1;
+// Case 2 (single org) is the default — it goes straight to the setup page
+window._selectedCase = 2;
 function switchCaseSelection(caseNum) {
   window._selectedCase = parseInt(caseNum, 10);
 }
@@ -6873,7 +6874,9 @@ function integIntroRenderHeader() {
     badge.style.background = on ? '#E9FBF4' : '#f1f2f6';
     badge.style.color = on ? '#10975E' : '#666';
   }
-  if (cta) cta.textContent = on ? 'Setup' : 'Enable Integration';
+  // Always "Setup": before enabling it opens the setup form, and after
+  // enabling it opens the settings. Enabling itself happens inside that form.
+  if (cta) cta.textContent = 'Setup';
 }
 
 function integWebinarCardSetup() {
@@ -6892,7 +6895,7 @@ function integIntroEnable() {
 }
 function integWebinarSetupProceed() {
   window._setupEntry = 'webinar';
-  var c = window._selectedCase || 1;
+  var c = window._selectedCase || 2;
   if (c === 1) {
     case1ModalOpen();
   } else if (c === 4) {
@@ -6908,7 +6911,7 @@ function integWebinarSetupProceed() {
   }
 }
 function integEnable() {
-  var c = window._selectedCase || 1;
+  var c = window._selectedCase || 2;
   if (c === 1) {
     case1ModalOpen();
   } else if (c === 2) {
