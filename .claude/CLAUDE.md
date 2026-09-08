@@ -301,6 +301,12 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   "Write the … email here" prompt became a real CSS placeholder (`:empty:before`) rather
   than grey content that typing merged into and that saved into the email.
   Why: the user asked for an empty, typable name and subject, and for the save to show up.
+- 2026-09-08 — **Templates list row actions (branch 1)**: a pencil **edit icon** now appears
+  on row hover in the column just before **Email Type** and opens that template in the
+  editor; clicking the **template name** opens the **Email Notifications** use-case gallery
+  at that email's use case instead of the read-only preview. Why: the user wanted editing to
+  be one hover away, and a click on a template to land on the create-template page where the
+  available templates for that use case are shown.
 - 2026-09-05 — Added `.claude/` (this file + the CRM design rules) so the webinar mock
   carries its own product context, matching the Zoho Survey repo.
 - 2026-09-04 — **Integration flow rebuilt**: choosing Zoho Webinar now opens an

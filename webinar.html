@@ -647,6 +647,11 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   </div>
 </div>
 
+<style>
+  /* the row's edit action only appears on hover, and sits before Email Type */
+  #tplpage-tbody tr .tpl-row-edit { opacity: 0; transition: opacity .12s; }
+  #tplpage-tbody tr:hover .tpl-row-edit { opacity: 1; }
+</style>
 <!-- ═══ Email Notification Gallery — opened from Zoho Webinar > Preferences > Customise Template ═══ -->
 <!-- One screen for the whole lifecycle: the rail switches use case, the pane offers that use
      case's Default (Quick), the customs saved for it, and the six Basic layouts to start from.
@@ -1109,6 +1114,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                       <th style="text-align:left;padding:14px 20px;color:#333;font-weight:700;">
                         <span style="display:inline-block;width:13px;height:13px;border:1.5px solid #C0C8E2;border-radius:3px;margin-right:12px;vertical-align:middle;"></span>Template Name
                       </th>
+                      <th style="width:46px;"></th>
                       <th id="tplpage-th-etype" style="display:none;text-align:left;padding:14px 16px;color:#333;font-weight:700;width:190px;position:relative;">
                         <span onclick="tplPageToggleETypeMenu(event)" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none;">
                           <span id="tplpage-etype-label">Email Type</span>
@@ -5665,11 +5671,28 @@ function tplPageRows() {
   }
   return rows;
 }
+// Email Type label back to the use-case key, so a created row's chip can open the
+// right rail entry even when its name is not in TPL_KEY_BY_NAME.
+var TPLPAGE_KEY_BY_ETYPE = {};
+Object.keys(TPLPAGE_ETYPE_BY_KEY).forEach(function(k) {
+  TPLPAGE_KEY_BY_ETYPE[TPLPAGE_ETYPE_BY_KEY[k]] = k;
+});
+// clicking the name shows that email's templates; the pencil goes straight to editing
+function tplPageOpenGallery(ucKey) {
+  if (window.openUsecaseGallery) openUsecaseGallery(ucKey);
+}
+function tplPageEditRow(name, module, key) {
+  if (key && window.openTemplateEditor) { openTemplateEditor(key); return; }
+  if (window.openModuleTemplateEditor) openModuleTemplateEditor(name, module);
+}
+window.tplPageOpenGallery = tplPageOpenGallery;
+window.tplPageEditRow = tplPageEditRow;
+
 function tplPageRenderRows() {
   var rows = tplPageRows();
   var tbody = document.getElementById('tplpage-tbody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="' + (tplPageETypeColumnOn() ? 5 : 4) + '" style="padding:40px 20px;text-align:center;color:#888;">' +
+    tbody.innerHTML = '<tr><td colspan="' + (tplPageETypeColumnOn() ? 6 : 5) + '" style="padding:40px 20px;text-align:center;color:#888;">' +
       (tplPageETypeColumnOn() && tplPageEType !== 'All'
         ? 'No ' + tplPageEType + ' templates yet.'
         : 'No templates found for this module.') + '</td></tr>';
@@ -5678,8 +5701,20 @@ function tplPageRenderRows() {
   tbody.innerHTML = rows.map(function(r) {
     var key = (typeof TPL_KEY_BY_NAME !== 'undefined') ? TPL_KEY_BY_NAME[r[0]] : null;
     if (!key && r[0] === 'Confirmation Template') key = 'confirmation';
-    var nameClick = key ? ' onclick="openTemplatePreview(\'' + key + '\')"' : '';
-    var nameStyle = 'font-size:14px;color:#111;font-weight:500;' + (key ? 'cursor:pointer;' : '');
+    // a webinar template also knows its use case, so the name opens that use case
+    // in the gallery — where its Default, its Customs and the Basic layouts are shown
+    var ucKey = key || TPLPAGE_KEY_BY_ETYPE[r.etype || ''] || null;
+    var nameClick = ucKey ? ' onclick="tplPageOpenGallery(\'' + ucKey + '\')"'
+                          : (key ? ' onclick="openTemplatePreview(\'' + key + '\')"' : '');
+    var nameStyle = 'font-size:14px;color:#111;font-weight:500;' + ((ucKey || key) ? 'cursor:pointer;' : '');
+    var editArgs = "'" + String(r[0]).replace(/'/g, "\\'") + "','" + String(r[1]).replace(/'/g, "\\'") + "','" + (key || '') + "'";
+    var editCell = '<td style="width:46px;padding:14px 0;text-align:center;">' +
+        '<span class="tpl-row-edit" title="Edit this template" onclick="tplPageEditRow(' + editArgs + ')" ' +
+        'style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:5px;cursor:pointer;" ' +
+        'onmouseover="this.style.background=\'#F0F1FF\'" onmouseout="this.style.background=\'transparent\'">' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#5464F2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>' +
+      '</span></td>';
     var stats = r[6]
       ? '<div style="color:#C2185B;font-weight:600;">' + r[6] + '</div><div style="color:#C2185B;font-size:12.5px;">' + r[7] + '</div>'
       : '<span style="color:#888;">-</span>';
@@ -5694,6 +5729,7 @@ function tplPageRenderRows() {
           '</div>' +
         '</div>' +
       '</td>' +
+      editCell +
       (tplPageETypeColumnOn()
         ? '<td style="padding:14px 16px;">' + ((r.etype || tplPageETypeOf(r[0]))
             ? '<span style="display:inline-block;font-size:12.5px;font-weight:600;color:#5464F2;background:#F0F1FF;border:1px solid #D2D7FF;border-radius:12px;padding:2px 10px;">' + (r.etype || tplPageETypeOf(r[0])) + '</span>'
