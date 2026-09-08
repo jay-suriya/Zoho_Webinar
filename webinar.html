@@ -3890,8 +3890,6 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 </div></div>
 <div class="form-row">
 <div class="form-group"><label>Webinar Date &amp; Time</label>
-<div style="display:flex;flex-direction:column;gap:6px">
-  <!-- Combined date+time box -->
   <div style="display:flex;align-items:stretch;border:1px solid #bbb;border-radius:3px;background:#fff;overflow:visible;max-width:320px">
     <input type="date" id="wDate" onchange="onDatePicked(this)"
       style="flex:1;padding:7px 10px;border:none;font-size:13px;background:transparent;outline:none;min-width:0">
@@ -3909,19 +3907,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
       </div>
     </div>
   </div>
-  <!-- Timezone below -->
-  <div class="cs-wrap">
-    <div class="cs-btn" onclick="csToggle(this)" style="min-width:160px">(-6) Central</div>
-    <div class="cs-dd">
-      <div class="cs-opt" onclick="csSelect(this)">(-5) Eastern</div>
-      <div class="cs-opt sel" onclick="csSelect(this)">(-6) Central</div>
-      <div class="cs-opt" onclick="csSelect(this)">(-7) Mountain</div>
-      <div class="cs-opt" onclick="csSelect(this)">(-8) Pacific</div>
-      <div class="cs-opt" onclick="csSelect(this)">(+0) UTC</div>
-      <div class="cs-opt" onclick="csSelect(this)">(+5:30) IST</div>
-    </div>
-  </div>
-</div></div>
+</div>
 <!-- LIVE: Duration -->
 <div class="form-group" id="durationGroup"><label>Webinar Duration</label>
 <div style="display:flex;align-items:stretch;border:1px solid #d0d0d0;border-radius:4px;overflow:visible;background:#fff;width:fit-content;">
@@ -3947,6 +3933,22 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 <span class="fc-remove" onclick="removeSelectedFile()">&times;</span>
 </div>
 </div></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Webinar Timezone</label>
+  <div class="cs-wrap">
+    <div class="cs-btn" onclick="csToggle(this)" style="min-width:200px">(-6) Central</div>
+    <div class="cs-dd">
+      <div class="cs-opt" onclick="csSelect(this)">(-5) Eastern</div>
+      <div class="cs-opt sel" onclick="csSelect(this)">(-6) Central</div>
+      <div class="cs-opt" onclick="csSelect(this)">(-7) Mountain</div>
+      <div class="cs-opt" onclick="csSelect(this)">(-8) Pacific</div>
+      <div class="cs-opt" onclick="csSelect(this)">(+0) UTC</div>
+      <div class="cs-opt" onclick="csSelect(this)">(+5:30) IST</div>
+    </div>
+  </div>
+</div>
+<div class="form-group"></div>
 </div>
 <!-- Webinar Owner / Organizer -->
 <div class="form-row">

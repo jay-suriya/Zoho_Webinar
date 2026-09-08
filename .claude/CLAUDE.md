@@ -125,6 +125,14 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **Create Webinar: the timezone picklist got a label and its own row**
+  (branch `templates-flow`). It was stacked under the date+time box inside the same
+  `.form-group`, so it had no label at all and the "Webinar Date & Time" label floated
+  vertically centred between the two controls. The timezone is now a **Webinar Timezone**
+  row of its own directly below, with an empty right-hand `.form-group` so the label
+  column keeps the width every other row uses — labels right-align together, both fields
+  share one left edge, and row spacing is the standard 14px again.
+  Why: the user pointed out the unlabelled picklist and the spacing.
 - 2026-09-07 — **Create Email Template: "Template Type" is now "Email Type", and "None"
   is gone** (branch `templates-flow`). The field names which lifecycle email the template
   is, so "Email Type" says it directly; "Template Type" restated the noun already in the
