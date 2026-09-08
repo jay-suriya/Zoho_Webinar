@@ -125,6 +125,17 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **Templates list: an Email Type column, only under Zoho Webinar**
+  (branch `templates-flow`). A new column between Template Name and Modified By showing
+  each lifecycle email's type as a chip, with a caret on the header that opens a filter —
+  All email types, Invitation, Confirmation, 1st/2nd/3rd Reminder, Attendees Follow-up,
+  Absentees Follow-up. It appears only while the Zoho Webinar module is selected, since
+  those are the only templates that carry a type, and switching module hides it and clears
+  the filter. The header label becomes the chosen type in pink so an active filter is
+  visible, the empty state reads "No <type> templates yet.", and its colspan widens with
+  the column. Types come from `TPL_KEY_BY_NAME` → `TPLPAGE_ETYPE_BY_KEY`, so the column
+  cannot drift from the type each template actually has.
+  Why: the user asked for a filterable Email Type column scoped to Zoho Webinar.
 - 2026-09-08 — **Create Webinar: the timezone picklist got a label and its own row**
   (branch `templates-flow`). It was stacked under the date+time box inside the same
   `.form-group`, so it had no label at all and the "Webinar Date & Time" label floated
