@@ -1802,9 +1802,9 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               <div style="display:flex;align-items:center;gap:14px;">
                 <span onclick="integShowPanel('integ-grid-panel')" style="cursor:pointer;color:#444;font-size:20px;line-height:1;">←</span>
                 <span style="font-size:19px;font-weight:800;color:#111;">Zoho Webinar Integration</span>
-                <span style="background:#f1f2f6;color:#666;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;">NOT ENABLED</span>
+                <span id="integ-intro-status" style="background:#f1f2f6;color:#666;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;">NOT ENABLED</span>
               </div>
-              <button onclick="integIntroEnable()" style="padding:10px 22px;background:#C2185B;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;" onmouseover="this.style.background='#9c1349'" onmouseout="this.style.background='#C2185B'">Enable Integration</button>
+              <button id="integ-intro-cta" onclick="integIntroEnable()" style="padding:10px 22px;background:#C2185B;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;" onmouseover="this.style.background='#9c1349'" onmouseout="this.style.background='#C2185B'">Enable Integration</button>
             </div>
 
             <div style="padding:36px 32px 56px;">
@@ -2367,6 +2367,10 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               window._postSyncTimeframe = window._syncTimeframe || '18M';
               window._postSyncImported = !!(syncApplies && !didNotSync);
               postRenderSyncPastData();
+
+              // From here on the introduction page shows "Setup", not "Enable Integration"
+              window._webinarIntegEnabled = true;
+              if (typeof integIntroRenderHeader === 'function') integIntroRenderHeader();
 
               // Navigate to the post-activation enabled panel
               integShowPanel('integ-enabled-panel');
@@ -6854,12 +6858,36 @@ function integWebinarCardClick() {
 // Clicking "Set up" on the marketplace card (Webinar path):
 // Case 1 → create modal (setup opens only after Create). Case 4 → not-admin modal.
 // Cases 2 & 3 → go straight to the setup (integration) page.
+// Has the Zoho Webinar integration already been set up in this session?
+window._webinarIntegEnabled = window._webinarIntegEnabled || false;
+
+// The introduction page is reachable again after setup, so its header has to
+// tell the truth: once the integration is on there is nothing left to enable,
+// and the action becomes a way back into the settings.
+function integIntroRenderHeader() {
+  var badge = document.getElementById('integ-intro-status');
+  var cta = document.getElementById('integ-intro-cta');
+  var on = !!window._webinarIntegEnabled;
+  if (badge) {
+    badge.textContent = on ? 'ENABLED' : 'NOT ENABLED';
+    badge.style.background = on ? '#E9FBF4' : '#f1f2f6';
+    badge.style.color = on ? '#10975E' : '#666';
+  }
+  if (cta) cta.textContent = on ? 'Setup' : 'Enable Integration';
+}
+
 function integWebinarCardSetup() {
-  // introduce the integration first; Enable Integration carries on into setup
+  // introduce the integration first; the action carries on into setup
   window._setupEntry = 'webinar';
+  integIntroRenderHeader();
   integShowPanel('integ-intro-panel');
 }
 function integIntroEnable() {
+  // already set up — the button is "Setup", so go straight to the settings
+  if (window._webinarIntegEnabled) {
+    integShowPanel('integ-enabled-panel');
+    return;
+  }
   integWebinarSetupProceed();
 }
 function integWebinarSetupProceed() {
