@@ -1914,8 +1914,8 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
             <!-- ============ SECTION 2: Modules a webinar invite can be sent to ============ -->
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;">
               <div>
-                <h2 style="font-size:22px;font-weight:800;color:#111;margin:0 0 6px;letter-spacing:-.2px;">Modules You Can Invite</h2>
-                <div style="font-size:13px;color:#666;line-height:1.6;">Records from these modules can be invited to a webinar. Turn one off and it disappears from the module list in Send Invite.</div>
+                <h2 style="font-size:22px;font-weight:800;color:#111;margin:0 0 6px;letter-spacing:-.2px;">Who Can Participate From CRM</h2>
+                <div style="font-size:13px;color:#666;line-height:1.6;">Pick the CRM modules your webinar invites can go to. Turn one off and it disappears from the module list in Send Invite.</div>
               </div>
               <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;padding-top:6px;">
                 <span onclick="imSelectAll(true)" style="font-size:12.5px;color:#2255cc;cursor:pointer;font-weight:600;">Select all</span>
@@ -2783,8 +2783,8 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               <div style="background:#fff;border:1px solid #e8ebf2;border-radius:12px;padding:24px 28px;">
                 <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:4px;">
                   <div>
-                    <div style="font-size:15px;font-weight:700;color:#111;">Modules You Can Invite</div>
-                    <p style="font-size:13px;color:#666;margin:6px 0 0;line-height:1.6;">Records from these modules can be invited to a webinar. Turn one off and it disappears from the module list in Send Invite.</p>
+                    <div style="font-size:15px;font-weight:700;color:#111;">Who Can Participate From CRM</div>
+                    <p style="font-size:13px;color:#666;margin:6px 0 0;line-height:1.6;">Pick the CRM modules your webinar invites can go to. Turn one off and it disappears from the module list in Send Invite.</p>
                   </div>
                   <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;padding-top:2px;">
                     <span onclick="imSelectAll(true)" style="font-size:12.5px;color:#2255cc;cursor:pointer;font-weight:600;">Select all</span>
@@ -7149,7 +7149,7 @@ function integToggleAttrib() {
 }
 
 
-// ── Modules You Can Invite — which CRM modules a webinar invite can go to ───────────
+// ── Who Can Participate From CRM — which CRM modules a webinar invite can go to ───────────
 var IM_GROUPS = [
   { name: 'Standard', modules: ['Leads', 'Contacts', 'Accounts', 'Potentials', 'Vendors', 'Cases', 'Campaigns', 'Meetings'] },
   { name: 'Custom',   modules: ['Custom Module 1', 'Donor Management', 'Donations', 'Volunteers', 'Nonprofits Campaigns', 'Community Budgets', 'Customer Visits', 'Referral', 'AI Creative Module', 'Org test', 'Untitless', 'AjB'] }
@@ -20978,7 +20978,7 @@ function OverviewTab({
 
 // ─── ADD PARTICIPANTS MODAL ───────────────────────────────────────────────────
 const INVITE_MODULES = ["Leads", "Contacts", "Vendors", "Custom Module 1"];
-// only the modules turned on in the integration's Modules You Can Invite section
+// only the modules turned on in the integration's Who Can Participate From CRM section
 function inviteModulesEnabled() {
   const on = window.INVITE_ENABLED_MODULES;
   if (!on || !on.length) return INVITE_MODULES;

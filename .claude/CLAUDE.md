@@ -67,7 +67,7 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
      Invite Modules**, and **Webinar Deal Attribution** (Linear selected by default).
    - **Enabled page**: the same connection details, invite modules and attribution, with
      a dirty-state Save bar.
-2. **Modules You Can Invite**: the list of CRM modules a webinar invite may be sent to. It drives
+2. **Who Can Participate From CRM**: the list of CRM modules a webinar invite may be sent to. It drives
    the module picker in Send Invite — turn a module off here and it disappears there.
 3. **Send Invite** (from a scheduled webinar): record picker (module dropdown → records)
    → Next → **Mass Email**, whose Invitation Template is chosen through **Select
@@ -97,7 +97,7 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 | Term | Belongs to | Meaning |
 |---|---|---|
 | Module | CRM | Object type (Leads, Contacts, custom, Zoho Webinar) |
-| Modules You Can Invite | Integration | Which modules a webinar invite can be sent to |
+| Who Can Participate From CRM | Integration | Which modules a webinar invite can be sent to |
 | Registrant | Webinar | Someone who signed up; becomes attendee or absentee |
 | Template Type | Integration | Which lifecycle email a template is for |
 | Join URL / Registration Link / Recording Link | Webinar | Per-registrant links a template can carry |
@@ -125,6 +125,16 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **"Modules You Can Invite" renamed to "Who Can Participate From CRM"**
+  (branch `templates-flow`), on the setup page, the enabled page and the two code comments
+  that named it. The old name described the data structure; the new one describes the
+  decision — who is in the room, and that they come from CRM. The heading and subline
+  swapped jobs: the heading now carries the intent, the subline the mechanism ("Pick the
+  CRM modules your webinar invites can go to. Turn one off and it disappears from the
+  module list in Send Invite."). Note for future naming: this setting gates who can be
+  *invited*, not who can *attend* — anyone with the public registration link can still
+  join — so the subline has to keep saying "invites" even though the heading says
+  "participate". Why: the user picked this from a slate.
 - 2026-09-08 — **Integration intro page: the action is "Setup", and Case 2 is the demo
   default** (branch `templates-flow`). The introduction page's top-right action said
   "Enable Integration", but it doesn't enable anything — it opens the setup form, and
