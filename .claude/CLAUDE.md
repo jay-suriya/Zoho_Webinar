@@ -125,6 +125,17 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **Only person-shaped modules are listed** (both branches). After the locked
+  Leads and Contacts, the picker held Accounts, Potentials, Cases, Campaigns and Meetings
+  — a company, a deal, a ticket, a campaign, an event. None is a person, so none can
+  participate, which is the only question this section asks. They are replaced by the
+  modules a business builds to hold people, named for who they hold: Vendors, Donors,
+  Volunteers, Members, Students, Alumni, Partners, Speakers, Referrals, Patients,
+  Subscribers. Placeholder names went too. Side effect worth knowing: the React
+  `INVITE_MODULES` for Send Invite is still `["Leads","Contacts","Vendors","Custom Module
+  1"]`, and `inviteModulesEnabled()` intersects it with this list — so Custom Module 1 can
+  no longer be switched on, and the Send Invite dropdown offers Leads and Contacts until
+  Vendors is turned on. Why: the user asked for individuals only.
 - 2026-09-08 — **"Sync past webinars?" is a Yes/No radio pair, not a dropdown** (both
   branches). A picklist for a binary question hid one of the two answers behind a click.
   The radios are the control now, with **Yes** preselected; a hidden input keeps the id
