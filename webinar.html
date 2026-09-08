@@ -7397,10 +7397,14 @@ function integToggleAttrib() {
 // are mandatory: they are the two modules a webinar audience is actually built
 // from, so they are checked and cannot be turned off. Everything else is opt-in.
 var IM_LOCKED = ['Leads', 'Contacts'];
-var IM_MODULES = ['Leads', 'Contacts', 'Accounts', 'Potentials', 'Vendors', 'Cases',
-                  'Campaigns', 'Meetings', 'Custom Module 1', 'Donor Management',
-                  'Donations', 'Volunteers', 'Nonprofits Campaigns', 'Community Budgets',
-                  'Customer Visits', 'Referral', 'AI Creative Module', 'Org test'];
+// Only modules whose records are individuals can take part in a webinar, so the
+// list is Leads and Contacts followed by the people-shaped modules a business
+// tends to build — named for who they hold. Accounts, Potentials, Cases,
+// Campaigns and Meetings are deliberately absent: a company, a deal, a ticket
+// and a campaign are not people and cannot attend anything.
+var IM_MODULES = ['Leads', 'Contacts', 'Vendors', 'Donors', 'Volunteers', 'Members',
+                  'Students', 'Alumni', 'Partners', 'Speakers', 'Referrals',
+                  'Patients', 'Subscribers'];
 window.INVITE_ENABLED_MODULES = IM_LOCKED.slice();
 
 function imIsLocked(m) { return IM_LOCKED.indexOf(m) !== -1; }
