@@ -125,6 +125,20 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **Selecting a template in the gallery lists it under Templates** (branch 1).
+  Picking a card in the Email Notifications gallery only flipped the "In use" badge — the
+  use case's seeded customs ("Long-form invite", "twsd") existed in `TPL_UC_STATE` and
+  nowhere else, so a template you had just chosen could not be found in Setup ▸ Templates.
+  `ucSelect` now calls `ucEnsureListRow`, which adds a Zoho Webinar row carrying the use
+  case's Email Type unless that name is already listed. `UC_DEFAULT_ROW_NAME` maps each
+  use case's Default to the row it already has in `TPLPAGE_WEBINAR_ROWS`, so selecting
+  Default matches instead of adding a second row — note the Default's editor label
+  ("Send Invite Template") is not its list name ("Webinar Invitation Template"), which is
+  why the map is needed. Re-selecting adds nothing. Worth knowing: **Webinar Cancelled**
+  has no shipped row, so selecting its Default is the one case where choosing a Default
+  creates a row — and its type is not in `TPLPAGE_ETYPES`, so the chip shows but the Email
+  Type filter has no entry for it. Why: the user asked that whatever template is selected
+  show up in the template list.
 - 2026-09-08 — **Email Type removed from Create Email Template** (branch `templates-flow`).
   With Zoho Webinar out of that dialog's module list, Email Type had nothing left to
   describe — it named a webinar lifecycle email, and those are created in the gallery now.

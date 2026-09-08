@@ -6700,11 +6700,56 @@ function ucRenderPane() {
   document.getElementById('tpl-uc-pane').innerHTML = html;
 }
 
+// The name each use case's Default carries in Setup ▸ Templates, so selecting it
+// points at the row that is already there instead of adding a second one.
+var UC_DEFAULT_ROW_NAME = {
+  sendInvite: 'Webinar Invitation Template',
+  confirmation: 'Confirmation Template',
+  reminder1: '1st Reminder Template',
+  reminder2: '2nd Reminder Template',
+  reminder3: '3rd Reminder Template',
+  attendeesFollowup: 'Attendees Follow-up Template',
+  absenteesFollowup: 'Absentees Follow-up Template',
+  cancellation: 'Webinar Cancelled Template'
+};
+var UC_ROW_SUBJECT = {
+  sendInvite: 'Sent when you invite CRM records to a webinar',
+  confirmation: 'Sent as soon as someone registers',
+  reminder1: 'Sent before the webinar starts',
+  reminder2: 'Sent before the webinar starts',
+  reminder3: 'Sent before the webinar starts',
+  attendeesFollowup: 'Sent after the webinar to those who attended',
+  absenteesFollowup: 'Sent after the webinar to those who missed it',
+  cancellation: 'Sent to registrants if the webinar is called off'
+};
+// Whatever is picked here has to be findable in Setup ▸ Templates — the Default already
+// has its row, a custom saved through the editor got one on save, but the customs that
+// came with the use case did not. Add the row on selection if it isn't listed yet.
+function ucListRowName(id) {
+  return (id === 'quick') ? (UC_DEFAULT_ROW_NAME[_ucKey] || ucMeta().label) : ucCardName(id);
+}
+function ucRowIsListed(name) {
+  var all = TPLPAGE_CREATED.concat(TPLPAGE_ROWS, TPLPAGE_WEBINAR_ROWS);
+  for (var i = 0; i < all.length; i++) {
+    if (all[i][0] === name && all[i][1] === 'Zoho Webinar') return true;
+  }
+  return false;
+}
+function ucEnsureListRow(id) {
+  var name = ucListRowName(id);
+  if (!name || ucRowIsListed(name)) return false;
+  tplPageAddCreatedRow(name, 'Zoho Webinar', UC_ROW_SUBJECT[_ucKey] || '',
+                       'Public Email Templates', TPLPAGE_ETYPE_BY_KEY[_ucKey] || '');
+  return true;
+}
+
 // ── selecting: takes effect straight away for this use case ──
 function ucSelect(id) {
   ucState().active = id;
+  var added = ucEnsureListRow(id);
   ucRenderPane();
-  ucToast(ucCardName(id) + ' is now the ' + ucMeta().label + ' email.');
+  ucToast(ucCardName(id) + ' is now the ' + ucMeta().label + ' email' +
+          (added ? ', and is listed under Templates.' : '.'));
 }
 function ucCardName(id) {
   if (id === 'quick') return 'Default';
