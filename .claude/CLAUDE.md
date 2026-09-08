@@ -129,12 +129,14 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   (branch `templates-flow`), on the setup page, the enabled page and the two code comments
   that named it. The old name described the data structure; the new one describes the
   decision — who is in the room, and that they come from CRM. The heading and subline
-  swapped jobs: the heading now carries the intent, the subline the mechanism ("Pick the
-  CRM modules your webinar invites can go to. Turn one off and it disappears from the
-  module list in Send Invite."). Note for future naming: this setting gates who can be
-  *invited*, not who can *attend* — anyone with the public registration link can still
-  join — so the subline has to keep saying "invites" even though the heading says
-  "participate". Why: the user picked this from a slate.
+  swapped jobs: the heading carries the intent, the subline the mechanism — "Choose which
+  CRM modules your participants can come from. Turn a module off and its records can no
+  longer be added to a webinar." The word "invite" is deliberately absent from both, at
+  the user's instruction. Worth knowing if you touch this copy: mechanically the setting
+  gates who can be *invited*, not who can *attend* — anyone with the public registration
+  link can still join — so "participate" here reads as intent rather than a literal
+  description of what the toggle controls. Why: the user picked the name from a slate and
+  then asked for the subline without "invite".
 - 2026-09-08 — **Integration intro page: the action is "Setup", and Case 2 is the demo
   default** (branch `templates-flow`). The introduction page's top-right action said
   "Enable Integration", but it doesn't enable anything — it opens the setup form, and
