@@ -125,6 +125,7 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+
 - 2026-09-08 — **Only person-shaped modules are listed** (both branches). After the locked
   Leads and Contacts, the picker held Accounts, Potentials, Cases, Campaigns and Meetings
   — a company, a deal, a ticket, a campaign, an event. None is a person, so none can
