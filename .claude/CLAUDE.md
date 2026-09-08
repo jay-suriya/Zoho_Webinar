@@ -136,6 +136,7 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   type is invitation, plus anything created there (`WEBINAR_CREATED`) and the module
   templates saved for the records being invited (`MODULE_TEMPLATES`), de-duplicated.
   Why: the user wanted the two branches to demo the two sources of truth side by side.
+
 - 2026-09-08 — **Only person-shaped modules are listed** (both branches). After the locked
   Leads and Contacts, the picker held Accounts, Potentials, Cases, Campaigns and Meetings
   — a company, a deal, a ticket, a campaign, an event. None is a person, so none can

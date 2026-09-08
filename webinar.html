@@ -2278,6 +2278,16 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               'All': { count: 34, tf: 'entire history',  detail: '5,120 registrants · 2,890 attendees' }
             };
 
+            // The enabled page mirrors the setup page's Sync past webinars answer.
+            function postSyncPastSet(v) {
+              var r = document.querySelector('input[name="post-sync-past"][value="' + v + '"]');
+              if (r) r.checked = true;
+              window._syncPast = (v === 'yes');
+              window._syncImportScope = (v === 'yes') ? 'webinar' : 'none';
+              if (typeof postDirty === 'function') postDirty();
+            }
+            window.postSyncPastSet = postSyncPastSet;
+
             function postRenderSyncPastData() {
               var yesState = document.getElementById('post-sync-yes-state');
               var noState = document.getElementById('post-sync-no-state');
@@ -2386,6 +2396,9 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               var didNotSync = (window._syncImportScope === 'none');
               window._postSyncTimeframe = window._syncTimeframe || '18M';
               window._postSyncImported = !!(syncApplies && !didNotSync);
+              // carry the answer from the setup form onto the enabled page
+              var pr = document.querySelector('input[name="post-sync-past"][value="' + (syncPast ? 'yes' : 'no') + '"]');
+              if (pr) pr.checked = true;
               postRenderSyncPastData();
 
               // Navigate to the post-activation enabled panel
@@ -2747,6 +2760,21 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                   <div style="display:flex;align-items:center;gap:24px;">
                     <label style="font-size:13px;color:#666;min-width:80px;">Organisation</label>
                     <input type="text" id="post-org-value" value="Acme Corp Webinars" readonly style="flex:1;padding:9px 14px;border:1px solid #e0e4ef;border-radius:6px;font-size:13px;outline:none;background:#fafafa;color:#444;font-family:inherit;">
+                  </div>
+                  <!-- The answer given during setup, still changeable here like the rest
+                       of this page; it feeds the same dirty-state Save bar. -->
+                  <div style="display:flex;align-items:center;gap:24px;">
+                    <label style="font-size:13px;color:#666;min-width:80px;">Sync past webinars</label>
+                    <div style="display:flex;align-items:center;gap:28px;flex:1;">
+                      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#313949;cursor:pointer;">
+                        <input type="radio" name="post-sync-past" value="yes" checked onchange="postSyncPastSet('yes')" style="accent-color:#C2185B;width:15px;height:15px;margin:0;cursor:pointer;">
+                        <span>Yes</span>
+                      </label>
+                      <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#313949;cursor:pointer;">
+                        <input type="radio" name="post-sync-past" value="no" onchange="postSyncPastSet('no')" style="accent-color:#C2185B;width:15px;height:15px;margin:0;cursor:pointer;">
+                        <span>No</span>
+                      </label>
+                    </div>
                   </div>
                 </div>
 
