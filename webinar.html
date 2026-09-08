@@ -670,11 +670,10 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#202123" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         <span style="font-size:21px;font-weight:800;color:#202123;">Email Notifications</span>
       </span>
-      <span id="tpl-uc-chip" style="display:flex;align-items:center;gap:8px;"></span>
     </div>
     <button onclick="return false" style="padding:9px 20px;border:1px solid #5464F2;border-radius:8px;background:#F0F1FF;color:#5464F2;font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;">Insert HTML / Plain Text</button>
   </div>
-  <div id="tpl-uc-note" style="flex-shrink:0;padding:0 26px 18px;font-size:13px;color:#616E88;line-height:1.6;max-width:1100px;"></div>
+  <div id="tpl-uc-note" style="flex-shrink:0;padding:0 26px 18px;font-size:13px;color:#616E88;line-height:1.6;max-width:1100px;">You can customize the email that will be sent to your attendees as well as create new templates to match your organizational preferences. You can also choose from our list of pre-defined templates based on your needs.</div>
   <div style="flex:1;display:flex;overflow:hidden;border-top:1px solid #E8EAED;">
     <div id="tpl-uc-rail" style="width:250px;flex-shrink:0;border-right:1px solid #E8EAED;overflow-y:auto;"></div>
     <div id="tpl-uc-pane" style="flex:1;overflow-y:auto;padding:26px 34px 60px;"></div>
@@ -6589,11 +6588,8 @@ function ucApplyType() {
 
 function ucRender() {
   ucApplyType();
-  var m = ucMeta();
-  document.getElementById('tpl-uc-chip').innerHTML =
-    '<span style="font-size:12.5px;font-weight:600;color:#5464F2;background:#F0F1FF;border:1px solid #A3ACFF;border-radius:12px;padding:3px 12px;">' + m.label + '</span>' +
-    '<span style="font-size:12.5px;color:#8C91AB;">' + (TPL_TYPE_BY_KEY[_ucKey] || '') + '</span>';
-  document.getElementById('tpl-uc-note').textContent = m.note;
+  // the header carries one standing line about this screen — the use case is already
+  // named by the rail, so the chip and the type text were saying it a third time
   document.getElementById('tpl-uc-rail').innerHTML = TPL_USECASES.map(function(u) {
     var on = u.key === _ucKey;
     return '<div onclick="ucSwitch(\'' + u.key + '\')" ' +
@@ -6668,13 +6664,21 @@ function ucRenderPane() {
       }) +
     '</div></div>';
 
-  // ── Custom Templates — what has been saved under this use case ──
-  html += '<div style="margin-bottom:38px;">' + ucSectionHead('Custom Templates', st.customs.length || null);
-  if (!st.customs.length) {
-    html += '<div style="font-size:13.5px;color:#8C91AB;border:1px dashed #D6D6E3;border-radius:8px;padding:26px 22px;max-width:640px;">' +
-      'Nothing saved yet for ' + ucMeta().label + '. Start from one of the Basic layouts below and it will be saved here.</div>';
-  } else {
-    html += '<div style="display:flex;flex-wrap:wrap;gap:26px;">' + st.customs.map(function(c, i) {
+  // ── Custom Templates — the Default leads the group, then what has been saved here ──
+  // The Default is a choice for this use case like any other, so it is offered in both
+  // groups rather than only in Quick Templates.
+  html += '<div style="margin-bottom:38px;">' + ucSectionHead('Custom Templates', st.customs.length + 1);
+  html += '<div style="display:flex;flex-wrap:wrap;gap:26px;">' +
+    ucCard({
+      live: st.active === 'quick',
+      thumb: ucThumb(false, st.active === 'quick'),
+      caption: 'Default',
+      name: 'Default',
+      onclick: "ucSelect('quick')",
+      preview: "ucPreviewDefault()",
+      edit: "ucEditDefault()"
+    }) +
+    st.customs.map(function(c, i) {
       var nm = String(c.name).replace(/'/g, "\\'");
       return ucCard({
         live: st.active === 'custom:' + i,
@@ -6686,7 +6690,6 @@ function ucRenderPane() {
         edit: "ucEditCustom(" + i + ")"
       });
     }).join('') + '</div>';
-  }
   html += '</div>';
 
   // ── Basic — start a new one for this use case ──

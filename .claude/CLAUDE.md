@@ -125,6 +125,20 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **Email Notifications header trimmed, Default offered in both groups**
+  (branch 1). The header repeated itself three times: the rail already names the use case,
+  and next to the title sat a blue pill with that same label plus the type name in grey.
+  Both are gone; the line under the title is now one standing sentence about what the screen
+  is for ("You can customize the email that will be sent to your attendees…"), static in the
+  markup, so `ucRender` no longer writes a header at all. The per-use-case note went with
+  the chip — worth knowing, because that note was where the link rule was spelled out
+  ("It must carry the Recording Link"); the rule is still enforced on save, just no longer
+  stated here. **Custom Templates now leads with the Default card** as well as Quick
+  Templates: it is a choice for the use case like any other, both cards select `'quick'` and
+  show "In use" together, and the count badge is `customs.length + 1`. The "Nothing saved
+  yet…" empty state is therefore unreachable and was removed — the group always has at
+  least the Default. Why: the user asked for the Default in both groups, for that
+  paragraph, and for the two duplicated header texts to go.
 - 2026-09-08 — **Create Email Template asks for the module, and Email Type with it**
   (branch 1). `+ New Template` went straight to the gallery whenever the list was filtered
   to Zoho Webinar, so the module was never actually chosen. It now always opens the dialog:
