@@ -136,6 +136,16 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   type is invitation, plus anything created there (`WEBINAR_CREATED`) and the module
   templates saved for the records being invited (`MODULE_TEMPLATES`), de-duplicated.
   Why: the user wanted the two branches to demo the two sources of truth side by side.
+- 2026-09-08 — **Who Can Participate From CRM is now the standard CRM module picker**
+  (both branches). The chips + search + grouped-grid picker is replaced by the reference
+  pattern: one card, a Search field, a flat scrollable checkbox list. Heading and subline
+  kept, everything below them new. **Leads and Contacts are mandatory** — checked, red
+  asterisk, muted label, no hover or pointer, and `imToggle()` returns early for anything
+  in `IM_LOCKED`, so they cannot be turned off. Everything else starts unchecked, so
+  `INVITE_ENABLED_MODULES` defaults to just those two and the Send Invite module dropdown
+  narrows to match. Gone with the old UI: "Select all", "Clear", the selected-count chips,
+  the "modules without an email field" footnote, plus `IM_GROUPS` and `imSelectAll`.
+  Why: the user supplied the reference and asked for the two locked modules.
 - 2026-09-08 — **"Modules You Can Invite" renamed to "Who Can Participate From CRM"**
   (both branches now), on the setup page, the enabled page and the two code comments that
   named it. The old name described the data structure; the new one describes the decision —

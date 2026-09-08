@@ -1926,18 +1926,14 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                 <h2 style="font-size:22px;font-weight:800;color:#111;margin:0 0 6px;letter-spacing:-.2px;">Who Can Participate From CRM</h2>
                 <div style="font-size:13px;color:#666;line-height:1.6;">Choose which CRM modules your participants can come from. Turn a module off and its records can no longer be added to a webinar.</div>
               </div>
-              <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;padding-top:6px;">
-                <span onclick="imSelectAll(true)" style="font-size:12.5px;color:#2255cc;cursor:pointer;font-weight:600;">Select all</span>
-                <span onclick="imSelectAll(false)" style="font-size:12.5px;color:#2255cc;cursor:pointer;font-weight:600;">Clear</span>
+            </div>
+            <div style="background:#fff;border:1px solid #e0e4ef;border-radius:14px;padding:18px;max-width:460px;margin-top:18px;">
+              <div style="display:flex;align-items:center;gap:10px;border:1px solid #d8dce9;border-radius:10px;padding:10px 14px;margin-bottom:6px;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa0b8" stroke-width="2.4"><circle cx="11" cy="11" r="7.5"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <input id="im2-search" oninput="imRender()" placeholder="Search" style="border:none;outline:none;font-size:14.5px;flex:1;color:#313949;font-family:inherit;background:transparent;">
               </div>
+              <div id="im2-list" style="max-height:300px;overflow-y:auto;"></div>
             </div>
-            <div id="im2-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 14px;"></div>
-            <div style="display:flex;align-items:center;gap:8px;border:1px solid #e0e4ef;border-radius:8px;padding:8px 12px;max-width:320px;margin-bottom:14px;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9aa0b8" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              <input id="im2-search" oninput="imRender()" placeholder="Search modules" style="border:none;outline:none;font-size:13px;flex:1;color:#333;font-family:inherit;background:transparent;">
-            </div>
-            <div id="im2-list" style="max-height:250px;overflow-y:auto;border:1px solid #eef0f6;border-radius:10px;padding:6px 0;"></div>
-            <div style="font-size:12px;color:#8C91AB;margin-top:10px;">Modules without an email field can't receive invites and aren't listed.</div>
 
             <!-- SECTION 3 wrapper (now shown together with section 1 on the same page) -->
             <div id="setup-section-3" style="display:block;">
@@ -2791,25 +2787,15 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                     <div style="font-size:15px;font-weight:700;color:#111;">Who Can Participate From CRM</div>
                     <p style="font-size:13px;color:#666;margin:6px 0 0;line-height:1.6;">Choose which CRM modules your participants can come from. Turn a module off and its records can no longer be added to a webinar.</p>
                   </div>
-                  <div style="display:flex;align-items:center;gap:14px;flex-shrink:0;padding-top:2px;">
-                    <span onclick="imSelectAll(true)" style="font-size:12.5px;color:#2255cc;cursor:pointer;font-weight:600;">Select all</span>
-                    <span onclick="imSelectAll(false)" style="font-size:12.5px;color:#2255cc;cursor:pointer;font-weight:600;">Clear</span>
+                </div>
+
+                <div style="background:#fff;border:1px solid #e0e4ef;border-radius:14px;padding:18px;max-width:460px;margin-top:18px;">
+                  <div style="display:flex;align-items:center;gap:10px;border:1px solid #d8dce9;border-radius:10px;padding:10px 14px;margin-bottom:6px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa0b8" stroke-width="2.4"><circle cx="11" cy="11" r="7.5"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input id="im-search" oninput="imRender()" placeholder="Search" style="border:none;outline:none;font-size:14.5px;flex:1;color:#313949;font-family:inherit;background:transparent;">
                   </div>
+                  <div id="im-list" style="max-height:300px;overflow-y:auto;"></div>
                 </div>
-
-                <!-- what is on right now -->
-                <div id="im-chips" style="display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 14px;"></div>
-
-                <!-- search -->
-                <div style="display:flex;align-items:center;gap:8px;border:1px solid #e0e4ef;border-radius:8px;padding:8px 12px;max-width:320px;margin-bottom:14px;">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9aa0b8" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                  <input id="im-search" oninput="imRender()" placeholder="Search modules" style="border:none;outline:none;font-size:13px;flex:1;color:#333;font-family:inherit;background:transparent;">
-                </div>
-
-                <!-- grouped, scrollable list -->
-                <div id="im-list" style="max-height:260px;overflow-y:auto;border:1px solid #eef0f6;border-radius:10px;padding:6px 0;"></div>
-
-                <div style="font-size:12px;color:#8C91AB;margin-top:10px;">Modules without an email field can't receive invites and aren't listed.</div>
               </div>
 
               <!-- SECTION 3: Attribution -->
@@ -7392,68 +7378,62 @@ function integToggleAttrib() {
 
 
 // ── Who Can Participate From CRM — which CRM modules a webinar invite can go to ───────────
-var IM_GROUPS = [
-  { name: 'Standard', modules: ['Leads', 'Contacts', 'Accounts', 'Potentials', 'Vendors', 'Cases', 'Campaigns', 'Meetings'] },
-  { name: 'Custom',   modules: ['Custom Module 1', 'Donor Management', 'Donations', 'Volunteers', 'Nonprofits Campaigns', 'Community Budgets', 'Customer Visits', 'Referral', 'AI Creative Module', 'Org test', 'Untitless', 'AjB'] }
-];
-window.INVITE_ENABLED_MODULES = ['Leads', 'Contacts', 'Custom Module 1'];
+// The modules a webinar invite can go to, as one flat list — Leads and Contacts
+// are mandatory: they are the two modules a webinar audience is actually built
+// from, so they are checked and cannot be turned off. Everything else is opt-in.
+var IM_LOCKED = ['Leads', 'Contacts'];
+var IM_MODULES = ['Leads', 'Contacts', 'Accounts', 'Potentials', 'Vendors', 'Cases',
+                  'Campaigns', 'Meetings', 'Custom Module 1', 'Donor Management',
+                  'Donations', 'Volunteers', 'Nonprofits Campaigns', 'Community Budgets',
+                  'Customer Visits', 'Referral', 'AI Creative Module', 'Org test'];
+window.INVITE_ENABLED_MODULES = IM_LOCKED.slice();
 
+function imIsLocked(m) { return IM_LOCKED.indexOf(m) !== -1; }
 function imIsOn(m) { return window.INVITE_ENABLED_MODULES.indexOf(m) !== -1; }
 function imToggle(m) {
+  if (imIsLocked(m)) return;              // mandatory — nothing to toggle
   var list = window.INVITE_ENABLED_MODULES;
   var i = list.indexOf(m);
   if (i === -1) list.push(m); else list.splice(i, 1);
   imRender();
   postDirty();
 }
-function imSelectAll(on) {
-  window.INVITE_ENABLED_MODULES = on
-    ? IM_GROUPS.reduce(function(a, g) { return a.concat(g.modules); }, [])
-    : [];
-  imRender();
-  postDirty();
-}
-function imCheckbox(on) {
-  return '<span style="width:16px;height:16px;border-radius:4px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;' +
-    (on ? 'background:#C2185B;border:1px solid #C2185B;color:#fff;font-size:11px;' : 'border:1.5px solid #C0C8E2;background:#fff;') +
+function imCheckbox(on, locked) {
+  var fill = locked ? '#DE7FAC' : '#C2185B';
+  return '<span style="width:18px;height:18px;border-radius:4px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;' +
+    (on ? 'background:' + fill + ';border:1px solid ' + fill + ';color:#fff;font-size:12px;'
+        : 'border:1.5px solid #C0C8E2;background:#fff;') +
     '">' + (on ? '✓' : '') + '</span>';
 }
-window.imToggle = imToggle; window.imSelectAll = imSelectAll;
+window.imToggle = imToggle;
 function imRender() {
   ['im', 'im2'].forEach(function(prefix) {
     if (document.getElementById(prefix + '-list')) imRenderOne(prefix);
   });
 }
 function imRenderOne(prefix) {
-  var chips = document.getElementById(prefix + '-chips');
   var list = document.getElementById(prefix + '-list');
-  if (!chips || !list) return;
-  var sel = window.INVITE_ENABLED_MODULES;
-
-  chips.innerHTML = '<span style="font-size:12.5px;color:#666;font-weight:600;align-self:center;margin-right:2px;">' +
-      sel.length + ' selected' + (sel.length ? ':' : '') + '</span>' +
-    (sel.length
-      ? sel.map(function(m) {
-          return '<span style="display:inline-flex;align-items:center;gap:6px;background:#FDEFF5;border:1px solid #F0C3D6;color:#C2185B;font-size:12.5px;font-weight:600;border-radius:14px;padding:4px 10px;">' + m +
-            '<span onclick="imToggle(\'' + m.replace(/'/g, "\\'") + '\')" style="cursor:pointer;font-size:13px;line-height:1;">×</span></span>';
-        }).join('')
-      : '<span style="font-size:12.5px;color:#8C91AB;">No modules selected — invites can\'t be sent from a webinar.</span>');
-
+  if (!list) return;
   var searchEl = document.getElementById(prefix + '-search');
   var q = ((searchEl && searchEl.value) || '').toLowerCase();
-  var html = IM_GROUPS.map(function(g) {
-    var mods = g.modules.filter(function(m) { return m.toLowerCase().indexOf(q) !== -1; });
-    if (!mods.length) return '';
-    return '<div style="padding:8px 16px 4px;font-size:11px;font-weight:700;color:#8C91AB;text-transform:uppercase;letter-spacing:.06em;">' + g.name + '</div>' +
-      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px 12px;padding:0 10px 8px;">' +
-      mods.map(function(m) {
-        var on = imIsOn(m);
-        return '<div onclick="imToggle(\'' + m.replace(/'/g, "\\'") + '\')" style="display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:6px;cursor:pointer;font-size:13px;color:#333;"' +
-          ' onmouseover="this.style.background=\'#F7F8FC\'" onmouseout="this.style.background=\'transparent\'">' +
-          imCheckbox(on) + '<span>' + m + '</span></div>';
-      }).join('') + '</div>';
+  var mods = IM_MODULES.filter(function(m) { return m.toLowerCase().indexOf(q) !== -1; });
+  if (!mods.length) {
+    list.innerHTML = '<div style="padding:24px;text-align:center;font-size:13.5px;color:#8C91AB;">No modules match that search.</div>';
+    return;
+  }
+  list.innerHTML = mods.map(function(m) {
+    var locked = imIsLocked(m);
+    var on = imIsOn(m);
+    var click = locked ? '' : ' onclick="imToggle(\'' + m.replace(/'/g, "\\'") + '\')"';
+    var hover = locked ? ''
+      : ' onmouseover="this.style.background=\'#F7F8FC\'" onmouseout="this.style.background=\'transparent\'"';
+    return '<div' + click + hover + ' title="' + (locked ? 'Always included' : '') + '" ' +
+      'style="display:flex;align-items:center;gap:12px;padding:11px 6px;border-radius:6px;font-size:14.5px;' +
+      (locked ? 'color:#8C87A8;cursor:default;' : 'color:#313949;cursor:pointer;') + '">' +
+      imCheckbox(on, locked) +
+      '<span>' + m + (locked ? '<span style="color:#FF4D5B;margin-left:1px;">*</span>' : '') + '</span>' +
+      '</div>';
   }).join('');
-  list.innerHTML = html || '<div style="padding:24px;text-align:center;font-size:13px;color:#8C91AB;">No modules match that search.</div>';
 }
 window.imRender = imRender;
 
