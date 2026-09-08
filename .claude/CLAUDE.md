@@ -67,7 +67,7 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
      Invite**, and **Webinar Deal Attribution** (Linear selected by default).
    - **Enabled page**: the same connection details, invite modules and attribution, with
      a dirty-state Save bar.
-2. **Modules You Can Invite**: the list of CRM modules a webinar invite may be sent to. It drives
+2. **Who Can Participate From CRM**: the list of CRM modules a webinar invite may be sent to. It drives
    the module picker in Send Invite — turn a module off here and it disappears there.
 3. **Send Invite** (from a scheduled webinar): record picker (module dropdown → records)
    → Next → **Mass Email**, whose Invitation Template is chosen through **Select
@@ -97,7 +97,7 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 | Term | Belongs to | Meaning |
 |---|---|---|
 | Module | CRM | Object type (Leads, Contacts, custom, Zoho Webinar) |
-| Modules You Can Invite | Integration | Which modules a webinar invite can be sent to |
+| Who Can Participate From CRM | Integration | Which modules a webinar invite can be sent to |
 | Registrant | Webinar | Someone who signed up; becomes attendee or absentee |
 | Template Type | Integration | Which lifecycle email a template is for |
 | Join URL / Registration Link / Recording Link | Webinar | Per-registrant links a template can carry |
@@ -136,6 +136,17 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   type is invitation, plus anything created there (`WEBINAR_CREATED`) and the module
   templates saved for the records being invited (`MODULE_TEMPLATES`), de-duplicated.
   Why: the user wanted the two branches to demo the two sources of truth side by side.
+- 2026-09-08 — **"Modules You Can Invite" renamed to "Who Can Participate From CRM"**
+  (both branches now), on the setup page, the enabled page and the two code comments that
+  named it. The old name described the data structure; the new one describes the decision —
+  who is in the room, and that they come from CRM. Subline: "Choose which CRM modules your
+  participants can come from. Turn a module off and its records can no longer be added to
+  a webinar." The word "invite" is deliberately absent from both, at the user's
+  instruction. Worth knowing if you touch this copy: mechanically the setting gates who
+  can be *invited*, not who can *attend* — anyone with the public registration link can
+  still join — so "participate" reads as intent rather than a literal description of the
+  toggle. Why: the user picked the name from a slate, then asked for the subline without
+  "invite", then asked for both on this branch too.
 - 2026-09-07 — **"Zoho Webinar Invite Modules" renamed to "Modules You Can Invite"**
   (both branches), on the setup page and the enabled page, plus the two code comments that
   named it. The old label repeated the product name on a page you can only reach inside
