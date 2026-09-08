@@ -660,6 +660,29 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   </div>
 </div>
 
+<!-- ═══ Email Notification Gallery — opened from Zoho Webinar > Preferences > Customise Template ═══ -->
+<!-- One screen for the whole lifecycle: the rail switches use case, the pane offers that use
+     case's Default (Quick), the customs saved for it, and the six Basic layouts to start from.
+     Every card carries the type of the use case it sits under, so the link types and merge
+     fields the editor offers are the ones that use case is allowed. -->
+<div id="tpl-uc-gallery" style="display:none;position:fixed;inset:0;z-index:9560;flex-direction:column;background:#fff;font-family:'Zoho Puvi',-apple-system,'Segoe UI',sans-serif;">
+  <div style="height:64px;flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:0 26px;">
+    <div style="display:flex;align-items:center;gap:32px;">
+      <span onclick="closeUsecaseGallery()" style="display:flex;align-items:center;gap:14px;cursor:pointer;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#202123" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span style="font-size:21px;font-weight:800;color:#202123;">Email Notifications</span>
+      </span>
+      <span id="tpl-uc-chip" style="display:flex;align-items:center;gap:8px;"></span>
+    </div>
+    <button onclick="return false" style="padding:9px 20px;border:1px solid #5464F2;border-radius:8px;background:#F0F1FF;color:#5464F2;font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;">Insert HTML / Plain Text</button>
+  </div>
+  <div id="tpl-uc-note" style="flex-shrink:0;padding:0 26px 18px;font-size:13px;color:#616E88;line-height:1.6;max-width:1100px;"></div>
+  <div style="flex:1;display:flex;overflow:hidden;border-top:1px solid #E8EAED;">
+    <div id="tpl-uc-rail" style="width:250px;flex-shrink:0;border-right:1px solid #E8EAED;overflow-y:auto;"></div>
+    <div id="tpl-uc-pane" style="flex:1;overflow-y:auto;padding:26px 34px 60px;"></div>
+  </div>
+</div>
+
 <!-- ═══ Insert Link — opened from the template editor toolbar ═══ -->
 <div id="tpl-link-modal" style="display:none;position:fixed;inset:0;z-index:9600;align-items:center;justify-content:center;background:rgba(49,57,73,0.5);">
   <div style="background:#fff;border-radius:10px;width:520px;box-shadow:0 4px 9px rgba(49,57,73,0.6);overflow:hidden;font-family:'Zoho Puvi',-apple-system,'Segoe UI',sans-serif;">
@@ -5328,7 +5351,7 @@ var WEBINAR_TEMPLATES = [
   ['3rd Reminder Template',          'Jay - ', '05 Dec 2025', '02 Jan 2026'],
   ['Attendees Follow-up Template',   'Jay - ', '05 Dec 2025', '02 Jan 2026'],
   ['Absentees Follow-up Template',   'Jay - ', '05 Dec 2025', '02 Jan 2026'],
-  ['Meetings Cancelled Template',    'Jay - ', '05 Dec 2025', '02 Jan 2026']
+  ['Webinar Cancelled Template',     'Jay - ', '05 Dec 2025', '02 Jan 2026']
 ];
 var MODFIELDS_SIDEBAR = ['Leads','Contacts','Quotes','Deals','Products','Appointments','Services','Price Books','Invoices','Sales Orders','Purchase Orders','Calls','Campaigns','Tasks','Zoho Webinar','Recruit','Employees','Zoho ShowTime','Work Items','Contact vs Accounts','testing Module for Import','Import Csv','Zoho Import','Nmeee','Macbook Pro 3','Visits'];
 var MODFIELDS_TABS = ['Layouts','Layout Rules','Validation Rules','Fields','Buttons','Preferences','Summary'];
@@ -5552,19 +5575,20 @@ function tplPagePickModule(m) {
   tplPageRenderRows();
 }
 
-// The webinar's lifecycle templates (confirmation, reminders, follow-ups) are NOT listed
-// here — they belong to the module and are managed in Zoho Webinar > Preferences.
+// Creating a template starts from the webinar's own emails: the Email Notification
+// gallery's rail picks the use case, and that stamps the type — so there is no
+// module + type dialog on the way in any more.
 function tplPageNewTemplate() {
-  var mod = (tplPageModule && tplPageModule !== 'All Modules') ? tplPageModule : 'Zoho Webinar';
-  if (window.openCreateTemplateModal) openCreateTemplateModal(mod);
+  if (window.openUsecaseGallery) openUsecaseGallery('sendInvite');
 }
 // templates created from this page, newest first, so a save is visible straight away
 var TPLPAGE_CREATED = [];
-function tplPageAddCreatedRow(name, module, subject, folder) {
+function tplPageAddCreatedRow(name, module, subject, folder, etype) {
   var d = new Date();
   var when = d.toLocaleString('en-US', { month: 'short', day: 'numeric' });
   var row = [name, module, subject || '\u2014', 'Jay', when, '', '', ''];
   row.folder = folder || 'Public Email Templates';
+  row.etype = etype || '';
   TPLPAGE_CREATED.unshift(row);
   if (typeof tplPageRenderRows === 'function' && document.getElementById('tplpage-tbody')) {
     tplPageRenderRows();
@@ -5582,7 +5606,8 @@ var TPLPAGE_ETYPE_BY_KEY = {
   reminder2: '2nd Reminder',
   reminder3: '3rd Reminder',
   attendeesFollowup: 'Attendees Follow-up',
-  absenteesFollowup: 'Absentees Follow-up'
+  absenteesFollowup: 'Absentees Follow-up',
+  cancellation: 'Webinar Cancelled'
 };
 var tplPageEType = 'All';
 function tplPageETypeOf(name) {
@@ -5644,7 +5669,7 @@ function tplPageRows() {
   }
   // the Email Type filter only bites while its column is on screen
   if (tplPageETypeColumnOn() && tplPageEType !== 'All') {
-    rows = rows.filter(function(r) { return tplPageETypeOf(r[0]) === tplPageEType; });
+    rows = rows.filter(function(r) { return (r.etype || tplPageETypeOf(r[0])) === tplPageEType; });
   }
   return rows;
 }
@@ -5678,8 +5703,8 @@ function tplPageRenderRows() {
         '</div>' +
       '</td>' +
       (tplPageETypeColumnOn()
-        ? '<td style="padding:14px 16px;">' + (tplPageETypeOf(r[0])
-            ? '<span style="display:inline-block;font-size:12.5px;font-weight:600;color:#5464F2;background:#F0F1FF;border:1px solid #D2D7FF;border-radius:12px;padding:2px 10px;">' + tplPageETypeOf(r[0]) + '</span>'
+        ? '<td style="padding:14px 16px;">' + ((r.etype || tplPageETypeOf(r[0]))
+            ? '<span style="display:inline-block;font-size:12.5px;font-weight:600;color:#5464F2;background:#F0F1FF;border:1px solid #D2D7FF;border-radius:12px;padding:2px 10px;">' + (r.etype || tplPageETypeOf(r[0])) + '</span>'
             : '<span style="color:#bbb;">&mdash;</span>') + '</td>'
         : '') +
       '<td style="padding:14px 16px;"><div style="color:#111;">' + r[3] + '</div><div style="color:#8b7bd8;font-size:12.5px;">' + r[4] + '</div></td>' +
@@ -5700,7 +5725,9 @@ var TPL_KEY_BY_NAME = {
   '2nd Reminder Template': 'reminder2',
   '3rd Reminder Template': 'reminder3',
   'Attendees Follow-up Template': 'attendeesFollowup',
-  'Absentees Follow-up Template': 'absenteesFollowup'
+  'Absentees Follow-up Template': 'absenteesFollowup',
+  'Webinar Cancelled Template': 'cancellation',
+  'Meetings Cancelled Template': 'cancellation'
 };
 
 function tplHeaderHtml() {
@@ -5804,6 +5831,20 @@ var TPL_META = {
         tplFooterHtml();
     }
   },
+  cancellation: {
+    label: 'Webinar Cancelled Template',
+    body: function() {
+      return tplHeaderHtml() +
+        '<p style="margin:0 0 4px;">Hi #Registrant Name,</p>' +
+        '<p style="margin:0 0 18px;">We\'re sorry to let you know that <b>#Webinar Title</b>, scheduled for <b>#Webinar Date &amp; Time</b>, has been cancelled.</p>' +
+        '<div style="border:1px solid #d6d6e3;border-top:3px solid #FF5D5A;border-radius:6px;padding:18px 20px;margin-bottom:18px;">' +
+          '<div style="font-size:15px;font-weight:700;margin-bottom:8px;">#Webinar Title</div>' +
+          '<div style="font-size:13px;color:#616E88;">Your registration has been cancelled. You do not need to do anything \u2014 nothing will be charged and no join link will be sent.</div>' +
+        '</div>' +
+        '<p style="margin:0 0 10px;">Apologies for the change of plan. #Webinar Organiser will be in touch if this webinar is rescheduled.</p>' +
+        tplFooterHtml();
+    }
+  },
   absenteesFollowup: {
     label: 'Absentees Follow-up Template',
     body: function() {
@@ -5837,6 +5878,11 @@ function closeTemplateEditor() {
   _tplNewModule = null;
   _tplMergeOrderOverride = null;
   tplHideMergeDropdown();
+  if (typeof _ucReturn !== 'undefined' && _ucReturn) {
+    _ucReturn = false;
+    _ucSlot = null;
+    openUsecaseGallery(_ucKey);
+  }
 }
 
 // ── New module template (created from the Send Invite picker) ──────────────
@@ -5880,6 +5926,25 @@ function tplHeaderName()    { return (document.getElementById('modfields-tpl-tit
 function tplHeaderSubject() { return (document.getElementById('modfields-tpl-subtitle').value || '').trim(); }
 
 function tplSaveClick() {
+  // opened from the Email Notification gallery — same required-link rule, and the
+  // gallery's use case supplies the type
+  if (typeof _ucReturn !== 'undefined' && _ucReturn) {
+    var ucMissing = tplMissingRequiredLink();
+    if (ucMissing) {
+      tplShowSaveError('A ' + _tplTypeName + ' template must contain a ' + ucMissing + '. Insert one before saving.');
+      return;
+    }
+    if (!_ucSlot) {                       // editing a card that already exists
+      var editedName = tplHeaderName() || ucMeta().label;
+      closeTemplateEditor();
+      ucToast('Changes to "' + editedName + '" saved.');
+      return;
+    }
+    document.getElementById('tpl-savename').value = tplHeaderName();
+    tplResetFolderPicker();
+    document.getElementById('tpl-savemodal').style.display = 'flex';
+    return;
+  }
   if (!_tplNewModule) { closeTemplateEditor(); return; }
   var missing = tplMissingRequiredLink();
   if (missing) {
@@ -6000,6 +6065,26 @@ function tplSaveConfirm() {
   var folder = _tplSaveFolder;
   var subject = tplHeaderSubject();
   document.getElementById('tpl-savemodal').style.display = 'none';
+  // created from the gallery: it becomes a Custom template for that use case, and
+  // joins the Templates list like anything else created here
+  if (_ucSlot) {
+    var st = TPL_UC_STATE[_ucSlot];
+    if (st.customs.some(function(c) { return c.name.toLowerCase() === name.toLowerCase(); })) {
+      tplShowSaveError('A ' + ucMeta().label + ' template named "' + name + '" already exists.');
+      document.getElementById('tpl-savemodal').style.display = 'flex';
+      return;
+    }
+    st.customs.push({ name: name, subject: subject, folder: folder });
+    st.active = 'custom:' + (st.customs.length - 1);
+    tplPageAddCreatedRow(name, 'Zoho Webinar', subject, folder, TPLPAGE_ETYPE_BY_KEY[_ucSlot]);
+    _ucKey = _ucSlot;
+    _ucSlot = null;
+    _ucReturn = false;
+    closeTemplateEditor();
+    openUsecaseGallery(_ucKey);
+    ucToast('"' + name + '" saved and set as the ' + ucMeta().label + ' email.');
+    return;
+  }
   closeTemplateEditor();
   if (_ctSlot) {
     // created from a step in the create-webinar form: back to that step's list
@@ -6086,6 +6171,10 @@ function closeTemplatePreview() {
   document.getElementById('modfields-template-preview').style.display = 'none';
   _tplPreviewKey = null;
   _tplPreviewModuleTpl = null;
+  if (typeof _ucReturn !== 'undefined' && _ucReturn) {
+    _ucReturn = false;
+    openUsecaseGallery(_ucKey);
+  }
 }
 function tplPreviewEdit() {
   if (_tplPreviewModuleTpl) {
@@ -6095,7 +6184,10 @@ function tplPreviewEdit() {
     return;
   }
   var key = _tplPreviewKey;
+  var back = (typeof _ucReturn !== 'undefined') && _ucReturn;
+  _ucReturn = false;
   closeTemplatePreview();
+  _ucReturn = back;
   openTemplateEditor(key);
 }
 
@@ -6413,6 +6505,314 @@ function tplInsertButton() {
 }
 
 
+// ── Email Notification Gallery (Zoho Webinar > Preferences > Customise Template) ──
+// The eight lifecycle emails in one screen. The rail picks the use case; the pane shows
+// what that use case can be set to. Selection is immediate — clicking a Default or Custom
+// card makes it the live template for that use case.
+var TPL_USECASES = [
+  { key: 'sendInvite',        label: 'Send Invite',              note: 'Sent when you invite CRM records to the webinar. It goes out before anyone has registered, so it carries the Registration Link and cannot use registrant fields.' },
+  { key: 'confirmation',      label: 'Registration Confirmation', note: 'Sent the moment someone registers. It must carry the Join URL, and can merge the registrant\'s own details.' },
+  { key: 'reminder1',         label: 'Reminder 1',               note: 'Sent before the webinar starts, at the interval set on the webinar. It must carry the Join URL.' },
+  { key: 'reminder2',         label: 'Reminder 2',               note: 'The second nudge before the webinar starts. It must carry the Join URL.' },
+  { key: 'reminder3',         label: 'Reminder 3',               note: 'The last reminder before the webinar starts. It must carry the Join URL.' },
+  { key: 'attendeesFollowup', label: 'Attendees Follow-up',      note: 'Sent after the webinar to everyone who attended. It must carry the Recording Link.' },
+  { key: 'absenteesFollowup', label: 'Absentees Follow-up',      note: 'Sent after the webinar to registrants who did not turn up. It must carry the Recording Link.' },
+  { key: 'cancellation',      label: 'Webinar Cancelled',        note: 'Sent to registrants if the webinar is called off. There is nothing left to join, register for or watch, so it carries no webinar links.' }
+];
+
+// per use case: which card is live, plus the customs saved under it
+var TPL_UC_STATE = {};
+(function seedUsecaseState() {
+  TPL_USECASES.forEach(function(u) { TPL_UC_STATE[u.key] = { active: 'quick', customs: [] }; });
+  // a couple already saved, so the Custom Templates group reads true to life
+  TPL_UC_STATE.sendInvite.customs   = [{ name: 'Long-form invite' }, { name: 'registration url' }];
+  TPL_UC_STATE.confirmation.customs = [{ name: 'twsd' }, { name: 'registration url' }];
+})();
+
+var _ucKey = 'sendInvite';
+function ucState() { return TPL_UC_STATE[_ucKey] || TPL_UC_STATE.sendInvite; }
+function ucMeta() { return TPL_USECASES.filter(function(u) { return u.key === _ucKey; })[0] || TPL_USECASES[0]; }
+
+function openUsecaseGallery(key) {
+  _ucKey = (key && TPL_UC_STATE[key]) ? key : 'sendInvite';
+  document.getElementById('tpl-uc-gallery').style.display = 'flex';
+  ucRender();
+}
+function closeUsecaseGallery() {
+  document.getElementById('tpl-uc-gallery').style.display = 'none';
+}
+function ucSwitch(key) {
+  if (!TPL_UC_STATE[key]) return;
+  _ucKey = key;
+  ucRender();
+  document.getElementById('tpl-uc-pane').scrollTop = 0;
+}
+
+// the editor's rules follow the use case, not the page you came from
+function ucApplyType() {
+  _tplTypeName = TPL_TYPE_BY_KEY[_ucKey] || 'Webinar Invitation';
+  _tplMergeOrderOverride = null;
+  tplMergeModule = tplDefaultMergeModule();
+}
+
+function ucRender() {
+  ucApplyType();
+  var m = ucMeta();
+  document.getElementById('tpl-uc-chip').innerHTML =
+    '<span style="font-size:12.5px;font-weight:600;color:#5464F2;background:#F0F1FF;border:1px solid #A3ACFF;border-radius:12px;padding:3px 12px;">' + m.label + '</span>' +
+    '<span style="font-size:12.5px;color:#8C91AB;">' + (TPL_TYPE_BY_KEY[_ucKey] || '') + '</span>';
+  document.getElementById('tpl-uc-note').textContent = m.note;
+  document.getElementById('tpl-uc-rail').innerHTML = TPL_USECASES.map(function(u) {
+    var on = u.key === _ucKey;
+    return '<div onclick="ucSwitch(\'' + u.key + '\')" ' +
+      'onmouseover="if(!this.dataset.on)this.style.background=\'#F2F4FF\'" onmouseout="if(!this.dataset.on)this.style.background=\'transparent\'" ' +
+      (on ? 'data-on="1" ' : '') +
+      'style="padding:16px 26px;border-bottom:1px solid #EFEFF5;cursor:pointer;font-size:15px;' +
+      (on ? 'font-weight:700;color:#202123;background:#F5F6FB;' : 'color:#434D5E;') + '">' + u.label + '</div>';
+  }).join('');
+  ucRenderPane();
+}
+
+// thumbnail for a ready-made email (Quick / Custom) — a header, a hero, a couple of lines
+function ucThumb(showZia, live) {
+  return '<div style="background:#fff;height:100%;padding:16px 18px;position:relative;">' +
+      (showZia ? '<div style="position:absolute;top:14px;right:' + (live ? '50px' : '16px') + ';width:22px;height:22px;border-radius:50%;border:3px solid #F5973A;border-right-color:transparent;transform:rotate(-45deg);"></div>' : '') +
+      '<div style="height:9px;width:44%;background:#E8E8EE;border-radius:4px;margin-bottom:7px;"></div>' +
+      '<div style="height:9px;width:66%;background:#E8E8EE;border-radius:4px;margin-bottom:14px;"></div>' +
+      '<div style="height:82px;background:#EDEDF2;border-radius:3px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;">' +
+        '<svg width="34" height="34" viewBox="0 0 24 24" fill="#fff"><path d="M21 19V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2zM8.5 11a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM6 17l3.5-4.5 2.5 3L15 12l3 5H6z"/></svg>' +
+      '</div>' +
+      '<div style="height:8px;width:88%;background:#E8E8EE;border-radius:4px;margin-bottom:7px;"></div>' +
+      '<div style="height:8px;width:62%;background:#E8E8EE;border-radius:4px;"></div>' +
+    '</div>';
+}
+
+// one card: thumbnail, an in-card caption, the name underneath, a check badge when live
+function ucCard(opts) {
+  var live = opts.live;
+  return '<div style="width:190px;">' +
+      '<div onclick="' + opts.onclick + '" ' +
+        'onmouseover="this.querySelector(\'.uc-acts\').style.opacity=1" onmouseout="this.querySelector(\'.uc-acts\').style.opacity=0" ' +
+        'style="position:relative;height:262px;border:' + (live ? '2px solid #5464F2' : '1px solid #E0E1E8') + ';border-radius:6px;background:#fff;overflow:hidden;cursor:pointer;display:flex;flex-direction:column;">' +
+        (live ? '<div style="position:absolute;top:8px;right:8px;z-index:3;width:26px;height:26px;border-radius:6px;background:#5464F2;display:flex;align-items:center;justify-content:center;">' +
+            '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>' : '') +
+        '<div style="flex:1;overflow:hidden;">' + opts.thumb + '</div>' +
+        '<div style="height:44px;flex-shrink:0;border-top:1px solid #EFEFF5;display:flex;align-items:center;justify-content:center;position:relative;">' +
+          '<span style="font-family:Georgia,serif;font-size:14.5px;color:#8C91AB;">' + opts.caption + '</span>' +
+          '<span class="uc-acts" style="opacity:0;transition:opacity .12s;position:absolute;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;gap:14px;">' +
+            (opts.preview ? '<span onclick="event.stopPropagation();' + opts.preview + '" style="font-size:13px;font-weight:600;color:#5464F2;cursor:pointer;">Preview</span>' : '') +
+            (opts.edit ? '<span style="color:#DCDBEE;">|</span><span onclick="event.stopPropagation();' + opts.edit + '" style="font-size:13px;font-weight:600;color:#5464F2;cursor:pointer;">Edit</span>' : '') +
+          '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div style="text-align:center;font-size:13.5px;color:#434D5E;margin-top:10px;">' + opts.name +
+        (live ? '<span style="display:block;font-size:11.5px;color:#5464F2;font-weight:600;margin-top:2px;">In use</span>' : '') +
+      '</div>' +
+    '</div>';
+}
+
+function ucSectionHead(title, count) {
+  return '<div style="display:flex;align-items:center;gap:10px;margin:0 0 20px;">' +
+      '<span style="font-size:16px;font-weight:700;color:#202123;">' + title + '</span>' +
+      (count == null ? '' : '<span style="font-size:12.5px;color:#5464F2;background:#F0F1FF;border:1px solid #D2D7FF;border-radius:12px;padding:2px 10px;font-weight:600;">' + count + '</span>') +
+    '</div>';
+}
+
+function ucRenderPane() {
+  var st = ucState();
+  var html = '';
+
+  // ── Quick Templates — the default Zoho Webinar ships for this use case ──
+  html += '<div style="margin-bottom:38px;">' + ucSectionHead('Quick Templates') +
+    '<div style="display:flex;flex-wrap:wrap;gap:26px;">' +
+      ucCard({
+        live: st.active === 'quick',
+        thumb: ucThumb(false, st.active === 'quick'),
+        caption: 'Default',
+        name: 'Default',
+        onclick: "ucSelect('quick')",
+        preview: "ucPreviewDefault()",
+        edit: "ucEditDefault()"
+      }) +
+    '</div></div>';
+
+  // ── Custom Templates — what has been saved under this use case ──
+  html += '<div style="margin-bottom:38px;">' + ucSectionHead('Custom Templates', st.customs.length || null);
+  if (!st.customs.length) {
+    html += '<div style="font-size:13.5px;color:#8C91AB;border:1px dashed #D6D6E3;border-radius:8px;padding:26px 22px;max-width:640px;">' +
+      'Nothing saved yet for ' + ucMeta().label + '. Start from one of the Basic layouts below and it will be saved here.</div>';
+  } else {
+    html += '<div style="display:flex;flex-wrap:wrap;gap:26px;">' + st.customs.map(function(c, i) {
+      var nm = String(c.name).replace(/'/g, "\\'");
+      return ucCard({
+        live: st.active === 'custom:' + i,
+        thumb: ucThumb(true, st.active === 'custom:' + i),
+        caption: 'Custom',
+        name: c.name,
+        onclick: "ucSelect('custom:" + i + "')",
+        preview: "ucPreviewCustom('" + nm + "')",
+        edit: "ucEditCustom(" + i + ")"
+      });
+    }).join('') + '</div>';
+  }
+  html += '</div>';
+
+  // ── Basic — start a new one for this use case ──
+  html += '<div>' + ucSectionHead('Basic', TG_LAYOUTS.length) +
+    '<div style="display:flex;flex-wrap:wrap;gap:26px;">' + TG_LAYOUTS.map(function(l, i) {
+      return '<div onclick="ucStartFromLayout(' + i + ')" style="width:190px;cursor:pointer;">' +
+          '<div style="height:262px;border:1px solid #E0E1E8;border-radius:6px;background:#fff;padding:' + (l.body ? '10px' : '0') + ';overflow:hidden;"' +
+            ' onmouseover="this.style.borderColor=\'#5464F2\'" onmouseout="this.style.borderColor=\'#E0E1E8\'">' +
+            (l.body ? '<div style="background:#F1F1F5;height:100%;padding:10px;">' + l.body + '</div>' : '') +
+          '</div>' +
+          '<div style="text-align:center;font-size:13.5px;color:#434D5E;margin-top:10px;">' + l.name + '</div>' +
+        '</div>';
+    }).join('') + '</div></div>';
+
+  document.getElementById('tpl-uc-pane').innerHTML = html;
+}
+
+// ── selecting: takes effect straight away for this use case ──
+function ucSelect(id) {
+  ucState().active = id;
+  ucRenderPane();
+  ucToast(ucCardName(id) + ' is now the ' + ucMeta().label + ' email.');
+}
+function ucCardName(id) {
+  if (id === 'quick') return 'Default';
+  var i = parseInt(String(id).split(':')[1], 10);
+  var c = ucState().customs[i];
+  return c ? c.name : 'Template';
+}
+function ucToast(msg) {
+  var el = document.getElementById('tpl-uc-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'tpl-uc-toast';
+    el.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:9700;background:#202123;color:#fff;font-size:13.5px;font-weight:600;border-radius:20px;padding:10px 22px;box-shadow:0 4px 12px rgba(49,57,73,0.28);font-family:inherit;';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.display = 'block';
+  clearTimeout(window._ucToastT);
+  window._ucToastT = setTimeout(function() { el.style.display = 'none'; }, 2600);
+}
+
+// ── preview / edit an existing card ──
+function ucHide() { document.getElementById('tpl-uc-gallery').style.display = 'none'; }
+function ucPreviewDefault() {
+  _ucReturn = true;
+  ucHide();
+  openTemplatePreview(_ucKey);
+}
+function ucPreviewCustom(name) {
+  _ucReturn = true;
+  ucHide();
+  var meta = TPL_META[_ucKey] || TPL_META.confirmation;
+  _tplPreviewKey = _ucKey;
+  _tplPreviewModuleTpl = null;
+  document.getElementById('tplpv-title').textContent = name;
+  document.getElementById('tplpv-folder').textContent = ucMeta().label;
+  document.getElementById('tplpv-subtitle').textContent = 'Zoho Webinar';
+  document.getElementById('tplpv-body').innerHTML = meta.body();
+  document.getElementById('modfields-template-preview').style.display = 'flex';
+}
+function ucEditDefault() {
+  _ucSlot = null;
+  _ucReturn = true;
+  ucHide();
+  openTemplateEditor(_ucKey);
+}
+function ucEditCustom(i) {
+  var c = ucState().customs[i];
+  if (!c) return;
+  _ucSlot = null;
+  _ucReturn = true;
+  ucHide();
+  ucApplyType();
+  _tplEditorKey = _ucKey;
+  _tplNewModule = null;
+  var meta = TPL_META[_ucKey] || TPL_META.confirmation;
+  tplSetHeader(c.name, c.subject || '', 'Zoho Webinar');
+  document.getElementById('tpl-editable-body').innerHTML = meta.body();
+  document.getElementById('modfields-template-editor').style.display = 'flex';
+}
+
+// ── start a new one from a Basic layout, stamped with this use case's type ──
+// starter content for each Basic layout, so picking one actually shapes the email
+var TG_STARTER_HTML = {
+  'Blank': '',
+  'One column':
+    '<h2 style="margin:0 0 12px;font-size:22px;font-weight:700;color:#202123;">Your headline</h2>' +
+    '<p style="margin:0 0 16px;color:#434D5E;line-height:1.7;">Write the opening paragraph here.</p>' +
+    '<div style="height:150px;background:#F1F1F5;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#8C91AB;font-size:13px;margin-bottom:16px;">Image</div>' +
+    '<p style="margin:0;color:#434D5E;line-height:1.7;">And the closing paragraph here.</p>',
+  'Two column':
+    '<h2 style="margin:0 0 12px;font-size:22px;font-weight:700;color:#202123;">Your headline</h2>' +
+    '<p style="margin:0 0 18px;color:#434D5E;line-height:1.7;">Write the opening paragraph here.</p>' +
+    '<table style="width:100%;border-collapse:collapse;"><tr>' +
+      '<td style="width:50%;vertical-align:top;padding-right:12px;color:#434D5E;line-height:1.7;">Left column text.</td>' +
+      '<td style="width:50%;vertical-align:top;padding-left:12px;color:#434D5E;line-height:1.7;">Right column text.</td>' +
+    '</tr></table>',
+  'Two column with image 1':
+    '<h2 style="margin:0 0 18px;font-size:22px;font-weight:700;color:#202123;">Your headline</h2>' +
+    '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;"><tr>' +
+      '<td style="width:96px;vertical-align:top;"><div style="height:80px;background:#F1F1F5;border-radius:6px;"></div></td>' +
+      '<td style="vertical-align:top;padding-left:16px;color:#434D5E;line-height:1.7;">Describe the first point here.</td>' +
+    '</tr></table>' +
+    '<table style="width:100%;border-collapse:collapse;"><tr>' +
+      '<td style="width:96px;vertical-align:top;"><div style="height:80px;background:#F1F1F5;border-radius:6px;"></div></td>' +
+      '<td style="vertical-align:top;padding-left:16px;color:#434D5E;line-height:1.7;">And the second point here.</td>' +
+    '</tr></table>',
+  'Two column with image 2':
+    '<h2 style="margin:0 0 18px;font-size:22px;font-weight:700;color:#202123;">Your headline</h2>' +
+    '<table style="width:100%;border-collapse:collapse;"><tr>' +
+      '<td style="width:50%;vertical-align:top;padding-right:10px;">' +
+        '<div style="height:110px;background:#F1F1F5;border-radius:6px;margin-bottom:12px;"></div>' +
+        '<div style="color:#434D5E;line-height:1.7;">Left column text.</div></td>' +
+      '<td style="width:50%;vertical-align:top;padding-left:10px;">' +
+        '<div style="height:110px;background:#F1F1F5;border-radius:6px;margin-bottom:12px;"></div>' +
+        '<div style="color:#434D5E;line-height:1.7;">Right column text.</div></td>' +
+    '</tr></table>',
+  'Three column':
+    '<h2 style="margin:0 0 18px;font-size:22px;font-weight:700;color:#202123;">Your headline</h2>' +
+    '<div style="height:130px;background:#F1F1F5;border-radius:6px;margin-bottom:18px;"></div>' +
+    '<table style="width:100%;border-collapse:collapse;"><tr>' +
+      '<td style="width:33%;vertical-align:top;padding-right:8px;"><div style="height:64px;background:#F1F1F5;border-radius:6px;margin-bottom:10px;"></div><div style="color:#434D5E;line-height:1.7;font-size:13.5px;">First.</div></td>' +
+      '<td style="width:33%;vertical-align:top;padding:0 8px;"><div style="height:64px;background:#F1F1F5;border-radius:6px;margin-bottom:10px;"></div><div style="color:#434D5E;line-height:1.7;font-size:13.5px;">Second.</div></td>' +
+      '<td style="width:33%;vertical-align:top;padding-left:8px;"><div style="height:64px;background:#F1F1F5;border-radius:6px;margin-bottom:10px;"></div><div style="color:#434D5E;line-height:1.7;font-size:13.5px;">Third.</div></td>' +
+    '</tr></table>'
+};
+
+var _ucSlot = null;
+var _ucReturn = false;
+// suggest a free name so a new card is never born a duplicate of an existing one
+function ucSuggestName() {
+  var st = TPL_UC_STATE[_ucSlot || _ucKey] || { customs: [] };
+  var base = ucMeta().label + ' template';
+  var taken = st.customs.map(function(c) { return c.name.toLowerCase(); });
+  if (taken.indexOf(base.toLowerCase()) === -1) return base;
+  for (var n = 2; n < 99; n++) {
+    if (taken.indexOf((base + ' ' + n).toLowerCase()) === -1) return base + ' ' + n;
+  }
+  return base;
+}
+function ucStartFromLayout(i) {
+  var layout = TG_LAYOUTS[i] || TG_LAYOUTS[0];
+  _ucSlot = _ucKey;
+  _ucReturn = true;
+  ucHide();
+  ucApplyType();
+  _tplEditorKey = null;
+  _tplNewModule = null;
+  // a brand-new template: name and subject start blank and are typed here
+  tplSetHeader('', '', 'Zoho Webinar');
+  document.getElementById('tpl-editable-body').innerHTML = TG_STARTER_HTML[layout.name] || '';
+  document.getElementById('modfields-template-editor').style.display = 'flex';
+  var b = document.getElementById('tpl-editable-body');
+  if (b) b.focus();
+}
+
 // ── Create Email Template → Template Gallery → editor ───────────────────────
 var _ctModule = 'Leads';
 var _ctType = 'Webinar Invitation';
@@ -6533,7 +6933,9 @@ var TPL_TYPE_LINKS = {
   '2nd Reminder':        ['Web URL', 'Join URL', 'Cancel Registration'].concat(TPL_CAL_LINKS),
   '3rd Reminder':        ['Web URL', 'Join URL', 'Cancel Registration'].concat(TPL_CAL_LINKS),
   'Attendees Follow-up': ['Web URL', 'Join URL', 'Recording Link'].concat(TPL_CAL_LINKS),
-  'Absentees Follow-up': ['Web URL', 'Join URL', 'Recording Link'].concat(TPL_CAL_LINKS)
+  'Absentees Follow-up': ['Web URL', 'Join URL', 'Recording Link'].concat(TPL_CAL_LINKS),
+  // the session is off: there is nothing to join, register for, add to a calendar or watch
+  'Webinar Cancelled':   ['Web URL', 'Email']
 };
 // which type the editor currently holds
 var _tplTypeName = 'Webinar Invitation';

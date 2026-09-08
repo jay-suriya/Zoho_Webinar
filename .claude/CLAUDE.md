@@ -125,6 +125,24 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-08 — **Creating a template now starts from the Email Notification gallery**
+  (branch `templates-flow`). `+ New Template` opened a Create Email Template dialog asking
+  for module + Email Type, then the six Basic layouts. It now opens branch 2's use-case
+  gallery — the rail of 8 lifecycle emails, each with its Default (Quick), its Customs and
+  the Basic layouts — ported over along with the `cancellation` type it needs. The rail
+  picks the use case, which stamps the type, so the module + type dialog is out of this
+  path (`openCreateTemplateModal` remains for the create-webinar slot and Send Invite
+  entries). **Only creation changed.** Editing is untouched: click a template in the list →
+  preview → pencil → editor, no gallery involved. Merge fields, allowed links and required
+  links are unchanged because they were always driven by `_tplTypeName`, which the gallery
+  sets exactly as the old dialog did. The list view keeps its Email Type column, and a
+  template created in the gallery now carries `row.etype` so its chip and the column's
+  filter are right — a custom name like "Day-before nudge" cannot be looked up through
+  `TPL_KEY_BY_NAME`. Two adaptations were needed on the way in: the ported functions wrote
+  the editor's name/subject with `.textContent`, which does nothing on this branch's input
+  fields, so they go through `tplSetHeader` now; and this branch's name-required plus
+  Save To folder rules apply to gallery saves rather than branch 2's auto-suggested name.
+  Why: the user asked for branch 2's creation flow, with everything else left alone.
 - 2026-09-08 — **"Sync past webinars" now appears on the enabled page too** (both
   branches). It never had it: `postRenderSyncPastData` looks for `post-sync-yes-state`
   and siblings, and that markup has never existed — not on `master`, not at the branch
