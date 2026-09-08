@@ -12,38 +12,65 @@ HOW TO USE THIS DOCUMENT
   Anything in [brackets] is a stage direction, not something you say.
 
 THE BUSINESS WE'LL USE THROUGHOUT
-  Bright Retail Systems. They sell billing-and-inventory software to small
-  shops - grocers, pharmacies, hardware stores. Six people in sales.
-  A deal is worth about $2,000. Nobody buys on the first call.
-  Our person is JAY, a sales rep. He also happens to be the one who set up
-  the CRM, which is true of most companies this size.
+  Jay is a fitness coach. 180,000 followers across Instagram and YouTube,
+  and behind the content is a real business: online coaching programmes.
 
-  Why this business: small, unglamorous, and every number in the demo is a
-  number the audience can hold in their head. Keep coming back to Jay by name.
-  He is the hero of this story, not the software.
+    8-Week Kickstart          $1,000
+    12-Week Transformation    $2,800
+    1:1 Elite coaching        $4,500
+
+  Two junior coaches work with him and one assistant. The way he sells is
+  the way everyone in this industry sells: a free masterclass, and at the
+  end of it, an offer.
+
+  Why this business: everyone in the room understands it instantly, and
+  the numbers in the mock are exactly the numbers this business produces.
+  A deal is a person signing up for a programme. Ad spend is his biggest
+  cost and he decides on it weekly - which makes the ROI section at the
+  end land much harder than it would for a company with an annual budget.
+
+  Keep coming back to Jay by name. He is the hero of this story, not the
+  software.
 
 
 BEFORE YOU PRESENT  (five minutes of prep, worth doing)
-  1. The sample data is generic. The scheduled webinar in the mock is called
-     "Real Estate Webinar" and that will contradict a billing-software story
-     the moment it's on screen. Two options, pick one:
-       - Edit it. Open the webinar, hit Edit, rename it to
-         "Cut your billing errors in half" and save. Cleanest.
-       - Or never read the title aloud. Say "Jay's Thursday session" and
-         point at the numbers instead. Works fine; nobody reads titles
-         unless you do.
-     The completed one, "Product Reveal Webinar", already fits the story.
-  2. Serve the mock and open it before the room fills up:
+  1. ONE THING IN THE MOCK CONTRADICTS THIS STORY - read this before you
+     stand up. On the completed webinar, the Deals Won table has an
+     "Account Name" column showing company names: "Jayas Co", "Suriya
+     Ltd", "Meena Tech". Jay coaches individuals, so there are no
+     companies. Three ways to deal with it, pick one:
+       - Best: rename them in the mock first. Open a few of those deals
+         and change the deal names to programme names - "Priya - 12-Week
+         Transformation", "Arjun - Elite 1:1". Ten minutes, and the table
+         becomes the strongest slide you have.
+       - Fine: don't read the table row by row. Point at the total and the
+         range - "seven people signed up, $1,000 to $4,500 each" - and
+         move to the source pie. Nobody reads columns you don't read.
+       - If someone asks: say it straight. "CRM keeps companies and people
+         in separate modules. For a coach every deal sits on a person, and
+         the Account column is just empty. This is sample data."
+     Do not discover this live.
+
+  2. The scheduled webinar in the mock is called "Real Estate Webinar".
+     Rename it - Edit, then something like "Why your workouts stopped
+     working" - or simply never read the title aloud and say "Thursday's
+     masterclass" instead. The completed one is "Product Reveal Webinar",
+     which is close enough to a programme launch to leave alone.
+
+  3. Serve the mock and open it before the room fills up:
        python3 -m http.server 8090
        http://localhost:8090/webinar.html
-     Add ?v=2 to the URL if you've been editing - the server sends no cache
-     headers and Chrome will happily show you a stale copy.
-  3. Click the whole path once, in order, before you present. Appendix A is
-     the running order. The point is to find the one button that needs a
-     second click, not to memorise anything.
-  4. Have the numbers in Appendix B in front of you. You will be asked
+     Add ?v=2 to the URL if you have been editing - the server sends no
+     cache headers and Chrome will happily show you a stale copy.
+
+  4. Click the whole path once, in order, before you present. Appendix A
+     is the running order. The point is to find the one button that needs
+     a second click, not to memorise anything.
+
+  5. Have the numbers in Appendix B in front of you. You will be asked
      "what was the ROI again?" and hunting for it on screen kills the
      moment.
+
 
 ================================================================================
 ACT 1  -  WHAT A WEBINAR IS, AND WHY JAY RUNS ONE
@@ -55,23 +82,29 @@ SAY
   "Let's start with something ordinary. A webinar.
 
    Strip away the jargon and a webinar is a scheduled online session where
-   one company talks and many people listen, ask questions, and leave their
+   one person talks and many people listen, ask questions, and leave their
    contact details on the way in.
 
-   Who actually runs them? Not marketing departments at big companies -
-   they're the ones everybody thinks of. In practice it's teams like Jay's.
-   Six salespeople at Bright Retail Systems, selling billing software to
-   small shops.
+   Who actually runs them? Everybody pictures a software company doing a
+   product demo. In practice, some of the heaviest users are people like
+   Jay. Jay is a fitness coach. 180,000 followers, and behind the content
+   a real business - coaching programmes from a thousand dollars to
+   forty-five hundred.
 
-   Why does Jay run one? Do the arithmetic he does. He has 400 leads from
-   ads and trade shows. He can call them one at a time - that's 400 calls
-   to find the 30 who are actually shopping this quarter. Or he can run one
-   session on Thursday, called 'Cut your billing errors in half', and let
-   the 30 identify themselves by showing up.
+   Why does Jay run a webinar? Do the arithmetic he does.
 
-   That's what a webinar really is for a team this size. It isn't marketing
-   theatre. It's a filter. It's the cheapest way Jay has to find out which
-   of his 400 names are worth a phone call."
+   He has 400 people who downloaded his free meal plan last month. Four
+   hundred names. He could message them one at a time, and spend a week
+   finding the twenty who are actually ready to pay for coaching. Or he
+   runs one free masterclass on Thursday - 'Why your workouts stopped
+   working' - and lets those twenty identify themselves by turning up.
+
+   That is what a webinar really is for a business like his. It is not
+   content. It is a filter. It is the cheapest way he has of finding out
+   which of those 400 names is worth an hour of his time.
+
+   And it is how the whole coaching industry sells: free masterclass, and
+   at the end, an offer."
 
   [Pause. Now the problem.]
 
@@ -79,30 +112,33 @@ SAY
 
    Jay's webinar tool and Jay's CRM are two different products. So:
 
-     One - He can't invite the people he actually wants. His leads live in
-     the CRM. The webinar tool has no idea they exist. So he exports a CSV.
-     Every single time.
+     One - He can't invite the people he actually wants. His leads - the
+     meal-plan downloads, the DMs, the people who filled his enquiry form
+     - all live in the CRM. The webinar tool has no idea they exist. So he
+     exports a CSV. Every single time.
 
-     Two - The people who register are strangers to his CRM. Somebody signs
-     up on Tuesday. That registration sits in the webinar tool. Jay's
-     colleague calls the same person on Wednesday with no idea they just
-     signed up for Thursday's session.
+     Two - The people who register are strangers to his CRM. Someone signs
+     up on Tuesday. That registration sits in the webinar tool. On
+     Wednesday one of his junior coaches DMs the same person a cold
+     'interested in coaching?' message, with no idea they already
+     registered for Thursday.
 
      Three - After the session he has an attendance list and no way to use
-     it. Fifteen people attended, fifteen didn't. Those are two completely
-     different sales conversations, and the list is in the wrong system.
+     it. Fifteen attended, fifteen didn't. Those two groups need
+     completely different messages, and the list is in the wrong system.
 
-     Four - And the question his manager actually asks: 'Did the webinar
-     make us any money?' Jay cannot answer it. He has attendance in one
-     tool and deals in another, and no thread between them. So he says
-     'it went well' and everyone moves on.
+     Four - And the one that actually costs him money: he spent $2,500 on
+     ads to fill that masterclass. Did it pay for itself? He has
+     attendance in one tool and sales in another and no thread between
+     them. So he guesses. And next week he decides his ad budget on a
+     guess.
 
    Notice what all four have in common. None of them is a webinar problem.
-   Zoho Webinar hosts the session perfectly well. Every one of them is a
-   problem of the webinar not knowing anything about the customer."
+   Zoho Webinar hosts the session perfectly well. Every one of them is the
+   webinar not knowing anything about the customer."
 
 LAND
-  "A webinar is how Jay finds out who's interested. The problem is that
+  "A webinar is how Jay finds out who's ready to buy. The problem is that
    what he finds out is trapped in the wrong system."
 
 
@@ -118,25 +154,25 @@ SAY
 
    Take the four problems, one at a time:
 
-     Jay couldn't invite his own leads.
+     He couldn't invite his own leads.
        -> Now he invites CRM records directly. No CSV, ever.
 
      Registrations were strangers.
-       -> Now a registration lands on the CRM record. Anyone on the team
-          who opens that lead sees it.
+       -> Now a registration lands on the person's CRM record. His junior
+          coach opens that lead and sees it before sending anything.
 
      The attendance list was unusable.
        -> Now attended and didn't-attend are two lists he can act on
           without leaving CRM.
 
-     He couldn't prove it made money.
-       -> Now the webinar is tied to the deals it influenced, with a
-          revenue number on the webinar itself.
+     He couldn't tell whether the ad spend paid.
+       -> Now the masterclass is tied to the programmes it sold, with a
+          revenue number sitting on the webinar itself.
 
-   And one more thing, the one Jay cares most about and would never say
-   out loud: he doesn't have to learn a second product. He has never opened
-   standalone Zoho Webinar and he doesn't want to. Everything you're about
-   to see, he does from inside the CRM he already uses every day."
+   And one more, the one Jay cares most about and would never say out
+   loud: he doesn't want to learn a second product. He is a coach, not a
+   systems person. Everything you're about to see, he does from inside the
+   CRM he already uses."
 
 LAND
   "The webinar doesn't become a better webinar. It becomes part of the CRM."
@@ -181,9 +217,12 @@ SAY
 
    Why ask at all? Two reasons, and they're both practical.
 
-     One is relevance. Jay invites Leads and Contacts. He is never going
-     to invite a Vendor to a customer webinar - those are his suppliers.
-     If Vendors stays on, it clutters every invite he ever sends, forever.
+     One is relevance. Jay invites Leads - the meal-plan downloads, the
+     enquiries - and Contacts, who are his current and past clients. He is
+     never going to invite a Vendor to a client masterclass: his Vendors
+     are his supplement partner, his apparel sponsor and his video editor.
+     Leave Vendors switched on and that list clutters every invite he
+     sends, forever, and one day somebody picks it by accident.
 
      The other is safety. Whatever you turn on here is what appears in the
      module dropdown when someone clicks Send Invite. Turn something off
@@ -199,21 +238,25 @@ SAY
   "Third, Webinar Deal Attribution. And this is the one that answers Jay's
    manager.
 
-   Here's the situation it exists for. Priya attends three of Jay's
-   webinars over two months. Then she buys - a $3,000 deal. Which webinar
-   gets the credit?
+   Here's the situation it exists for. Priya watches three of Jay's
+   masterclasses over two months. Then she signs up for the 12-Week
+   Transformation - $2,800. Which masterclass gets the credit?
 
-   It's a real question, not an academic one, because next quarter Jay has
-   to decide whether to keep running these. If all three webinars each claim
-   the full $3,000, he thinks he made $9,000 from one $3,000 sale. Attribution
-   is what stops you lying to yourself.
+   This is not an academic question for Jay, it's a budget question he
+   answers every week. If all three masterclasses each claim the full
+   $2,800, his dashboard tells him he made $8,400 from one $2,800 sale.
+   He then triples his ad spend on the back of a number that was never
+   real. Attribution is what stops you lying to yourself with your own
+   reporting.
 
    So you pick a rule, once:
 
-     First Interaction   - all credit to the webinar that found her.
-                           Use it when you care about what generates demand.
+     First Interaction   - all credit to the masterclass that found her.
+                           Use it when you're judging which ad brings
+                           new people in.
      Last Interaction    - all credit to the one just before she bought.
-                           Use it when you care about what closes.
+                           Use it when you're judging which session
+                           actually converts.
      Linear              - split it evenly across all three. The honest
                            default when you don't know. It's what we
                            pre-select.
@@ -240,7 +283,7 @@ ACT 4  -  CREATING THE WEBINAR
 SHOW   The Create Webinar form. Scroll it once, top to bottom, fairly briskly.
 
 SAY
-  "Jay creates the webinar. Title, date and time, timezone, how long,
+  "Jay creates the masterclass. Title, date and time, timezone, how long,
    who's hosting.
 
    I'm going to move through this quickly, because the point isn't the form.
@@ -254,10 +297,11 @@ SAY
    himself or it's automatic, whether there's a cap on seats.
 
    And the emails. Confirmation, reminders, follow-ups - already filled in
-   with sensible defaults, so a webinar Jay creates in ninety seconds still
-   sends a proper confirmation and a proper reminder. He can change them.
-   He mostly won't. That's deliberate: the defaults are there so that doing
-   nothing still produces something professional.
+   with sensible defaults, so a masterclass Jay sets up in ninety seconds
+   between clients still sends a proper confirmation and a proper reminder.
+   He can change them. He mostly won't. That's deliberate: the defaults are
+   there so that doing nothing still produces something professional. For a
+   one-person business that matters more than any feature on this page.
 
    He hits Save. The webinar is scheduled. Now the interesting part starts."
 
@@ -273,9 +317,10 @@ ACT 5  -  THE SCHEDULED WEBINAR  (the working screen)
 SHOW   The scheduled webinar detail page.
 
 SAY
-  "This is the screen Jay will actually live on for the next two weeks.
+  "This is the screen Jay lives on for the week before the masterclass.
    And there are only two questions in his head when he opens it:
-   'how many have signed up' and 'how do I get more'.
+   'how many have signed up' and 'how do I get more'. Because an empty
+   room on Thursday means a wasted $2,500 in ads.
 
    Let's take them in that order."
 
@@ -297,36 +342,45 @@ SAY
 
 SAY
   "Where they came from, in CRM terms - 7 Leads, 2 Contacts, 1 Vendor.
-   This is a view standalone webinar software simply cannot produce, because
-   it doesn't know what a Lead is. Jay reads it as 'this is filling up with
-   new prospects, not just existing customers' - which for a webinar meant
-   to generate pipeline is exactly what he wants to see."
+   Standalone webinar software cannot produce this view, because it has no
+   idea what a Lead is.
+   And Jay reads it in one second: seven of these are new people, two are
+   existing clients. That ratio is the whole point. If a masterclass fills
+   with people he already coaches, it's a nice community event and it will
+   sell nothing. He wants Leads in that pie."
 
   [Point at Registration by Source]
 
 SAY
-  "Where they came from on the internet - email, LinkedIn, Twitter, direct.
+  "Where they came from on the internet - his email list, LinkedIn,
+   Twitter, direct. Read these as his channels: the newsletter, the reel,
+   the link in bio.
    Two bars per channel: how many visited, how many actually registered.
-   That gap is the interesting part. A channel that sends lots of visitors
-   who don't sign up is telling you the click was curious but the offer
-   didn't land.
+   That gap is the interesting part. A channel sending lots of visitors who
+   don't sign up means the reel got the click but the page didn't close it
+   - and for someone paying per click, that gap is money."
 
    And these numbers exist because of the registration link."
 
   [Click View Registration Link. Show the modal. Toggle Source Tracking on.]
 
 SAY
-  "One link he can copy anywhere, plus embed code to put it on the website.
-   And source tracking - he creates a separate link per channel, and each
-   one reports visits and registrations back. That's how the chart we just
-   looked at gets filled in."
+  "One link he can copy anywhere - link in bio, story sticker, newsletter -
+   plus embed code for his site.
+   And source tracking: he creates a separate link per channel, and each
+   one reports visits and registrations back. One for the Instagram story,
+   one for the newsletter, one for YouTube. That's how the chart we just
+   looked at gets filled in, and it's the difference between 'the
+   masterclass filled up' and 'the newsletter filled it, the reels did
+   nothing'."
 
   [Point at Daily Registration Trend]
 
 SAY
-  "And the shape over time. Peak day, average per day. Jay uses this to
-   decide whether to push again this week - a flat line for three days is
-   a nudge to go send more invites."
+   And the shape over time. Peak day, average per day. Jay reads this the
+   way he reads all his analytics: the spike is the day he posted, and a
+   flat line for three days is a nudge to post again or send another
+   invite."
 
   [Scroll to Registrants list]
 
@@ -341,6 +395,14 @@ SAY
 SAY
   "And here's the one Jay works from. He invited 100 people. This splits
    them: registered, and not registered.
+   That second list is the most valuable thing on this page. Those are
+   people who already heard from him and haven't signed up yet. They're
+   warm, they're named, they're one reminder away - and they cost him
+   nothing, because he has already paid to acquire them.
+   In his old world that list did not exist. He had an invite list in a CSV
+   and a registration list in another tool and no way to subtract one from
+   the other. So he did what everybody does: he messaged all 100 again,
+   including the ones who had already signed up."
 
    That second list is the most valuable thing on this page. Those are
    people who already got an email from him and haven't signed up. They're
@@ -373,9 +435,9 @@ ACT 6  -  THE COMPLETED WEBINAR  (handling the attendees)
 SHOW   The completed webinar detail page.
 
 SAY
-  "The webinar has happened. Same record, different job. Before, Jay was
-   trying to fill seats. Now he's trying to turn a room full of people
-   into conversations.
+  "The masterclass has happened. Same record, different job. Before, Jay
+   was trying to fill the room. Now he's trying to turn the room into
+   paying clients.
 
    Look at the top line: 30 registered, 15 attended, 15 didn't. Fifty-fifty,
    which is normal and worth saying out loud so nobody thinks it's a
@@ -387,8 +449,15 @@ SAY
   [Point at the two numbers as you say this]
 
 SAY
-  "The 15 who attended: they gave you an hour of their attention. They know
-   what the product does. Jay's job is to call them while it's fresh.
+  "The 15 who attended: they sat through the whole thing and, crucially,
+   they heard the offer at the end. Jay's job is to reach them today, while
+   it's fresh. These are the people who buy.
+   The 15 who didn't: they registered, so they wanted to be there. Life got
+   in the way. They have not heard the offer at all. They need the replay
+   and a second chance - a completely different message.
+   Sending both groups the same 'thanks for joining!' email is the most
+   common mistake in this business. It confuses half of them and wastes the
+   other half. This screen makes it hard to do."
 
    The 15 who didn't: they raised their hand and then something came up.
    They are still interested - they registered! They just need the recording
@@ -404,16 +473,30 @@ SAY
    and by source. And this is where it gets genuinely useful, because now
    you can compare.
 
-   Look: LinkedIn brought lots of registrations. But did LinkedIn people
-   actually show up? Compare the source pies and you find out. A channel
-   that registers well and attends badly is a channel bringing you tyre-
-   kickers. Jay can only see that because both pies are on one screen."
+   Look: one channel brought lots of registrations. But did those people
+   actually show up? Compare the two source pies and you find out.
+   A channel that registers well and attends badly is bringing him
+   curiosity, not intent - people who tap 'register' on a story and forget.
+   A channel that registers less but attends nearly all of it is bringing
+   him buyers. Those two deserve completely different ad budgets, and he
+   can only tell them apart because both pies are on one screen."
 
   [Scroll to Attendees and Registrants List. Point at the Polls and Q&A columns.]
 
 SAY
   "Now the list, and I want to draw your eye to two columns most people
-   would scroll past: Polls and Q&A.
+   scroll straight past: Polls and Q&A.
+   Arjun answered 2 polls and asked a question. Karthik answered 1. Priya
+   attended and did neither.
+   Think about what asking a question means here. In a fitness masterclass
+   the questions are 'would this work with a knee injury?' or 'can I do
+   this in 20 minutes a day?'. Nobody types that unless they are already
+   imagining themselves doing the programme. That is not engagement data.
+   That is a buying signal, in writing.
+   Jay has 15 attendees and time to properly follow up maybe six today.
+   This column tells him which six - and it tells him what to open with.
+   Attendance is a yes or no. Engagement is a ranking. The ranking is
+   worth far more."
 
    Arjun answered 2 polls and asked a question. Karthik answered 1.
    Priya attended and did neither.
@@ -429,16 +512,33 @@ SAY
   [Scroll to Webinar Revenue and expand it]
 
 SAY
-  "And finally, the section that answers the question Jay could never answer.
+  "And finally, the section that answers the question Jay could never
+   answer - the one his ad budget depends on.
+   Webinar ROI. The masterclass cost $2,500, almost all of it ads.
+   Programmes sold that this masterclass is credited with: $16,800. A 572%
+   return. Another $32,450 still in conversation. Cost per attendee $167.
+   Revenue per attendee $1,120.
+   Sit with that last pair, because it's the number that changes his
+   behaviour. Every person he gets into that room is worth $1,120 and costs
+   $167 to get there. That is not a report. That is permission to spend
+   more on ads, with a ceiling he can actually calculate.
 
    Webinar ROI. The webinar cost $2,500 to run. Deals won that this webinar
    is credited with: $16,800. That's a 572% return. There's another $32,450
    still in the pipeline. Cost per attendee $167, revenue per attendee $1,120.
 
-   And it's not a claim - it's itemised. Here are the deals. Names, amounts,
-   stage, the account, the contact. Jayas Enterprises, $1,000. Meena Cloud,
-   $4,500. Seven of them. Jay's manager can click any one and land on the
-   deal record.
+   And it isn't a claim - it's itemised. Seven people signed up, from
+   $1,000 to $4,500 - Kickstart at the bottom, Elite 1:1 at the top. Each
+   one is a live CRM record he can click into.
+   [If you have NOT renamed the deals in the mock, don't read this table
+   row by row - see note 1 at the top. Point at the total and the range,
+   then move to the source pie.]
+   Pipeline by stage, so he can see who's still deciding. And deals won by
+   source, which closes the loop back to Act 5: one channel brought four of
+   the seven people who actually paid.
+   That's a genuinely different fact from 'that channel brought the most
+   registrations'. Registrations are vanity. This is the one that decides
+   where next month's ad money goes."
 
    Pipeline by stage, so he can see what's still moving. And deals won by
    source, which closes the loop all the way back: Twitter brought four of
@@ -449,14 +549,16 @@ SAY
   [Optional, if you have time - scroll to Recordings / related lists]
 
 SAY
-  "And the rest is where you'd expect it: the recording, the polls, the
-   questions, the files, and open activities - the follow-up tasks Jay
-   created off the back of this session, sitting on the webinar record."
+  "And the rest is where you'd expect it: the recording - which is exactly
+   what he sends the 15 who missed it - the polls, the questions, the
+   files, and open activities, the follow-up tasks he created off the back
+   of this session, sitting on the webinar record itself."
 
 LAND
-  "After the webinar this page does two things. It sorts a room full of
+  "After the masterclass this page does two things. It sorts a room full of
    people into who to call first. And it puts a revenue number on the
-   webinar - which is what gets you permission to run the next one."
+   session - which is how Jay decides, with confidence, to run the next one
+   and spend more filling it."
 
 
 ================================================================================
@@ -470,20 +572,28 @@ SAY
 
    Jay had four problems. He couldn't invite his own leads. Registrations
    were strangers to his CRM. His attendance list was unusable. And he
-   couldn't prove any of it made money.
+   couldn't tell whether $2,500 of ads had paid for itself.
 
    Walk back through what we just saw:
 
      He invited CRM records directly - no CSV.
-     Every registration landed on the record, for the whole team to see.
+     Every registration landed on the person's record, for his coaches
+       to see before they messaged anyone.
      Attended and didn't-attend became two lists he could act on, ranked
-       by who actually engaged.
-     And the webinar carries its own revenue number, itemised down to the
-       individual deal.
+       by who actually asked a question.
+     And the masterclass carries its own revenue number - $16,800 won,
+       itemised down to the individual programme, with a cost per attendee
+       and a revenue per attendee next to it.
 
-   And the through-line: at no point did Jay open a second product. He
-   created a webinar, filled it, ran it, and followed it up, from inside
-   the CRM he was already in.
+   And the through-line: at no point did Jay open a second product. He set
+   up a masterclass, filled it, ran it, and followed it up, from inside the
+   CRM he was already in.
+
+   One last thought. Jay isn't a big company. He's a coach with two staff
+   and an ad budget he re-decides every week. The reason this matters for
+   him more than it would for an enterprise is that he has nobody to hand
+   the spreadsheet to. If the system doesn't tell him which fifteen people
+   to call and whether the ads paid, nobody does.
 
    That's the whole idea. Not a webinar tool bolted onto a CRM. A webinar
    that has become one more thing the CRM knows about your customer."
@@ -511,21 +621,22 @@ APPENDIX A  -  RUNNING ORDER (the clicks, in sequence)
 ================================================================================
 APPENDIX B  -  THE NUMBERS YOU'LL SAY OUT LOUD
 ================================================================================
-  SCHEDULED  (Real Estate Webinar)
+  SCHEDULED  (the upcoming masterclass)
     10 of 200 registered, 190 seats left
     5 waiting for approval
     By module: 7 Leads, 2 Contacts, 1 Vendor
     By source: email, LinkedIn, Twitter, direct (visited vs registered)
     Invited 100, split into registered / not registered
 
-  COMPLETED  (Product Reveal Webinar)
+  COMPLETED  (the masterclass that already ran)
     30 registered, 15 attended (50%), 15 absent (50%)
     Attendance by module: 10 Leads, 3 Contacts, 2 Vendors
     Attendance by source: 8 email, 4 Twitter, 3 LinkedIn
     Attendees list: Polls count and Q&A per person
     ROI: cost $2,500 | won $16,800 | +572% | pipeline $32,450
          cost/attendee $167 | revenue/attendee $1,120
-    7 deals won, $1,000 to $4,500
+    7 programmes sold, $1,000 to $4,500
+      (read as Kickstart $1,000 / Transformation $2,800 / Elite $4,500)
     Deals won by source: Twitter 4, Email 3, LinkedIn 2, Direct 1
 
 
@@ -533,15 +644,23 @@ APPENDIX B  -  THE NUMBERS YOU'LL SAY OUT LOUD
 APPENDIX C  -  QUESTIONS YOU WILL GET
 ================================================================================
   "Do we have to use the CRM to run a webinar now?"
-     No. This is for teams whose audience already lives in the CRM. If
+     No. This is for anyone whose audience already lives in the CRM. If
      you're running a 5,000-person public conference, that's a different
      job and standalone Zoho Webinar is still the right tool.
 
-  "What if someone registers who isn't in our CRM?"
+  "Would a solo coach really buy a CRM?"
+     Fair question, and the honest answer is: they already have one, they
+     just call it a spreadsheet. The moment there are two coaches messaging
+     the same leads, the spreadsheet breaks. That's the buying moment, and
+     it's exactly when webinar-and-CRM-in-one-place stops being a nicety.
+
+  "What if someone registers who isn't in the CRM?"
      They come in through the public registration link and can be pushed
      into CRM as a new record - that's the Push to CRM setting on the
-     webinar. Which is worth saying plainly: the webinar becomes a lead
-     source, not just a lead filter.
+     webinar. Worth saying plainly, because for a coach it's the main way
+     it works: a masterclass promoted on Instagram brings in people he has
+     never met. So the webinar isn't only a filter for leads he already
+     has. It's a lead source in its own right.
 
   "Why is Linear the default attribution model?"
      Because it's the one that makes the fewest assumptions. First and Last
@@ -554,7 +673,8 @@ APPENDIX C  -  QUESTIONS YOU WILL GET
 
   "How is this different from just sending a campaign?"
      A campaign tells you who opened an email. This tells you who gave you
-     an hour, what they asked about, and which deals it turned into.
+     an hour of their evening, what they were worried about in their own
+     words, and which programmes it sold.
 
   IF SOMETHING IN THE MOCK MISBEHAVES
      Say "this is a prototype, that's a known gap" and move on. Do not
