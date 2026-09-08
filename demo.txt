@@ -1,0 +1,562 @@
+================================================================================
+ZOHO CRM  x  ZOHO WEBINAR  —  DEMO SCRIPT
+Walkthrough narrative for the templates-flow mock (webinar.html)
+================================================================================
+
+HOW TO USE THIS DOCUMENT
+  Seven acts, in the order you click through the mock. Each act has:
+    SAY      - the words, spoken aloud
+    SHOW     - what to have on screen
+    LAND     - the one sentence the audience must walk away with
+  Total runtime: about 18-20 minutes at a comfortable pace.
+  Anything in [brackets] is a stage direction, not something you say.
+
+THE BUSINESS WE'LL USE THROUGHOUT
+  Bright Retail Systems. They sell billing-and-inventory software to small
+  shops - grocers, pharmacies, hardware stores. Six people in sales.
+  A deal is worth about $2,000. Nobody buys on the first call.
+  Our person is JAY, a sales rep. He also happens to be the one who set up
+  the CRM, which is true of most companies this size.
+
+  Why this business: small, unglamorous, and every number in the demo is a
+  number the audience can hold in their head. Keep coming back to Jay by name.
+  He is the hero of this story, not the software.
+
+
+BEFORE YOU PRESENT  (five minutes of prep, worth doing)
+  1. The sample data is generic. The scheduled webinar in the mock is called
+     "Real Estate Webinar" and that will contradict a billing-software story
+     the moment it's on screen. Two options, pick one:
+       - Edit it. Open the webinar, hit Edit, rename it to
+         "Cut your billing errors in half" and save. Cleanest.
+       - Or never read the title aloud. Say "Jay's Thursday session" and
+         point at the numbers instead. Works fine; nobody reads titles
+         unless you do.
+     The completed one, "Product Reveal Webinar", already fits the story.
+  2. Serve the mock and open it before the room fills up:
+       python3 -m http.server 8090
+       http://localhost:8090/webinar.html
+     Add ?v=2 to the URL if you've been editing - the server sends no cache
+     headers and Chrome will happily show you a stale copy.
+  3. Click the whole path once, in order, before you present. Appendix A is
+     the running order. The point is to find the one button that needs a
+     second click, not to memorise anything.
+  4. Have the numbers in Appendix B in front of you. You will be asked
+     "what was the ROI again?" and hunting for it on screen kills the
+     moment.
+
+================================================================================
+ACT 1  -  WHAT A WEBINAR IS, AND WHY JAY RUNS ONE
+================================================================================
+
+SHOW   Nothing yet. Slides off. Just talk. Ninety seconds, no screen.
+
+SAY
+  "Let's start with something ordinary. A webinar.
+
+   Strip away the jargon and a webinar is a scheduled online session where
+   one company talks and many people listen, ask questions, and leave their
+   contact details on the way in.
+
+   Who actually runs them? Not marketing departments at big companies -
+   they're the ones everybody thinks of. In practice it's teams like Jay's.
+   Six salespeople at Bright Retail Systems, selling billing software to
+   small shops.
+
+   Why does Jay run one? Do the arithmetic he does. He has 400 leads from
+   ads and trade shows. He can call them one at a time - that's 400 calls
+   to find the 30 who are actually shopping this quarter. Or he can run one
+   session on Thursday, called 'Cut your billing errors in half', and let
+   the 30 identify themselves by showing up.
+
+   That's what a webinar really is for a team this size. It isn't marketing
+   theatre. It's a filter. It's the cheapest way Jay has to find out which
+   of his 400 names are worth a phone call."
+
+  [Pause. Now the problem.]
+
+  "So he runs it. And this is where it falls apart.
+
+   Jay's webinar tool and Jay's CRM are two different products. So:
+
+     One - He can't invite the people he actually wants. His leads live in
+     the CRM. The webinar tool has no idea they exist. So he exports a CSV.
+     Every single time.
+
+     Two - The people who register are strangers to his CRM. Somebody signs
+     up on Tuesday. That registration sits in the webinar tool. Jay's
+     colleague calls the same person on Wednesday with no idea they just
+     signed up for Thursday's session.
+
+     Three - After the session he has an attendance list and no way to use
+     it. Fifteen people attended, fifteen didn't. Those are two completely
+     different sales conversations, and the list is in the wrong system.
+
+     Four - And the question his manager actually asks: 'Did the webinar
+     make us any money?' Jay cannot answer it. He has attendance in one
+     tool and deals in another, and no thread between them. So he says
+     'it went well' and everyone moves on.
+
+   Notice what all four have in common. None of them is a webinar problem.
+   Zoho Webinar hosts the session perfectly well. Every one of them is a
+   problem of the webinar not knowing anything about the customer."
+
+LAND
+  "A webinar is how Jay finds out who's interested. The problem is that
+   what he finds out is trapped in the wrong system."
+
+
+================================================================================
+ACT 2  -  WHY THIS INTEGRATION
+================================================================================
+
+SHOW   Still no screen. Thirty seconds. This act is one idea, said cleanly.
+
+SAY
+  "So the fix isn't a better webinar tool. It's making the webinar happen
+   where the customer already lives - inside the CRM.
+
+   Take the four problems, one at a time:
+
+     Jay couldn't invite his own leads.
+       -> Now he invites CRM records directly. No CSV, ever.
+
+     Registrations were strangers.
+       -> Now a registration lands on the CRM record. Anyone on the team
+          who opens that lead sees it.
+
+     The attendance list was unusable.
+       -> Now attended and didn't-attend are two lists he can act on
+          without leaving CRM.
+
+     He couldn't prove it made money.
+       -> Now the webinar is tied to the deals it influenced, with a
+          revenue number on the webinar itself.
+
+   And one more thing, the one Jay cares most about and would never say
+   out loud: he doesn't have to learn a second product. He has never opened
+   standalone Zoho Webinar and he doesn't want to. Everything you're about
+   to see, he does from inside the CRM he already uses every day."
+
+LAND
+  "The webinar doesn't become a better webinar. It becomes part of the CRM."
+
+
+================================================================================
+ACT 3  -  TURNING IT ON  (the integration page)
+================================================================================
+[Open the mock. Setup (gear) -> Marketplace -> Zoho -> Zoho Webinar]
+
+SHOW   The introduction panel, before enabling.
+
+SAY
+  "Here's the first design decision worth pointing out. When Jay picks
+   Zoho Webinar, we don't ask him for anything yet. We explain ourselves
+   first - what this makes possible, how it works, why teams turn it on.
+   Enable Integration sits in the top right and waits.
+
+   Small thing. But Jay is about to connect a product to his customer
+   database. Being asked for credentials before being told what happens
+   is how people quietly back out."
+
+  [Click Enable Integration -> the setup page]
+
+SAY
+  "Now the setup, and there are only three things on it.
+
+   First, the connection. His email, his organisation, and one question:
+   sync the webinars he's already run? Say yes, and the webinars from
+   before today come in with their attendance history. His reporting
+   doesn't start from zero on day one."
+
+  [Scroll to: Modules You Can Invite]
+
+SAY
+  "Second - and this is the one worth slowing down on - Modules You Can
+   Invite.
+
+   In CRM, people live in modules. Leads. Contacts. Vendors. Custom ones
+   you built yourself. This setting answers one question: which of those
+   can a webinar invite go to?
+
+   Why ask at all? Two reasons, and they're both practical.
+
+     One is relevance. Jay invites Leads and Contacts. He is never going
+     to invite a Vendor to a customer webinar - those are his suppliers.
+     If Vendors stays on, it clutters every invite he ever sends, forever.
+
+     The other is safety. Whatever you turn on here is what appears in the
+     module dropdown when someone clicks Send Invite. Turn something off
+     here and it's gone from there. So this is the guard rail: it decides
+     who your team can email before anyone is in a hurry.
+
+   That's why it's a setup decision and not a per-webinar one. You choose
+   the audience once, calmly, and the daily flow inherits it."
+
+  [Scroll to: Webinar Deal Attribution]
+
+SAY
+  "Third, Webinar Deal Attribution. And this is the one that answers Jay's
+   manager.
+
+   Here's the situation it exists for. Priya attends three of Jay's
+   webinars over two months. Then she buys - a $3,000 deal. Which webinar
+   gets the credit?
+
+   It's a real question, not an academic one, because next quarter Jay has
+   to decide whether to keep running these. If all three webinars each claim
+   the full $3,000, he thinks he made $9,000 from one $3,000 sale. Attribution
+   is what stops you lying to yourself.
+
+   So you pick a rule, once:
+
+     First Interaction   - all credit to the webinar that found her.
+                           Use it when you care about what generates demand.
+     Last Interaction    - all credit to the one just before she bought.
+                           Use it when you care about what closes.
+     Linear              - split it evenly across all three. The honest
+                           default when you don't know. It's what we
+                           pre-select.
+     Time Decay          - the closer to the sale, the more credit.
+                           Increasing or decreasing.
+     Position-Based      - most credit to the first and the last, less to
+                           the middle.
+
+   We default to Linear on purpose. It's the one that makes the fewest
+   claims. Jay can change it when he has an opinion; until then he isn't
+   accidentally over-crediting anything."
+
+LAND
+  "Two decisions, made once: who you can invite, and how credit gets
+   counted. Everything after this is Jay just doing his job."
+
+
+================================================================================
+ACT 4  -  CREATING THE WEBINAR
+================================================================================
+[Zoho Webinar module -> Create Webinar]
+[KEEP THIS SHORT. Two minutes. Do not walk the form field by field.]
+
+SHOW   The Create Webinar form. Scroll it once, top to bottom, fairly briskly.
+
+SAY
+  "Jay creates the webinar. Title, date and time, timezone, how long,
+   who's hosting.
+
+   I'm going to move through this quickly, because the point isn't the form.
+   The point is that it's a CRM form. Same layout, same fields on the left,
+   same Save in the corner as every other record he creates. Nobody has to
+   train him on this screen.
+
+   Two things to notice as I scroll, and then we'll move on.
+
+   Registration setup - whether people register, whether he approves them
+   himself or it's automatic, whether there's a cap on seats.
+
+   And the emails. Confirmation, reminders, follow-ups - already filled in
+   with sensible defaults, so a webinar Jay creates in ninety seconds still
+   sends a proper confirmation and a proper reminder. He can change them.
+   He mostly won't. That's deliberate: the defaults are there so that doing
+   nothing still produces something professional.
+
+   He hits Save. The webinar is scheduled. Now the interesting part starts."
+
+LAND
+  "Creating it looks like creating any CRM record, which is exactly the point."
+
+
+================================================================================
+ACT 5  -  THE SCHEDULED WEBINAR  (the working screen)
+================================================================================
+[Zoho Webinar -> Real Estate Webinar (Scheduled)]
+
+SHOW   The scheduled webinar detail page.
+
+SAY
+  "This is the screen Jay will actually live on for the next two weeks.
+   And there are only two questions in his head when he opens it:
+   'how many have signed up' and 'how do I get more'.
+
+   Let's take them in that order."
+
+  [Point at the header]
+
+SAY
+  "First, the header. Notice it's honest about where we are in time -
+   'Starts in 16 minutes'. And the actions are the three things he'd want:
+   Start Webinar, Send Invite, View Registration Link."
+
+  [Point at Registration Overview]
+
+SAY
+  "Registrations: 10 of 200, with 190 seats left. The ring shows how full
+   he is. And 5 waiting for approval - he chose manual moderation, so five
+   people have asked to come in and need a yes. That's a click, from here."
+
+  [Point at Registration by Module]
+
+SAY
+  "Where they came from, in CRM terms - 7 Leads, 2 Contacts, 1 Vendor.
+   This is a view standalone webinar software simply cannot produce, because
+   it doesn't know what a Lead is. Jay reads it as 'this is filling up with
+   new prospects, not just existing customers' - which for a webinar meant
+   to generate pipeline is exactly what he wants to see."
+
+  [Point at Registration by Source]
+
+SAY
+  "Where they came from on the internet - email, LinkedIn, Twitter, direct.
+   Two bars per channel: how many visited, how many actually registered.
+   That gap is the interesting part. A channel that sends lots of visitors
+   who don't sign up is telling you the click was curious but the offer
+   didn't land.
+
+   And these numbers exist because of the registration link."
+
+  [Click View Registration Link. Show the modal. Toggle Source Tracking on.]
+
+SAY
+  "One link he can copy anywhere, plus embed code to put it on the website.
+   And source tracking - he creates a separate link per channel, and each
+   one reports visits and registrations back. That's how the chart we just
+   looked at gets filled in."
+
+  [Point at Daily Registration Trend]
+
+SAY
+  "And the shape over time. Peak day, average per day. Jay uses this to
+   decide whether to push again this week - a flat line for three days is
+   a nudge to go send more invites."
+
+  [Scroll to Registrants list]
+
+SAY
+  "Then the people themselves. Approved, unapproved, denied - the moderation
+   queue. Names, emails, which module, which source, when they registered.
+
+   And notice: these are CRM records. He can click through to the lead."
+
+  [Scroll to the Invited panel]
+
+SAY
+  "And here's the one Jay works from. He invited 100 people. This splits
+   them: registered, and not registered.
+
+   That second list is the most valuable thing on this page. Those are
+   people who already got an email from him and haven't signed up. They're
+   warm, they're identified, and they're one reminder away. In his old
+   world that list didn't exist - he had an invite list in a CSV and a
+   registration list in another tool and no way to subtract one from the
+   other."
+
+  [Click Send Invite briefly - show the record picker, then Mass Email]
+
+SAY
+  "And when he wants more, Send Invite. He picks the module - and only the
+   modules we turned on in setup appear here, which is that guard rail
+   doing its job. He picks records the way he picks records anywhere in CRM,
+   with his own views and filters. Then it becomes a mass email with the
+   invitation template already chosen.
+
+   No export. No import. He never left CRM."
+
+LAND
+  "Before the webinar, this page answers two questions: how many, and who
+   do I chase next. The second one is a list of names he can act on today."
+
+
+================================================================================
+ACT 6  -  THE COMPLETED WEBINAR  (handling the attendees)
+================================================================================
+[Zoho Webinar -> Product Reveal Webinar (Completed)]
+
+SHOW   The completed webinar detail page.
+
+SAY
+  "The webinar has happened. Same record, different job. Before, Jay was
+   trying to fill seats. Now he's trying to turn a room full of people
+   into conversations.
+
+   Look at the top line: 30 registered, 15 attended, 15 didn't. Fifty-fifty,
+   which is normal and worth saying out loud so nobody thinks it's a
+   failure.
+
+   But here's the thing - those two fifteens are not one list. They are
+   two completely different sales situations."
+
+  [Point at the two numbers as you say this]
+
+SAY
+  "The 15 who attended: they gave you an hour of their attention. They know
+   what the product does. Jay's job is to call them while it's fresh.
+
+   The 15 who didn't: they raised their hand and then something came up.
+   They are still interested - they registered! They just need the recording
+   and another chance. Completely different email, completely different call.
+
+   Sending those two groups the same follow-up is the single most common
+   mistake in webinars, and this screen makes it hard to do."
+
+  [Point at the four pies]
+
+SAY
+  "Then attendance broken down the same two ways as registration - by module
+   and by source. And this is where it gets genuinely useful, because now
+   you can compare.
+
+   Look: LinkedIn brought lots of registrations. But did LinkedIn people
+   actually show up? Compare the source pies and you find out. A channel
+   that registers well and attends badly is a channel bringing you tyre-
+   kickers. Jay can only see that because both pies are on one screen."
+
+  [Scroll to Attendees and Registrants List. Point at the Polls and Q&A columns.]
+
+SAY
+  "Now the list, and I want to draw your eye to two columns most people
+   would scroll past: Polls and Q&A.
+
+   Arjun answered 2 polls and asked a question. Karthik answered 1.
+   Priya attended and did neither.
+
+   That is a priority order. Somebody who typed a question out loud in
+   front of strangers is more interested than somebody who left the tab
+   open. Jay has 15 attendees and time to call maybe six today. This column
+   tells him which six.
+
+   Attendance is a yes-or-no. Engagement is a ranking. The ranking is worth
+   more."
+
+  [Scroll to Webinar Revenue and expand it]
+
+SAY
+  "And finally, the section that answers the question Jay could never answer.
+
+   Webinar ROI. The webinar cost $2,500 to run. Deals won that this webinar
+   is credited with: $16,800. That's a 572% return. There's another $32,450
+   still in the pipeline. Cost per attendee $167, revenue per attendee $1,120.
+
+   And it's not a claim - it's itemised. Here are the deals. Names, amounts,
+   stage, the account, the contact. Jayas Enterprises, $1,000. Meena Cloud,
+   $4,500. Seven of them. Jay's manager can click any one and land on the
+   deal record.
+
+   Pipeline by stage, so he can see what's still moving. And deals won by
+   source, which closes the loop all the way back: Twitter brought four of
+   the deals we won. That is a genuinely different fact from 'Twitter brought
+   the most registrations', and it's the one that should decide next quarter's
+   budget."
+
+  [Optional, if you have time - scroll to Recordings / related lists]
+
+SAY
+  "And the rest is where you'd expect it: the recording, the polls, the
+   questions, the files, and open activities - the follow-up tasks Jay
+   created off the back of this session, sitting on the webinar record."
+
+LAND
+  "After the webinar this page does two things. It sorts a room full of
+   people into who to call first. And it puts a revenue number on the
+   webinar - which is what gets you permission to run the next one."
+
+
+================================================================================
+ACT 7  -  CLOSING
+================================================================================
+
+SHOW   Come off the screen. Look at the room.
+
+SAY
+  "Let's go back to where we started.
+
+   Jay had four problems. He couldn't invite his own leads. Registrations
+   were strangers to his CRM. His attendance list was unusable. And he
+   couldn't prove any of it made money.
+
+   Walk back through what we just saw:
+
+     He invited CRM records directly - no CSV.
+     Every registration landed on the record, for the whole team to see.
+     Attended and didn't-attend became two lists he could act on, ranked
+       by who actually engaged.
+     And the webinar carries its own revenue number, itemised down to the
+       individual deal.
+
+   And the through-line: at no point did Jay open a second product. He
+   created a webinar, filled it, ran it, and followed it up, from inside
+   the CRM he was already in.
+
+   That's the whole idea. Not a webinar tool bolted onto a CRM. A webinar
+   that has become one more thing the CRM knows about your customer."
+
+
+================================================================================
+APPENDIX A  -  RUNNING ORDER (the clicks, in sequence)
+================================================================================
+  1. [no screen]                       Act 1, Act 2
+  2. Setup -> Marketplace -> Zoho -> Zoho Webinar     intro panel
+  3. Enable Integration                setup page
+  4.   scroll to Modules You Can Invite
+  5.   scroll to Webinar Deal Attribution
+  6. Zoho Webinar module -> Create Webinar            scroll once, briskly
+  7. Zoho Webinar -> Real Estate Webinar              SCHEDULED
+  8.   View Registration Link -> toggle Source Tracking
+  9.   scroll: Registrants list -> Invited panel
+ 10.   Send Invite -> picker -> Mass Email  (then back out)
+ 11. Zoho Webinar -> Product Reveal Webinar          COMPLETED
+ 12.   scroll: pies -> Attendees list (Polls / Q&A columns)
+ 13.   expand Webinar Revenue
+ 14. [no screen]                       Act 7
+
+
+================================================================================
+APPENDIX B  -  THE NUMBERS YOU'LL SAY OUT LOUD
+================================================================================
+  SCHEDULED  (Real Estate Webinar)
+    10 of 200 registered, 190 seats left
+    5 waiting for approval
+    By module: 7 Leads, 2 Contacts, 1 Vendor
+    By source: email, LinkedIn, Twitter, direct (visited vs registered)
+    Invited 100, split into registered / not registered
+
+  COMPLETED  (Product Reveal Webinar)
+    30 registered, 15 attended (50%), 15 absent (50%)
+    Attendance by module: 10 Leads, 3 Contacts, 2 Vendors
+    Attendance by source: 8 email, 4 Twitter, 3 LinkedIn
+    Attendees list: Polls count and Q&A per person
+    ROI: cost $2,500 | won $16,800 | +572% | pipeline $32,450
+         cost/attendee $167 | revenue/attendee $1,120
+    7 deals won, $1,000 to $4,500
+    Deals won by source: Twitter 4, Email 3, LinkedIn 2, Direct 1
+
+
+================================================================================
+APPENDIX C  -  QUESTIONS YOU WILL GET
+================================================================================
+  "Do we have to use the CRM to run a webinar now?"
+     No. This is for teams whose audience already lives in the CRM. If
+     you're running a 5,000-person public conference, that's a different
+     job and standalone Zoho Webinar is still the right tool.
+
+  "What if someone registers who isn't in our CRM?"
+     They come in through the public registration link and can be pushed
+     into CRM as a new record - that's the Push to CRM setting on the
+     webinar. Which is worth saying plainly: the webinar becomes a lead
+     source, not just a lead filter.
+
+  "Why is Linear the default attribution model?"
+     Because it's the one that makes the fewest assumptions. First and Last
+     Interaction both throw away information. Linear splits it evenly until
+     you have a reason to believe otherwise.
+
+  "Can I stop the team inviting the wrong people?"
+     That's exactly what Modules You Can Invite is for. What you turn off
+     there disappears from the Send Invite dropdown for everyone.
+
+  "How is this different from just sending a campaign?"
+     A campaign tells you who opened an email. This tells you who gave you
+     an hour, what they asked about, and which deals it turned into.
+
+  IF SOMETHING IN THE MOCK MISBEHAVES
+     Say "this is a prototype, that's a known gap" and move on. Do not
+     debug on stage. The story survives a broken button; it does not
+     survive five minutes of silence.
