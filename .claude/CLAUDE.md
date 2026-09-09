@@ -125,6 +125,24 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **One row per lifecycle email: selecting a template renames it, never adds
+  a second** (branch 1). Selecting a custom in the gallery had been *adding* a row, so the
+  Templates list showed both "Webinar Invitation Template" and the custom you had just
+  chosen — two rows for one email. `ucEnsureListRow` is replaced by `ucSyncListRow`, which
+  finds the row that stands for the use case (`ucUseCaseRow`: the shipped
+  `TPLPAGE_WEBINAR_ROWS` entry if there is one, else the first created row with that
+  Email Type), drops any other Zoho Webinar row carrying the same type, and renames the
+  survivor to the live template. So picking "Long-form invite" turns the Invitation row
+  into *Long-form invite · Invitation template*, and picking Default back turns it into
+  *Webinar Invitation Template* again — the count stays 7. Saving a new custom from the
+  gallery goes through the same call instead of `tplPageAddCreatedRow`, so a save replaces
+  its email's row too. Webinar Cancelled has no shipped row, so its first selection adds
+  one and later ones rename it. The row keeps its use case in `row.etype`, and the pencil's
+  key now falls back to that use case (`key || ucKey`), so a renamed row still opens the
+  right editor rather than the generic module one. Consequence to know: a custom that is
+  saved but not live has no row of its own — the list is a view of what each email is
+  currently set to, and the customs themselves live in the gallery. Why: the user pointed
+  out the selected template was listed alongside the one it replaced.
 - 2026-09-09 — **Default is back in Custom Templates; the Email Type text stays** (branch
   1). Half of the entry below was reverted at the user's request: the Default card again
   leads the Custom Templates group in the gallery (count `customs.length + 1`, both cards

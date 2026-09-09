@@ -5644,7 +5644,7 @@ function tplPageRenderRows() {
     var nameClick = ucKey ? ' onclick="tplPageOpenGallery(\'' + ucKey + '\')"'
                           : (key ? ' onclick="openTemplatePreview(\'' + key + '\')"' : '');
     var nameStyle = 'font-size:14px;color:#111;font-weight:500;' + ((ucKey || key) ? 'cursor:pointer;' : '');
-    var editArgs = "'" + String(r[0]).replace(/'/g, "\\'") + "','" + String(r[1]).replace(/'/g, "\\'") + "','" + (key || '') + "'";
+    var editArgs = "'" + String(r[0]).replace(/'/g, "\\'") + "','" + String(r[1]).replace(/'/g, "\\'") + "','" + (key || ucKey || '') + "'";
     var editCell = '<td style="width:46px;padding:14px 0;text-align:center;">' +
         '<span class="tpl-row-edit" title="Edit this template" onclick="tplPageEditRow(' + editArgs + ')" ' +
         'style="display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:5px;cursor:pointer;" ' +
@@ -6040,8 +6040,9 @@ function tplSaveConfirm() {
     }
     st.customs.push({ name: name, subject: subject, folder: folder });
     st.active = 'custom:' + (st.customs.length - 1);
-    tplPageAddCreatedRow(name, 'Zoho Webinar', subject, folder, TPLPAGE_ETYPE_BY_KEY[_ucSlot]);
     _ucKey = _ucSlot;
+    // it is now the live template for this email, so it takes over that email's row
+    ucSyncListRow(st.active);
     _ucSlot = null;
     _ucReturn = false;
     closeTemplateEditor();
@@ -6662,34 +6663,55 @@ var UC_ROW_SUBJECT = {
   absenteesFollowup: 'Sent after the webinar to those who missed it',
   cancellation: 'Sent to registrants if the webinar is called off'
 };
-// Whatever is picked here has to be findable in Setup ▸ Templates — the Default already
-// has its row, a custom saved through the editor got one on save, but the customs that
-// came with the use case did not. Add the row on selection if it isn't listed yet.
+// Setup ▸ Templates holds one row per lifecycle email, showing whichever template is
+// live for it. Selecting in the gallery renames that row — it never adds a second, so
+// choosing a custom replaces "Webinar Invitation Template" rather than joining it.
 function ucListRowName(id) {
   return (id === 'quick') ? (UC_DEFAULT_ROW_NAME[_ucKey] || ucMeta().label) : ucCardName(id);
 }
-function ucRowIsListed(name) {
-  var all = TPLPAGE_CREATED.concat(TPLPAGE_ROWS, TPLPAGE_WEBINAR_ROWS);
-  for (var i = 0; i < all.length; i++) {
-    if (all[i][0] === name && all[i][1] === 'Zoho Webinar') return true;
+function ucRowEType(r) { return r.etype || tplPageETypeOf(r[0]); }
+// the row that stands for this use case: the shipped one if there is one, otherwise the
+// first created row carrying its type. Any further row for the same type is a leftover.
+function ucUseCaseRow(etype) {
+  var found = null;
+  for (var i = 0; i < TPLPAGE_WEBINAR_ROWS.length; i++) {
+    if (ucRowEType(TPLPAGE_WEBINAR_ROWS[i]) === etype) return TPLPAGE_WEBINAR_ROWS[i];
   }
-  return false;
+  TPLPAGE_CREATED = TPLPAGE_CREATED.filter(function(r) {
+    if (r[1] !== 'Zoho Webinar' || ucRowEType(r) !== etype) return true;
+    if (!found) { found = r; return true; }
+    return false;
+  });
+  return found;
 }
-function ucEnsureListRow(id) {
+function ucSyncListRow(id) {
+  var etype = TPLPAGE_ETYPE_BY_KEY[_ucKey] || '';
   var name = ucListRowName(id);
-  if (!name || ucRowIsListed(name)) return false;
-  tplPageAddCreatedRow(name, 'Zoho Webinar', UC_ROW_SUBJECT[_ucKey] || '',
-                       'Public Email Templates', TPLPAGE_ETYPE_BY_KEY[_ucKey] || '');
-  return true;
+  if (!name || !etype) return;
+  var row = ucUseCaseRow(etype);
+  if (!row) {
+    tplPageAddCreatedRow(name, 'Zoho Webinar', UC_ROW_SUBJECT[_ucKey] || '',
+                         'Public Email Templates', etype);
+    return;
+  }
+  // drop every other row for this email, then rename the one that is left
+  TPLPAGE_CREATED = TPLPAGE_CREATED.filter(function(r) {
+    return r === row || r[1] !== 'Zoho Webinar' || ucRowEType(r) !== etype;
+  });
+  row[0] = name;
+  row.etype = etype;
+  if (!row[2] || row[2] === '\u2014') row[2] = UC_ROW_SUBJECT[_ucKey] || '';
+  if (typeof tplPageRenderRows === 'function' && document.getElementById('tplpage-tbody')) {
+    tplPageRenderRows();
+  }
 }
 
 // ── selecting: takes effect straight away for this use case ──
 function ucSelect(id) {
   ucState().active = id;
-  var added = ucEnsureListRow(id);
+  ucSyncListRow(id);
   ucRenderPane();
-  ucToast(ucCardName(id) + ' is now the ' + ucMeta().label + ' email' +
-          (added ? ', and is listed under Templates.' : '.'));
+  ucToast(ucCardName(id) + ' is now the ' + ucMeta().label + ' email.');
 }
 function ucCardName(id) {
   if (id === 'quick') return 'Default';
