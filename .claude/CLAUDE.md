@@ -125,6 +125,14 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **Webinar Cancelled Template is a shipped row, listed last** (branch 1). It
+  had no row of its own, so it only appeared once you selected something for that use case
+  — and then arrived at the *top*, because `tplPageAddCreatedRow` unshifts. It is now the
+  eighth entry in `TPLPAGE_WEBINAR_ROWS`, after Absentees Follow-up, matching the order of
+  the gallery's rail: the list shows all eight lifecycle emails from the start and the
+  cancellation email sits at the end, where it belongs — it only goes out if the webinar is
+  called off. `ucSyncListRow` now finds and renames it like any other, so nothing is added
+  on selection any more. Why: the user asked for it last.
 - 2026-09-09 — **One row per lifecycle email: selecting a template renames it, never adds
   a second** (branch 1). Selecting a custom in the gallery had been *adding* a row, so the
   Templates list showed both "Webinar Invitation Template" and the custom you had just
