@@ -125,6 +125,19 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **`index.html` redirects with a cache-buster.** Slate serves the mock with
+  `cache-control: public, max-age=31536000` — a year — so a browser that had opened the page
+  once kept showing that copy after every redeploy, which reads exactly like "the deploy
+  didn't work". (It cost a round of confusion: the file on the server was current, `curl`
+  and a fresh tab both proved it, while the user's cached tab was not.) The root redirect
+  now appends `?v=<Date.now()>`, so `/` always pulls a fresh copy. Opening `/webinar.html`
+  directly still hits the cached copy — hard-reload there. The cost is re-fetching 1.4 MB
+  each visit, which is the right trade for a demo. Also worth recording: there are **two
+  Slate apps**. `zoho-webinar-eqbkvmwc.onslate.com` is a dead upload from the morning;
+  `zoho-webinar-aqxbqcax.onslate.com` is the live one, git-connected to `master` with Auto
+  Deploy, and it is the URL to use. Slate labels the build with its own commit id
+  (`bbfc4e0`), which is not a commit in this repo — match deployments by content, not by
+  that id. Why: the user reported the deployment not reflecting changes.
 - 2026-09-09 — **Creating a template from a create-webinar slot happens in Zoho Webinar**
   (branch 1). `+ Create Template` inside a slot's Select Template dialog no longer opens
   CRM's Template Gallery. It opens a **new tab on meeting.zoho.com** — with its own address

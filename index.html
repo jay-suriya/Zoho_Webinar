@@ -3,9 +3,16 @@
 <head>
 <meta charset="utf-8">
 <title>Zoho CRM &rlm;⇌&rlm; Zoho Webinar</title>
-<!-- The mock lives in webinar.html. Static hosts (Catalyst, http.server, GitHub Pages)
-     serve index.html for "/", so this hands off to it rather than 404ing at the root.
-     Kept as a redirect, not a copy, so there is only one 1.4 MB file to keep in step. -->
+<!-- The mock lives in webinar.html. Static hosts (Catalyst Slate, http.server, GitHub
+     Pages) serve index.html for "/", so this hands off to it rather than 404ing at the
+     root. Kept as a redirect, not a copy, so there is only one 1.4 MB file to keep in step.
+
+     The redirect carries a cache-busting ?v= because Slate serves the mock with
+     "cache-control: public, max-age=31536000" — a year. Without this, a browser that has
+     opened the page once keeps showing that copy after every redeploy, which reads as
+     "the deployment didn't work". The cost is that the file is re-fetched each visit;
+     for a demo mock that is the right trade. Opening /webinar.html directly still hits
+     the cached copy — hard-reload (Cmd-Shift-R) in that case. -->
 <meta http-equiv="refresh" content="0; url=webinar.html">
 <link rel="canonical" href="webinar.html">
 <style>
@@ -16,6 +23,10 @@
 </head>
 <body>
   <p>Opening the mock&hellip; if nothing happens, <a href="webinar.html">open webinar.html</a>.</p>
-  <script>location.replace('webinar.html' + location.search + location.hash);</script>
+  <script>
+    // a fresh copy every visit, so a redeploy is visible without a hard reload
+    var q = location.search ? location.search + '&' : '?';
+    location.replace('webinar.html' + q + 'v=' + Date.now() + location.hash);
+  </script>
 </body>
 </html>
