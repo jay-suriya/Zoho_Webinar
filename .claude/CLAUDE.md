@@ -125,6 +125,20 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **Email Type is locked to Webinar Invitation** (branch `template-flow-fixes`
+  only). The field now holds a single option, **Webinar Invitation**, preselected and
+  `disabled` with the design's disabled treatment (`#F5F6F8` fill, `#D2D9F1` border,
+  not-allowed cursor) and a tooltip pointing at where the other emails are set. The
+  reasoning it encodes: the invitation is the one lifecycle email a CRM user sends by hand,
+  so it is the only one worth creating from Setup ▸ Templates; the rest are set per webinar
+  in Zoho Webinar ▸ Preferences. `_ctUsecase` is pinned to `'sendInvite'` when the dialog
+  opens, so `_ctType` / `_tplTypeName` and therefore the required Registration Link and the
+  invitation's merge-field set follow from it. The Template Gallery chip now reads whatever
+  the Email Type field said (the option's own text, not `TPLPAGE_ETYPE_BY_KEY`), so the
+  dialog and the gallery cannot disagree — both say "Webinar Invitation". The other seven
+  options are no longer rendered rather than merely hidden; restoring them means putting
+  `TPL_USECASES.map` back and dropping the `disabled` flag. Why: the user asked for the type
+  to default to Webinar Invitation and not be changeable.
 - 2026-09-09 — **Creation goes through the six Basic layouts, and a list click previews**
   (branch `template-flow-fixes` only). Where branch 1 sends `+ New Template` into the
   use-case gallery, this branch keeps the classic path: Create Email Template (module +

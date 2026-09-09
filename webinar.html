@@ -6818,13 +6818,19 @@ function openCreateTemplateModal(module) {
   var sel = document.getElementById('ct-module');
   sel.value = _ctModule;
   if (sel.value !== _ctModule) { _ctModule = 'Leads'; sel.value = 'Leads'; }
-  // Email Type options are the eight lifecycle emails, labelled as the Templates list
-  // labels them, valued by the use case the gallery opens on
+  // Email Type is fixed at Webinar Invitation and cannot be changed: it is the only
+  // lifecycle email you send from CRM, so it is the only one you create from here. The
+  // rest are set per webinar in Zoho Webinar > Preferences.
+  _ctUsecase = 'sendInvite';
   var et = document.getElementById('ct-etype');
-  et.innerHTML = TPL_USECASES.map(function(u) {
-    return '<option value="' + u.key + '">' + (TPLPAGE_ETYPE_BY_KEY[u.key] || u.label) + '</option>';
-  }).join('');
-  et.value = _ctUsecase;
+  et.innerHTML = '<option value="sendInvite">Webinar Invitation</option>';
+  et.value = 'sendInvite';
+  et.disabled = true;
+  et.style.background = '#F5F6F8';
+  et.style.borderColor = '#D2D9F1';
+  et.style.color = '#616E88';
+  et.style.cursor = 'not-allowed';
+  et.title = 'Templates created here are webinar invitations. The other lifecycle emails are set in Zoho Webinar \u203a Preferences.';
   ctModuleChanged();
   document.getElementById('ct-modal').style.display = 'flex';
 }
@@ -6842,9 +6848,11 @@ function ctNext() {
   if (_ctModule === 'Zoho Webinar') {
     // carry the chosen Email Type through to the Basic layouts: the gallery header names
     // the module and the email, and the type stamps the link and merge-field rules
-    _ctUsecase = document.getElementById('ct-etype').value || 'sendInvite';
+    var etSel = document.getElementById('ct-etype');
+    _ctUsecase = etSel.value || 'sendInvite';
     _ctType = TPL_TYPE_BY_KEY[_ctUsecase] || 'Webinar Invitation';
-    _ctETypeLabel = TPLPAGE_ETYPE_BY_KEY[_ctUsecase] || _ctType;
+    // the chip reads exactly what the Email Type field said
+    _ctETypeLabel = (etSel.options[etSel.selectedIndex] || {}).text || _ctType;
     openTemplateGallery();
     return;
   }
