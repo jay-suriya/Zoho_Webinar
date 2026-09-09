@@ -5047,9 +5047,8 @@ function _syncCrmFormPicker(label){
     </div>
     <!-- Toolbar: folder filter + search + A-Z + Create Template -->
     <div style="padding:18px 28px 16px;display:flex;align-items:center;gap:14px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #C0C8E2;border-radius:6px;padding:10px 14px;min-width:230px;font-size:15px;color:#1B1A2E;cursor:pointer;">
-        <span id="stpl-folder-filter">All Templates</span>
-        <span style="color:#555;font-size:11px;">&#9660;</span>
+      <div style="display:flex;align-items:center;gap:10px;border:1px solid #C0C8E2;border-radius:6px;padding:10px 14px;min-width:230px;font-size:15px;color:#1B1A2E;">
+        <span id="stpl-folder-filter">Zoho Webinar</span>
       </div>
       <div style="display:flex;align-items:center;gap:10px;border:1px solid #C2185B;border-radius:6px;padding:10px 14px;min-width:270px;">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9aa0b8" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -6336,9 +6335,25 @@ function zwEditorDoc(key) {
       '</div>' +
     '</div></body></html>';
 }
+function zwPopupBlockedToast(what) {
+  var el = document.getElementById('zw-popup-toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'zw-popup-toast';
+    el.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%);' +
+      'z-index:10000;background:#202123;color:#fff;font-size:13.5px;font-weight:600;' +
+      'border-radius:20px;padding:10px 22px;box-shadow:0 4px 12px rgba(49,57,73,0.28);' +
+      "font-family:'Zoho Puvi',-apple-system,'Segoe UI',sans-serif;";
+    document.body.appendChild(el);
+  }
+  el.textContent = 'Allow pop-ups for this site to ' + what + ' in Zoho Webinar.';
+  el.style.display = 'block';
+  clearTimeout(window._zwToastT);
+  window._zwToastT = setTimeout(function() { el.style.display = 'none'; }, 4500);
+}
 function openZohoWebinarTemplateEditor(key) {
   var w = window.open('', '_blank');
-  if (!w) { alert('Allow pop-ups to open the Zoho Webinar template editor.'); return; }
+  if (!w) { zwPopupBlockedToast('edit this template'); return; }
   w.document.open();
   w.document.write(zwEditorDoc(key));
   w.document.close();
@@ -6529,14 +6544,217 @@ function openInviteTemplateGallery() {
   _ctType = 'Webinar Invitation';
   openTemplateGallery();
 }
+// ══ Creating a lifecycle template from the create-webinar form ═════════════
+// These emails belong to Zoho Webinar, so the create step leaves CRM: a new tab opens
+// on meeting.zoho.com with Email customization, and picking a Basic layout opens the
+// editor there. Saving hands the template back to this page and closes the tab.
+var ZW_SLOT_UC = {
+  conf:     { key: 'confirmation',      label: 'Registration Confirmation', subject: 'Registration Confirmation for ${Campaigns.Title}', lead: 'You have successfully registered for the webinar.' },
+  r1:       { key: 'reminder1',         label: 'Reminder 1',                subject: 'Reminder to join - ${Campaigns.Title}',            lead: 'This is a reminder that the webinar you registered for is coming up.' },
+  r2:       { key: 'reminder2',         label: 'Reminder 2',                subject: 'Reminder to join - ${Campaigns.Title}',            lead: 'This is a reminder that the webinar you registered for is coming up.' },
+  r3:       { key: 'reminder3',         label: 'Reminder 3',                subject: 'Reminder to join - ${Campaigns.Title}',            lead: 'The webinar you registered for starts soon.' },
+  thankyou: { key: 'attendeesFollowup', label: 'Attendees Follow-up',       subject: 'Thank you for attending ${Campaigns.Title}',       lead: 'Thank you for attending the webinar.' },
+  fuAtt:    { key: 'attendeesFollowup', label: 'Attendees Follow-up',       subject: 'Thank you for attending ${Campaigns.Title}',       lead: 'Thank you for attending the webinar.' },
+  fuAbs:    { key: 'absenteesFollowup', label: 'Absentees Follow-up',       subject: 'We missed you at ${Campaigns.Title}',              lead: 'We are sorry that you were not able to attend the webinar.' }
+};
+var ZW_UC_ORDER = ['conf', 'r1', 'r2', 'r3', 'fuAtt', 'fuAbs'];
+var _zwSlotWin = null;
+var _zwSlot = null;
+
+function zwSlotUrl(slot, step) {
+  var uc = ZW_SLOT_UC[slot] || ZW_SLOT_UC.conf;
+  return 'meeting.zoho.com/meeting/556217208/886748000000019001/settings/templates' +
+         '?step=' + (step || 'customize') + '&templateName=Default&module=Registrations' +
+         '&selectedTemplate=' + uc.key;
+}
+// the customs already saved for this slot's email, so the new tab reads true to life
+function zwSlotCustoms(slot) {
+  var type = TPL_SLOT_TYPE[slot] || '';
+  return (window.WEBINAR_CREATED || [])
+    .filter(function(c) { return c.type === type; })
+    .map(function(c) { return c.name; });
+}
+
+function zwCreateFlowDoc(slot) {
+  var uc = ZW_SLOT_UC[slot] || ZW_SLOT_UC.conf;
+  var rail = ZW_UC_ORDER.map(function(k) {
+    var u = ZW_SLOT_UC[k];
+    var on = u.key === uc.key;
+    return '<div class="zw-rail-item' + (on ? ' on' : '') + '">' + u.label + '</div>';
+  }).join('');
+  var customs = zwSlotCustoms(slot).map(function(n) {
+    return '<div class="zw-card"><div class="zw-thumb zw-thumb-zia"></div><div class="zw-card-name">' + n + '</div></div>';
+  }).join('');
+  var layouts = ['Blank', 'One column', 'Two column', 'Two column with image 1',
+                 'Two column with image 2', 'Three column'];
+  var basic = layouts.map(function(n, i) {
+    return '<div class="zw-card" onclick="zwOpenEditor(' + i + ')">' +
+             '<div class="zw-thumb' + (i === 0 ? ' zw-blank' : '') + '"></div>' +
+             '<div class="zw-card-name">' + n + '</div></div>';
+  }).join('');
+
+  return '<!doctype html><html><head><meta charset="utf-8"><title>Zoho Meeting | Templates</title><style>' +
+    '*{box-sizing:border-box;}body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;background:#fff;color:#222;}' +
+    // browser frame, so the meeting.zoho.com address is visible in a mock
+    '.zw-chrome{background:#3C1F1B;padding:8px 12px;display:flex;align-items:center;gap:12px;}' +
+    '.zw-nav{color:#E8DDD9;font-size:17px;}' +
+    '.zw-omni{flex:1;display:flex;align-items:center;gap:9px;background:#1F1512;border-radius:16px;padding:7px 14px;color:#F2E9E6;font-size:13.5px;}' +
+    '.zw-omni-url{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}' +
+    '.zw-badge{background:#F26F21;color:#fff;font-size:12px;font-weight:600;border-radius:14px;padding:5px 12px;white-space:nowrap;}' +
+    // Zoho Meeting shell
+    '.zw-top{border-bottom:1px solid #E8E8ED;padding:10px 20px;display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;color:#2C7BE5;}' +
+    '.zw-page{padding:22px 28px 0;}' +
+    '.zw-h1{font-size:22px;font-weight:600;margin:0 0 8px;display:flex;align-items:center;gap:14px;}' +
+    '.zw-note{font-size:13.5px;color:#5b5b6b;margin:0 0 14px;max-width:1100px;}' +
+    '.zw-htmlbtn{margin-left:auto;border:1px solid #2C7BE5;color:#2C7BE5;background:#fff;border-radius:5px;padding:8px 16px;font-size:14px;cursor:pointer;}' +
+    '.zw-split{display:flex;border-top:1px solid #E8E8ED;min-height:calc(100vh - 190px);}' +
+    '.zw-rail{width:262px;flex-shrink:0;border-right:1px solid #E8E8ED;}' +
+    '.zw-rail-item{padding:14px 22px;border-bottom:1px solid #F0F0F4;font-size:15px;color:#3b3b4b;}' +
+    '.zw-rail-item.on{font-weight:700;color:#111;}' +
+    '.zw-pane{flex:1;padding:26px 30px 60px;overflow-y:auto;}' +
+    '.zw-sec{font-size:16px;font-weight:600;margin:0 0 18px;}' +
+    '.zw-cards{display:flex;flex-wrap:wrap;gap:28px;margin-bottom:38px;}' +
+    '.zw-card{width:180px;cursor:pointer;}' +
+    '.zw-thumb{height:238px;border:1px solid #DCDCE4;border-radius:3px;background:' +
+      'linear-gradient(#F1F1F5 0 14%,#CFCFD8 14% 44%,#F1F1F5 44% 100%);}' +
+    '.zw-card:hover .zw-thumb{border-color:#2C7BE5;}' +
+    '.zw-blank{background:#fff;}' +
+    '.zw-thumb-zia{position:relative;}' +
+    '.zw-card-name{text-align:center;font-size:13.5px;color:#3b3b4b;margin-top:9px;}' +
+    '.zw-empty{font-size:13.5px;color:#8b8b9b;border:1px dashed #DCDCE4;border-radius:6px;padding:24px;max-width:620px;margin-bottom:38px;}' +
+    // editor
+    '.zw-head{background:#2E3145;color:#fff;padding:14px 22px;display:flex;align-items:center;gap:18px;}' +
+    '.zw-name{font-size:19px;font-weight:600;background:transparent;border:none;border-bottom:1px solid #565A78;color:#fff;outline:none;font-family:inherit;width:300px;padding:2px 0;}' +
+    '.zw-name::placeholder{color:#C7C9DA;}' +
+    '.zw-sub{font-size:14px;color:#C7C9DA;margin-top:4px;}' +
+    '.zw-chip{background:#4A4D63;color:#E7E8F0;font-size:12.5px;border-radius:3px;padding:5px 11px;}' +
+    '.zw-btn{border-radius:16px;border:none;padding:8px 20px;font-size:14px;cursor:pointer;background:#fff;color:#2E3145;}' +
+    '.zw-btn-primary{background:#2C7BE5;color:#fff;}' +
+    '.zw-ebody{display:flex;min-height:calc(100vh - 108px);}' +
+    '.zw-left{width:340px;flex-shrink:0;border-right:1px solid #E3E3E8;padding:24px 0;}' +
+    '.zw-left-title{text-align:center;font-size:18px;font-weight:600;margin-bottom:22px;letter-spacing:.02em;}' +
+    '.zw-tiles{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:0 42px;}' +
+    '.zw-tile-box{height:88px;border:1px solid #DADAE0;border-radius:3px;display:flex;align-items:center;justify-content:center;}' +
+    '.zw-tile-label{text-align:center;font-size:12.5px;margin-top:6px;letter-spacing:.03em;}' +
+    '.zw-right{flex:1;background:#EFEFF1;}' +
+    '.zw-toolbar{background:#fff;border-bottom:1px solid #E3E3E8;padding:9px 16px;font-size:14px;color:#3b3b3b;display:flex;gap:12px;flex-wrap:wrap;}' +
+    '.zw-canvas{padding:38px 0;display:flex;justify-content:center;}' +
+    '.zw-sheet{background:#fff;width:800px;max-width:92%;min-height:820px;padding:42px;font-size:17px;line-height:1.5;}' +
+    '</style></head><body>' +
+    '<div class="zw-chrome">' +
+      '<span class="zw-nav">&#8592;</span><span class="zw-nav">&#8594;</span><span class="zw-nav">&#8635;</span>' +
+      '<div class="zw-omni"><span>&#128274;</span><span class="zw-omni-url" id="zw-url">' + zwSlotUrl(slot, 'customize') + '</span></div>' +
+      '<span class="zw-nav">&#9734;</span><span class="zw-badge">New Chrome available</span>' +
+    '</div>' +
+    '<div id="zw-app">' +
+      '<div class="zw-top">&#10023; Meeting</div>' +
+      '<div class="zw-page">' +
+        '<div class="zw-h1"><span>&#8592;</span><span>Email customization</span>' +
+          '<button class="zw-htmlbtn">Insert HTML / Plain Text</button></div>' +
+        '<p class="zw-note">You can customize the email that will be sent to your attendees as well as create new templates to match your organizational preferences. You can also choose from our list of pre-defined templates based on your needs.</p>' +
+      '</div>' +
+      '<div class="zw-split">' +
+        '<div class="zw-rail">' + rail + '</div>' +
+        '<div class="zw-pane">' +
+          '<div class="zw-sec">Quick Templates</div>' +
+          '<div class="zw-cards"><div class="zw-card"><div class="zw-thumb"></div><div class="zw-card-name">Default</div></div></div>' +
+          '<div class="zw-sec">Custom Templates</div>' +
+          (customs ? '<div class="zw-cards">' + customs + '</div>'
+                   : '<div class="zw-empty">No custom templates available.</div>') +
+          '<div class="zw-sec">Basic <span style="font-size:12.5px;color:#2C7BE5;background:#EAF2FD;border-radius:10px;padding:2px 9px;">6</span></div>' +
+          '<div class="zw-cards">' + basic + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<script>' +
+    'var LAYOUTS=' + JSON.stringify(layouts) + ';' +
+    'var SLOT=' + JSON.stringify(slot) + ';' +
+    'var UC=' + JSON.stringify({ label: uc.label, subject: uc.subject, lead: uc.lead }) + ';' +
+    'var EDIT_URL=' + JSON.stringify(zwSlotUrl(slot, 'create')) + ';' +
+    'function tile(l,inner){return "<div><div class=\\"zw-tile-box\\">"+inner+"</div><div class=\\"zw-tile-label\\">"+l+"</div></div>";}' +
+    'function zwOpenEditor(i){' +
+      'document.getElementById("zw-url").textContent=EDIT_URL;' +
+      'var body="<p style=\\"margin:0 0 26px;\\">${companyLogo}</p>"+' +
+        '"<p style=\\"margin:0 0 26px;\\">"+UC.lead+"</p>"+' +
+        '"<h1 style=\\"margin:0 0 6px;font-size:31px;\\">${Campaigns.Title}</h1>"+' +
+        '"<p style=\\"margin:0 0 24px;color:#444;\\">${Campaigns.Date and Time Formatted}</p>"+' +
+        '"<p style=\\"margin:0 0 30px;\\">Please send your questions, comments and feedback to:<br>${Users.Email}.</p>"+' +
+        '"<div style=\\"display:flex;height:5px;margin-top:36px;\\"><div style=\\"flex:1;background:#DB4437;\\"></div>"+' +
+        '"<div style=\\"flex:1;background:#0F9D58;\\"></div><div style=\\"flex:1;background:#4285F4;\\"></div>"+' +
+        '"<div style=\\"flex:1;background:#F4B400;\\"></div></div>";' +
+      'document.getElementById("zw-app").innerHTML=' +
+        '"<div class=\\"zw-head\\"><div><input id=\\"zw-tplname\\" class=\\"zw-name\\" placeholder=\\"Enter a template name\\">"+' +
+        '"<div class=\\"zw-sub\\">"+UC.subject+"</div></div><span class=\\"zw-chip\\">Registrations</span>"+' +
+        '"<div style=\\"margin-left:auto;display:flex;align-items:center;gap:14px;\\">"+' +
+        '"<span style=\\"font-size:14px;text-decoration:underline;\\">Attachments</span>"+' +
+        '"<button class=\\"zw-btn\\" onclick=\\"window.close()\\">Cancel</button>"+' +
+        '"<button class=\\"zw-btn\\">Preview</button>"+' +
+        '"<button class=\\"zw-btn zw-btn-primary\\" onclick=\\"zwSave()\\">Save</button></div></div>"+' +
+        '"<div class=\\"zw-ebody\\"><div class=\\"zw-left\\"><div class=\\"zw-left-title\\">ALL COMPONENTS</div>"+' +
+        '"<div class=\\"zw-tiles\\">"+tile("TEXT","<b style=\\"font:700 26px Georgia,serif;\\">T</b>")+' +
+        'tile("IMAGE","&#128444;")+tile("SPACER","&#8597;")+tile("IMAGE+TEXT","&#128444;&#8801;")+' +
+        'tile("BUTTON","<span style=\\"display:inline-block;width:52px;height:16px;border-radius:8px;background:#3b3b3b;\\"></span>")+' +
+        'tile("COLUMNS","&#9707;")+tile("TABLE","&#9636;")+tile("BACKGROUND","&#9670;")+"</div>"+' +
+        '"<div style=\\"padding:26px 30px 0;font-size:14px;\\"><div>HINT:</div><div>Type # to insert merge field. "+' +
+        '"<span style=\\"color:#2C7BE5;\\">More</span></div></div></div>"+' +
+        '"<div class=\\"zw-right\\"><div class=\\"zw-toolbar\\"><b>Arial &#9662;</b><b>14 &#9662;</b><b>B</b><i>I</i><u>U</u>"+' +
+        '"<span>&#8801;</span><span>&#128279;</span><span>&#128444;</span><span>&#169;</span><b>Size &#9662;</b></div>"+' +
+        '"<div class=\\"zw-canvas\\"><div class=\\"zw-sheet\\">"+body+"</div></div></div></div>";' +
+      'document.getElementById("zw-tplname").focus();' +
+    '}' +
+    // Save hands the template back to the CRM tab that opened this one, then closes
+    'function zwSave(){' +
+      'var el=document.getElementById("zw-tplname");' +
+      'var name=(el.value||"").trim();' +
+      'if(!name){el.style.borderBottomColor="#FF5D5A";el.focus();return;}' +
+      'try{ if(window.opener && !window.opener.closed && window.opener.zwSlotTemplateSaved){' +
+        'window.opener.zwSlotTemplateSaved(name, SLOT); } }catch(e){}' +
+      'window.close();' +
+    '}' +
+    '<\/script></body></html>';
+}
+
+function openZohoWebinarCreateTemplate(slot) {
+  _zwSlot = slot;
+  var w = window.open('', '_blank');
+  if (!w) { zwPopupBlockedToast('create a template'); return; }
+  _zwSlotWin = w;
+  w.document.open();
+  w.document.write(zwCreateFlowDoc(slot));
+  w.document.close();
+}
+// called by the Zoho Webinar tab when Save is pressed there
+function zwSlotTemplateSaved(name, slot) {
+  slot = slot || _zwSlot;
+  var type = TPL_SLOT_TYPE[slot] || 'Confirmation Email';
+  var uc = ZW_SLOT_UC[slot] || ZW_SLOT_UC.conf;
+  if (!(window.WEBINAR_CREATED || []).some(function(c) {
+        return c.name === name && c.type === type; })) {
+    window.WEBINAR_CREATED.push({ name: name, type: type, folder: 'Public Email Templates' });
+  }
+  // it is a template in its own right, so it is listed in Setup > Templates too
+  if (window.tplPageAddCreatedRow) {
+    tplPageAddCreatedRow(name, 'Zoho Webinar', uc.subject, 'Public Email Templates',
+                         TPLPAGE_ETYPE_BY_KEY[uc.key] || '');
+  }
+  // and it becomes this step's template, with the picker open on it
+  _activeTplSlot = slot;
+  tplSlotSelection[slot] = name;
+  var chip = document.getElementById('tplchip-' + slot);
+  if (chip) chip.textContent = name;
+  openSlotTemplatePicker(slot);
+  tplShowRefreshPill();
+}
+window.zwSlotTemplateSaved = zwSlotTemplateSaved;
+
 function slotCreateTemplate() {
-  // the step the call came from decides the type, so there is nothing to ask
+  // these are Zoho Webinar's lifecycle emails, so creating one happens there: a new tab
+  // on meeting.zoho.com, which hands the saved template back and closes itself
   _ctFromInvite = false;
-  _ctSlot = _activeTplSlot;
-  _ctModule = 'Zoho Webinar';
-  _ctType = TPL_SLOT_TYPE[_activeTplSlot] || 'Webinar Invitation';
+  _ctSlot = null;
+  var slot = _activeTplSlot;
   closeSelectTemplateModal();
-  openTemplateGallery();
+  openZohoWebinarCreateTemplate(slot);
 }
 function pickSlotTemplate(name) {
   if (_activeTplSlot) {

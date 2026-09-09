@@ -125,6 +125,30 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **Creating a template from a create-webinar slot happens in Zoho Webinar**
+  (branch 1). `+ Create Template` inside a slot's Select Template dialog no longer opens
+  CRM's Template Gallery. It opens a **new tab on meeting.zoho.com** — with its own address
+  bar, since a mock cannot occupy that domain — showing Zoho Meeting's **Email
+  customization** screen: the rail of six lifecycle emails with the slot's own email in
+  bold, Quick Templates' Default, the customs already saved for that email (or "No custom
+  templates available."), and **Basic (6)**. Picking a layout swaps in the editor — template
+  name field, the email's real subject, Registrations chip, ALL COMPONENTS rail, toolbar and
+  a `${...}` body. **Save hands the template back and closes the tab**:
+  `window.opener.zwSlotTemplateSaved(name, slot)` pushes it into `WEBINAR_CREATED`, adds a
+  Setup ▸ Templates row with its Email Type, selects it for the slot (chip updated) and
+  reopens the picker on it, then the tab calls `window.close()`. The child is same-origin
+  (`about:blank` inherits the opener's origin), which is what makes the callback possible.
+  Also: the Select Template dialog's **"All Templates" dropdown is now a static "Zoho
+  Webinar"** label with no caret — every template it lists is a webinar template, so there
+  was nothing to filter.
+  **Hazard learned the hard way:** the blocked-pop-up path used `alert()`, and a modal
+  dialog freezes the whole renderer until someone dismisses it by hand — it cost a frozen
+  tab and a dead `Runtime.evaluate`. Both pop-up-blocked messages are now a toast
+  (`zwPopupBlockedToast`). Five `alert()` calls remain in the mock from before this session
+  (Visit Webinar module, Notify Super Admin, Notify Suriya, Add Meeting, Search CRM users);
+  they are click stubs, but avoid clicking them while driving the page with automation.
+  Why: the user asked for this hand-off, for the tab to close on save with the template
+  available here, and for the folder dropdown to become Zoho Webinar.
 - 2026-09-09 — **Branch 1 takes branch 2's template and Send Invite flow.** The reverse of
   yesterday's port: 14 of the 23 hunks between the two files came across from
   `template-flow-fixes`, 9 were held back. **Taken — the whole template flow:** creation is
