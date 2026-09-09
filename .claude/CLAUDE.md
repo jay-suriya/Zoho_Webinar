@@ -125,11 +125,18 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
-- 2026-09-09 — **Custom Templates holds only real customs; Email Type moved out of the
-  column and into the row** (branch 1). Two corrections to yesterday's work. (1) The
-  Default no longer appears under Custom Templates — that group lists what has actually
-  been saved for the use case, and when nothing has, it says **"No custom templates
-  available."** Send Invite reads 2, Webinar Cancelled shows the empty state. (2) The
+- 2026-09-09 — **Default is back in Custom Templates; the Email Type text stays** (branch
+  1). Half of the entry below was reverted at the user's request: the Default card again
+  leads the Custom Templates group in the gallery (count `customs.length + 1`, both cards
+  showing "In use" together), and the "No custom templates available." empty state is
+  unreachable again and gone. The Email Type change was explicitly kept — it stays a text
+  segment on the row's subline, not a column. Why: the user asked to revert the previous
+  change except for the email type.
+- 2026-09-09 — **[customs half reverted, see above] Email Type moved out of the
+  column and into the row** (branch 1). Two changes at the time. (1) The
+  Default no longer appeared under Custom Templates — that group listed what had actually
+  been saved for the use case, and when nothing had, it said "No custom templates
+  available." **This half was reverted the same day.** (2) The
   **Email Type column is gone.** A column that only exists for one module leaves a hole in
   the table for every other module, so the type now reads as the tail of the row's own
   subline: *Zoho Webinar · Sent when you invite CRM records to a webinar · Invitation

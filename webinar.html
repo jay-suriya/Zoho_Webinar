@@ -6597,13 +6597,20 @@ function ucRenderPane() {
       }) +
     '</div></div>';
 
-  // ── Custom Templates — only what has actually been saved under this use case ──
-  html += '<div style="margin-bottom:38px;">' + ucSectionHead('Custom Templates', st.customs.length || null);
-  if (!st.customs.length) {
-    html += '<div style="font-size:13.5px;color:#8C91AB;border:1px dashed #D6D6E3;border-radius:8px;padding:26px 22px;max-width:640px;">' +
-      'No custom templates available.</div>';
-  } else {
+  // ── Custom Templates — the Default leads the group, then what has been saved here ──
+  // The Default is a choice for this use case like any other, so it is offered in both
+  // groups rather than only in Quick Templates.
+  html += '<div style="margin-bottom:38px;">' + ucSectionHead('Custom Templates', st.customs.length + 1);
   html += '<div style="display:flex;flex-wrap:wrap;gap:26px;">' +
+    ucCard({
+      live: st.active === 'quick',
+      thumb: ucThumb(false, st.active === 'quick'),
+      caption: 'Default',
+      name: 'Default',
+      onclick: "ucSelect('quick')",
+      preview: "ucPreviewDefault()",
+      edit: "ucEditDefault()"
+    }) +
     st.customs.map(function(c, i) {
       var nm = String(c.name).replace(/'/g, "\\'");
       return ucCard({
@@ -6616,7 +6623,6 @@ function ucRenderPane() {
         edit: "ucEditCustom(" + i + ")"
       });
     }).join('') + '</div>';
-  }
   html += '</div>';
 
   // ── Basic — start a new one for this use case ──
