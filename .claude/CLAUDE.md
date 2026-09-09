@@ -125,6 +125,21 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **CRM lists Zoho Webinar's templates; only the invitation is CRM's to edit**
+  (branch `template-flow-fixes` only). This is the model the locked Email Type implies, now
+  carried into the list. Every lifecycle email except the invitation carries a **Default**
+  chip after its name and has **no hover pencil** — it is Zoho Webinar's own template,
+  listed here so it can be seen and previewed, not edited from CRM. The invitation keeps its
+  pencil and stays the one template CRM owns and customises, which is why it is also the
+  only Email Type `+ New Template` offers. **Webinar Cancelled Template is removed from the
+  list** — it is not part of what CRM lists; the use case stays in the Email Notifications
+  rail, so Preferences still manages it. Clicking any row, Default included, still opens the
+  preview (checked: 2nd Reminder Template). The list is 7 rows now. `isWebinarDefault` is
+  `module === 'Zoho Webinar' && etype && etype !== 'Invitation'`, so a template someone
+  creates for a non-invitation email would also read as Default — not reachable today,
+  since the dialog only creates invitations. Why: the user said CRM is just listing Zoho
+  Webinar's templates, everything but the invitation is a default, and the cancellation
+  email should not be listed.
 - 2026-09-09 — **Email Type is locked to Webinar Invitation** (branch `template-flow-fixes`
   only). The field now holds a single option, **Webinar Invitation**, preselected and
   `disabled` with the design's disabled treatment (`#F5F6F8` fill, `#D2D9F1` border,
