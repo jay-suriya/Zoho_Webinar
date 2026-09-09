@@ -6175,7 +6175,173 @@ function closeTemplatePreview() {
     openUsecaseGallery(_ucKey);
   }
 }
+// ══ Editing a listed default hands off to Zoho Webinar ═════════════════════
+// CRM lists these emails but does not own them, so Edit leaves CRM: it opens Zoho
+// Webinar's own template editor in a new browser tab, on meeting.zoho.com. The tab
+// draws its own address bar because a mock cannot occupy that domain.
+var ZW_EDIT = {
+  confirmation: {
+    module: 'Registrations',
+    subject: 'Registration Confirmation for ${Campaigns.Title}',
+    lead: 'You have successfully registered for the webinar.',
+    tail: 'We look forward to seeing you there. Please send your questions, comments and feedback to:<br>${Users.Email}.'
+  },
+  reminder1: {
+    module: 'Registrations',
+    subject: 'Reminder to join - ${Campaigns.Title}',
+    lead: 'This is a reminder that the webinar you registered for is coming up.',
+    tail: 'Please send your questions, comments and feedback to:<br>${Users.Email}.'
+  },
+  reminder2: {
+    module: 'Registrations',
+    subject: 'Reminder to join - ${Campaigns.Title}',
+    lead: 'This is a reminder that the webinar you registered for is coming up.',
+    tail: 'Please send your questions, comments and feedback to:<br>${Users.Email}.'
+  },
+  reminder3: {
+    module: 'Registrations',
+    subject: 'Reminder to join - ${Campaigns.Title}',
+    lead: 'The webinar you registered for starts soon.',
+    tail: 'Please send your questions, comments and feedback to:<br>${Users.Email}.'
+  },
+  attendeesFollowup: {
+    module: 'Registrations',
+    subject: 'Thank you for attending ${Campaigns.Title}',
+    lead: 'Thank you for attending the webinar.',
+    tail: 'Please send your questions, comments and feedback to:<br>${Users.Email}.'
+  },
+  absenteesFollowup: {
+    module: 'Registrations',
+    subject: 'We missed you at ${Campaigns.Title}',
+    lead: 'We are sorry that you were not able to attend the webinar.',
+    tail: 'Please send your questions, comments and feedback to:<br>${Users.Email}.'
+  }
+};
+function zwCanEditElsewhere(key) { return !!ZW_EDIT[key]; }
+function zwEditorUrl(key) {
+  var m = ZW_EDIT[key] || ZW_EDIT.confirmation;
+  return 'meeting.zoho.com/meeting/556217208/886748000000019001/settings/templates' +
+         '?step=create&templateName=Default&module=' + m.module + '&selectedTemplate=' + key;
+}
+function zwComponentTile(label, svg) {
+  return '<div class="zw-tile"><div class="zw-tile-box">' + svg + '</div>' +
+         '<div class="zw-tile-label">' + label + '</div></div>';
+}
+function zwEditorDoc(key) {
+  var m = ZW_EDIT[key] || ZW_EDIT.confirmation;
+  var url = zwEditorUrl(key);
+  var body =
+    '<p style="margin:0 0 26px;">${companyLogo}</p>' +
+    '<p style="margin:0 0 26px;">' + m.lead + '</p>' +
+    '<h1 style="margin:0 0 6px;font-size:31px;font-weight:700;">${Campaigns.Title}</h1>' +
+    '<p style="margin:0 0 24px;color:#444;">${Campaigns.Date and Time Formatted}</p>' +
+    '<p style="margin:0 0 24px;">' + m.lead.replace('the webinar', '${Campaigns.Title}') + '</p>' +
+    '<p style="margin:0 0 30px;">' + m.tail + '</p>' +
+    '<div style="display:flex;height:5px;margin-top:36px;">' +
+      '<div style="flex:1;background:#DB4437;"></div><div style="flex:1;background:#0F9D58;"></div>' +
+      '<div style="flex:1;background:#4285F4;"></div><div style="flex:1;background:#F4B400;"></div>' +
+    '</div>';
+  var T = function(d) { return '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#3b3b3b" stroke-width="1.4">' + d + '</svg>'; };
+  var tiles =
+    zwComponentTile('TEXT', '<div style="font:700 26px Georgia,serif;color:#3b3b3b;">T</div>') +
+    zwComponentTile('IMAGE', T('<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.6"/><path d="M4 18l5-6 4 4 3-3 4 5"/>')) +
+    zwComponentTile('SPACER', T('<path d="M4 8h6M4 8l2-2M4 8l2 2M20 8h-6M20 8l-2-2M20 8l-2 2M4 16h16"/>')) +
+    zwComponentTile('IMAGE+TEXT', T('<rect x="2" y="6" width="9" height="12" rx="1"/><path d="M4 14l2-2 2 2"/><path d="M14 9h7M14 13h7M14 17h5"/>')) +
+    zwComponentTile('BUTTON', '<div style="width:52px;height:16px;border-radius:8px;background:#3b3b3b;"></div>') +
+    zwComponentTile('COLUMNS', T('<rect x="3" y="4" width="4.6" height="16"/><rect x="9.7" y="4" width="4.6" height="16"/><rect x="16.4" y="4" width="4.6" height="16"/>')) +
+    zwComponentTile('TABLE', T('<rect x="3" y="4" width="18" height="16"/><path d="M3 10h18M3 15h18M9 4v16M15 4v16"/>')) +
+    zwComponentTile('BACKGROUND', T('<path d="M12 3l7 7-7 8-7-8z"/><path d="M17 15c1.6 0 3 1.3 3 3a3 3 0 01-6 0c0-1.7 1.4-3 3-3z" fill="#3b3b3b"/>'));
+
+  var TB = function(x) { return '<span class="zw-tb">' + x + '</span>'; };
+  var toolbar =
+    '<span class="zw-tb zw-tb-sel">Arial <b>&#9662;</b></span><span class="zw-tb zw-tb-sel">14 <b>&#9662;</b></span>' +
+    TB('<b>B</b>') + TB('<i>I</i>') + TB('<u>U</u>') + TB('<s>S</s>') + TB('X<sub>2</sub>') + TB('X<sup>2</sup>') +
+    TB('<span style="color:#c00;">A</span>') + TB('<span style="border:1px solid #999;padding:0 3px;">A</span>') + TB('T<sub>x</sub>') +
+    '<span class="zw-tb-gap"></span>' +
+    TB('&#8801;<b>&#9662;</b>') + TB('&#8677;') + TB('&#8676;') + TB('1&#8801;') + TB('&#8226;&#8801;') +
+    '<span class="zw-tb-gap"></span>' +
+    TB('&#128279;') + TB('&#128279;&#10007;') + TB('&#128444;') + TB('&#8801;') + TB('&#169;') +
+    '<span class="zw-tb-gap"></span>' +
+    TB('&#128167;') + TB('&#9744;<b>&#9662;</b>') + '<span class="zw-tb zw-tb-sel">Size <b>&#9662;</b></span>' +
+    TB('&#8803;<b>&#9662;</b>') + TB('&#9998;');
+
+  return '<!doctype html><html><head><meta charset="utf-8">' +
+    '<title>Zoho Meeting | Templates</title>' +
+    '<style>' +
+    '*{box-sizing:border-box;}' +
+    'body{margin:0;font-family:-apple-system,"Segoe UI",Roboto,sans-serif;background:#fff;}' +
+    // the browser frame, so the meeting.zoho.com address is visible in a mock
+    '.zw-chrome{background:#3C1F1B;padding:8px 12px;display:flex;align-items:center;gap:12px;}' +
+    '.zw-nav{color:#E8DDD9;font-size:17px;}' +
+    '.zw-omni{flex:1;display:flex;align-items:center;gap:9px;background:#1F1512;border-radius:16px;padding:7px 14px;color:#F2E9E6;font-size:13.5px;}' +
+    '.zw-omni-url{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}' +
+    '.zw-badge{background:#F26F21;color:#fff;font-size:12px;font-weight:600;border-radius:14px;padding:5px 12px;white-space:nowrap;}' +
+    // Zoho Meeting's editor
+    '.zw-head{background:#2E3145;color:#fff;padding:14px 22px;display:flex;align-items:center;gap:18px;}' +
+    '.zw-name{font-size:19px;font-weight:600;color:#C7C9DA;}' +
+    '.zw-sub{font-size:14px;color:#fff;margin-top:3px;}' +
+    '.zw-chip{background:#4A4D63;color:#E7E8F0;font-size:12.5px;border-radius:3px;padding:5px 11px;}' +
+    '.zw-btn{border-radius:16px;border:none;padding:8px 20px;font-size:14px;cursor:pointer;background:#fff;color:#2E3145;}' +
+    '.zw-btn-primary{background:#2C7BE5;color:#fff;}' +
+    '.zw-body{display:flex;min-height:calc(100vh - 108px);}' +
+    '.zw-left{width:365px;flex-shrink:0;border-right:1px solid #E3E3E8;padding:26px 0 20px;display:flex;flex-direction:column;}' +
+    '.zw-left-title{text-align:center;font-size:19px;font-weight:600;color:#3b3b3b;letter-spacing:.02em;margin-bottom:26px;}' +
+    '.zw-tiles{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:0 46px;}' +
+    '.zw-tile-box{height:92px;border:1px solid #DADAE0;border-radius:3px;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:0 -3px 0 #fff,0 -4px 0 #DADAE0;}' +
+    '.zw-tile-label{text-align:center;font-size:12.5px;color:#3b3b3b;margin-top:7px;letter-spacing:.03em;}' +
+    '.zw-hint{margin-top:auto;padding:0 30px;font-size:14px;color:#3b3b3b;}' +
+    '.zw-right{flex:1;background:#EFEFF1;}' +
+    '.zw-toolbar{background:#fff;border-bottom:1px solid #E3E3E8;padding:9px 16px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;}' +
+    '.zw-tb{font-size:14px;color:#3b3b3b;cursor:default;min-width:20px;text-align:center;}' +
+    '.zw-tb-sel{font-weight:600;}' +
+    '.zw-tb-gap{width:12px;}' +
+    '.zw-canvas{padding:40px 0 0;display:flex;justify-content:center;}' +
+    '.zw-sheet{background:#fff;width:800px;max-width:92%;min-height:900px;padding:44px 44px 0;font-size:17px;line-height:1.5;color:#222;}' +
+    '</style></head><body>' +
+    // address bar
+    '<div class="zw-chrome">' +
+      '<span class="zw-nav">&#8592;</span><span class="zw-nav">&#8594;</span><span class="zw-nav">&#8635;</span>' +
+      '<div class="zw-omni"><span>&#128274;</span><span class="zw-omni-url">' + url + '</span></div>' +
+      '<span class="zw-nav">&#9734;</span>' +
+      '<span class="zw-badge">New Chrome available</span>' +
+    '</div>' +
+    // editor header
+    '<div class="zw-head">' +
+      '<div><div class="zw-name">Enter a template name</div><div class="zw-sub">' + m.subject + '</div></div>' +
+      '<span class="zw-chip">' + m.module + '</span>' +
+      '<div style="margin-left:auto;display:flex;align-items:center;gap:14px;">' +
+        '<span style="font-size:14px;text-decoration:underline;">Attachments</span>' +
+        '<button class="zw-btn">Cancel</button><button class="zw-btn">Preview</button>' +
+        '<button class="zw-btn zw-btn-primary">Save</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="zw-body">' +
+      '<div class="zw-left">' +
+        '<div class="zw-left-title">ALL COMPONENTS</div>' +
+        '<div class="zw-tiles">' + tiles + '</div>' +
+        '<div class="zw-hint"><div>HINT:</div><div>Type # to insert merge field. <span style="color:#2C7BE5;">More</span></div></div>' +
+      '</div>' +
+      '<div class="zw-right">' +
+        '<div class="zw-toolbar">' + toolbar + '</div>' +
+        '<div class="zw-canvas"><div class="zw-sheet">' + body + '</div></div>' +
+      '</div>' +
+    '</div></body></html>';
+}
+function openZohoWebinarTemplateEditor(key) {
+  var w = window.open('', '_blank');
+  if (!w) { alert('Allow pop-ups to open the Zoho Webinar template editor.'); return; }
+  w.document.open();
+  w.document.write(zwEditorDoc(key));
+  w.document.close();
+}
+window.openZohoWebinarTemplateEditor = openZohoWebinarTemplateEditor;
+
 function tplPreviewEdit() {
+  // CRM lists this email but does not own it — edit it where it lives
+  if (zwCanEditElsewhere(_tplPreviewKey)) {
+    openZohoWebinarTemplateEditor(_tplPreviewKey);
+    return;
+  }
   if (_tplPreviewModuleTpl) {
     var t = _tplPreviewModuleTpl;
     closeTemplatePreview();

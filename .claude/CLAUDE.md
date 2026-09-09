@@ -125,6 +125,26 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **Editing a listed default leaves CRM for Zoho Webinar** (branch
+  `template-flow-fixes` only). Preview a Default row and hit the pencil and it no longer
+  opens CRM's editor: `tplPreviewEdit` checks `zwCanEditElsewhere(_tplPreviewKey)` and, for
+  any lifecycle email but the invitation, opens **Zoho Webinar's own template editor in a
+  new browser tab** — `window.open` plus `document.write(zwEditorDoc(key))`, so no second
+  file or route is needed. The document reproduces the reference: Zoho Meeting's dark header
+  ("Enter a template name" over the real subject), the **Registrations** chip,
+  Attachments / Cancel / Preview / Save, the **ALL COMPONENTS** rail (TEXT, IMAGE, SPACER,
+  IMAGE+TEXT, BUTTON, COLUMNS, TABLE, BACKGROUND) with the HINT at its foot, the rich-text
+  toolbar, and the body in `${...}` merge syntax ending in the four-colour bar. Bodies per
+  email come from `ZW_EDIT`. **The tab draws its own address bar** showing
+  `meeting.zoho.com/meeting/556217208/886748000000019001/settings/templates?step=create&templateName=Default&module=Registrations&selectedTemplate=<key>`
+  — a mock cannot occupy that domain, and the point of the screenshot was that the URL is
+  visible, so the browser frame is part of the page. The invitation is unaffected: checked
+  that its pencil still opens the CRM editor in place and opens no tab. Two things to know:
+  the popup needs a real click (a `window.open` from a devtools/eval context can be
+  blocked — there is an alert asking for pop-ups if it returns null), and the tab's actual
+  location is `about:blank`, so it cannot be screenshotted by the Chrome tooling — verify
+  its look by rendering `zwEditorDoc(key)` into a tab instead. Why: the user asked for this
+  hand-off, with the screenshot including its address.
 - 2026-09-09 — **The listed emails are named "Default", with their real subjects** (branch
   `template-flow-fixes` only). Replaces yesterday's Default chip: the six emails CRM only
   lists are now *named* **Default**, and their subject column carries the subject that
