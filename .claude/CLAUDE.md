@@ -125,6 +125,21 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **Send Invite's Select Template reads Setup ▸ Templates, invitations only**
+  (branch `template-flow-fixes`). It had been reading `TPL_UC_STATE.sendInvite` — the
+  Preferences gallery's Default card plus its customs — which is the source this branch was
+  originally split on. It now lists the Zoho Webinar rows from the Templates list whose
+  **Email Type is Invitation**, `TPLPAGE_CREATED` first then `TPLPAGE_WEBINAR_ROWS`, so the
+  six rows named Default are excluded: an invite can only be sent with an invitation, and
+  the Templates list is the one place templates are kept, so the picker cannot offer
+  something that page does not show. Checked in the browser: the picker lists just
+  **Webinar Invitation Template | Public Email Templates**, and a newly created invitation
+  ("Long-form invite | Managerial templates") appears above it with its own folder. The
+  green **In use** chip went with the old source — nothing in the list carries liveness, and
+  since gallery selection no longer rewrites rows on this branch, matching a card to a row
+  by name would have been a half-truth. `TPL_FOLDER` stays the fallback for rows with no
+  folder of their own. Why: the user asked for the picker to show the webinar invitation
+  templates that the Templates list holds.
 - 2026-09-09 — **Editing a listed default leaves CRM for Zoho Webinar** (branch
   `template-flow-fixes` only). Preview a Default row and hit the pencil and it no longer
   opens CRM's editor: `tplPreviewEdit` checks `zwCanEditElsewhere(_tplPreviewKey)` and, for

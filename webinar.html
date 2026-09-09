@@ -22169,26 +22169,21 @@ function SelectTemplateModal({
   // alongside the webinar's own — nothing that can't render for these records
   const TPL_FOLDERS = ["All Templates", "Favorites", "Associated Templates", "Created by me", "Shared with me", "Public Email Templates", "Managerial templates"];
   const [folder, setFolder] = useState("All Templates");
-  // The invitation templates come from the module, not Setup > Templates: whatever is
-  // set up under Zoho Webinar > Preferences > Send Invite — its Default (Quick) card and
-  // the customs saved under it. One source of truth, so the two screens cannot disagree.
+  // The invitation templates come from Setup > Templates: the Zoho Webinar rows listed
+  // there whose Email Type is Invitation, plus anything created in that section. The
   // second column is the CRM template folder, not the module — every row here is
   // already a webinar invitation template, so the module would say nothing
   const TPL_FOLDER = "Public Email Templates";
-  const ucInvite = (window.TPL_UC_STATE || {}).sendInvite;
-  const source = ucInvite
-    ? [{
-        name: "Send Invite Template",
-        folder: TPL_FOLDER,
-        live: ucInvite.active === "quick",
-        openRate: "0%"
-      }].concat(ucInvite.customs.map((c, i) => ({
-        name: c.name,
-        folder: c.folder || TPL_FOLDER,
-        live: ucInvite.active === "custom:" + i,
-        openRate: "0%"
-      })))
-    : [{ name: "Send Invite Template", folder: TPL_FOLDER, live: true, openRate: "0%" }];
+  // Only the webinar invitations that Setup > Templates lists: an invite can be sent with
+  // an invitation and nothing else, and the list is the one place templates are kept, so
+  // the picker cannot offer something the Templates page does not show.
+  const etypeOf = r => r.etype || ((window.tplPageETypeOf || (() => ""))(r[0]) || "");
+  const inviteRows = (window.TPLPAGE_CREATED || []).concat(window.TPLPAGE_WEBINAR_ROWS || [])
+    .filter(r => r[1] === "Zoho Webinar" && etypeOf(r) === "Invitation")
+    .map(r => ({ name: r[0], folder: r.folder || TPL_FOLDER, desc: r[2], openRate: "0%" }));
+  const source = inviteRows.length
+    ? inviteRows
+    : [{ name: "Webinar Invitation Template", folder: TPL_FOLDER, openRate: "0%" }];
   const filtered = source.filter(t => t.name.toLowerCase().includes(search.toLowerCase()) || t.folder.toLowerCase().includes(search.toLowerCase()));
   return /*#__PURE__*/React.createElement(ModalOverlay, null, /*#__PURE__*/React.createElement("div", {
     style: {
@@ -22391,17 +22386,7 @@ function SelectTemplateModal({
       fontSize: 15,
       color: "#7E8CA6"
     }
-  }, t.folder), t.live && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontSize: 11.5,
-      fontWeight: 600,
-      color: "#10975E",
-      background: "#E9FBF4",
-      border: "1px solid #19B171",
-      borderRadius: 10,
-      padding: "2px 9px"
-    }
-  }, "In use")), /*#__PURE__*/React.createElement("div", {
+  }, t.folder)), /*#__PURE__*/React.createElement("div", {
     style: {
       display: "flex",
       alignItems: "center",
