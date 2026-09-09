@@ -125,6 +125,28 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **The whole template flow ported from branch 1** (branch
+  `template-flow-fixes`). 26 of the 39 diff hunks between the two files were taken from
+  `templates-flow`; 13 were held back. **Taken:** the editor header's name/subject as real
+  blank inputs (`tplSetHeader` / `tplHeaderName` / `tplHeaderSubject`) with the body prompt
+  as a CSS placeholder; Create Email Template asking module first with an **Email Type** row
+  that appears only for Zoho Webinar and carries the choice into the gallery
+  (`ctModuleChanged`, `_ctUsecase`, `ctNext`); the Email Notifications header's standing
+  intro line with the duplicated chip and type text gone; the Default card offered under
+  Custom Templates as well as Quick; Setup ▸ Templates listing the eight lifecycle emails
+  with **Webinar Cancelled last**, the email type as text on the row's subline rather than a
+  column, the hover pencil before it, a name click opening that email's gallery, and
+  `ucSyncListRow` keeping one row per email so selecting a custom renames that row instead
+  of adding another. **Held back, deliberately:** Preferences ▸ Customise Template still
+  opens the gallery (branch 1 opens a preview) — this branch's whole premise; the Send
+  Invite picker still reads `TPL_UC_STATE.sendInvite` with its "In use" chip rather than the
+  Setup ▸ Templates rows, per the user's original split; and the branch-1-only asks that
+  were never meant for here — the intro page's "Setup" CTA and enabled badge, Case 2 as the
+  demo default, and the Webinar Timezone label and row. Note the one design reversal: the
+  comment saying the lifecycle emails are *not* listed under Setup ▸ Templates is no longer
+  true — they are listed there now, in addition to living in Preferences, so this branch is
+  a superset rather than the either/or it started as. Why: the user asked for the template
+  flow on branch 2 as well.
 - 2026-09-06 — **Send Invite's Select Template now has a real source, different per
   branch.** It used to be a hardcoded `[{name:'Webinar Invitation Template'}]` in
   `SelectTemplateModal`, which is why a template created anywhere never showed up in it.
