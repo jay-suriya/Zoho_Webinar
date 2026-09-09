@@ -125,6 +125,20 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **The listed emails are named "Default", with their real subjects** (branch
+  `template-flow-fixes` only). Replaces yesterday's Default chip: the six emails CRM only
+  lists are now *named* **Default**, and their subject column carries the subject that
+  actually goes out — `Registration Confirmation for ${Campaigns.Title}`, `Reminder to join
+  - ${Campaigns.Title}` for all three reminders, `Thank you for attending
+  ${Campaigns.Title}`, `We missed you at ${Campaigns.Title}`. The Email Type in the subline
+  is what tells six identically-named rows apart. The invitation keeps its own name and its
+  pencil — it is the one CRM owns. Consequence that needed handling: `tplPageETypeOf` looks
+  the type up from the template *name*, which no longer works for a row named "Default", and
+  losing the type would have silently taken the type text, the read-only rule and the
+  preview routing with it — so `stampWebinarRowTypes()` sets `row.etype` on each shipped row
+  by position instead. Checked: the Attendees row still previews the right body
+  (`_tplPreviewKey === 'attendeesFollowup'`) under the title "Default". Why: the user asked
+  for the name itself to be Default and gave the four subjects.
 - 2026-09-09 — **CRM lists Zoho Webinar's templates; only the invitation is CRM's to edit**
   (branch `template-flow-fixes` only). This is the model the locked Email Type implies, now
   carried into the list. Every lifecycle email except the invitation carries a **Default**

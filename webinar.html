@@ -5447,14 +5447,22 @@ var TPLPAGE_MODULES = ['Contacts','Accounts','Potentials','Financial Services','
 // Modules and Fields > Zoho Webinar > Preferences
 var TPLPAGE_WEBINAR_ROWS = [
   ['Webinar Invitation Template',   'Zoho Webinar', 'Sent when you invite CRM records to a webinar',   'Jay', '28 Dec 2025', '15 Jan 2026', '', ''],
-  ['Confirmation Template',         'Zoho Webinar', 'Sent as soon as someone registers',              'Jay', '02 Jan 2026', '12 Jan 2026', '', ''],
-  ['1st Reminder Template',         'Zoho Webinar', 'Sent before the webinar starts',                 'Jay', '21 Dec 2025', '07 Jan 2026', '', ''],
-  ['2nd Reminder Template',         'Zoho Webinar', 'Sent before the webinar starts',                 'Jay', '21 Dec 2025', '10 Jan 2026', '', ''],
-  ['3rd Reminder Template',         'Zoho Webinar', 'Sent before the webinar starts',                 'Jay', '05 Dec 2025', '02 Jan 2026', '', ''],
-  ['Attendees Follow-up Template',  'Zoho Webinar', 'Sent after the webinar to those who attended',   'Jay', '05 Dec 2025', '02 Jan 2026', '', ''],
-  ['Absentees Follow-up Template',  'Zoho Webinar', 'Sent after the webinar to those who missed it',  'Jay', '05 Dec 2025', '02 Jan 2026', '', '']
+  ['Default', 'Zoho Webinar', 'Registration Confirmation for ${Campaigns.Title}', 'Jay', '02 Jan 2026', '12 Jan 2026', '', ''],
+  ['Default', 'Zoho Webinar', 'Reminder to join - ${Campaigns.Title}',             'Jay', '21 Dec 2025', '07 Jan 2026', '', ''],
+  ['Default', 'Zoho Webinar', 'Reminder to join - ${Campaigns.Title}',             'Jay', '21 Dec 2025', '10 Jan 2026', '', ''],
+  ['Default', 'Zoho Webinar', 'Reminder to join - ${Campaigns.Title}',             'Jay', '05 Dec 2025', '02 Jan 2026', '', ''],
+  ['Default', 'Zoho Webinar', 'Thank you for attending ${Campaigns.Title}',        'Jay', '05 Dec 2025', '02 Jan 2026', '', ''],
+  ['Default', 'Zoho Webinar', 'We missed you at ${Campaigns.Title}',               'Jay', '05 Dec 2025', '02 Jan 2026', '', '']
   // The cancellation email is deliberately absent: it is not part of what CRM lists.
 ];
+// Six of these rows are named "Default", so the Email Type cannot be looked up from the
+// name any more — it is stamped on the row, which is also what routes a click to the
+// right preview and marks the row read-only.
+(function stampWebinarRowTypes() {
+  var order = ['Invitation', 'Confirmation', '1st Reminder', '2nd Reminder',
+               '3rd Reminder', 'Attendees Follow-up', 'Absentees Follow-up'];
+  TPLPAGE_WEBINAR_ROWS.forEach(function(r, i) { r.etype = order[i] || ''; });
+})();
 var TPLPAGE_TYPES = ['Email','Inventory','Mail Merge'];
 var TPLPAGE_CATEGORIES = [
   ['All Templates', false], ['Favorites', false], ['Associated Templates', false],
@@ -5659,9 +5667,6 @@ function tplPageRenderRows() {
     // CRM owns the invitation; the rest of the lifecycle emails are Zoho Webinar's
     // defaults, listed here to be seen, not edited
     var isWebinarDefault = r[1] === 'Zoho Webinar' && etype && etype !== 'Invitation';
-    var defaultChip = isWebinarDefault
-      ? '<span style="margin-left:8px;font-size:11px;font-weight:600;color:#616E88;background:#F1F0F7;border:1px solid #D6D6E3;border-radius:10px;padding:1px 8px;vertical-align:2px;">Default</span>'
-      : '';
     var editCell = isWebinarDefault
       ? '<td style="width:46px;"></td>'
       : '<td style="width:46px;padding:14px 0;text-align:center;">' +
@@ -5679,7 +5684,7 @@ function tplPageRenderRows() {
         '<div style="display:flex;align-items:flex-start;gap:12px;">' +
           '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c9c9d4" stroke-width="1.8" style="margin-top:3px;flex-shrink:0;"><path d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg>' +
           '<div>' +
-            '<div' + nameClick + ' style="' + nameStyle + '">' + r[0] + defaultChip + '</div>' +
+            '<div' + nameClick + ' style="' + nameStyle + '">' + r[0] + '</div>' +
             '<div style="margin-top:4px;font-size:13px;"><span style="color:#0F935B;">' + r[1] + '</span>' +
               '<span style="color:#bbb;margin:0 8px;">·</span><span style="color:#8b7bd8;">' + r[2] + '</span>' +
               // which lifecycle email this is — only the webinar templates have one, and it
