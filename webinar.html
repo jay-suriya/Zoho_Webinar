@@ -1120,13 +1120,6 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                         <span style="display:inline-block;width:13px;height:13px;border:1.5px solid #C0C8E2;border-radius:3px;margin-right:12px;vertical-align:middle;"></span>Template Name
                       </th>
                       <th style="width:46px;"></th>
-                      <th id="tplpage-th-etype" style="display:none;text-align:left;padding:14px 16px;color:#333;font-weight:700;width:190px;position:relative;">
-                        <span onclick="tplPageToggleETypeMenu(event)" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;user-select:none;">
-                          <span id="tplpage-etype-label">Email Type</span>
-                          <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
-                        </span>
-                        <div id="tplpage-etype-menu" style="display:none;position:absolute;top:42px;left:10px;min-width:210px;background:#fff;border:1px solid #D6D6E3;border-radius:8px;box-shadow:0 6px 18px rgba(49,57,73,0.18);z-index:20;font-weight:400;overflow:hidden;"></div>
-                      </th>
                       <th style="text-align:left;padding:14px 16px;color:#333;font-weight:700;width:150px;">Modified By</th>
                       <th style="text-align:left;padding:14px 16px;color:#333;font-weight:700;width:130px;">Last Used</th>
                       <th style="text-align:left;padding:14px 20px;color:#333;font-weight:700;width:110px;">Stats</th>
@@ -5503,7 +5496,6 @@ function openTemplatesPage() {
   tplPageRenderTabs();
   tplPageRenderCategories();
   tplPageRenderModuleMenu();
-  tplPageRenderETypeHead();
   tplPageRenderRows();
 }
 function templatesBack() {
@@ -5565,11 +5557,9 @@ function tplPageRenderModuleMenu() {
 }
 function tplPagePickModule(m) {
   tplPageModule = m;
-  tplPageEType = 'All';
   document.getElementById('tplpage-module-label').textContent = m;
   document.getElementById('tplpage-module-menu').style.display = 'none';
   tplPageRenderModuleMenu();
-  tplPageRenderETypeHead();
   tplPageRenderRows();
 }
 
@@ -5598,8 +5588,6 @@ function tplPageAddCreatedRow(name, module, subject, folder, etype) {
 // ── Email Type column — only shown while the Zoho Webinar module is selected ──
 // The lifecycle emails are the only templates that have a type, so the column and its
 // filter appear with that module and disappear with it.
-var TPLPAGE_ETYPES = ['Invitation', 'Confirmation', '1st Reminder', '2nd Reminder',
-                      '3rd Reminder', 'Attendees Follow-up', 'Absentees Follow-up'];
 var TPLPAGE_ETYPE_BY_KEY = {
   sendInvite: 'Invitation',
   confirmation: 'Confirmation',
@@ -5610,67 +5598,14 @@ var TPLPAGE_ETYPE_BY_KEY = {
   absenteesFollowup: 'Absentees Follow-up',
   cancellation: 'Webinar Cancelled'
 };
-var tplPageEType = 'All';
 function tplPageETypeOf(name) {
   var key = (typeof TPL_KEY_BY_NAME !== 'undefined') ? TPL_KEY_BY_NAME[name] : null;
   return (key && TPLPAGE_ETYPE_BY_KEY[key]) || '';
 }
-function tplPageETypeColumnOn() {
-  return tplPageModule === 'Zoho Webinar';
-}
-function tplPageRenderETypeHead() {
-  var th = document.getElementById('tplpage-th-etype');
-  if (!th) return;
-  th.style.display = tplPageETypeColumnOn() ? 'table-cell' : 'none';
-  var lbl = document.getElementById('tplpage-etype-label');
-  if (lbl) {
-    lbl.textContent = (tplPageEType === 'All') ? 'Email Type' : tplPageEType;
-    lbl.style.color = (tplPageEType === 'All') ? '#333' : '#C2185B';
-  }
-  var menu = document.getElementById('tplpage-etype-menu');
-  if (menu) menu.style.display = 'none';
-}
-function tplPageRenderETypeMenu() {
-  var menu = document.getElementById('tplpage-etype-menu');
-  if (!menu) return;
-  var row = function(label, value) {
-    var on = tplPageEType === value;
-    return '<div onclick="tplPagePickEType(\'' + value.replace(/'/g, "\\'") + '\')" ' +
-      'onmouseover="this.style.background=\'#F2F4FF\'" onmouseout="this.style.background=\'' + (on ? '#F5F6FB' : '#fff') + '\'" ' +
-      'style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 14px;font-size:13.5px;cursor:pointer;' +
-      'background:' + (on ? '#F5F6FB' : '#fff') + ';color:' + (on ? '#C2185B' : '#313949') + ';font-weight:' + (on ? '600' : '400') + ';">' +
-      '<span>' + label + '</span>' + (on ? '<span>&#10003;</span>' : '') + '</div>';
-  };
-  menu.innerHTML = row('All email types', 'All') +
-    '<div style="border-top:1px solid #EFEFF5;"></div>' +
-    TPLPAGE_ETYPES.map(function(t) { return row(t, t); }).join('');
-}
-function tplPageToggleETypeMenu(e) {
-  if (e) e.stopPropagation();
-  var menu = document.getElementById('tplpage-etype-menu');
-  if (!menu) return;
-  if (menu.style.display === 'block') { menu.style.display = 'none'; return; }
-  tplPageRenderETypeMenu();
-  menu.style.display = 'block';
-}
-function tplPagePickEType(v) {
-  tplPageEType = v;
-  tplPageRenderETypeHead();
-  tplPageRenderRows();
-}
-document.addEventListener('click', function(e) {
-  var menu = document.getElementById('tplpage-etype-menu');
-  if (menu && menu.style.display === 'block' && !menu.contains(e.target)) menu.style.display = 'none';
-});
-
 function tplPageRows() {
   var rows = TPLPAGE_CREATED.concat(TPLPAGE_ROWS, TPLPAGE_WEBINAR_ROWS);
   if (tplPageModule !== 'All Modules') {
     rows = rows.filter(function(r) { return r[1] === tplPageModule; });
-  }
-  // the Email Type filter only bites while its column is on screen
-  if (tplPageETypeColumnOn() && tplPageEType !== 'All') {
-    rows = rows.filter(function(r) { return (r.etype || tplPageETypeOf(r[0])) === tplPageEType; });
   }
   return rows;
 }
@@ -5695,10 +5630,8 @@ function tplPageRenderRows() {
   var rows = tplPageRows();
   var tbody = document.getElementById('tplpage-tbody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="' + (tplPageETypeColumnOn() ? 6 : 5) + '" style="padding:40px 20px;text-align:center;color:#888;">' +
-      (tplPageETypeColumnOn() && tplPageEType !== 'All'
-        ? 'No ' + tplPageEType + ' templates yet.'
-        : 'No templates found for this module.') + '</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" style="padding:40px 20px;text-align:center;color:#888;">' +
+      'No templates found for this module.</td></tr>';
     return;
   }
   tbody.innerHTML = rows.map(function(r) {
@@ -5707,6 +5640,7 @@ function tplPageRenderRows() {
     // a webinar template also knows its use case, so the name opens that use case
     // in the gallery — where its Default, its Customs and the Basic layouts are shown
     var ucKey = key || TPLPAGE_KEY_BY_ETYPE[r.etype || ''] || null;
+    var etype = r.etype || tplPageETypeOf(r[0]);
     var nameClick = ucKey ? ' onclick="tplPageOpenGallery(\'' + ucKey + '\')"'
                           : (key ? ' onclick="openTemplatePreview(\'' + key + '\')"' : '');
     var nameStyle = 'font-size:14px;color:#111;font-weight:500;' + ((ucKey || key) ? 'cursor:pointer;' : '');
@@ -5728,16 +5662,15 @@ function tplPageRenderRows() {
           '<div>' +
             '<div' + nameClick + ' style="' + nameStyle + '">' + r[0] + '</div>' +
             '<div style="margin-top:4px;font-size:13px;"><span style="color:#0F935B;">' + r[1] + '</span>' +
-              '<span style="color:#bbb;margin:0 8px;">·</span><span style="color:#8b7bd8;">' + r[2] + '</span></div>' +
+              '<span style="color:#bbb;margin:0 8px;">·</span><span style="color:#8b7bd8;">' + r[2] + '</span>' +
+              // which lifecycle email this is — only the webinar templates have one, and it
+              // reads as part of the line rather than as a column that is blank elsewhere
+              (etype ? '<span style="color:#bbb;margin:0 8px;">·</span><span style="color:#5464F2;font-weight:600;">' + etype + ' template</span>' : '') +
+            '</div>' +
           '</div>' +
         '</div>' +
       '</td>' +
       editCell +
-      (tplPageETypeColumnOn()
-        ? '<td style="padding:14px 16px;">' + ((r.etype || tplPageETypeOf(r[0]))
-            ? '<span style="display:inline-block;font-size:12.5px;font-weight:600;color:#5464F2;background:#F0F1FF;border:1px solid #D2D7FF;border-radius:12px;padding:2px 10px;">' + (r.etype || tplPageETypeOf(r[0])) + '</span>'
-            : '<span style="color:#bbb;">&mdash;</span>') + '</td>'
-        : '') +
       '<td style="padding:14px 16px;"><div style="color:#111;">' + r[3] + '</div><div style="color:#8b7bd8;font-size:12.5px;">' + r[4] + '</div></td>' +
       '<td style="padding:14px 16px;color:#111;">' + (r[5] || '') + '</td>' +
       '<td style="padding:14px 20px;">' + stats + '</td>' +
@@ -6664,20 +6597,13 @@ function ucRenderPane() {
       }) +
     '</div></div>';
 
-  // ── Custom Templates — the Default leads the group, then what has been saved here ──
-  // The Default is a choice for this use case like any other, so it is offered in both
-  // groups rather than only in Quick Templates.
-  html += '<div style="margin-bottom:38px;">' + ucSectionHead('Custom Templates', st.customs.length + 1);
+  // ── Custom Templates — only what has actually been saved under this use case ──
+  html += '<div style="margin-bottom:38px;">' + ucSectionHead('Custom Templates', st.customs.length || null);
+  if (!st.customs.length) {
+    html += '<div style="font-size:13.5px;color:#8C91AB;border:1px dashed #D6D6E3;border-radius:8px;padding:26px 22px;max-width:640px;">' +
+      'No custom templates available.</div>';
+  } else {
   html += '<div style="display:flex;flex-wrap:wrap;gap:26px;">' +
-    ucCard({
-      live: st.active === 'quick',
-      thumb: ucThumb(false, st.active === 'quick'),
-      caption: 'Default',
-      name: 'Default',
-      onclick: "ucSelect('quick')",
-      preview: "ucPreviewDefault()",
-      edit: "ucEditDefault()"
-    }) +
     st.customs.map(function(c, i) {
       var nm = String(c.name).replace(/'/g, "\\'");
       return ucCard({
@@ -6690,6 +6616,7 @@ function ucRenderPane() {
         edit: "ucEditCustom(" + i + ")"
       });
     }).join('') + '</div>';
+  }
   html += '</div>';
 
   // ── Basic — start a new one for this use case ──

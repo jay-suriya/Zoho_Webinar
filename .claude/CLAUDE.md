@@ -125,6 +125,23 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **Custom Templates holds only real customs; Email Type moved out of the
+  column and into the row** (branch 1). Two corrections to yesterday's work. (1) The
+  Default no longer appears under Custom Templates — that group lists what has actually
+  been saved for the use case, and when nothing has, it says **"No custom templates
+  available."** Send Invite reads 2, Webinar Cancelled shows the empty state. (2) The
+  **Email Type column is gone.** A column that only exists for one module leaves a hole in
+  the table for every other module, so the type now reads as the tail of the row's own
+  subline: *Zoho Webinar · Sent when you invite CRM records to a webinar · Invitation
+  template*. Non-webinar rows simply have no third segment. The table is back to five
+  columns for every module (plus the hover-edit spacer). **Removed with the column: its
+  caret filter** — `TPLPAGE_ETYPES`, `tplPageEType`, `tplPageETypeColumnOn`,
+  `tplPageRenderETypeHead`, `tplPageRenderETypeMenu`, `tplPageToggleETypeMenu`,
+  `tplPagePickEType`, the outside-click listener and the `<th>` — so **there is no longer
+  any way to filter the list by email type**, and the "No <type> templates yet." empty
+  state went with it. `TPLPAGE_ETYPE_BY_KEY`, `tplPageETypeOf` and `TPLPAGE_KEY_BY_ETYPE`
+  stay: they write the subline and still route a row's name click to the right use case.
+  Why: the user asked for both.
 - 2026-09-08 — **Email Notifications header trimmed, Default offered in both groups**
   (branch 1). The header repeated itself three times: the rail already names the use case,
   and next to the title sat a blue pill with that same label plus the type name in grey.
