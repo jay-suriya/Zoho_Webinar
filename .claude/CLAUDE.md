@@ -125,6 +125,28 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **Creation goes through the six Basic layouts, and a list click previews**
+  (branch `template-flow-fixes` only). Where branch 1 sends `+ New Template` into the
+  use-case gallery, this branch keeps the classic path: Create Email Template (module +
+  **Email Type** when the module is Zoho Webinar) → **Next** → the **Template Gallery** with
+  its category rail (All / Basic / Celebration / Invitation / Followup / Product Promotion /
+  Notification) and **Basic (6)** — Blank, One/Two/Three column, Two column with image 1
+  and 2 — headed by the module dropdown reading **Zoho Webinar** with the chosen Email Type
+  as the chip beside it (`_ctETypeLabel`, so it shows "2nd Reminder" rather than the
+  internal type name). Link and merge-field rules are untouched because they still come
+  from `_ctType` → `_tplTypeName`: a 2nd Reminder still refuses to save without a Join URL.
+  **Clicking a template in the list opens the preview**, not the create screen —
+  `openTemplatePreview(key, displayName)` now takes the row's own name so a custom shows its
+  own title, and the panel gained the reference's **Preview / Analytics** tabs alongside the
+  folder chip, subject, Mail data with Masking and Desktop/Mobile it already had.
+  **A saved template joins the list with its name, its subject and its Email Type** —
+  "Day-before nudge · Starting tomorrow: #Webinar Title · 2nd Reminder template" — for both
+  the Basic-layout path and a gallery save. Because created templates are listed in their
+  own right here, `ucSelect` no longer rewrites rows and the branch-1 helpers that did
+  (`ucSyncListRow`, `ucUseCaseRow`, `ucListRowName`, `ucRowEType`, `UC_DEFAULT_ROW_NAME`,
+  `UC_ROW_SUBJECT`) were removed: selecting a card changes which template is live, not what
+  is listed. Why: the user asked for this creation and preview flow on branch 2 only, with
+  the Template Gallery and preview screenshots as reference.
 - 2026-09-09 — **The whole template flow ported from branch 1** (branch
   `template-flow-fixes`). 26 of the 39 diff hunks between the two files were taken from
   `templates-flow`; 13 were held back. **Taken:** the editor header's name/subject as real

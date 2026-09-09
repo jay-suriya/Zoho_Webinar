@@ -459,6 +459,12 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
           Mobile
         </span>
       </div>
+      <div id="tplpv-tabs" style="display:flex;justify-content:center;margin:-4px 0 18px;">
+        <div style="display:inline-flex;border:1px solid #eee;border-radius:20px;padding:4px;background:#fff;">
+          <span style="padding:7px 20px;border-radius:16px;background:#FDEFF5;border:1px solid #C2185B;color:#C2185B;font-size:13px;font-weight:600;">Preview</span>
+          <span style="padding:7px 20px;border-radius:16px;color:#555;font-size:13px;">Analytics</span>
+        </div>
+      </div>
       <div id="tplpv-body" style="background:#fff;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.06);max-width:640px;padding:32px 36px;font-family:Arial,sans-serif;color:#222;line-height:1.5;pointer-events:none;user-select:none;"></div>
     </div>
   </div>
@@ -641,7 +647,13 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   </div>
   <div style="flex:1;display:flex;overflow:hidden;">
     <div style="width:230px;flex-shrink:0;border-right:1px solid #E8EAED;padding:26px 0;">
+      <div style="padding:8px 26px;font-size:15px;color:#434D5E;">All</div>
       <div style="padding:8px 26px;font-size:15px;font-weight:600;color:#202123;background:#F5F6FB;border-left:3px solid #C2185B;">Basic</div>
+      <div style="padding:8px 26px;font-size:15px;color:#434D5E;">Celebration</div>
+      <div style="padding:8px 26px;font-size:15px;color:#434D5E;">Invitation</div>
+      <div style="padding:8px 26px;font-size:15px;color:#434D5E;">Followup</div>
+      <div style="padding:8px 26px;font-size:15px;color:#434D5E;">Product Promotion</div>
+      <div style="padding:8px 26px;font-size:15px;color:#434D5E;">Notification</div>
     </div>
     <div style="flex:1;overflow-y:auto;padding:26px 30px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:22px;">
@@ -5638,9 +5650,12 @@ function tplPageRenderRows() {
     // in the gallery — where its Default, its Customs and the Basic layouts are shown
     var ucKey = key || TPLPAGE_KEY_BY_ETYPE[r.etype || ''] || null;
     var etype = r.etype || tplPageETypeOf(r[0]);
-    var nameClick = ucKey ? ' onclick="tplPageOpenGallery(\'' + ucKey + '\')"'
-                          : (key ? ' onclick="openTemplatePreview(\'' + key + '\')"' : '');
-    var nameStyle = 'font-size:14px;color:#111;font-weight:500;' + ((ucKey || key) ? 'cursor:pointer;' : '');
+    // clicking a template shows a preview of it, not the create screen
+    var pvKey = key || ucKey;
+    var nameClick = pvKey
+      ? ' onclick="openTemplatePreview(\'' + pvKey + '\',\'' + String(r[0]).replace(/'/g, "\\'") + '\')"'
+      : '';
+    var nameStyle = 'font-size:14px;color:#111;font-weight:500;' + (pvKey ? 'cursor:pointer;' : '');
     var editArgs = "'" + String(r[0]).replace(/'/g, "\\'") + "','" + String(r[1]).replace(/'/g, "\\'") + "','" + (key || ucKey || '') + "'";
     var editCell = '<td style="width:46px;padding:14px 0;text-align:center;">' +
         '<span class="tpl-row-edit" title="Edit this template" onclick="tplPageEditRow(' + editArgs + ')" ' +
@@ -6038,8 +6053,9 @@ function tplSaveConfirm() {
     st.customs.push({ name: name, subject: subject, folder: folder });
     st.active = 'custom:' + (st.customs.length - 1);
     _ucKey = _ucSlot;
-    // it is now the live template for this email, so it takes over that email's row
-    ucSyncListRow(st.active);
+    // it is a template in its own right, so it joins the list with its own row
+    tplPageAddCreatedRow(name, 'Zoho Webinar', subject, folder,
+                         TPLPAGE_ETYPE_BY_KEY[_ucSlot] || '');
     _ucSlot = null;
     _ucReturn = false;
     closeTemplateEditor();
@@ -6071,7 +6087,11 @@ function tplSaveConfirm() {
     window.dispatchEvent(new CustomEvent('module-template-created', { detail: { name: name, module: mod, fromInvite: true } }));
     return;
   }
-  window.MODULE_TEMPLATES.push({ name: name, module: mod });
+  window.MODULE_TEMPLATES.push({ name: name, module: mod, subject: subject, folder: folder });
+  // and it joins the Templates list it was created from — name, subject, and for a
+  // webinar template the Email Type it was created as
+  tplPageAddCreatedRow(name, mod, subject, folder,
+    (mod === 'Zoho Webinar') ? (TPLPAGE_ETYPE_BY_KEY[_ctUsecase] || '') : '');
   // tell the Send Invite flow so the new template is selected there
   window.dispatchEvent(new CustomEvent('module-template-created', { detail: { name: name, module: mod } }));
 }
@@ -6125,10 +6145,10 @@ function openNewModuleTemplate(module) {
 
 // ── Template Preview — read-only, shown first; pencil icon opens the real editor ──
 var _tplPreviewKey = null;
-function openTemplatePreview(key) {
+function openTemplatePreview(key, displayName) {
   var meta = TPL_META[key] || TPL_META.confirmation;
   _tplPreviewKey = key;
-  document.getElementById('tplpv-title').textContent = meta.label;
+  document.getElementById('tplpv-title').textContent = displayName || meta.label;
   document.getElementById('tplpv-folder').textContent = 'Zoho Webinar Templates';
   document.getElementById('tplpv-subtitle').textContent = 'Zoho Webinar';
   document.getElementById('tplpv-body').innerHTML = meta.body();
@@ -6643,75 +6663,13 @@ function ucRenderPane() {
   document.getElementById('tpl-uc-pane').innerHTML = html;
 }
 
-// The name each use case's Default carries in Setup ▸ Templates, so selecting it
-// points at the row that is already there instead of adding a second one.
-var UC_DEFAULT_ROW_NAME = {
-  sendInvite: 'Webinar Invitation Template',
-  confirmation: 'Confirmation Template',
-  reminder1: '1st Reminder Template',
-  reminder2: '2nd Reminder Template',
-  reminder3: '3rd Reminder Template',
-  attendeesFollowup: 'Attendees Follow-up Template',
-  absenteesFollowup: 'Absentees Follow-up Template',
-  cancellation: 'Webinar Cancelled Template'
-};
-var UC_ROW_SUBJECT = {
-  sendInvite: 'Sent when you invite CRM records to a webinar',
-  confirmation: 'Sent as soon as someone registers',
-  reminder1: 'Sent before the webinar starts',
-  reminder2: 'Sent before the webinar starts',
-  reminder3: 'Sent before the webinar starts',
-  attendeesFollowup: 'Sent after the webinar to those who attended',
-  absenteesFollowup: 'Sent after the webinar to those who missed it',
-  cancellation: 'Sent to registrants if the webinar is called off'
-};
-// Setup ▸ Templates holds one row per lifecycle email, showing whichever template is
-// live for it. Selecting in the gallery renames that row — it never adds a second, so
-// choosing a custom replaces "Webinar Invitation Template" rather than joining it.
-function ucListRowName(id) {
-  return (id === 'quick') ? (UC_DEFAULT_ROW_NAME[_ucKey] || ucMeta().label) : ucCardName(id);
-}
-function ucRowEType(r) { return r.etype || tplPageETypeOf(r[0]); }
-// the row that stands for this use case: the shipped one if there is one, otherwise the
-// first created row carrying its type. Any further row for the same type is a leftover.
-function ucUseCaseRow(etype) {
-  var found = null;
-  for (var i = 0; i < TPLPAGE_WEBINAR_ROWS.length; i++) {
-    if (ucRowEType(TPLPAGE_WEBINAR_ROWS[i]) === etype) return TPLPAGE_WEBINAR_ROWS[i];
-  }
-  TPLPAGE_CREATED = TPLPAGE_CREATED.filter(function(r) {
-    if (r[1] !== 'Zoho Webinar' || ucRowEType(r) !== etype) return true;
-    if (!found) { found = r; return true; }
-    return false;
-  });
-  return found;
-}
-function ucSyncListRow(id) {
-  var etype = TPLPAGE_ETYPE_BY_KEY[_ucKey] || '';
-  var name = ucListRowName(id);
-  if (!name || !etype) return;
-  var row = ucUseCaseRow(etype);
-  if (!row) {
-    tplPageAddCreatedRow(name, 'Zoho Webinar', UC_ROW_SUBJECT[_ucKey] || '',
-                         'Public Email Templates', etype);
-    return;
-  }
-  // drop every other row for this email, then rename the one that is left
-  TPLPAGE_CREATED = TPLPAGE_CREATED.filter(function(r) {
-    return r === row || r[1] !== 'Zoho Webinar' || ucRowEType(r) !== etype;
-  });
-  row[0] = name;
-  row.etype = etype;
-  if (!row[2] || row[2] === '\u2014') row[2] = UC_ROW_SUBJECT[_ucKey] || '';
-  if (typeof tplPageRenderRows === 'function' && document.getElementById('tplpage-tbody')) {
-    tplPageRenderRows();
-  }
-}
+// On this branch the Templates list is the templates that exist — the eight shipped
+// lifecycle emails plus everything created here — so choosing a card changes which one
+// is live, not what is listed. (branch 1 renames the email's row instead.)
 
 // ── selecting: takes effect straight away for this use case ──
 function ucSelect(id) {
   ucState().active = id;
-  ucSyncListRow(id);
   ucRenderPane();
   ucToast(ucCardName(id) + ' is now the ' + ucMeta().label + ' email.');
 }
@@ -6854,6 +6812,7 @@ function ucStartFromLayout(i) {
 var _ctModule = 'Leads';
 var _ctType = 'Webinar Invitation';
 var _ctUsecase = 'sendInvite';
+var _ctETypeLabel = '';
 function openCreateTemplateModal(module) {
   _ctModule = module || 'Leads';
   var sel = document.getElementById('ct-module');
@@ -6881,15 +6840,17 @@ function ctNext() {
   _ctModule = document.getElementById('ct-module').value;
   closeCreateTemplateModal();
   if (_ctModule === 'Zoho Webinar') {
-    // carry the chosen Email Type through: the gallery opens on that use case, which is
-    // also what stamps the template's type and its link rules
+    // carry the chosen Email Type through to the Basic layouts: the gallery header names
+    // the module and the email, and the type stamps the link and merge-field rules
     _ctUsecase = document.getElementById('ct-etype').value || 'sendInvite';
     _ctType = TPL_TYPE_BY_KEY[_ctUsecase] || 'Webinar Invitation';
-    if (window.openUsecaseGallery) openUsecaseGallery(_ctUsecase);
+    _ctETypeLabel = TPLPAGE_ETYPE_BY_KEY[_ctUsecase] || _ctType;
+    openTemplateGallery();
     return;
   }
   // a template created for an ordinary CRM module has no webinar lifecycle type
   _ctType = 'None';
+  _ctETypeLabel = '';
   openTemplateGallery();
 }
 
@@ -6913,8 +6874,9 @@ var TG_LAYOUTS = [
 
 function openTemplateGallery() {
   document.getElementById('tg-module').innerHTML = _ctModule + ' <span style="font-size:10px;color:#8C91AB;">▼</span>';
-  document.getElementById('tg-context').innerHTML = (_ctType && _ctType !== 'None')
-    ? '<span style="font-size:12.5px;font-weight:600;color:#C2185B;background:#FDEFF5;border:1px solid #F0C3D6;border-radius:12px;padding:3px 12px;">' + _ctType + '</span>'
+  var tgChip = _ctETypeLabel || ((_ctType && _ctType !== 'None') ? _ctType : '');
+  document.getElementById('tg-context').innerHTML = tgChip
+    ? '<span style="font-size:12.5px;font-weight:600;color:#C2185B;background:#FDEFF5;border:1px solid #F0C3D6;border-radius:12px;padding:3px 12px;">' + tgChip + '</span>'
     : '';
   document.getElementById('tg-cards').innerHTML = TG_LAYOUTS.map(function(l, i) {
     return '<div onclick="tgPick(' + i + ')" style="cursor:pointer;width:180px;">' +
