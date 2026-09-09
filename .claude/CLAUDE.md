@@ -137,8 +137,10 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   the Email Type field said (the option's own text, not `TPLPAGE_ETYPE_BY_KEY`), so the
   dialog and the gallery cannot disagree — both say "Webinar Invitation". The other seven
   options are no longer rendered rather than merely hidden; restoring them means putting
-  `TPL_USECASES.map` back and dropping the `disabled` flag. Why: the user asked for the type
-  to default to Webinar Invitation and not be changeable.
+  `TPL_USECASES.map` back and dropping the `disabled` flag. The caret is suppressed too
+  (`appearance: none`), so the field reads as a stated value rather than a picker that
+  refuses to open. Why: the user asked for the type
+  to default to Webinar Invitation, not be changeable, and to lose the dropdown symbol.
 - 2026-09-09 — **Creation goes through the six Basic layouts, and a list click previews**
   (branch `template-flow-fixes` only). Where branch 1 sends `+ New Template` into the
   use-case gallery, this branch keeps the classic path: Create Email Template (module +

@@ -6830,6 +6830,10 @@ function openCreateTemplateModal(module) {
   et.style.borderColor = '#D2D9F1';
   et.style.color = '#616E88';
   et.style.cursor = 'not-allowed';
+  // nothing to open, so no caret — the field just states what the type is
+  et.style.appearance = 'none';
+  et.style.webkitAppearance = 'none';
+  et.style.MozAppearance = 'none';
   et.title = 'Templates created here are webinar invitations. The other lifecycle emails are set in Zoho Webinar \u203a Preferences.';
   ctModuleChanged();
   document.getElementById('ct-modal').style.display = 'flex';
