@@ -125,6 +125,17 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **Added `index.html`, a redirect to the mock.** Deploying the repo to a
+  static host answered **404 at the root**: the mock is `webinar.html`, and Catalyst (like
+  `http.server` and GitHub Pages) serves `index.html` for `/`, so there was nothing at `/`
+  to serve — `/webinar.html` was live and fine the whole time. `index.html` is a redirect
+  (meta refresh plus `location.replace`, carrying any query string and hash through, with a
+  visible link as the fallback) rather than a copy, so there is only one 1.4 MB file to keep
+  in step. Worth knowing for the next deploy: the copy on
+  `zoho-webinar-eqbkvmwc.onslate.com` was byte-identical to `master`
+  (md5 `dc1f18c0045034b72177a58a1b0dd164`), i.e. the pre-session baseline with none of the
+  template-flow work — deploy from `templates-flow` or `template-flow-fixes` to demo it.
+  Why: the user hit the 404.
 - 2026-09-09 — **Webinar Cancelled Template is a shipped row, listed last** (branch 1). It
   had no row of its own, so it only appeared once you selected something for that use case
   — and then arrived at the *top*, because `tplPageAddCreatedRow` unshifts. It is now the
