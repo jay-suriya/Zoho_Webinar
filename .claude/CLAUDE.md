@@ -125,6 +125,28 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-09 — **Branch 1 takes branch 2's template and Send Invite flow.** The reverse of
+  yesterday's port: 14 of the 23 hunks between the two files came across from
+  `template-flow-fixes`, 9 were held back. **Taken — the whole template flow:** creation is
+  Create Email Template (module, plus **Email Type locked to Webinar Invitation**, one
+  option, `disabled`, no caret) → **Next** → the **Template Gallery** with its category rail
+  and the six Basic layouts, headed by "Zoho Webinar" and the type chip; the Templates list
+  holds the invitation plus six rows **named "Default"** carrying the real subjects
+  (`Registration Confirmation for ${Campaigns.Title}` and the rest), read-only with no
+  pencil, cancellation row gone, types stamped by `stampWebinarRowTypes()`; a row click
+  **previews** (with the Preview/Analytics tabs) instead of opening the gallery, and the
+  pencil on a Default opens **Zoho Webinar's editor in a new tab** with its own
+  meeting.zoho.com address bar; a created template lists with name, subject and Email Type.
+  **Send Invite's Select Template** now lists only the Invitation-type rows from the
+  Templates list. `ucSyncListRow` and its helpers are gone — selecting a card changes what
+  is live, not what is listed. **Held back — branch 1's own features:** the intro page's
+  "Setup" CTA and enabled badge, Case 2 as the demo default, and the Webinar Timezone label
+  and row; all three re-checked after the port (`_selectedCase === 2`, the CTA reads
+  "Setup", the label is present). One fix made on the way in: branch 2's Send-Invite create
+  path pushed only into `WEBINAR_CREATED` and `TPL_UC_STATE`, so with the picker now reading
+  the Templates list a template created inside Send Invite would not have been selectable in
+  the step that created it — it now also calls `tplPageAddCreatedRow(..., 'Invitation')`.
+  Why: the user asked for both flows on branch 1, ahead of taking them to master.
 - 2026-09-09 — **Added `index.html`, a redirect to the mock.** Deploying the repo to a
   static host answered **404 at the root**: the mock is `webinar.html`, and Catalyst (like
   `http.server` and GitHub Pages) serves `index.html` for `/`, so there was nothing at `/`
