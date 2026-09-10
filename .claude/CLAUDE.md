@@ -125,6 +125,23 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-10 — **PRD Introduction rewritten as four questions, and the business changed.**
+  `docs/prd/zoho-webinar/prd-source.md` now opens with **What Zoho Webinar is** / **Who uses
+  it** / **The problem** / **How the CRM integration solves it**, then the module screenshot;
+  rebuilt with `python3 build_prd.py` (2.58 MB, 49 figures). The business is no longer the
+  fitness coach from `demo.txt`: it is a company selling **training courses to other
+  businesses**, with Jay as its account executive. The reason is in demo.txt's own prep
+  notes — the mock's Deals Won table carries Account names ("Jayas Co", "Suriya Ltd"), which
+  contradicts a coach selling to individuals and forced a workaround in the demo. A B2B
+  training company fits the mock's data as it stands, and puts webinars at the centre rather
+  than alongside: the free masterclass is how leads arrive and the paid course sessions are
+  the product, so a session is channel, pitch and deliverable at once. The three questions
+  that framing produces — who registered, who turned up, which of them paid — are used to
+  structure the problem and then answered one by one by the four capabilities.
+  Two things to know: `demo.txt` **still uses the fitness coach**, so the PRD and the demo
+  script now disagree on the business; and the PRD's other nine sections still describe the
+  mock as it was before this session's template-flow, intro-page and Case 4 work.
+  Why: the user asked for that introduction and a business where webinars are central.
 - 2026-09-10 — **The blocking cases are answered at the marketplace card, not on the intro
   page.** `integWebinarCardSetup()` — what the Zoho Meetings card's **For webinars &rsaquo;
   Set up** calls — now checks `window._selectedCase` first: **1** opens the no-account

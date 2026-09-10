@@ -17,20 +17,47 @@ Everything below was written by clicking through the mock at `webinar.html`. Eve
 
 ## Introduction
 
-Zoho Webinar is Zoho's webinar product. You schedule a session, publish a registration form, people sign up, they show up or they don't, and the product emails them along the way — an invitation, a confirmation, reminders, and a follow-up afterwards. It also keeps what happened in the room: the polls you ran, the questions people asked, the recording, the files you shared.
+### What Zoho Webinar is
 
-All of that already works. The problem is where it happens. A sales rep lives in CRM, and today the webinar sits outside it, which means the rep does this: export the registrant list, re-import it somewhere, and try to work out by hand whether the session actually produced any pipeline.
+Zoho Webinar is Zoho's webinar product. You schedule a session, publish a registration form, and people sign up. The product emails them along the way — an invitation, a confirmation when they register, up to three reminders before it starts, and afterwards a follow-up that differs depending on whether they turned up. It runs the session itself, and it keeps what happened in the room: the polls you ran, the questions people asked, the recording, the files you shared.
 
-This integration removes that gap. The rep creates the webinar from inside CRM, invites the Leads and Contacts they already work with, and reads the results — who registered, who turned up, who didn't, and which deals the session influenced — on the record, without leaving CRM.
+None of that is missing today. Zoho Webinar does the webinar well.
 
-Specifically, it handles:
+### Who uses it
 
-- Inviting CRM records directly, so the invite always goes to current data rather than a stale export.
-- Bringing registrations, joins and no-shows back onto the webinar record, and optionally creating CRM records from registrants who aren't in CRM yet.
-- Sending the whole email lifecycle — invitation, confirmation, up to three reminders, and separate follow-ups for people who attended and people who missed it.
-- Tying attendance to the deals it influenced, so you can see what a webinar was actually worth.
+Businesses that sell by getting people into a room. Not as an occasional marketing experiment — as the way the pipeline actually starts.
 
-Once enabled, Zoho Webinar becomes a module in CRM, sitting in the left nav alongside Leads and Contacts.
+The business used throughout this document, and in the demo script at `demo.txt`, is one of those: a company that runs **training courses for other businesses**. Jay is its account executive. His week has a webinar in it every week, because the webinar is both halves of his job:
+
+- **The free masterclass** — an hour of genuinely useful teaching, ending in an offer. This is how strangers become leads.
+- **The paid course sessions** — the thing customers bought. Delivered as webinars too.
+
+So a single session is a marketing channel, a sales pitch, and a product all at once. Two hundred people register, sixty turn up, and somewhere in that sixty are the eight companies that will buy a team licence this quarter. Jay's job is to find those eight.
+
+That makes three questions matter more to him than anything else about a webinar: who registered, who actually turned up, and which of them ended up paying.
+
+### The problem
+
+Those are exactly the three questions that stop at the product boundary.
+
+Jay lives in CRM. The Leads and Contacts he invites are there; the Deals he closes are there; the Accounts they belong to are there. The webinar sits outside it. So every session costs him the same manual round trip:
+
+- He **exports** a recipient list out of CRM to invite anyone, which means the invite goes to whatever the data looked like the day he exported it — not to the record as it stands.
+- He **re-imports** the registrants afterwards to get them back into CRM, and hand-matches the ones who already exist so he does not create duplicates.
+- He **guesses** at the result. Attendance lives in one product and pipeline in the other, so "did that webinar produce anything?" is answered by eyeballing two lists side by side — if it is answered at all.
+
+The cost is not only the effort. A rep opening a lead in CRM cannot see that this person sat through a masterclass last Thursday, so the next call starts colder than it needed to. And because the connection between attendance and revenue is never recorded, the case for running the next webinar rests on a feeling rather than a number.
+
+### How the CRM integration solves it
+
+It closes the boundary rather than adding a second place to work. Once enabled, Zoho Webinar becomes a module in CRM, sitting in the left nav alongside Leads and Contacts, and each webinar is a record like any other. Jay creates the session, invites his records and reads the outcome without leaving CRM:
+
+- **Inviting CRM records directly**, so the invite always goes to current data rather than a stale export — and to the modules the admin allows, not just Leads and Contacts.
+- **Bringing registrations, joins and no-shows back onto the webinar record**, and optionally creating CRM records from registrants who were not in CRM to begin with, so there is nothing to re-import.
+- **Sending the whole email lifecycle** — invitation, confirmation, up to three reminders, and separate follow-ups for people who attended and people who missed it — from templates that live with the module.
+- **Tying attendance to the deals it influenced**, through an attribution model you choose, so what a webinar was worth is a figure on the record instead of a guess.
+
+Each of those maps onto one of the three questions. Who registered and who turned up land on the record; what it was worth is attributed to the deals.
 
 ![[01-webinar-list.jpg|The Zoho Webinar module, with six webinars covering every state the product has]]
 
