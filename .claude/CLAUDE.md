@@ -125,6 +125,31 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-10 — **New PRD over the current master flow, plus a screenshot pipeline**, at
+  `docs/prd/current/`. Nine sections in the order the user asked for: Introduction (what
+  Zoho Webinar is / who uses it / the problem / how the integration solves it), Turning the
+  integration on, Creating a webinar, Fields in the create flow, Before the webinar, The
+  webinar list, After the webinar, Open questions. 36 figures, all captured from `master`.
+  The **field tables list every picklist's actual options**, not option counts — a first
+  pass wrote "Picklist (29 options)" and the user rightly asked why the options were
+  missing; they are now pulled from the DOM (`.cs-opt` text) so they cannot drift from the
+  mock. The interesting facts it records: the 2nd and 3rd reminders add **None** to the same
+  eleven intervals the 1st offers, so a webinar can send fewer than three; `Webinar Cost` on
+  the create form is what the completed webinar's ROI divides by; and Push Registrants to
+  CRM is the setting that removes the re-import step from the introduction's problem.
+  **`shoot.mjs` is the reusable part**: headless Chrome over the DevTools protocol, driven
+  by `Runtime.evaluate`, writing real PNGs — no npm packages, since Node 22+ has a global
+  `WebSocket`. Shots are `{file, steps[]}` where each step is JS run in the page, plus
+  injected helpers (`__click`, `__clickRelated`, `__scrollDetail`, `__scrollForm`, `__pick`).
+  `node shoot.mjs --eval "expr"` is how the entry points were found. Four traps are written
+  up in `docs/prd/current/README.md` and cost real time here: a `\s` regex inside the
+  injected template literal collapses to `s`; the detail page and create form scroll inner
+  elements so `window.scrollTo` does nothing; the create form's five sections share one
+  770px scroll so Preferences/Reminders/Follow-Ups land in a single screenful; and
+  **Webinar Revenue is collapsed by default**, so a naive shot captures the panel beneath
+  it. Identical file sizes across a batch is the tell that a step silently failed — compare
+  md5s. The old PRD at `docs/prd/zoho-webinar/` is untouched and still describes the
+  pre-session mock. Why: the user asked for a new PRD over the current flow.
 - 2026-09-10 — **PRD Introduction rewritten as four questions, and the business changed.**
   `docs/prd/zoho-webinar/prd-source.md` now opens with **What Zoho Webinar is** / **Who uses
   it** / **The problem** / **How the CRM integration solves it**, then the module screenshot;

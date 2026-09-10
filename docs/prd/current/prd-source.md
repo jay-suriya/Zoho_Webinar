@@ -175,75 +175,92 @@ The builder is where the questions come from. A form has a name, a description a
 
 ## Fields in the create flow
 
-Every field the create form presents, in form order, with its control type. Toggle rows are checkboxes styled as switches; picklists show their option count.
+Every field the create form presents, in form order, with its control and — for a picklist — the options it actually offers. Toggle rows are checkboxes styled as switches.
 
 ### Webinar Details
 
-| Field | Type |
-|---|---|
-| Webinar title * | Text (required) |
-| Webinar Type | Picklist — Live Webinar, OnDemand Webinar |
-| Webinar Date & Time | Date + time |
-| Webinar Duration | Picklist (29 options) |
-| Webinar Timezone | Picklist (6 options) |
-| Video File | Picklist (4 options) — on-demand only |
-| Allow video play/pause | Toggle — on-demand only |
-| Webinar Owner | Picklist (4 options) |
-| Organizer | Picklist (2 options) |
-| Co-Organizer | Picklist (3 options), two rows |
-| Repeat Webinar | Toggle, opens Repeat Type / Repeat Ends / On / After N Webinars |
-| Webinar Cost | Text (currency) |
-| Description | Multi-line text |
+| Field | Control | Options |
+|---|---|---|
+| Webinar title * | Text, required | — |
+| Webinar Type | Picklist | Live Webinar · OnDemand Webinar |
+| Webinar Date & Time | Date input + time picklist | 9:00 AM · 10:00 AM · 11:00 AM · 12:00 PM · 1:00 PM · 2:00 PM |
+| Webinar Duration | Two picklists, hours and minutes | Hours: 1–24 hr. Minutes: 00 · 15 · 30 · 45 min |
+| Webinar Timezone | Picklist | (-5) Eastern · (-6) Central · (-7) Mountain · (-8) Pacific · (+0) UTC · (+5:30) IST |
+| Video File | Picklist — on-demand only | From Zoho Webinar Recordings · Upload Files / Documents · Zoho WorkDrive · Other Cloud Services |
+| Allow video play/pause | Toggle — on-demand only | — |
+| Webinar Owner | Picklist | Rao Priya · Jay Acme · Mark Acme · Suriya |
+| Organizer | Picklist | Jayasuriya · Morrison Troy |
+| Co-Organizer (two rows) | Picklist | None · Jayasuriya · Morrison Troy |
+| Repeat Webinar | Toggle, opens the repeat dialog | — |
+| Webinar Cost | Text, currency | — |
+| Description | Multi-line text | — |
+
+The repeat dialog, when Repeat Webinar is on:
+
+| Field | Control | Options |
+|---|---|---|
+| Repeat Type | Picklist | None · Daily · Weekly · Monthly · Yearly · Custom |
+| Repeat Ends | Radio | Never · On *(date)* · After *(N)* Webinars |
 
 ### Registration Setup
 
-| Field | Type |
-|---|---|
-| Registration Type | Picklist — With Registration, Without Registration |
-| Registration Mode | Picklist — per event, or once for any event |
-| Open Registration for | Picklist (8 options) |
-| Registration Form | Picklist — 3 sample forms, each previewable, + Create New Form |
-| Moderation Type | Picklist — Automatic, Manual |
-| Set Registration Limit | Number |
-| Push Webinar Registrants to CRM | Toggle, plus Manage Configuration |
-| Allow/deny registrants from specific countries | Picklist (3 options) + country multi-select |
-| Allow/Block Specific Domains | Picklist (3 options) + domain list |
-| Post_Registration Custom Redirection | Toggle + Post Redirection URL (text) |
-| Allow access to join link only through mail | Toggle |
-| Allow only authenticated Zoho Users with a Zoho account | Toggle |
-| Send Confirmation to Registrants | Toggle + Confirmation Email Template (Select Template) |
+| Field | Control | Options |
+|---|---|---|
+| Registration Type | Picklist | With Registration · Without Registration |
+| Registration Mode | Picklist | Register and attend each event individually · Register once and attend any event |
+| Open Registration for | Picklist | All Webinars · Only selected number of occurrences · 1–6 occurrences |
+| Registration Form | Picklist, each entry previewable | Default Form · Real Estate Form · Stock Trading Form · + Create New Form |
+| Moderation Type | Picklist | Automatic Moderation · Manual Moderation |
+| Set Registration Limit | Number | — |
+| Push Webinar Registrants to CRM | Toggle + Manage Configuration | — |
+| Allow/deny registrants from specific countries | Picklist + country multi-select | No Restrictions · Allow registrants from Countries · Block registrants from Countries |
+| Allow/Block Specific Domains | Picklist + domain list | No Restriction · Allow specific email domains · Block specific email domains |
+| Post_Registration Custom Redirection | Toggle + Post Redirection URL (text) | — |
+| Allow access to join link only through mail | Toggle | — |
+| Allow only authenticated Zoho Users with a Zoho account | Toggle | — |
+| Send Confirmation to Registrants | Toggle + Confirmation Email Template *(Select Template)* | — |
 
 ### Preferences
 
-| Field | Type |
-|---|---|
-| Who can Join | Picklist (2 options) |
-| Allow attendees to ask questions | Toggle |
-| Allow anonymous questions | Toggle |
-| Show questions to all | Toggle |
-| Auto Reply for questions | Multi-line text |
-| Automatic session recording | Toggle |
-| Video recording | Toggle |
-| Display attendee list to all | Toggle |
-| Use Emoji reactions | Toggle |
-| Post webinar Re-direction | Toggle + Post Redirection URL (text) |
-| Send thank you email to attendees | Picklist (3 options) + Thank You Email Template |
+| Field | Control | Options |
+|---|---|---|
+| Who can Join | Picklist | Anyone can Join · Only Authenticated Users can Join |
+| Allow/deny registrants from specific countries | Picklist + country multi-select | None · Allow registrants from Countries · Block registrants from Countries |
+| Allow attendees to ask questions | Toggle | — |
+| Allow anonymous questions | Toggle | — |
+| Show questions to all | Toggle | — |
+| Auto Reply for questions | Multi-line text | — |
+| Automatic session recording | Toggle | — |
+| Video recording | Toggle | — |
+| Display attendee list to all | Toggle | — |
+| Use Emoji reactions | Toggle | — |
+| Post webinar Re-direction | Toggle + Post Redirection URL (text) | — |
+| Send thank you email to attendees | Picklist + Thank You Email Template | 2 minutes · 5 mins · 10 mins after webinar ends |
 
-### Reminders and Follow-Ups
+### Reminders
 
-| Field | Type |
-|---|---|
-| 1st Reminder | Picklist (11 intervals) + 1st Reminder Template |
-| 2nd Reminder | Picklist (12 intervals) + 2nd Reminder Template |
-| 3rd Reminder | Picklist (12 intervals) + 3rd Reminder Template |
-| Send Follow-up Email to Attendees | Picklist (9 options) + Attendees Follow-up Template |
-| Send Follow-up Email to Absentees | Picklist (9 options) + Absentees Follow-up Template |
-| Include Recording for Attendees | Toggle |
-| Include Recording for Absentees | Toggle |
+All three reminders offer the same intervals; the 2nd and 3rd add **None** so a webinar can send fewer than three.
+
+| Field | Control | Options |
+|---|---|---|
+| 1st Reminder | Picklist + 1st Reminder Template | 2 mins · 5 mins · 10 mins · 15 mins · 30 mins · 1 hour · 2 hours · 6 hours · 12 hours · 1 day · 1 week — before the webinar |
+| 2nd Reminder | Picklist + 2nd Reminder Template | None, then the same eleven intervals |
+| 3rd Reminder | Picklist + 3rd Reminder Template | None, then the same eleven intervals |
+
+### Follow-Ups
+
+| Field | Control | Options |
+|---|---|---|
+| Send Follow-up Email to Attendees | Picklist + Attendees Follow-up Template | None · 2 mins · 5 mins · 10 mins · 15 mins · 1 hour · 2 hours · 6 hours · 1 day — after the webinar ends |
+| Send Follow-up Email to Absentees | Picklist + Absentees Follow-up Template | None, then the same eight intervals |
+| Include Recording for Attendees | Toggle | — |
+| Include Recording for Absentees | Toggle | — |
 
 ![[cr-03-preferences-reminders-followups.jpg|Preferences, Reminders and Follow-Ups. Every template row is a Select Template button, not a text field]]
 
 > NOTE: Every email row here selects a template rather than composing one. That is deliberate: the template is a reusable object with its own link and merge-field rules, covered in *Before the webinar*.
+
+> NOTE: The Webinar Owner and Organizer picklists hold the mock's sample users. In the product they would be the CRM users of the org.
 
 ## Before the webinar
 
