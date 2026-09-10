@@ -125,6 +125,20 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-10 — **The blocking cases are answered at the marketplace card, not on the intro
+  page.** `integWebinarCardSetup()` — what the Zoho Meetings card's **For webinars &rsaquo;
+  Set up** calls — now checks `window._selectedCase` first: **1** opens the no-account
+  modal, **4** the not-an-admin modal, **5** the trial-expired modal, and it returns without
+  showing anything else. Only **2** and **3** reach the introduction page. Before this the
+  card always opened the intro and the check happened on that page's Setup button, so a user
+  with no Webinar account was sold the integration before being told they could not have it.
+  `integWebinarSetupProceed()` keeps its own copy of the branch, which is now a second guard
+  rather than the only one — it still fires if the DEMO case is switched while the intro page
+  is open. The meetings path (`mpSetupMeeting` → `ommOpenProviders`) is untouched: it is a
+  different product flow with its own provider chooser. Verified from the card: case 1 →
+  case1 modal, 2 → intro page, 3 → intro page, 4 → case4 modal, 5 → case5 modal, with
+  nothing else on screen in the blocking cases. Why: the user asked for the exceptions to be
+  thrown at the setup card rather than on the marketing page.
 - 2026-09-10 — **Case 4 loses its "Notify Super Admin" button.** The not-an-admin modal
   offered to email the Webinar Super Admin; only **Cancel** is left. It was also the last
   `alert()` inside a modal this session's work touches — those freeze the renderer until
