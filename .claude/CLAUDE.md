@@ -125,6 +125,25 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-10 — **Intro page: design and motion, and one feature dropped** (branch 1). The
+  stripped-back version below read as documentation, not marketing, so it got a visual pass
+  while keeping its shape (no CTAs in the body — the header's Setup button is still the only
+  action). Added: a hero on a **drifting gradient** (two blurred radial orbs on slow
+  `ixDriftA` / `ixDriftB` loops), a status pill with a **pulsing dot**, the second line of
+  the headline in a **blue-to-pink gradient**; the five features as **cards with gradient
+  icon tiles** that lift on hover and grow a gradient top rule; and "What it solves" as four
+  rows where the old way **strikes itself out** (`ixStrike`, a scaleX on an `:after` rule) as
+  the row arrives, answered by a line with a gradient left bar. Everything fades up on scroll
+  via one IntersectionObserver with staggered `animation-delay`, and the whole thing goes
+  static under `prefers-reduced-motion`. **"The lifecycle emails, handled" was removed** at
+  the user's request, leaving five features.
+  Two things learned building it: the observer was first given `root: panel`, and it **never
+  fired at all** — every block stayed at `opacity: 0`, i.e. a blank-looking page — so it uses
+  the viewport now, plus a 1.2s fallback that reveals anything still hidden and on screen,
+  because invisible content is a worse failure than no animation. And `ixReveal()` is
+  re-run from `integShowPanel()` on every open, clearing `.ix-in` first, or the animation
+  would only ever play once per page load. Why: the user said it did not read as a marketing
+  page and asked for animation and design, minus that feature.
 - 2026-09-10 — **Intro page stripped back to features and problems** (branch 1). The
   marketing-page pass below went too far the other way: it had a hero CTA that turned into
   **"Open settings"** once enabled, a second Setup button in a closing band, and a fake
