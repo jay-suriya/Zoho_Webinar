@@ -125,6 +125,20 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-10 — **Intro page stripped back to features and problems** (branch 1). The
+  marketing-page pass below went too far the other way: it had a hero CTA that turned into
+  **"Open settings"** once enabled, a second Setup button in a closing band, and a fake
+  record card with an invented **$48,000** influenced-pipeline figure. All of it is gone.
+  The page is now one 820px column: a short intro, **What you get** (six features as a
+  definition list — the module, webinars created in CRM, invites to your own records, the
+  lifecycle emails, registrants as records, revenue attribution) and **What it solves**
+  (four problems struck through, each answered by a line underneath). No buttons in the body
+  at all — the only action is the **Setup** button in the header, which is why
+  `integ-intro-cta2` and its state handling were removed from `integIntroRenderHeader()`.
+  The old `.ix-shot` / `.ix-flow` / `.ix-why` / `.ix-close` / `.ix-facts` styles went with
+  their markup. The panel is ~7.2 KB, down from ~15.3 KB. Why: the user asked why there was
+  an "Open settings" button at all, and for the page to simply explain what the integration
+  offers and what it solves, simply and minimally.
 - 2026-09-10 — **The integration intro page is a marketing page now** (branch 1). What was
   there: a hero, then **three stacked four-across card grids** — "How it works" (4 steps),
   "Why teams enable it" (4 benefits) and "When you enable, this integration will" (4 ticks)
