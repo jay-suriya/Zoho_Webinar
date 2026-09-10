@@ -125,6 +125,18 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-10 — **Case 4 loses its "Notify Super Admin" button.** The not-an-admin modal
+  offered to email the Webinar Super Admin; only **Cancel** is left. It was also the last
+  `alert()` inside a modal this session's work touches — those freeze the renderer until
+  dismissed by hand, which had already cost a stuck tab. The modal still explains the
+  situation and what to do about it; the difference is that CRM no longer implies it can
+  send that mail. Worth knowing while testing: **the case exceptions were never removed** —
+  `integWebinarSetupProceed()` still branches on `window._selectedCase`, and all five were
+  re-verified (1 → create-account modal, 2 and 3 → setup form, 4 → not-an-admin, 5 → trial
+  expired). What changed earlier in the session is *when* they fire: the introduction page
+  now comes first, so the check runs on that page's Setup button rather than on the
+  marketplace card, and Case 2 being the demo default means you see none of them until the
+  DEMO switcher is moved. Why: the user asked for the button to go.
 - 2026-09-10 — **Intro page: design and motion, and one feature dropped** (branch 1). The
   stripped-back version below read as documentation, not marketing, so it got a visual pass
   while keeping its shape (no CTAs in the body — the header's Setup button is still the only
