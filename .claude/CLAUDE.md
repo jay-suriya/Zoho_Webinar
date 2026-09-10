@@ -125,6 +125,28 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-10 — **The integration intro page is a marketing page now** (branch 1). What was
+  there: a hero, then **three stacked four-across card grids** — "How it works" (4 steps),
+  "Why teams enable it" (4 benefits) and "When you enable, this integration will" (4 ticks)
+  — twelve boxes of small grey text, with the last two grids largely restating each other.
+  Rebuilt as four beats: a **hero** with one claim ("Run your webinars without leaving
+  CRM."), a lede, the **Setup button next to it** and a "See how it works" jump link, plus a
+  fake-record product shot (a Lead with Attended / Registered / No-show pills and influenced
+  pipeline) so the payoff is shown rather than described; **three steps** as a left-to-right
+  flow with arrows instead of four cards; **three** benefit cards instead of four; and a
+  closing band that folds the old "what enabling does" list into one sentence beside a
+  second Setup button. The fact strip under the hero is deliberately factual, not invented
+  stats — Leads/Contacts and person modules, 7 lifecycle emails, 6 attribution models.
+  New `.ix-*` styles live with the panel's existing `.iw-*` ones; a `@media (max-width:1080px)`
+  block stacks the hero, the flow and the cards. `integ-intro-status` and `integ-intro-cta`
+  keep their ids so `integIntroRenderHeader()` still drives them, and it now also sets the
+  hero button (`integ-intro-cta2`), which reads **Open settings** once enabled while the
+  header stays "Setup". Checked: badge flips to ENABLED, both buttons reach the setup panel.
+  **Mistake worth remembering:** the first pass dropped the `</div>` that closed
+  `#integ-intro-panel`, and the page went **completely blank** — an unbalanced div swallows
+  every panel after it, exactly like the unbalanced-paren failure mode noted for the React
+  parts. Count `<div>` against `</div>` across a replaced block before reloading.
+  Why: the user asked for the page to be simpler and to read like a marketing page.
 - 2026-09-09 — **`index.html` redirects with a cache-buster.** Slate serves the mock with
   `cache-control: public, max-age=31536000` — a year — so a browser that had opened the page
   once kept showing that copy after every redeploy, which reads exactly like "the deploy
