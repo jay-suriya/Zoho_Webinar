@@ -1821,70 +1821,202 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               .iw-step-n { width:26px;height:26px;border-radius:50%;background:#EEF2FF;color:#2255cc;font-size:12.5px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-bottom:12px; }
               .iw-ben { background:#fff;border:1px solid #e8ebf2;border-radius:12px;padding:20px 22px;transition:box-shadow .15s,transform .15s; }
               .iw-ben:hover { box-shadow:0 6px 18px rgba(49,57,73,.08);transform:translateY(-2px); }
+
+              /* ── Integration intro ─────────────────────────────────────────────
+                 A page that has to read as marketing, so it is allowed motion: a
+                 drifting gradient behind the claim, and everything else revealing on
+                 scroll. All CSS keyframes plus one IntersectionObserver — no library.
+                 Everything collapses to static under prefers-reduced-motion. ── */
+              .ix-page { font-family:'Zoho Puvi',-apple-system,'Segoe UI',sans-serif;color:#202123;background:#fff; }
+
+              /* reveal */
+              .ix-reveal { opacity:0;transform:translateY(16px); }
+              .ix-reveal.ix-in { animation:ixUp .62s cubic-bezier(.21,.72,.23,1) forwards; }
+              @keyframes ixUp { to { opacity:1;transform:none; } }
+
+              /* hero */
+              .ix-hero { position:relative;overflow:hidden;padding:88px 40px 82px;
+                         background:linear-gradient(168deg,#fbfbfe 0%,#f4f6ff 52%,#fdf4f8 100%);
+                         border-bottom:1px solid #eceef6; }
+              .ix-orb { position:absolute;border-radius:50%;filter:blur(58px);opacity:.5;pointer-events:none; }
+              .ix-orb-a { width:420px;height:420px;top:-150px;right:-90px;
+                          background:radial-gradient(circle,#c9d4ff,transparent 68%);
+                          animation:ixDriftA 19s ease-in-out infinite; }
+              .ix-orb-b { width:360px;height:360px;bottom:-160px;left:-70px;
+                          background:radial-gradient(circle,#ffd3e4,transparent 68%);
+                          animation:ixDriftB 23s ease-in-out infinite; }
+              @keyframes ixDriftA { 50% { transform:translate(-46px,38px) scale(1.09); } }
+              @keyframes ixDriftB { 50% { transform:translate(40px,-34px) scale(1.12); } }
+              .ix-hero-in { position:relative;max-width:1080px;margin:0 auto; }
+              .ix-badge { display:inline-flex;align-items:center;gap:9px;background:#fff;
+                          border:1px solid #e2e5f2;border-radius:100px;padding:6px 15px;
+                          font-size:12px;font-weight:600;color:#434D5E;margin-bottom:26px;
+                          box-shadow:0 1px 3px rgba(49,57,73,.05); }
+              .ix-badge-dot { width:7px;height:7px;border-radius:50%;background:#10975E;
+                              box-shadow:0 0 0 0 rgba(16,151,94,.55);animation:ixPulse 2.4s ease-out infinite; }
+              @keyframes ixPulse { 70% { box-shadow:0 0 0 7px rgba(16,151,94,0); }
+                                  100% { box-shadow:0 0 0 0 rgba(16,151,94,0); } }
+              .ix-h1 { font-size:48px;line-height:1.08;font-weight:800;letter-spacing:-1.1px;margin:0 0 20px; }
+              .ix-grad { background:linear-gradient(96deg,#5464F2 12%,#C2185B 88%);
+                         -webkit-background-clip:text;background-clip:text;
+                         -webkit-text-fill-color:transparent;color:#5464F2; }
+              .ix-lede { font-size:17px;line-height:1.7;color:#434D5E;margin:0;max-width:36em; }
+              .ix-h1.ix-reveal.ix-in { animation-delay:.07s; }
+              .ix-lede.ix-reveal.ix-in { animation-delay:.14s; }
+
+              /* sections */
+              .ix-section { max-width:1080px;margin:0 auto;padding:68px 40px 0; }
+              .ix-section:last-child { padding-bottom:92px; }
+              .ix-kicker { font-size:12px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+                           color:#8C91AB;margin-bottom:30px; }
+
+              /* feature cards */
+              .ix-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:20px; }
+              .ix-card { position:relative;background:#fff;border:1px solid #e8ebf2;border-radius:14px;
+                         padding:26px 24px 24px;overflow:hidden;
+                         transition:transform .22s cubic-bezier(.21,.72,.23,1),box-shadow .22s,border-color .22s; }
+              .ix-card:before { content:'';position:absolute;inset:0 0 auto;height:2px;
+                                background:linear-gradient(90deg,#5464F2,#C2185B);
+                                transform:scaleX(0);transform-origin:left;transition:transform .3s; }
+              .ix-card:hover { transform:translateY(-4px);box-shadow:0 14px 32px rgba(49,57,73,.1);border-color:#dfe3f0; }
+              .ix-card:hover:before { transform:scaleX(1); }
+              .ix-card h3 { font-size:15.5px;font-weight:700;margin:0 0 8px; }
+              .ix-card p { font-size:13.5px;line-height:1.7;color:#616E88;margin:0; }
+              .ix-ico { width:40px;height:40px;border-radius:11px;display:flex;align-items:center;
+                        justify-content:center;margin-bottom:17px;color:#5464F2;
+                        background:linear-gradient(140deg,#eef1ff,#fdeef5);transition:transform .22s; }
+              .ix-card:hover .ix-ico { transform:scale(1.07) rotate(-3deg); }
+              .ix-grid .ix-card.ix-in:nth-child(2) { animation-delay:.06s; }
+              .ix-grid .ix-card.ix-in:nth-child(3) { animation-delay:.12s; }
+              .ix-grid .ix-card.ix-in:nth-child(4) { animation-delay:.18s; }
+              .ix-grid .ix-card.ix-in:nth-child(5) { animation-delay:.24s; }
+
+              /* what it solves — the old way strikes itself out as the row arrives */
+              .ix-solve { display:flex;flex-direction:column; }
+              .ix-row { padding:22px 0;border-bottom:1px solid #f0f1f7; }
+              .ix-row:last-child { border-bottom:none; }
+              .ix-was { font-size:14.5px;line-height:1.6;color:#9aa0b5;margin-bottom:7px; }
+              .ix-was span { position:relative;display:inline; }
+              .ix-was span:after { content:'';position:absolute;left:0;top:52%;height:1.5px;width:100%;
+                                   background:#c9cde0;transform:scaleX(0);transform-origin:left; }
+              .ix-row.ix-in .ix-was span:after { animation:ixStrike .5s ease-out .26s forwards; }
+              @keyframes ixStrike { to { transform:scaleX(1); } }
+              .ix-now { font-size:15.5px;line-height:1.65;color:#202123;font-weight:500;
+                        display:flex;gap:11px;align-items:flex-start; }
+              .ix-now:before { content:'';flex-shrink:0;width:3px;align-self:stretch;border-radius:2px;
+                               background:linear-gradient(#5464F2,#C2185B); }
+              .ix-solve .ix-row.ix-in:nth-child(2) { animation-delay:.05s; }
+              .ix-solve .ix-row.ix-in:nth-child(3) { animation-delay:.1s; }
+              .ix-solve .ix-row.ix-in:nth-child(4) { animation-delay:.15s; }
+
+              @media (max-width:980px) { .ix-grid { grid-template-columns:repeat(2,1fr); } }
+              @media (max-width:720px) {
+                .ix-hero { padding:56px 24px 52px; }
+                .ix-h1 { font-size:32px; }
+                .ix-section { padding:48px 24px 0; }
+                .ix-grid { grid-template-columns:1fr; }
+              }
+              @media (prefers-reduced-motion:reduce) {
+                .ix-reveal, .ix-reveal.ix-in { opacity:1;transform:none;animation:none; }
+                .ix-orb { animation:none; }
+                .ix-badge-dot { animation:none; }
+                .ix-was span:after { transform:scaleX(1);animation:none; }
+                .ix-card, .ix-ico, .ix-card:before { transition:none; }
+              }
             </style>
 
-            <!-- header with the enable action on the right -->
-            <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px 32px;border-bottom:1px solid #eaeaea;background:#fff;">
+            <!-- header: back, name, state, and the one action -->
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding:18px 32px;border-bottom:1px solid #eaeaea;background:#fff;">
               <div style="display:flex;align-items:center;gap:14px;">
-                <span onclick="integShowPanel('integ-grid-panel')" style="cursor:pointer;color:#444;font-size:20px;line-height:1;">←</span>
-                <span style="font-size:19px;font-weight:800;color:#111;">Zoho Webinar Integration</span>
+                <span onclick="integShowPanel('integ-grid-panel')" style="cursor:pointer;color:#444;font-size:20px;line-height:1;">&#8592;</span>
+                <span style="font-size:17px;font-weight:700;color:#111;">Zoho Webinar</span>
                 <span id="integ-intro-status" style="background:#f1f2f6;color:#666;font-size:11px;font-weight:700;padding:3px 10px;border-radius:12px;">NOT ENABLED</span>
               </div>
-              <button id="integ-intro-cta" onclick="integIntroEnable()" style="padding:10px 22px;background:#C2185B;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;" onmouseover="this.style.background='#9c1349'" onmouseout="this.style.background='#C2185B'">Setup</button>
+              <button id="integ-intro-cta" onclick="integIntroEnable()" style="padding:9px 22px;background:#C2185B;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;" onmouseover="this.style.background='#9c1349'" onmouseout="this.style.background='#C2185B'">Setup</button>
             </div>
 
-            <div style="padding:36px 32px 56px;">
-              <div style="max-width:1100px;">
+            <!-- ── What the integration offers and what it fixes. No action in the body:
+                     the only button is Setup, in the header. Everything reveals on scroll. ── -->
+            <div class="ix-page">
 
-                <!-- hero -->
-                <div style="display:flex;align-items:center;gap:28px;background:linear-gradient(135deg,#f7f8fc,#eef2ff);border:1px solid #e8ebf2;border-radius:14px;padding:30px 32px;margin-bottom:36px;">
-                  <div style="display:flex;align-items:center;gap:16px;flex-shrink:0;">
-                    <div style="width:60px;height:60px;border-radius:14px;background:#fff;border:1px solid #e0e4ef;display:flex;align-items:center;justify-content:center;">
-                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><polygon points="23 7 16 12 23 17 23 7" stroke="#185FA5" stroke-width="2" fill="none" stroke-linejoin="round"/><rect x="1" y="5" width="15" height="14" rx="2" stroke="#185FA5" stroke-width="2" fill="none"/></svg>
+              <!-- hero: drifting gradient behind a single claim -->
+              <section class="ix-hero">
+                <div class="ix-orb ix-orb-a"></div>
+                <div class="ix-orb ix-orb-b"></div>
+                <div class="ix-hero-in">
+                  <div class="ix-badge ix-reveal">
+                    <span class="ix-badge-dot"></span>Zoho Webinar &nbsp;&#183;&nbsp; Zoho CRM
+                  </div>
+                  <h1 class="ix-h1 ix-reveal">Run your webinars<br><span class="ix-grad">from inside CRM.</span></h1>
+                  <p class="ix-lede ix-reveal">Registration, reminders, attendance, recordings &mdash; Zoho Webinar's own features, re&#8209;flowed so they work on the records you already have.</p>
+                </div>
+              </section>
+
+              <!-- what you get -->
+              <section class="ix-section">
+                <div class="ix-kicker ix-reveal">What you get</div>
+                <div class="ix-grid">
+                  <div class="ix-card ix-reveal">
+                    <div class="ix-ico">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
                     </div>
-                    <div style="display:flex;flex-direction:column;align-items:center;gap:4px;color:#8C91AB;">
-                      <svg width="46" height="12" viewBox="0 0 46 12" fill="none"><path d="M0 6h38" stroke="#C0C8E2" stroke-width="2" stroke-dasharray="4 4"/><path d="M38 2l6 4-6 4" stroke="#C0C8E2" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>
-                      <span style="font-size:10.5px;font-weight:700;letter-spacing:.06em;">TWO-WAY</span>
-                      <svg width="46" height="12" viewBox="0 0 46 12" fill="none"><path d="M46 6H8" stroke="#C0C8E2" stroke-width="2" stroke-dasharray="4 4"/><path d="M8 2L2 6l6 4" stroke="#C0C8E2" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>
+                    <h3>A Zoho Webinar module</h3>
+                    <p>Webinars become CRM records &mdash; each one carrying its registrants, its attendance and its recording.</p>
+                  </div>
+                  <div class="ix-card ix-reveal">
+                    <div class="ix-ico">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/><line x1="3" y1="11" x2="21" y2="11"/></svg>
                     </div>
-                    <div style="width:60px;height:60px;border-radius:14px;background:#fff;border:1px solid #e0e4ef;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#E8384F;">Z</div>
+                    <h3>Webinars created in CRM</h3>
+                    <p>Schedule a live, on&#8209;demand or recurring webinar, with its registration form, without opening a second product.</p>
                   </div>
-                  <div>
-                    <div style="font-size:24px;font-weight:800;color:#111;letter-spacing:-.3px;margin-bottom:8px;">Run your webinars from inside CRM</div>
-                    <div style="font-size:14px;color:#555;line-height:1.7;max-width:640px;">Invite the records you already work with, let registrations and attendance flow back onto the webinar, and see which webinars actually closed deals — without exporting a single list.</div>
+                  <div class="ix-card ix-reveal">
+                    <div class="ix-ico">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <h3>Invites to your own records</h3>
+                    <p>Send to Leads, Contacts, or any module that holds people. You decide which ones qualify.</p>
                   </div>
-                </div>
-
-                <!-- how it works -->
-                <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:16px;">How it works</div>
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:36px;">
-                  <div class="iw-step"><div class="iw-step-n">1</div><div style="font-size:13.5px;font-weight:700;color:#111;margin-bottom:6px;">Create the webinar in CRM</div><div style="font-size:12.5px;color:#666;line-height:1.6;">Schedule it from the Zoho Webinar module, with its registration form and lifecycle emails.</div></div>
-                  <div class="iw-step"><div class="iw-step-n">2</div><div style="font-size:13.5px;font-weight:700;color:#111;margin-bottom:6px;">Invite your records</div><div style="font-size:12.5px;color:#666;line-height:1.6;">Pick recipients from the modules you allow — Leads, Contacts or a custom module — and send.</div></div>
-                  <div class="iw-step"><div class="iw-step-n">3</div><div style="font-size:13.5px;font-weight:700;color:#111;margin-bottom:6px;">Registrants come back</div><div style="font-size:12.5px;color:#666;line-height:1.6;">Registrations, joins and no-shows land on the webinar, and can be pushed into CRM as records.</div></div>
-                  <div class="iw-step"><div class="iw-step-n">4</div><div style="font-size:13.5px;font-weight:700;color:#111;margin-bottom:6px;">See the revenue</div><div style="font-size:12.5px;color:#666;line-height:1.6;">Attendance is tied to the deals it influenced, using the attribution model you choose.</div></div>
-                </div>
-
-                <!-- why teams enable it -->
-                <div style="font-size:16px;font-weight:800;color:#111;margin-bottom:16px;">Why teams enable it</div>
-                <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:36px;">
-                  <div class="iw-ben"><div style="font-size:13.5px;font-weight:700;color:#111;margin-bottom:6px;">No exporting lists</div><div style="font-size:12.5px;color:#666;line-height:1.6;">Recipients come straight from CRM, so the invite always goes to current data.</div></div>
-                  <div class="iw-ben"><div style="font-size:13.5px;font-weight:700;color:#111;margin-bottom:6px;">Attendance on the record</div><div style="font-size:12.5px;color:#666;line-height:1.6;">Who registered, who turned up and who missed it, visible where the rep already works.</div></div>
-                  <div class="iw-ben"><div style="font-size:13.5px;font-weight:700;color:#111;margin-bottom:6px;">Emails handled for you</div><div style="font-size:12.5px;color:#666;line-height:1.6;">Confirmation, reminders and follow-ups go out from the webinar's own templates.</div></div>
-                  <div class="iw-ben"><div style="font-size:13.5px;font-weight:700;color:#111;margin-bottom:6px;">Proof it worked</div><div style="font-size:12.5px;color:#666;line-height:1.6;">Revenue attribution shows which webinars contributed to closed deals.</div></div>
-                </div>
-
-                <!-- what enabling does -->
-                <div style="background:#fff;border:1px solid #e8ebf2;border-radius:12px;padding:24px 28px;">
-                  <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:14px;">When you enable, this integration will</div>
-                  <div style="display:flex;flex-direction:column;gap:10px;">
-                    <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#22c55e;font-size:13px;">&#10003;</span><span style="font-size:13px;color:#555;line-height:1.6;">Connect your Zoho Webinar organisation to this CRM account.</span></div>
-                    <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#22c55e;font-size:13px;">&#10003;</span><span style="font-size:13px;color:#555;line-height:1.6;">Add a Zoho Webinar module, with its registrants, attendance and recordings.</span></div>
-                    <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#22c55e;font-size:13px;">&#10003;</span><span style="font-size:13px;color:#555;line-height:1.6;">Let you choose which modules a webinar invite can be sent to.</span></div>
-                    <div style="display:flex;gap:10px;align-items:flex-start;"><span style="color:#22c55e;font-size:13px;">&#10003;</span><span style="font-size:13px;color:#555;line-height:1.6;">Optionally sync your past webinars, and attribute deal revenue to them.</span></div>
+                  <div class="ix-card ix-reveal">
+                    <div class="ix-ico">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="9 15 11 17 15 13"/></svg>
+                    </div>
+                    <h3>Registrants as records</h3>
+                    <p>Whoever signs up through the registration form can land in CRM automatically, ready to work.</p>
+                  </div>
+                  <div class="ix-card ix-reveal">
+                    <div class="ix-ico">
+                      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+                    </div>
+                    <h3>Revenue attribution</h3>
+                    <p>Attendance tied to the deals it influenced, across six models &mdash; Linear unless you choose otherwise.</p>
                   </div>
                 </div>
+              </section>
 
-              </div>
+              <!-- what it solves -->
+              <section class="ix-section">
+                <div class="ix-kicker ix-reveal">What it solves</div>
+                <div class="ix-solve">
+                  <div class="ix-row ix-reveal">
+                    <div class="ix-was"><span>Exporting a list out of CRM, importing it into a webinar tool.</span></div>
+                    <div class="ix-now">Recipients come straight from the module, so an invite never goes to stale data.</div>
+                  </div>
+                  <div class="ix-row ix-reveal">
+                    <div class="ix-was"><span>Attendance stranded in a second product's reports.</span></div>
+                    <div class="ix-now">Registrations, joins and no&#8209;shows land on the record your rep already has open.</div>
+                  </div>
+                  <div class="ix-row ix-reveal">
+                    <div class="ix-was"><span>No answer to &ldquo;did the webinar actually help?&rdquo;</span></div>
+                    <div class="ix-now">Attendance is attributed to the deals it moved, so the answer is a number.</div>
+                  </div>
+                  <div class="ix-row ix-reveal">
+                    <div class="ix-was"><span>Learning and operating a separate webinar product.</span></div>
+                    <div class="ix-now">It happens in CRM, in the modules and templates your team already knows.</div>
+                  </div>
+                </div>
+              </section>
+
             </div>
           </div>
 
@@ -2469,10 +2601,10 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
                 <strong>What to do next:</strong> Ask your Webinar Super Admin (Suriya) to either complete this setup on your behalf, or promote your account to Admin so you can complete it yourself.
               </div>
 
-              <!-- Actions -->
+              <!-- Actions — nothing to do here but leave: CRM cannot promote a Webinar
+                   member to Admin, so the only honest action is Cancel. -->
               <div style="display:flex;gap:10px;justify-content:flex-end;">
                 <button onclick="case4ModalClose()" style="padding:8px 20px;background:#fff;border:1.5px solid #ccc;border-radius:6px;color:#444;font-size:13.5px;font-weight:500;cursor:pointer;">Cancel</button>
-                <button onclick="alert('Email sent to your Webinar Super Admin.');case4ModalClose();" style="padding:8px 24px;background:#2563eb;color:#fff;border:none;border-radius:6px;font-size:13.5px;font-weight:600;cursor:pointer;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Notify Super Admin</button>
               </div>
             </div>
           </div>
@@ -7655,6 +7787,43 @@ function applyNotInWebinarRestrictions(restricted) {
   if (ownNote) ownNote.style.display = restricted ? 'flex' : 'none';
 }
 
+// The intro page reveals its blocks as they scroll in. The panel is display:none until
+// it is opened, so the observer is rebuilt on each open and the classes are cleared first,
+// otherwise everything would already be "revealed" the second time you visit.
+var _ixObserver = null;
+function ixReveal() {
+  var panel = document.getElementById('integ-intro-panel');
+  if (!panel) return;
+  var items = panel.querySelectorAll('.ix-reveal');
+  if (!items.length) return;
+  if (_ixObserver) { _ixObserver.disconnect(); _ixObserver = null; }
+  for (var i = 0; i < items.length; i++) items[i].classList.remove('ix-in');
+  if (!('IntersectionObserver' in window)) {
+    for (var j = 0; j < items.length; j++) items[j].classList.add('ix-in');
+    return;
+  }
+  // The viewport is the root, not the panel: the panel is not always the scroller, and
+  // with it as root the observer never fired at all — leaving every block at opacity 0.
+  _ixObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('ix-in'); _ixObserver.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  // a frame's grace so the panel has its size before anything is measured
+  requestAnimationFrame(function() {
+    for (var k = 0; k < items.length; k++) _ixObserver.observe(items[k]);
+  });
+  // Safety net: content must never be left invisible because an observer misbehaved.
+  clearTimeout(window._ixFallbackT);
+  window._ixFallbackT = setTimeout(function() {
+    var stuck = panel.querySelectorAll('.ix-reveal:not(.ix-in)');
+    for (var n = 0; n < stuck.length; n++) {
+      var r = stuck[n].getBoundingClientRect();
+      if (r.top < window.innerHeight) stuck[n].classList.add('ix-in');
+    }
+  }, 1200);
+}
+
 function integShowPanel(id) {
   var flexPanels = {'integ-attrib-panel': true};
   var allPanels = ['integ-grid-panel','integ-intro-panel','integ-enabled-panel','integ-attrib-panel','integ-setup-panel'];
@@ -7668,6 +7837,7 @@ function integShowPanel(id) {
       el.style.display = 'none';
     }
   });
+  if (id === 'integ-intro-panel') ixReveal();
   if (id === 'integ-setup-panel' && typeof window.imRender === 'function') imRender();
   if (id === 'integ-enabled-panel') {
     if (typeof window.imRender === 'function') imRender();

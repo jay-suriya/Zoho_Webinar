@@ -125,6 +125,73 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-10 — **Case 4 loses its "Notify Super Admin" button.** The not-an-admin modal
+  offered to email the Webinar Super Admin; only **Cancel** is left. It was also the last
+  `alert()` inside a modal this session's work touches — those freeze the renderer until
+  dismissed by hand, which had already cost a stuck tab. The modal still explains the
+  situation and what to do about it; the difference is that CRM no longer implies it can
+  send that mail. Worth knowing while testing: **the case exceptions were never removed** —
+  `integWebinarSetupProceed()` still branches on `window._selectedCase`, and all five were
+  re-verified (1 → create-account modal, 2 and 3 → setup form, 4 → not-an-admin, 5 → trial
+  expired). What changed earlier in the session is *when* they fire: the introduction page
+  now comes first, so the check runs on that page's Setup button rather than on the
+  marketplace card, and Case 2 being the demo default means you see none of them until the
+  DEMO switcher is moved. Why: the user asked for the button to go.
+- 2026-09-10 — **Intro page: design and motion, and one feature dropped** (branch 1). The
+  stripped-back version below read as documentation, not marketing, so it got a visual pass
+  while keeping its shape (no CTAs in the body — the header's Setup button is still the only
+  action). Added: a hero on a **drifting gradient** (two blurred radial orbs on slow
+  `ixDriftA` / `ixDriftB` loops), a status pill with a **pulsing dot**, the second line of
+  the headline in a **blue-to-pink gradient**; the five features as **cards with gradient
+  icon tiles** that lift on hover and grow a gradient top rule; and "What it solves" as four
+  rows where the old way **strikes itself out** (`ixStrike`, a scaleX on an `:after` rule) as
+  the row arrives, answered by a line with a gradient left bar. Everything fades up on scroll
+  via one IntersectionObserver with staggered `animation-delay`, and the whole thing goes
+  static under `prefers-reduced-motion`. **"The lifecycle emails, handled" was removed** at
+  the user's request, leaving five features.
+  Two things learned building it: the observer was first given `root: panel`, and it **never
+  fired at all** — every block stayed at `opacity: 0`, i.e. a blank-looking page — so it uses
+  the viewport now, plus a 1.2s fallback that reveals anything still hidden and on screen,
+  because invisible content is a worse failure than no animation. And `ixReveal()` is
+  re-run from `integShowPanel()` on every open, clearing `.ix-in` first, or the animation
+  would only ever play once per page load. Why: the user said it did not read as a marketing
+  page and asked for animation and design, minus that feature.
+- 2026-09-10 — **Intro page stripped back to features and problems** (branch 1). The
+  marketing-page pass below went too far the other way: it had a hero CTA that turned into
+  **"Open settings"** once enabled, a second Setup button in a closing band, and a fake
+  record card with an invented **$48,000** influenced-pipeline figure. All of it is gone.
+  The page is now one 820px column: a short intro, **What you get** (six features as a
+  definition list — the module, webinars created in CRM, invites to your own records, the
+  lifecycle emails, registrants as records, revenue attribution) and **What it solves**
+  (four problems struck through, each answered by a line underneath). No buttons in the body
+  at all — the only action is the **Setup** button in the header, which is why
+  `integ-intro-cta2` and its state handling were removed from `integIntroRenderHeader()`.
+  The old `.ix-shot` / `.ix-flow` / `.ix-why` / `.ix-close` / `.ix-facts` styles went with
+  their markup. The panel is ~7.2 KB, down from ~15.3 KB. Why: the user asked why there was
+  an "Open settings" button at all, and for the page to simply explain what the integration
+  offers and what it solves, simply and minimally.
+- 2026-09-10 — **The integration intro page is a marketing page now** (branch 1). What was
+  there: a hero, then **three stacked four-across card grids** — "How it works" (4 steps),
+  "Why teams enable it" (4 benefits) and "When you enable, this integration will" (4 ticks)
+  — twelve boxes of small grey text, with the last two grids largely restating each other.
+  Rebuilt as four beats: a **hero** with one claim ("Run your webinars without leaving
+  CRM."), a lede, the **Setup button next to it** and a "See how it works" jump link, plus a
+  fake-record product shot (a Lead with Attended / Registered / No-show pills and influenced
+  pipeline) so the payoff is shown rather than described; **three steps** as a left-to-right
+  flow with arrows instead of four cards; **three** benefit cards instead of four; and a
+  closing band that folds the old "what enabling does" list into one sentence beside a
+  second Setup button. The fact strip under the hero is deliberately factual, not invented
+  stats — Leads/Contacts and person modules, 7 lifecycle emails, 6 attribution models.
+  New `.ix-*` styles live with the panel's existing `.iw-*` ones; a `@media (max-width:1080px)`
+  block stacks the hero, the flow and the cards. `integ-intro-status` and `integ-intro-cta`
+  keep their ids so `integIntroRenderHeader()` still drives them, and it now also sets the
+  hero button (`integ-intro-cta2`), which reads **Open settings** once enabled while the
+  header stays "Setup". Checked: badge flips to ENABLED, both buttons reach the setup panel.
+  **Mistake worth remembering:** the first pass dropped the `</div>` that closed
+  `#integ-intro-panel`, and the page went **completely blank** — an unbalanced div swallows
+  every panel after it, exactly like the unbalanced-paren failure mode noted for the React
+  parts. Count `<div>` against `</div>` across a replaced block before reloading.
+  Why: the user asked for the page to be simpler and to read like a marketing page.
 - 2026-09-09 — **`index.html` redirects with a cache-buster.** Slate serves the mock with
   `cache-control: public, max-age=31536000` — a year — so a browser that had opened the page
   once kept showing that copy after every redeploy, which reads exactly like "the deploy
