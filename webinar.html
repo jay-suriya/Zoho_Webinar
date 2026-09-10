@@ -7921,8 +7921,15 @@ function integIntroRenderHeader() {
 }
 
 function integWebinarCardSetup() {
-  // introduce the integration first; the action carries on into setup
   window._setupEntry = 'webinar';
+  // The blocking states are answered here, on the marketplace card — the moment Set up is
+  // clicked. If there is no Zoho Webinar account, or you are a Member rather than an Admin,
+  // or the trial has expired, then nothing can be set up and there is no point introducing
+  // the integration first. Only cases 2 and 3 get as far as the introduction page.
+  var c = window._selectedCase || 2;
+  if (c === 1) { case1ModalOpen(); return; }
+  if (c === 4) { case4ModalOpen(); return; }
+  if (c === 5) { case5ModalOpen(); return; }
   integIntroRenderHeader();
   integShowPanel('integ-intro-panel');
 }
