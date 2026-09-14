@@ -1,0 +1,96 @@
+================================================================================
+ZOHO CRM  x  ZOHO WEBINAR  -  DEV WALKTHROUGH
+The master flow, in the order we will click it
+================================================================================
+
+WHO THIS IS FOR
+  The engineers who are going to build this. They know CRM. Most of them have
+  never run a webinar, and a few have never attended one, so nothing about the
+  domain is assumed.
+
+HOW TO USE THIS DOCUMENT
+  Sections in the order you click through the mock. Each one has:
+    SAY    - roughly the words, spoken aloud
+    SHOW   - what is on screen while you say it
+    LAND   - the one sentence they must walk away with
+  Anything in [brackets] is a stage direction, not something you say.
+
+BEFORE YOU START
+  Serve the mock from the repo root and open it before anyone is in the room:
+      python3 -m http.server 8090
+      http://localhost:8090/webinar.html
+  This document follows master. The PRD at docs/prd/current/prd.html covers the
+  same flow in writing, with screenshots - send that round afterwards.
+
+
+================================================================================
+1.  WHAT A WEBINAR TOOL IS
+================================================================================
+
+SHOW
+  Nothing yet. Do this one with the screen still on the CRM home page, or
+  blank. It is ninety seconds of vocabulary and it works better without the
+  mock competing for attention.
+
+SAY
+  Before we look at any screens, I want to make sure we are all holding the
+  same picture of the thing we are integrating, because half of this room has
+  probably never run a webinar.
+
+  A webinar tool runs a scheduled online session for an audience. That is it.
+  One or a few people present, and anywhere from ten to ten thousand people
+  watch. It is not a meeting. In a meeting everyone is a participant, everyone
+  can talk, and you join by having the link. In a webinar the audience is an
+  audience: they watch, they can ask questions in a panel, and crucially most
+  of them had to sign up in advance.
+
+  That signing up is the part that matters to us, so let me walk the shape of
+  it. A webinar has a date, a time and a host. It publishes a registration
+  form. People fill it in, and at that moment they become a registrant. They
+  get a confirmation email, then a reminder or two as the date gets closer. On
+  the day, some of them turn up and some do not, and that split is the whole
+  game: the ones who turned up are attendees, the ones who did not are
+  absentees, and afterwards they get different emails - the attendees get a
+  thank-you, the absentees get the recording.
+
+  While the session is running, the tool captures things worth keeping. Polls
+  the host launches and how the room answered. Questions people typed and what
+  the host replied. A recording. Whatever files were shared.
+
+  So the vocabulary for the next hour:
+
+      Webinar        the scheduled session
+      Registration   the form, and the act of signing up through it
+      Registrant     someone who signed up
+      Attendee       a registrant who turned up
+      Absentee       a registrant who did not
+      Polls / Q&A    what the room did during the session
+
+  If you think of it as a state machine it is almost trivial - invited, then
+  registered, then attended or not attended - and that is exactly why this is
+  worth integrating. Those states are facts about a person, and we already have
+  a system whose entire job is holding facts about people.
+
+  [Pause here. Ask: "everyone comfortable with registrant versus attendee?"
+   It is the distinction the rest of the session leans on, and it is the one
+   people quietly get wrong.]
+
+LAND
+  A webinar tool turns strangers into registrants, and registrants into
+  attendees or absentees. Those are facts about people - and people are what
+  CRM is for.
+
+
+================================================================================
+2.  WHAT ZOHO WEBINAR ALREADY DOES        [to be written]
+================================================================================
+3.  THE PROBLEM, AND WHY CRM              [to be written]
+================================================================================
+4.  TURNING THE INTEGRATION ON            [to be written]
+================================================================================
+5.  CREATING A WEBINAR                    [to be written]
+================================================================================
+6.  BEFORE THE WEBINAR - INVITES          [to be written]
+================================================================================
+7.  AFTER THE WEBINAR - RESULTS           [to be written]
+================================================================================
