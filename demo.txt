@@ -23,33 +23,18 @@ BEFORE YOU START
   same flow in writing, with screenshots - send that round afterwards.
 
 THE BUSINESS WE WILL USE THROUGHOUT
-  Northline Capital. Wealth management - they advise business owners on what
-  to do with their money, and they earn on the portfolios they end up managing.
+  Northline Capital - wealth managers. They advise business owners on what to
+  do with their money and earn on the portfolios they end up managing. Jay is
+  an advisor there, and his screen is the one we are on all day.
 
-  How they sell:
-      Market outlook webinar   free, monthly, genuinely educational
-      Discovery call           booked by the people who attended
-      Managed portfolio        the deal
+  Why they use a webinar tool: they cannot cold-call their way to a portfolio.
+  So once a month they teach in public - a free market outlook webinar, no
+  pitch until the last five minutes - and the people who lean in identify
+  themselves. Two hundred sign up, sixty turn up, and that room is the whole
+  pipeline. The webinar is not marketing support for the sales motion, it is
+  the top of it.
 
-  Jay is an advisor there, and his screen is the one we are on all day. He
-  runs the outlook webinar most months and works the room afterwards.
-
-  Why this business: in a regulated industry you cannot cold-call your way to
-  a portfolio. You teach first, publicly, and the people who lean in identify
-  themselves. That makes the webinar unavoidable rather than a marketing
-  choice - it is the only top of funnel they have. Two hundred sign up, sixty
-  turn up, and the handful who stay behind asking questions are the pipeline.
-
-  It also pays off on screen. The webinar approves its registrants by hand,
-  which is exactly what a firm that has to know who is in the room would do,
-  and the mock shows five people waiting for approval. The completed webinar
-  shows $2,500 spent, $16,800 won and $32,450 still in pipeline - read those
-  as first-year advisory fees and they are Northline's numbers as they stand.
-
-  Keep saying Northline and keep saying Jay. The engineers will remember a
-  person running a business long after they have forgotten a feature list.
-
-TWO THINGS ON SCREEN THAT FIGHT THE STORY - READ BEFORE YOU STAND UP
+THREE THINGS ON SCREEN THAT FIGHT THE STORY - READ BEFORE YOU STAND UP
   1. The Q&A transcript on the completed webinar is written as software
      questions - "What does the Enterprise plan cost per seat?". Do not read
      it out line by line. Point at the structure instead: who asked, which
@@ -60,6 +45,9 @@ TWO THINGS ON SCREEN THAT FIGHT THE STORY - READ BEFORE YOU STAND UP
      works here: Northline advises business owners, so the account is the
      client's company and the contact is the person. Say that once, early,
      and the table reads correctly for the rest of the session.
+  3. The money on the completed webinar - $2,500 spent, $16,800 won, $32,450
+     in pipeline. Read those as first-year advisory fees and they stand as
+     they are. Do not convert them into assets under management on the fly.
 
 
 ================================================================================
