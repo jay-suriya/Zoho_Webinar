@@ -124,9 +124,77 @@ LAND
 
 
 ================================================================================
-2.  WHAT ZOHO WEBINAR ALREADY DOES        [to be written]
+2.  WHAT ZOHO WEBINAR ALREADY DOES
 ================================================================================
-3.  THE PROBLEM, AND WHY CRM              [to be written]
+
+SHOW
+  Still no mock. Keep this verbal - the moment you open a screen they start
+  reading it instead of listening.
+
+SAY
+  Zoho Webinar already does the webinar, and does it properly. Jay creates the
+  session. He gets a registration link and puts it on the website and on
+  LinkedIn. People sign up. On the day he runs his polls live, and people type
+  questions into the panel.
+
+  And afterwards he can see all of it. Who registered. Who actually turned up.
+  Who did not. Every question that was asked and what he answered. How the
+  room voted on each poll.
+
+  I want to be clear about this, because it changes what we are building:
+  nothing on that list is missing. We are not here to fix Zoho Webinar.
+
+LAND
+  Zoho Webinar already captures everything that happened in the room.
+
+
+================================================================================
+3.  THE PROBLEM, AND WHY CRM
+================================================================================
+
+SHOW
+  Still verbal. If you want something on screen, put up two words - WEBINAR
+  and CRM - and nothing else.
+
+SAY
+  Here is what it does not have. Business context.
+
+  Sixty people attended Jay's outlook webinar. The webinar gives him sixty
+  names, sixty email addresses, and what each of them did in the hour. What it
+  cannot tell him is the only thing he actually needs on Monday morning: who
+  does he call first.
+
+  Three questions, none of which the webinar can answer:
+
+      Who is worth the call?      Sixty names, ranked how?
+      Is this question a signal?  Someone asked "what is your minimum
+                                  portfolio size" - chase it or not?
+      What do I already know?     Have we spoken? Is there a proposal out?
+
+  Take that middle one, because it is the sharpest. "What is your minimum
+  portfolio size" from a stranger who found the webinar on LinkedIn is a
+  curious browser. The identical question from someone Jay has already met
+  twice, with a proposal sitting at negotiation, is a buying signal and he
+  should ring them today. Same words, completely different follow-up - and
+  the webinar shows both of them the same way, because it has never heard of
+  either person before they registered.
+
+  Now here is the frustrating part. Northline already has that context. Every
+  client and every lead is in CRM, with the history, the calls, the open
+  deals. It is all sitting there. It just has no idea the webinar happened.
+
+  So the state we are in: the webinar knows what happened in the room and
+  nothing about the people. CRM knows the people and nothing about the room.
+  The two halves of the answer live in different products, and today the only
+  thing joining them is somebody exporting a spreadsheet.
+
+  That is the whole job of this integration. Not new webinar features - put
+  what happened in the room next to who it happened to.
+
+LAND
+  The webinar knows what happened. CRM knows who it happened to. Neither is
+  much use alone, and today they never meet.
+
 ================================================================================
 4.  TURNING THE INTEGRATION ON            [to be written]
 ================================================================================
