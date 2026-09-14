@@ -125,6 +125,21 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **Sending an invite creates an Email source-tracking link.** Completing Send
+  Invite now adds an **Email** row to the list in **View Registration Link** and switches
+  **Enable Source Tracking** on, so the channel CRM invites arrive through is tracked the
+  same way a LinkedIn or Twitter link would be. `RegistrationLinkModal` had `sources` as
+  local state starting `[]`, so anything created died when the modal closed; it now takes
+  `initialSources` and seeds both the list and the tracking toggle from it, while
+  `WebinarDetailApp` owns `linkSources` and `handleSent` appends the Email entry (guarded
+  against duplicates on a second send). Checked end to end in Chrome: before sending, the
+  modal shows the default link with tracking off and no table; after sending, tracking is on
+  and the table holds one row — Email, created by Jay, 0 visited, 0 registered, enabled.
+  This is what the previous entry was reaching for and missed: the ask was a source in the
+  registration-link list, not the source chart. That earlier change stands — a webinar with
+  no channels charts nothing and gains an Email bar on first invite — and the two now agree,
+  but it was not what was asked for and can be reverted on its own if it is unwanted.
+  Why: the user clarified that the entry belongs in View Registration Link.
 - 2026-09-14 — **A webinar with no channels has no sources; Send Invite creates Email.**
   `sourceData` in `OverviewTab` was a hardcoded four-channel array, so a brand-new webinar
   that nobody had been invited to still charted Twitter, LinkedIn and Direct registrations.
