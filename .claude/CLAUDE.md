@@ -125,6 +125,14 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **Co-Organizer picker gains a search box.** Sits under the tabs, filters the
+  directory that is showing, and shows **No users found** when nothing matches. Switching
+  tabs clears it, since the search belongs to whichever directory is open, and adding a name
+  clears it too so the new entry is not hidden by a filter that no longer matches it. The
+  input stops click and keydown from propagating — without that, typing in it reaches the
+  `.cs-btn` behind and closes the dropdown. Checked: "mor" narrows CRM Users to Morrison
+  Troy, "zzz" empties the list and shows the empty state, switching to Webinar Users resets
+  the box and shows Suriya / Mark Acme. Why: the user pointed out there was no search.
 - 2026-09-14 — **Co-Organizer is a two-source picker with an add action.** It was a flat
   picklist of three names. It now opens a dropdown with **CRM Users / Webinar Users** tabs —
   a co-organiser can be either, and the two directories are not the same people — and a

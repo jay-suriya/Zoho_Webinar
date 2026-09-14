@@ -229,6 +229,10 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .co-tab:hover{background:#f4f7fd}
 .co-tab.sel{color:#2C5CC5;font-weight:600;border-bottom-color:#2C5CC5}
 .co-list{max-height:180px;overflow-y:auto;padding:2px 0}
+.co-search{padding:8px 10px;border-bottom:1px solid #f0f0f4}
+.co-search input{width:100%;box-sizing:border-box;padding:6px 9px;border:1px solid #d5d5dd;border-radius:3px;font-size:12.5px;font-family:inherit;outline:none}
+.co-search input:focus{border-color:#2C5CC5}
+.co-empty{padding:14px 12px;font-size:12.5px;color:#999;text-align:center}
 .co-add{border-top:1px solid #e6e6ea;padding:9px 12px;font-size:13px;color:#2C5CC5;font-weight:600;cursor:pointer}
 .co-add:hover{background:#f4f7fd}
 .cb-row{display:flex;align-items:center;gap:0;flex:1;padding:0 32px;}
@@ -4201,11 +4205,11 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 <!-- LIVE: Co-Organizer -->
 <div class="form-group" id="coOrgGroup"><label>Co-Organizer</label>
 <div class="cs-wrap"><div class="cs-btn" onclick="csToggle(this)">None</div>
-<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-list" data-src="crm"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div><div class="cs-opt" onclick="csSelect(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="csSelect(this)">Suriya</div><div class="cs-opt" onclick="csSelect(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div></div></div></div>
+<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="co-list" data-src="crm"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div><div class="cs-opt" onclick="csSelect(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="csSelect(this)">Suriya</div><div class="cs-opt" onclick="csSelect(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div></div></div></div>
 <!-- ONDEMAND: Co-Organizer moves here -->
 <div class="form-group hidden" id="coOrgGroup2"><label>Co-Organizer</label>
 <div class="cs-wrap"><div class="cs-btn" onclick="csToggle(this)">None</div>
-<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-list" data-src="crm"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div><div class="cs-opt" onclick="csSelect(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="csSelect(this)">Suriya</div><div class="cs-opt" onclick="csSelect(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div></div></div></div>
+<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="co-list" data-src="crm"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div><div class="cs-opt" onclick="csSelect(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="csSelect(this)">Suriya</div><div class="cs-opt" onclick="csSelect(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div></div></div></div>
 </div>
 <!-- Webinar Cost — own row below Repeat Webinar, stays aligned regardless of Repeat Webinar summary length -->
 <div class="form-row" id="webinarCostRow">
@@ -8739,6 +8743,24 @@ function coOrgTab(tab, src){
   dd.querySelectorAll('.co-list').forEach(function(l){
     l.classList.toggle('hidden', l.getAttribute('data-src')!==src);
   });
+  /* the search belongs to whichever directory is showing, so it starts clean on a switch */
+  var box=dd.querySelector('.co-search input');
+  if(box){ box.value=''; coOrgFilter(box); }
+}
+/* filter the directory that is currently showing */
+function coOrgFilter(input){
+  var dd=input.closest('.co-dd');
+  var list=dd.querySelector('.co-list:not(.hidden)');
+  if(!list) return;
+  var q=(input.value||'').trim().toLowerCase();
+  var shown=0;
+  list.querySelectorAll('.cs-opt').forEach(function(o){
+    var hit=!q || (o.textContent||'').toLowerCase().indexOf(q)!==-1;
+    o.classList.toggle('hidden', !hit);
+    if(hit) shown++;
+  });
+  var empty=dd.querySelector('.co-empty');
+  if(empty) empty.classList.toggle('hidden', shown>0);
 }
 function coOrgAdd(e){
   if(e) e.stopPropagation();
@@ -8751,6 +8773,8 @@ function coOrgAdd(e){
   opt.textContent=name;
   opt.setAttribute('onclick','csSelect(this)');
   list.appendChild(opt);
+  var box=dd.querySelector('.co-search input');
+  if(box){ box.value=''; coOrgFilter(box); }
   csSelect(opt);
 }
 function closeAllDD(){document.querySelectorAll('.cs-dd.open').forEach(function(d){d.classList.remove('open')});document.querySelectorAll('.dd-menu.open').forEach(function(d){d.classList.remove('open')});document.querySelectorAll('.ms-dd.open').forEach(function(d){d.classList.remove('open')})}
