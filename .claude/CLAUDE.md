@@ -125,6 +125,22 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **Co-Organizer is a two-source picker with an add action.** It was a flat
+  picklist of three names. It now opens a dropdown with **CRM Users / Webinar Users** tabs —
+  a co-organiser can be either, and the two directories are not the same people — and a
+  **+ Add New Co-Organiser** action pinned under the list, which prompts for a name or email,
+  appends it to whichever tab is showing and selects it. Both copies of the field are
+  updated: `coOrgGroup` (live) and `coOrgGroup2` (on-demand). Two things this needed:
+  `coOrgTab` calls `stopPropagation`, or the click bubbles to the `.cs-btn` above and closes
+  the dropdown as you switch tabs; and `csSelect` now finds its dropdown with
+  `opt.closest('.cs-dd')` rather than `opt.parentElement`, because options now sit one level
+  deeper inside `.co-list` — without that, selecting a name would not write it back to the
+  button. Verified: tabs read CRM Users / Webinar Users, CRM holds None / Jayasuriya /
+  Morrison Troy / Rao Priya, Webinar holds Suriya / Mark Acme, switching swaps the list, and
+  picking from the second tab writes "Suriya" to the field and closes the dropdown.
+  **Built from a description, not the screenshot** — the reference was a drag-temp file that
+  macOS had already deleted, so the layout is my reading of "toggle options CRM users and
+  webinar users, and at the bottom add new co-organiser". Why: the user asked for it.
 - 2026-09-14 — **Sending an invite creates an Email source-tracking link.** Completing Send
   Invite now adds an **Email** row to the list in **View Registration Link** and switches
   **Enable Source Tracking** on, so the channel CRM invites arrive through is tracked the
