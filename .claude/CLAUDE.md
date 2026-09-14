@@ -125,6 +125,16 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **On-demand: Allow video play/pause moves under Video File.** It had a row of
+  its own below Webinar Owner / Organizer, so the on-demand form read Video File, then
+  Organizer, then the toggle — the setting sat two rows away from the file it governs. It
+  now occupies the empty right-hand cell of the **Webinar Timezone** row, which puts the
+  right column in the order the setting belongs in: **Video File → Allow video play/pause →
+  Organizer**. The standalone `playPauseRow` is gone and `playPauseGroup` carries its own
+  visibility, so `onWebinarTypeChange` toggles one element instead of two. Live is unchanged
+  — checked both: live reads Date & Time | Duration, Timezone, Owner | Organizer, Repeat |
+  Co-Organizer; on-demand reads Date & Time | Video File, Timezone | Allow video play/pause,
+  Owner | Organizer. Why: the user asked for that position.
 - 2026-09-14 — **Webinar Owner and Organizer get a search box too** — search only, no tabs
   and no add action, since those two pick from one directory. `coOrgFilter` was written for
   the tabbed co-organiser list, so it now resolves its dropdown with `closest('.cs-dd')` and

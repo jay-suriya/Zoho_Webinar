@@ -4161,7 +4161,8 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
     </div>
   </div>
 </div>
-<div class="form-group"></div>
+<!-- ONDEMAND: Allow video play/pause sits directly under Video File and above Organizer -->
+<div class="cb-row hidden" id="playPauseGroup"><label>Allow video play/pause</label><div class="cb checked" onclick="toggleCb(this)"></div></div>
 </div>
 <!-- Webinar Owner / Organizer -->
 <div class="form-row">
@@ -4191,11 +4192,6 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 <div class="form-group"><label>Organizer</label>
 <div class="cs-wrap"><div class="cs-btn" onclick="csToggle(this)">Jayasuriya</div>
 <div class="cs-dd"><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="cs-opt sel" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div></div></div></div>
-</div>
-<!-- ONDEMAND: Allow video play/pause (hidden by default) — own row so Organizer stays aligned under Video File -->
-<div class="form-row hidden" id="playPauseRow">
-<div class="form-group"></div>
-<div class="cb-row" id="playPauseGroup"><label>Allow video play/pause</label><div class="cb checked" onclick="toggleCb(this)"></div></div>
 </div>
 <!-- Repeat Webinar / Co-Organizer -->
 <div class="form-row" id="repeatRow">
@@ -8817,7 +8813,6 @@ function onWebinarTypeChange(val){
     /* Show OnDemand fields */
     document.getElementById('videoFileGroup').classList.remove('hidden');
     document.getElementById('playPauseGroup').classList.remove('hidden');
-    document.getElementById('playPauseRow').classList.remove('hidden');
     document.getElementById('coOrgGroup2').classList.remove('hidden');
 
     /* Hide Repeat Webinar */
@@ -8865,7 +8860,6 @@ function onWebinarTypeChange(val){
     /* Hide OnDemand fields */
     document.getElementById('videoFileGroup').classList.add('hidden');
     document.getElementById('playPauseGroup').classList.add('hidden');
-    document.getElementById('playPauseRow').classList.add('hidden');
     document.getElementById('coOrgGroup2').classList.add('hidden');
     document.getElementById('selectedFileChip').classList.add('hidden');
 
