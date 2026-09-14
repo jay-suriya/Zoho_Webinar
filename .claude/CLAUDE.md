@@ -125,6 +125,65 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **A webinar with no channels has no sources; Send Invite creates Email.**
+  `sourceData` in `OverviewTab` was a hardcoded four-channel array, so a brand-new webinar
+  that nobody had been invited to still charted Twitter, LinkedIn and Direct registrations.
+  Now `startedWithoutSources` (`!(hasInvited || isCompletedInit)`) marks a webinar that
+  opened with nothing in it: its source list is **empty**, and completing the Send Invite
+  flow sets `emailSourceCreated` in `handleSent`, which adds a single **Email** source.
+  A webinar that already had invites, or has run, keeps its real channel mix — checked all
+  three states. Second half of the fix: `VisitedVsRegisteredBar` drew its own fixed
+  `["Email","LinkedIn","Twitter","Direct"]` labels and ignored `sourceData` entirely, so the
+  chart still showed four bars after the first change; it now derives its labels from
+  `sourceData` and falls back to the four only when there are none. Verified by walking the
+  real flow in Chrome: blank webinar → no source chart at all → Send Invite → Registration
+  by Source is one Email bar. **Known inconsistency left alone:** the sample registrants
+  list that appears after sending still carries rows sourced LinkedIn / Twitter / Direct,
+  which contradicts a webinar whose only channel is Email. It is pre-existing sample data
+  and changing it would disturb the screens the PRD documents. Why: the user asked that an
+  empty source list gain an Email source when Send Invite completes.
+- 2026-09-10 — **New PRD over the current master flow, plus a screenshot pipeline**, at
+  `docs/prd/current/`. Nine sections in the order the user asked for: Introduction (what
+  Zoho Webinar is / who uses it / the problem / how the integration solves it), Turning the
+  integration on, Creating a webinar, Fields in the create flow, Before the webinar, The
+  webinar list, After the webinar, Open questions. 36 figures, all captured from `master`.
+  The **field tables list every picklist's actual options**, not option counts — a first
+  pass wrote "Picklist (29 options)" and the user rightly asked why the options were
+  missing; they are now pulled from the DOM (`.cs-opt` text) so they cannot drift from the
+  mock. The interesting facts it records: the 2nd and 3rd reminders add **None** to the same
+  eleven intervals the 1st offers, so a webinar can send fewer than three; `Webinar Cost` on
+  the create form is what the completed webinar's ROI divides by; and Push Registrants to
+  CRM is the setting that removes the re-import step from the introduction's problem.
+  **`shoot.mjs` is the reusable part**: headless Chrome over the DevTools protocol, driven
+  by `Runtime.evaluate`, writing real PNGs — no npm packages, since Node 22+ has a global
+  `WebSocket`. Shots are `{file, steps[]}` where each step is JS run in the page, plus
+  injected helpers (`__click`, `__clickRelated`, `__scrollDetail`, `__scrollForm`, `__pick`).
+  `node shoot.mjs --eval "expr"` is how the entry points were found. Four traps are written
+  up in `docs/prd/current/README.md` and cost real time here: a `\s` regex inside the
+  injected template literal collapses to `s`; the detail page and create form scroll inner
+  elements so `window.scrollTo` does nothing; the create form's five sections share one
+  770px scroll so Preferences/Reminders/Follow-Ups land in a single screenful; and
+  **Webinar Revenue is collapsed by default**, so a naive shot captures the panel beneath
+  it. Identical file sizes across a batch is the tell that a step silently failed — compare
+  md5s. The old PRD at `docs/prd/zoho-webinar/` is untouched and still describes the
+  pre-session mock. Why: the user asked for a new PRD over the current flow.
+- 2026-09-10 — **PRD Introduction rewritten as four questions, and the business changed.**
+  `docs/prd/zoho-webinar/prd-source.md` now opens with **What Zoho Webinar is** / **Who uses
+  it** / **The problem** / **How the CRM integration solves it**, then the module screenshot;
+  rebuilt with `python3 build_prd.py` (2.58 MB, 49 figures). The business is no longer the
+  fitness coach from `demo.txt`: it is a company selling **training courses to other
+  businesses**, with Jay as its account executive. The reason is in demo.txt's own prep
+  notes — the mock's Deals Won table carries Account names ("Jayas Co", "Suriya Ltd"), which
+  contradicts a coach selling to individuals and forced a workaround in the demo. A B2B
+  training company fits the mock's data as it stands, and puts webinars at the centre rather
+  than alongside: the free masterclass is how leads arrive and the paid course sessions are
+  the product, so a session is channel, pitch and deliverable at once. The three questions
+  that framing produces — who registered, who turned up, which of them paid — are used to
+  structure the problem and then answered one by one by the four capabilities.
+  Two things to know: `demo.txt` **still uses the fitness coach**, so the PRD and the demo
+  script now disagree on the business; and the PRD's other nine sections still describe the
+  mock as it was before this session's template-flow, intro-page and Case 4 work.
+  Why: the user asked for that introduction and a business where webinars are central.
 - 2026-09-10 — **The blocking cases are answered at the marketplace card, not on the intro
   page.** `integWebinarCardSetup()` — what the Zoho Meetings card's **For webinars &rsaquo;
   Set up** calls — now checks `window._selectedCase` first: **1** opens the no-account
