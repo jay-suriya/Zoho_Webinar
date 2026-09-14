@@ -223,18 +223,32 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .cs-opt.blue-btn:hover{background:#244ea5}
 /* Co-organiser picker: the people come from two places, so the list is tabbed and
    carries its own "add" action at the foot. */
-.co-dd{min-width:250px;max-height:none;overflow:visible}
-.co-tabs{display:flex;border-bottom:1px solid #e6e6ea}
-.co-tab{flex:1;padding:8px 10px;font-size:12.5px;text-align:center;cursor:pointer;color:#666;border-bottom:2px solid transparent}
-.co-tab:hover{background:#f4f7fd}
-.co-tab.sel{color:#2C5CC5;font-weight:600;border-bottom-color:#2C5CC5}
-.co-list{max-height:180px;overflow-y:auto;padding:2px 0}
 .cs-dd:has(.co-search){max-height:260px;min-width:230px}
 .co-search{padding:8px 10px;border-bottom:1px solid #f0f0f4;position:sticky;top:0;background:#fff;z-index:1}
 .co-search input{width:100%;box-sizing:border-box;padding:6px 9px;border:1px solid #d5d5dd;border-radius:3px;font-size:12.5px;font-family:inherit;outline:none}
 .co-search input:focus{border-color:#2C5CC5}
 .co-empty{padding:14px 12px;font-size:12.5px;color:#999;text-align:center}
 .coorg-wrap{min-width:200px}
+.coorg-users{border:1px solid #eceef2;border-radius:4px;max-height:210px;overflow-y:auto}
+.coorg-user{display:flex;align-items:center;gap:10px;padding:9px 12px;cursor:pointer;border-bottom:1px solid #f4f5f8}
+.coorg-user:last-child{border-bottom:none}
+.coorg-user:hover{background:#f6f8fd}
+.coorg-user .cb{flex-shrink:0}
+.coorg-user-name{font-size:13px;color:#222}
+.coorg-user-mail{font-size:12px;color:#8a8f9e;margin-left:auto}
+.coorg-invite{margin-top:16px;padding-top:14px;border-top:1px solid #eceef2}
+.coorg-invite-hd{font-size:12px;font-weight:600;color:#555;margin-bottom:8px}
+.coorg-invite-row{display:flex;gap:8px}
+.coorg-invite-row input{flex:1;min-width:0;padding:7px 10px;border:1px solid #d5d5dd;border-radius:3px;font-size:13px;font-family:inherit;outline:none}
+.coorg-invite-row input:focus{border-color:#2C5CC5}
+.coorg-invite-row button{padding:7px 16px;border:none;border-radius:3px;background:#2C5CC5;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0}
+.coorg-invite-err{margin-top:6px;font-size:12px;color:#d93025}
+.coorg-selected{margin-top:16px;padding-top:14px;border-top:1px solid #eceef2}
+.coorg-selected-hd{font-size:12px;font-weight:600;color:#555;margin-bottom:8px}
+.coorg-selected-hd span{color:#8a8f9e;font-weight:400}
+.coorg-btn{padding:8px 22px;border:none;border-radius:4px;background:#2C5CC5;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.coorg-btn.ghost{background:#fff;color:#555;border:1px solid #d5d5dd}
+.coorg-chip small{display:block;font-size:10.5px;color:#7d879b;line-height:1.2}
 .coorg-chips{display:flex;flex-wrap:wrap;gap:6px}
 .coorg-chips:not(:empty){margin-bottom:6px}
 .coorg-chip{display:inline-flex;align-items:center;gap:6px;background:#eef2fb;border:1px solid #d5dff2;border-radius:12px;padding:3px 6px 3px 10px;font-size:12.5px;color:#2b3a55}
@@ -242,13 +256,6 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .coorg-chip span:hover{color:#d93025}
 .coorg-add{display:inline-block;font-size:13px;color:#2C5CC5;font-weight:600;cursor:pointer;padding:6px 0}
 .coorg-add:hover{text-decoration:underline}
-.co-add{border-top:1px solid #e6e6ea;padding:9px 12px;font-size:13px;color:#2C5CC5;font-weight:600;cursor:pointer}
-.co-add:hover{background:#f4f7fd}
-.co-addbox{border-top:1px solid #e6e6ea;padding:8px 10px;display:flex;gap:6px;align-items:center}
-.co-addbox input{flex:1;min-width:0;padding:6px 8px;border:1px solid #d5d5dd;border-radius:3px;font-size:12.5px;font-family:inherit;outline:none}
-.co-addbox input:focus{border-color:#2C5CC5}
-.co-addbox button{padding:6px 10px;border:none;border-radius:3px;background:#2C5CC5;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
-.co-addbox button.ghost{background:transparent;color:#777}
 .cb-row{display:flex;align-items:center;gap:0;flex:1;padding:0 32px;}
 .cb-row label{font-size:13px;font-weight:400;color:#555;min-width:160px;max-width:160px;text-align:right;flex-shrink:0;padding-right:16px;}
 .cb{width:18px;height:18px;border:2px solid #999;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
@@ -4215,12 +4222,10 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 </div></div>
 <!-- LIVE: Co-Organizer -->
 <div class="form-group" id="coOrgGroup"><label>Co-Organizer</label>
-<div class="cs-wrap coorg-wrap"><div class="coorg-chips"></div><div class="coorg-add" onclick="csToggle(this)">+ Add co-organisers</div>
-<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="co-list" data-src="crm"><div class="cs-opt" onclick="coOrgPick(this)">Jayasuriya</div><div class="cs-opt" onclick="coOrgPick(this)">Morrison Troy</div><div class="cs-opt" onclick="coOrgPick(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="coOrgPick(this)">Suriya</div><div class="cs-opt" onclick="coOrgPick(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div><div class="co-addbox hidden" onclick="event.stopPropagation()"><input type="text" placeholder="Name or email" onkeydown="coOrgAddKey(event,this)" onclick="event.stopPropagation()"><button type="button" onclick="coOrgAddSave(event,this)">Add</button><button type="button" class="ghost" onclick="coOrgAddCancel(event)">Cancel</button></div></div></div></div>
+<div class="coorg-wrap"><div class="coorg-chips"></div><div class="coorg-add" onclick="coOrgOpen(this)">+ Add co-organisers</div></div></div></div>
 <!-- ONDEMAND: Co-Organizer moves here -->
 <div class="form-group hidden" id="coOrgGroup2"><label>Co-Organizer</label>
-<div class="cs-wrap coorg-wrap"><div class="coorg-chips"></div><div class="coorg-add" onclick="csToggle(this)">+ Add co-organisers</div>
-<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="co-list" data-src="crm"><div class="cs-opt" onclick="coOrgPick(this)">Jayasuriya</div><div class="cs-opt" onclick="coOrgPick(this)">Morrison Troy</div><div class="cs-opt" onclick="coOrgPick(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="coOrgPick(this)">Suriya</div><div class="cs-opt" onclick="coOrgPick(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div><div class="co-addbox hidden" onclick="event.stopPropagation()"><input type="text" placeholder="Name or email" onkeydown="coOrgAddKey(event,this)" onclick="event.stopPropagation()"><button type="button" onclick="coOrgAddSave(event,this)">Add</button><button type="button" class="ghost" onclick="coOrgAddCancel(event)">Cancel</button></div></div></div></div>
+<div class="coorg-wrap"><div class="coorg-chips"></div><div class="coorg-add" onclick="coOrgOpen(this)">+ Add co-organisers</div></div></div></div>
 </div>
 <!-- Webinar Cost — own row below Repeat Webinar, stays aligned regardless of Repeat Webinar summary length -->
 <div class="form-row" id="webinarCostRow">
@@ -4691,6 +4696,52 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 </div>
 
 <!-- MODAL: REPEAT PREFERENCE -->
+
+<!-- Co-organisers: chosen from CRM or Zoho Webinar, or invited by email -->
+<div class="modal-overlay" id="coOrgModal" onclick="if(event.target===this)coOrgClose()">
+<div class="modal" style="width:620px;max-height:88vh;display:flex;flex-direction:column;">
+  <div class="modal-hdr" style="display:flex;align-items:center;justify-content:space-between;">
+    <h2>Add Co-organisers</h2>
+    <span onclick="coOrgClose()" style="cursor:pointer;font-size:20px;color:#888;line-height:1;">&times;</span>
+  </div>
+  <div class="modal-body" style="padding:18px 24px;overflow-y:auto;">
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:14px;">
+      <div class="cs-wrap">
+        <div class="cs-btn" id="coOrgSourceBtn" onclick="csToggle(this)" style="min-width:150px">CRM</div>
+        <div class="cs-dd">
+          <div class="cs-opt sel" onclick="csSelect(this);coOrgSource('crm')">CRM</div>
+          <div class="cs-opt" onclick="csSelect(this);coOrgSource('webinar')">Zoho Webinar</div>
+        </div>
+      </div>
+      <input type="text" id="coOrgSearch" placeholder="Search users" oninput="coOrgModalFilter()"
+             style="flex:1;padding:7px 10px;border:1px solid #d5d5dd;border-radius:3px;font-size:13px;font-family:inherit;outline:none;">
+    </div>
+
+    <div id="coOrgUserList" class="coorg-users"></div>
+    <div id="coOrgNoUsers" class="co-empty hidden">No users found</div>
+
+    <div class="coorg-invite">
+      <div class="coorg-invite-hd">Invite by email address</div>
+      <div class="coorg-invite-row">
+        <input type="text" id="coOrgInviteName" placeholder="Name">
+        <input type="text" id="coOrgInviteEmail" placeholder="Email address" onkeydown="if(event.key==='Enter')coOrgInvite()">
+        <button type="button" onclick="coOrgInvite()">Invite</button>
+      </div>
+      <div class="coorg-invite-err hidden" id="coOrgInviteErr"></div>
+    </div>
+
+    <div class="coorg-selected">
+      <div class="coorg-selected-hd">Selected <span id="coOrgCount">0</span></div>
+      <div id="coOrgSelected" class="coorg-chips"></div>
+      <div id="coOrgSelectedEmpty" class="co-empty">Nobody selected yet</div>
+    </div>
+  </div>
+  <div class="modal-ftr" style="padding:14px 24px;border-top:1px solid #eee;display:flex;justify-content:flex-end;gap:10px;">
+    <button type="button" class="coorg-btn ghost" onclick="coOrgClose()">Cancel</button>
+    <button type="button" class="coorg-btn" onclick="coOrgDone()">Done</button>
+  </div>
+</div>
+</div>
 <div class="modal-overlay" id="repeatModal">
 <div class="modal" style="width:680px;max-height:90vh;overflow-y:auto;">
 <div class="modal-hdr"><h2>Repeat Preference</h2></div>
@@ -8744,54 +8795,147 @@ function csSelect(opt){
   if(btn) btn.textContent=opt.textContent;
   dd.classList.remove('open');
 }
-/* Co-organiser: switch which set of people the list is showing. The tab click must not
-   reach csToggle on the button above, or the dropdown closes as you switch. */
-function coOrgTab(tab, src){
-  if(event) event.stopPropagation();
-  var dd=tab.closest('.co-dd');
-  dd.querySelectorAll('.co-tab').forEach(function(t){t.classList.remove('sel')});
-  tab.classList.add('sel');
-  dd.querySelectorAll('.co-list').forEach(function(l){
-    l.classList.toggle('hidden', l.getAttribute('data-src')!==src);
+/* ── Co-organisers ────────────────────────────────────────────────────────────
+   A webinar can have several, and they come from two directories or from an email
+   invitation, so the field is a panel rather than a picklist. The field itself holds
+   chips and an action whose label depends on whether anything is in it. */
+var CO_ORG_DIRECTORY = {
+  crm: [
+    { name: 'Jayasuriya',   email: 'jayasuriya@northline.com' },
+    { name: 'Morrison Troy', email: 'morrison.troy@northline.com' },
+    { name: 'Rao Priya',    email: 'rao.priya@northline.com' },
+    { name: 'Mahesh Kumar', email: 'mahesh.k@northline.com' }
+  ],
+  webinar: [
+    { name: 'Suriya',     email: 'suriya@northline.com' },
+    { name: 'Mark Acme',  email: 'mark@northline.com' },
+    { name: 'Divakar Ganapathy', email: 'divakar.g@northline.com' }
+  ]
+};
+var _coOrgField = null;      /* the field that opened the panel */
+var _coOrgSource = 'crm';
+var _coOrgSel = [];          /* [{name, email, invited}] while the panel is open */
+
+function coOrgOpen(el){
+  _coOrgField = el.closest('.coorg-wrap');
+  _coOrgSel = Array.from(_coOrgField.querySelectorAll('.coorg-chip')).map(function(c){
+    return { name: c.getAttribute('data-name'), email: c.getAttribute('data-email') || '',
+             invited: c.getAttribute('data-invited') === '1' };
   });
-  /* the search belongs to whichever directory is showing, so it starts clean on a switch */
-  var box=dd.querySelector('.co-search input');
-  if(box){ box.value=''; coOrgFilter(box); }
+  _coOrgSource = 'crm';
+  var btn=document.getElementById('coOrgSourceBtn');
+  if(btn) btn.textContent='CRM';
+  var dd=btn && btn.nextElementSibling;
+  if(dd) dd.querySelectorAll('.cs-opt').forEach(function(o,i){ o.classList.toggle('sel', i===0); });
+  document.getElementById('coOrgSearch').value='';
+  document.getElementById('coOrgInviteName').value='';
+  document.getElementById('coOrgInviteEmail').value='';
+  document.getElementById('coOrgInviteErr').classList.add('hidden');
+  coOrgRenderUsers();
+  coOrgRenderSelected();
+  document.getElementById('coOrgModal').classList.add('open');
 }
-/* A co-organiser is added rather than chosen: each pick becomes a chip and the field
-   keeps its "+ Add co-organisers" action so more can follow. */
-function coOrgPick(opt){
-  var dd=opt.closest('.cs-dd');
-  var wrap=dd.closest('.coorg-wrap');
-  var chips=wrap.querySelector('.coorg-chips');
-  var name=(opt.textContent||'').trim();
-  var already=Array.from(chips.querySelectorAll('.coorg-chip')).some(function(c){
-    return c.getAttribute('data-name')===name;
+function coOrgClose(){
+  document.getElementById('coOrgModal').classList.remove('open');
+  _coOrgField = null;
+}
+function coOrgSource(src){
+  _coOrgSource = src;
+  document.getElementById('coOrgSearch').value='';
+  coOrgRenderUsers();
+}
+function coOrgIsSelected(email, name){
+  return _coOrgSel.some(function(s){ return (s.email && s.email===email) || s.name===name; });
+}
+function coOrgRenderUsers(){
+  var q=(document.getElementById('coOrgSearch').value||'').trim().toLowerCase();
+  var people=(CO_ORG_DIRECTORY[_coOrgSource]||[]).filter(function(p){
+    return !q || p.name.toLowerCase().indexOf(q)!==-1 || p.email.toLowerCase().indexOf(q)!==-1;
   });
-  if(!already){
-    var chip=document.createElement('span');
-    chip.className='coorg-chip';
-    chip.setAttribute('data-name', name);
-    chip.innerHTML=name.replace(/</g,'&lt;')+' <span onclick="coOrgRemove(event,this)">&times;</span>';
-    chips.appendChild(chip);
+  var host=document.getElementById('coOrgUserList');
+  host.innerHTML = people.map(function(p){
+    var on=coOrgIsSelected(p.email, p.name);
+    return '<div class="coorg-user" onclick="coOrgToggle(this)" data-name="'+p.name+'" data-email="'+p.email+'">'+
+             '<div class="cb'+(on?' checked':'')+'"></div>'+
+             '<span class="coorg-user-name">'+p.name+'</span>'+
+             '<span class="coorg-user-mail">'+p.email+'</span>'+
+           '</div>';
+  }).join('');
+  document.getElementById('coOrgNoUsers').classList.toggle('hidden', people.length>0);
+}
+function coOrgToggle(row){
+  var name=row.getAttribute('data-name'), email=row.getAttribute('data-email');
+  if(coOrgIsSelected(email, name)){
+    _coOrgSel = _coOrgSel.filter(function(s){ return !((s.email && s.email===email) || s.name===name); });
+  } else {
+    _coOrgSel.push({ name: name, email: email, invited: false });
   }
-  dd.classList.remove('open');
+  row.querySelector('.cb').classList.toggle('checked');
+  coOrgRenderSelected();
+}
+function coOrgInvite(){
+  var nameEl=document.getElementById('coOrgInviteName');
+  var mailEl=document.getElementById('coOrgInviteEmail');
+  var err=document.getElementById('coOrgInviteErr');
+  var name=(nameEl.value||'').trim(), email=(mailEl.value||'').trim();
+  var show=function(m){ err.textContent=m; err.classList.remove('hidden'); };
+  if(!email){ show('Enter an email address.'); mailEl.focus(); return; }
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ show('That does not look like an email address.'); mailEl.focus(); return; }
+  if(!name){ show('Enter a name, so the co-organiser is recognisable later.'); nameEl.focus(); return; }
+  if(coOrgIsSelected(email, name)){ show(email+' is already in the list.'); return; }
+  err.classList.add('hidden');
+  _coOrgSel.push({ name: name, email: email, invited: true });
+  nameEl.value=''; mailEl.value=''; nameEl.focus();
+  coOrgRenderSelected();
+  coOrgRenderUsers();
+}
+function coOrgRenderSelected(){
+  var host=document.getElementById('coOrgSelected');
+  host.innerHTML = _coOrgSel.map(function(s, i){
+    return '<span class="coorg-chip" data-name="'+s.name+'" data-email="'+s.email+'" data-invited="'+(s.invited?'1':'0')+'">'+
+             s.name + (s.invited ? ' <small>'+s.email+' &middot; invited</small>' : '') +
+             ' <span onclick="coOrgUnselect(event,'+i+')">&times;</span>'+
+           '</span>';
+  }).join('');
+  document.getElementById('coOrgCount').textContent = _coOrgSel.length ? '('+_coOrgSel.length+')' : '';
+  document.getElementById('coOrgSelectedEmpty').classList.toggle('hidden', _coOrgSel.length>0);
+}
+function coOrgUnselect(e, i){
+  if(e) e.stopPropagation();
+  _coOrgSel.splice(i,1);
+  coOrgRenderSelected();
+  coOrgRenderUsers();
+}
+/* Done writes the selection onto the field. With anybody on it the action becomes
+   "Manage co-organisers", because there is now something to manage rather than add. */
+function coOrgDone(){
+  if(!_coOrgField){ coOrgClose(); return; }
+  var chips=_coOrgField.querySelector('.coorg-chips');
+  chips.innerHTML = _coOrgSel.map(function(s){
+    return '<span class="coorg-chip" data-name="'+s.name+'" data-email="'+s.email+'" data-invited="'+(s.invited?'1':'0')+'">'+
+             s.name + ' <span onclick="coOrgRemove(event,this)">&times;</span></span>';
+  }).join('');
+  var act=_coOrgField.querySelector('.coorg-add');
+  act.textContent = _coOrgSel.length ? 'Manage co-organisers' : '+ Add co-organisers';
+  coOrgClose();
 }
 function coOrgRemove(e, x){
   if(e) e.stopPropagation();
-  var chip=x.closest('.coorg-chip');
-  if(chip) chip.remove();
+  var wrap=x.closest('.coorg-wrap');
+  x.closest('.coorg-chip').remove();
+  var act=wrap.querySelector('.coorg-add');
+  if(!wrap.querySelectorAll('.coorg-chip').length) act.textContent='+ Add co-organisers';
 }
-/* filter the directory that is currently showing */
+function coOrgModalFilter(){ coOrgRenderUsers(); }
+
+/* Search inside a plain picklist (Webinar Owner, Organizer): hide the options that do
+   not match and show the empty state when none do. */
 function coOrgFilter(input){
-  /* works for the tabbed co-organiser list and for a plain picklist that only has a
-     search box, where the options are direct children of the dropdown */
   var dd=input.closest('.cs-dd');
   if(!dd) return;
-  var list=dd.querySelector('.co-list:not(.hidden)') || dd;
   var q=(input.value||'').trim().toLowerCase();
   var shown=0;
-  list.querySelectorAll('.cs-opt').forEach(function(o){
+  dd.querySelectorAll('.cs-opt').forEach(function(o){
     var hit=!q || (o.textContent||'').toLowerCase().indexOf(q)!==-1;
     o.classList.toggle('hidden', !hit);
     if(hit) shown++;
@@ -8799,45 +8943,7 @@ function coOrgFilter(input){
   var empty=dd.querySelector('.co-empty');
   if(empty) empty.classList.toggle('hidden', shown>0);
 }
-function coOrgAdd(e){
-  if(e) e.stopPropagation();
-  var foot=e.target.closest('.co-add');
-  var dd=foot.closest('.co-dd');
-  foot.classList.add('hidden');
-  var box=dd.querySelector('.co-addbox');
-  box.classList.remove('hidden');
-  var input=box.querySelector('input');
-  input.value='';
-  input.focus();
-}
-function coOrgAddCancel(e){
-  if(e) e.stopPropagation();
-  var dd=e.target.closest('.co-dd');
-  dd.querySelector('.co-addbox').classList.add('hidden');
-  dd.querySelector('.co-add').classList.remove('hidden');
-}
-function coOrgAddSave(e, el){
-  if(e) e.stopPropagation();
-  var dd=el.closest('.co-dd');
-  var input=dd.querySelector('.co-addbox input');
-  var name=(input.value||'').trim();
-  if(!name){ input.focus(); return; }
-  var list=dd.querySelector('.co-list:not(.hidden)');
-  var opt=document.createElement('div');
-  opt.className='cs-opt';
-  opt.textContent=name;
-  opt.setAttribute('onclick','coOrgPick(this)');
-  list.appendChild(opt);
-  var search=dd.querySelector('.co-search input');
-  if(search){ search.value=''; coOrgFilter(search); }
-  coOrgAddCancel({ stopPropagation: function(){}, target: el });
-  coOrgPick(opt);
-}
-function coOrgAddKey(e, el){
-  e.stopPropagation();
-  if(e.key === 'Enter') coOrgAddSave(e, el);
-  if(e.key === 'Escape') coOrgAddCancel({ stopPropagation: function(){}, target: el });
-}
+
 function closeAllDD(){document.querySelectorAll('.cs-dd.open').forEach(function(d){d.classList.remove('open')});document.querySelectorAll('.dd-menu.open').forEach(function(d){d.classList.remove('open')});document.querySelectorAll('.ms-dd.open').forEach(function(d){d.classList.remove('open')})}
 
 /* === CHECKBOX === */

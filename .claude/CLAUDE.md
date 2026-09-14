@@ -125,6 +125,27 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **Co-organisers move into a panel; the action becomes Manage.** The inline
+  dropdown is replaced by an **Add Co-organisers** dialog: a source picklist reading **CRM /
+  Zoho Webinar** (renamed from "CRM Users / Webinar Users"), a search, a checkbox list of
+  people showing name and email, an **Invite by email address** row, and a **Selected (n)**
+  strip of chips, with Cancel and **Done**. Done writes the chips onto the field and flips
+  its action from **+ Add co-organisers** to **Manage co-organisers**, because once somebody
+  is on it there is something to manage rather than add; removing the last chip flips it
+  back. The panel is shared by both fields — `_coOrgField` remembers which one opened it —
+  and the selection is only committed on Done, so Cancel genuinely discards. **Invite by
+  email takes a name as well as an address**, which is the "best UI" part: a bare address is
+  not recognisable in a chip list six weeks later, so an invite without a name is refused
+  with "Enter a name, so the co-organiser is recognisable later", the address is validated,
+  and the chip shows the name with the address and "invited" underneath it. Removed with the
+  old dropdown: `coOrgTab`, `coOrgPick`, `coOrgAdd`, `.co-dd`, `.co-tabs`, `.co-list`,
+  `.co-addbox`. **Careful:** `coOrgFilter` was deleted with that block and had to be put
+  back, because Webinar Owner and Organizer still use it for their own search — check those
+  two whenever co-organiser code is touched. Verified end to end: picking two from CRM, one
+  from Zoho Webinar and one email invite gives four chips, the trigger reads "Manage
+  co-organisers", and the panel closes. **Built from the description, not the screenshots** —
+  both references were drag-temp files macOS had already deleted. Why: the user asked for
+  this panel, the Manage label, the CRM / Zoho Webinar naming and a name on email invites.
 - 2026-09-14 — **Co-Organizer is an add action, not a picklist box.** The field no longer
   renders a `.cs-btn` reading "None". It shows **+ Add co-organisers**, and each pick becomes
   a removable chip above the action, which stays put so more can be added — a webinar can
