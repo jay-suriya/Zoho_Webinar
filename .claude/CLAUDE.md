@@ -125,6 +125,18 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **Fixed the layout the co-organiser field broke.** Swapping the picklist for
+  the chips-and-action markup left **one `</div>` too many** in each of the two fields. The
+  stray close ended `#repeatRow` early, so `coOrgGroup2` and every row after it fell out of
+  their row: the form rendered a **519px hole** between Repeat Webinar and Webinar Cost, and
+  `repeatRow` held 2 children instead of 3. Removing one close from each field restored it —
+  rows now run 349 → 394 → 440 contiguously and `repeatRow` has all three groups.
+  **How to catch this quickly:** walking `<div>`/`</div>` with a running depth over the
+  affected block prints exactly where depth crosses zero, which named the culprit in one
+  pass after eyeballing the markup twice had missed it. An unbalanced div does not throw —
+  it silently reparents everything after it, so check depth after any markup swap, and
+  compare `.getBoundingClientRect().top` of consecutive rows for gaps. Same failure mode as
+  the blank intro page earlier this session. Why: the user reported the layout breaking.
 - 2026-09-14 — **Co-organisers move into a panel; the action becomes Manage.** The inline
   dropdown is replaced by an **Add Co-organisers** dialog: a source picklist reading **CRM /
   Zoho Webinar** (renamed from "CRM Users / Webinar Users"), a search, a checkbox list of
