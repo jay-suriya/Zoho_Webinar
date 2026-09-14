@@ -196,7 +196,39 @@ LAND
   much use alone, and today they never meet.
 
 ================================================================================
-4.  TURNING THE INTEGRATION ON            [to be written]
+4.  TURNING THE INTEGRATION ON            [rest of the section to be written]
+================================================================================
+
+  [The setup form asks four things: the Zoho Webinar account to connect,
+   whether to sync past webinars, which CRM modules can be invited, and the
+   attribution model. The first three explain themselves on screen. The
+   fourth does not, so it gets its own paragraph below.]
+
+WEBINAR DEAL ATTRIBUTION - SAY THIS AT THE ATTRIBUTION STEP
+
+SHOW
+  The setup form, scrolled to Webinar Deal Attribution, Linear selected.
+
+SAY
+  One business owner attends Jay's March outlook webinar and does nothing,
+  attends again in June and books a discovery call, then attends in September
+  and signs - twelve thousand dollars of first-year fees. Three webinars, one
+  deal. Which webinar earned the twelve thousand? March found them, September
+  closed them, June is the one that made them pick up the phone, and there is
+  no true answer. That is exactly why attribution exists: if you do not pick a
+  rule, all three webinars report the full twelve thousand and your webinar
+  revenue for the year reads thirty-six thousand on a twelve-thousand deal.
+  Attribution is that rule, chosen once in setup and applied everywhere -
+  First Interaction gives it all to March, Last Interaction gives it all to
+  September, Linear splits it four thousand each, Time Decay weights the later
+  or earlier touches, Position-Based rewards the first and last. We default to
+  Linear because it is the least opinionated, and changing the model
+  recalculates every revenue figure in the product against the new rule.
+
+LAND
+  One deal, several webinars. Attribution is the rule that splits the money -
+  without it every webinar claims the whole deal and the totals are fiction.
+
 ================================================================================
 5.  CREATING A WEBINAR                    [to be written]
 ================================================================================
