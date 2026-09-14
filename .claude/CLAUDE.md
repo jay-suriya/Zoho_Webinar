@@ -125,6 +125,23 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **A webinar with no channels has no sources; Send Invite creates Email.**
+  `sourceData` in `OverviewTab` was a hardcoded four-channel array, so a brand-new webinar
+  that nobody had been invited to still charted Twitter, LinkedIn and Direct registrations.
+  Now `startedWithoutSources` (`!(hasInvited || isCompletedInit)`) marks a webinar that
+  opened with nothing in it: its source list is **empty**, and completing the Send Invite
+  flow sets `emailSourceCreated` in `handleSent`, which adds a single **Email** source.
+  A webinar that already had invites, or has run, keeps its real channel mix — checked all
+  three states. Second half of the fix: `VisitedVsRegisteredBar` drew its own fixed
+  `["Email","LinkedIn","Twitter","Direct"]` labels and ignored `sourceData` entirely, so the
+  chart still showed four bars after the first change; it now derives its labels from
+  `sourceData` and falls back to the four only when there are none. Verified by walking the
+  real flow in Chrome: blank webinar → no source chart at all → Send Invite → Registration
+  by Source is one Email bar. **Known inconsistency left alone:** the sample registrants
+  list that appears after sending still carries rows sourced LinkedIn / Twitter / Direct,
+  which contradicts a webinar whose only channel is Email. It is pre-existing sample data
+  and changing it would disturb the screens the PRD documents. Why: the user asked that an
+  empty source list gain an Email source when Send Invite completes.
 - 2026-09-10 — **New PRD over the current master flow, plus a screenshot pipeline**, at
   `docs/prd/current/`. Nine sections in the order the user asked for: Introduction (what
   Zoho Webinar is / who uses it / the problem / how the integration solves it), Turning the

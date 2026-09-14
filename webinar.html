@@ -17264,9 +17264,14 @@ function EngagementHeatmapTimeline() {
 function VisitedVsRegisteredBar({ sourceData, activeSourceSlice, onSourceSliceClick, drillDownPeople }) {
   const VISITED_MOCK = { "Email": 100, "LinkedIn": 180, "Twitter": 150, "Direct": 40 };
   const REGISTERED_MOCK = { "Email": 30, "LinkedIn": 20, "Twitter": 40, "Direct": 10 };
-  const labels = ["Email","LinkedIn","Twitter","Direct"];
-  const visited = labels.map(l => VISITED_MOCK[l]);
-  const registered = labels.map(l => REGISTERED_MOCK[l]);
+  // Draw the channels this webinar actually has, not a fixed four. A webinar whose
+  // only channel so far is the CRM invite charts Email alone; one with no channels at
+  // all charts nothing. The mock numbers stay as the per-channel sample data.
+  const labels = (sourceData && sourceData.length)
+    ? sourceData.map(s => s.label)
+    : ["Email","LinkedIn","Twitter","Direct"];
+  const visited = labels.map(l => VISITED_MOCK[l] || 0);
+  const registered = labels.map(l => REGISTERED_MOCK[l] || 0);
   const [chartType, setChartType] = React.useState("Bar");
   const [showDD, setShowDD] = React.useState(false);
   const canvasRef = React.useRef(null);
@@ -20992,6 +20997,8 @@ function OverviewTab({
   onOpenRegLinkModal,
   onOpenEmbed,
   invitedCount,
+  startedWithoutSources,
+  emailSourceCreated,
   onScrollToSection
 }) {
   const [detailsOpen, setDetailsOpen] = useState(true);
@@ -21018,7 +21025,12 @@ function OverviewTab({
     value: 1,
     color: "#f29900"
   }];
-  const sourceData = [{
+  // A source is a channel registrations have actually arrived through. A webinar
+  // nobody has been invited to and whose link has not been shared has none, so the
+  // source chart starts empty rather than inventing a mix. Completing Send Invite
+  // creates the Email source: CRM invites are the channel that will bring the first
+  // registrations in, and every registration from that invite is attributed to it.
+  const ALL_SOURCES = [{
     label: "Twitter",
     value: 4,
     color: "#1a73e8"
@@ -21035,6 +21047,14 @@ function OverviewTab({
     value: 1,
     color: "#d93025"
   }];
+  const EMAIL_SOURCE = [{
+    label: "Email",
+    value: 0,
+    color: "#0f9d58"
+  }];
+  const sourceData = !startedWithoutSources
+    ? ALL_SOURCES
+    : (emailSourceCreated ? EMAIL_SOURCE : []);
   const detailPeople = [{
     id: 1,
     name: "Jayas",
@@ -27004,6 +27024,11 @@ function WebinarDetailApp({
   const [invitedCount, setInvitedCount] = useState(hasInvited || isCompletedInit ? 100 : 0);
   const [inviteDropdown, setInviteDropdown] = useState(false);
   const [inviteSent, setInviteSent] = useState(hasInvited || isCompletedInit || false);
+  // true only for a webinar that opened with nothing in it — the case where there is
+  // genuinely no source yet. A webinar that already has invites or has run keeps its
+  // real channel mix.
+  const startedWithoutSources = !(hasInvited || isCompletedInit);
+  const [emailSourceCreated, setEmailSourceCreated] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
   const [isCompleted, setIsCompleted] = useState(isCompletedInit || false);
   const [isCanceled, setIsCanceled] = useState(false);
@@ -27116,6 +27141,8 @@ function WebinarDetailApp({
     setInvited(invitedPeople);
     setInvitedCount(100);
     setInviteSent(true);
+    // the invite has gone from CRM, so Email is now a real channel for this webinar
+    setEmailSourceCreated(true);
     const st = window.WEBINAR_TPL && window.WEBINAR_TPL.lastStamp;
     setSuccessMsg(st && st.tailored
       ? "Invitation sent \u2014 " + st.count + " " + st.module + " on the " + st.module + " templates"
@@ -27274,7 +27301,9 @@ function WebinarDetailApp({
     onOpenRegLinkModal: () => setShowRegLinkModal(true),
     onOpenEmbed: () => setShowRegLinkModal(true),
     onScrollToSection: scrollToSection,
-    invitedCount: invitedCount
+    invitedCount: invitedCount,
+    startedWithoutSources: startedWithoutSources,
+    emailSourceCreated: emailSourceCreated
   }), /*#__PURE__*/React.createElement("div", {
     ref: sectionRefs.Notes,
     style: {
