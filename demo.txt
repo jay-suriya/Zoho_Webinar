@@ -23,24 +23,43 @@ BEFORE YOU START
   same flow in writing, with screenshots - send that round afterwards.
 
 THE BUSINESS WE WILL USE THROUGHOUT
-  Northline. They sell training courses to other businesses - a course is a
-  block of sessions, sold as a team licence, a few thousand dollars a time.
+  Northline Capital. Wealth management - they advise business owners on what
+  to do with their money, and they earn on the portfolios they end up managing.
 
   How they sell:
-      Free masterclass      90 minutes, open to anyone, ends with an offer
-      Paid course sessions  the thing customers bought, also delivered live
+      Market outlook webinar   free, monthly, genuinely educational
+      Discovery call           booked by the people who attended
+      Managed portfolio        the deal
 
-  Jay is their account executive and the person whose screen we are on all
-  day. He runs a masterclass most weeks and works the room afterwards.
+  Jay is an advisor there, and his screen is the one we are on all day. He
+  runs the outlook webinar most months and works the room afterwards.
 
-  Why this business and not a consumer one: their deals sit on companies, so
-  the Accounts and Deals in the mock line up with the story instead of
-  fighting it. The completed webinar we open later really does show $2,500
-  spent, $16,800 won and $32,450 still in pipeline - those are Northline's
-  numbers, and you can read them off the screen without apologising for them.
+  Why this business: in a regulated industry you cannot cold-call your way to
+  a portfolio. You teach first, publicly, and the people who lean in identify
+  themselves. That makes the webinar unavoidable rather than a marketing
+  choice - it is the only top of funnel they have. Two hundred sign up, sixty
+  turn up, and the handful who stay behind asking questions are the pipeline.
+
+  It also pays off on screen. The webinar approves its registrants by hand,
+  which is exactly what a firm that has to know who is in the room would do,
+  and the mock shows five people waiting for approval. The completed webinar
+  shows $2,500 spent, $16,800 won and $32,450 still in pipeline - read those
+  as first-year advisory fees and they are Northline's numbers as they stand.
 
   Keep saying Northline and keep saying Jay. The engineers will remember a
   person running a business long after they have forgotten a feature list.
+
+TWO THINGS ON SCREEN THAT FIGHT THE STORY - READ BEFORE YOU STAND UP
+  1. The Q&A transcript on the completed webinar is written as software
+     questions - "What does the Enterprise plan cost per seat?". Do not read
+     it out line by line. Point at the structure instead: who asked, which
+     module they came from, what the host answered. If someone reads it
+     aloud, say it straight - the mock ships with sample content, the point
+     is that questions are captured against a record.
+  2. Deals Won lists Account names - Jayas Co, Suriya Ltd, Meena Tech. That
+     works here: Northline advises business owners, so the account is the
+     client's company and the contact is the person. Say that once, early,
+     and the table reads correctly for the rest of the session.
 
 
 ================================================================================
@@ -65,17 +84,19 @@ SAY
   can talk, and you join by having the link. In a webinar the audience is an
   audience: they watch, they can ask questions in a panel, the anser for Polls.
 
-  Make it concrete. Take Northline - the business we are using all the way
-  through today. They sell training courses to other companies. Their whole
-  sales motion is one webinar: a free ninety-minute masterclass, open to
-  anyone, taught properly, and at the end of it an offer for the paid course.
-  Two hundred people sign up, sixty turn up, and somewhere in that sixty are
-  the eight companies that buy a team licence this quarter.
+  Make it concrete. Take Northline Capital - the business we are using all the
+  way through today. They are wealth managers. Once a month they run a free
+  market outlook webinar: an hour on where rates are going, open to anyone,
+  no pitch until the last five minutes. Two hundred people sign up, sixty turn
+  up, and the ones who stay behind asking what it means for their own money
+  are the reason the webinar exists.
 
-  That is why the webinar matters to them and not just to marketing. It is the
-  top of the funnel and the product at the same time - the paid course sessions
-  are webinars too. Every question we ask for the rest of this hour is asked on
-  Northline's behalf: who signed up, who actually came, and which of them paid.
+  They cannot cold-call their way to a portfolio - the industry does not allow
+  it and nobody would take the call anyway. So they teach in public and let
+  the interested identify themselves. The webinar is not marketing support for
+  the sales motion, it is the entire top of it. Every question we ask for the
+  rest of this hour is asked on Northline's behalf: who signed up, who
+  actually came, and which of them became a client.
 
   That signing up is the part that matters to us, so let me walk the shape of
   it. A webinar has a date, a time and a host. It publishes a registration
