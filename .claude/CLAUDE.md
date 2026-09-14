@@ -125,6 +125,15 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **Webinar Owner and Organizer get a search box too** — search only, no tabs
+  and no add action, since those two pick from one directory. `coOrgFilter` was written for
+  the tabbed co-organiser list, so it now resolves its dropdown with `closest('.cs-dd')` and
+  falls back to the dropdown itself when there is no `.co-list`, which makes it work for any
+  plain picklist. The search row is sticky at the top of the dropdown, and
+  `.cs-dd:has(.co-search)` sets `min-width:230px` — without it the Owner dropdown inherits
+  the narrow width of its button and the search field is clipped to "Search u…". Checked:
+  "ma" narrows Owner to Mark Acme, an unmatched term shows the empty state, and selecting
+  still writes the name back to the field. Why: the user asked for search on those two.
 - 2026-09-14 — **Co-Organizer picker gains a search box.** Sits under the tabs, filters the
   directory that is showing, and shows **No users found** when nothing matches. Switching
   tabs clears it, since the search belongs to whichever directory is open, and adding a name
