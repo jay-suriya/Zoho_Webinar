@@ -221,6 +221,16 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .cs-opt.sel{background:#e8eef8;font-weight:600}
 .cs-opt.blue-btn{color:#fff;background:#2C5CC5;font-weight:600;text-align:center;margin:4px 6px;border-radius:3px;padding:8px 12px}
 .cs-opt.blue-btn:hover{background:#244ea5}
+/* Co-organiser picker: the people come from two places, so the list is tabbed and
+   carries its own "add" action at the foot. */
+.co-dd{min-width:250px;max-height:none;overflow:visible}
+.co-tabs{display:flex;border-bottom:1px solid #e6e6ea}
+.co-tab{flex:1;padding:8px 10px;font-size:12.5px;text-align:center;cursor:pointer;color:#666;border-bottom:2px solid transparent}
+.co-tab:hover{background:#f4f7fd}
+.co-tab.sel{color:#2C5CC5;font-weight:600;border-bottom-color:#2C5CC5}
+.co-list{max-height:180px;overflow-y:auto;padding:2px 0}
+.co-add{border-top:1px solid #e6e6ea;padding:9px 12px;font-size:13px;color:#2C5CC5;font-weight:600;cursor:pointer}
+.co-add:hover{background:#f4f7fd}
 .cb-row{display:flex;align-items:center;gap:0;flex:1;padding:0 32px;}
 .cb-row label{font-size:13px;font-weight:400;color:#555;min-width:160px;max-width:160px;text-align:right;flex-shrink:0;padding-right:16px;}
 .cb{width:18px;height:18px;border:2px solid #999;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
@@ -4191,11 +4201,11 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 <!-- LIVE: Co-Organizer -->
 <div class="form-group" id="coOrgGroup"><label>Co-Organizer</label>
 <div class="cs-wrap"><div class="cs-btn" onclick="csToggle(this)">None</div>
-<div class="cs-dd"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div></div></div></div>
+<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-list" data-src="crm"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div><div class="cs-opt" onclick="csSelect(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="csSelect(this)">Suriya</div><div class="cs-opt" onclick="csSelect(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div></div></div></div>
 <!-- ONDEMAND: Co-Organizer moves here -->
 <div class="form-group hidden" id="coOrgGroup2"><label>Co-Organizer</label>
 <div class="cs-wrap"><div class="cs-btn" onclick="csToggle(this)">None</div>
-<div class="cs-dd"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div></div></div></div>
+<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-list" data-src="crm"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div><div class="cs-opt" onclick="csSelect(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="csSelect(this)">Suriya</div><div class="cs-opt" onclick="csSelect(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div></div></div></div>
 </div>
 <!-- Webinar Cost — own row below Repeat Webinar, stays aligned regardless of Repeat Webinar summary length -->
 <div class="form-row" id="webinarCostRow">
@@ -8710,7 +8720,39 @@ function resetAll(){
 
 /* === CUSTOM SELECT === */
 function csToggle(btn){var dd=btn.nextElementSibling;var wasOpen=dd&&dd.classList.contains('open');closeAllDD();if(dd&&!wasOpen)dd.classList.add('open')}
-function csSelect(opt){var dd=opt.parentElement;var btn=dd.previousElementSibling;dd.querySelectorAll('.cs-opt').forEach(function(o){o.classList.remove('sel')});opt.classList.add('sel');btn.textContent=opt.textContent;dd.classList.remove('open')}
+function csSelect(opt){
+  /* the option may sit directly in .cs-dd, or inside a .co-list within it */
+  var dd=opt.closest('.cs-dd')||opt.parentElement;
+  var btn=dd.previousElementSibling;
+  dd.querySelectorAll('.cs-opt').forEach(function(o){o.classList.remove('sel')});
+  opt.classList.add('sel');
+  if(btn) btn.textContent=opt.textContent;
+  dd.classList.remove('open');
+}
+/* Co-organiser: switch which set of people the list is showing. The tab click must not
+   reach csToggle on the button above, or the dropdown closes as you switch. */
+function coOrgTab(tab, src){
+  if(event) event.stopPropagation();
+  var dd=tab.closest('.co-dd');
+  dd.querySelectorAll('.co-tab').forEach(function(t){t.classList.remove('sel')});
+  tab.classList.add('sel');
+  dd.querySelectorAll('.co-list').forEach(function(l){
+    l.classList.toggle('hidden', l.getAttribute('data-src')!==src);
+  });
+}
+function coOrgAdd(e){
+  if(e) e.stopPropagation();
+  var name=(window.prompt('Name or email of the co-organiser') || '').trim();
+  if(!name) return;
+  var dd=e.target.closest('.co-dd');
+  var list=dd.querySelector('.co-list:not(.hidden)');
+  var opt=document.createElement('div');
+  opt.className='cs-opt';
+  opt.textContent=name;
+  opt.setAttribute('onclick','csSelect(this)');
+  list.appendChild(opt);
+  csSelect(opt);
+}
 function closeAllDD(){document.querySelectorAll('.cs-dd.open').forEach(function(d){d.classList.remove('open')});document.querySelectorAll('.dd-menu.open').forEach(function(d){d.classList.remove('open')});document.querySelectorAll('.ms-dd.open').forEach(function(d){d.classList.remove('open')})}
 
 /* === CHECKBOX === */
