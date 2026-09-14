@@ -22,6 +22,26 @@ BEFORE YOU START
   This document follows master. The PRD at docs/prd/current/prd.html covers the
   same flow in writing, with screenshots - send that round afterwards.
 
+THE BUSINESS WE WILL USE THROUGHOUT
+  Northline. They sell training courses to other businesses - a course is a
+  block of sessions, sold as a team licence, a few thousand dollars a time.
+
+  How they sell:
+      Free masterclass      90 minutes, open to anyone, ends with an offer
+      Paid course sessions  the thing customers bought, also delivered live
+
+  Jay is their account executive and the person whose screen we are on all
+  day. He runs a masterclass most weeks and works the room afterwards.
+
+  Why this business and not a consumer one: their deals sit on companies, so
+  the Accounts and Deals in the mock line up with the story instead of
+  fighting it. The completed webinar we open later really does show $2,500
+  spent, $16,800 won and $32,450 still in pipeline - those are Northline's
+  numbers, and you can read them off the screen without apologising for them.
+
+  Keep saying Northline and keep saying Jay. The engineers will remember a
+  person running a business long after they have forgotten a feature list.
+
 
 ================================================================================
 1.  WHAT A WEBINAR TOOL IS
@@ -37,12 +57,25 @@ SAY
   same picture of the thing we are integrating, because half of this room has
   probably never run a webinar.
 
+  a webinar tool is an online software application used to host, manage,
+  and broadcast virtual seminars, workshops, and presentations to a remote audience
   A webinar tool runs a scheduled online session for an audience. That is it.
-  One or a few people present, and anywhere from ten to ten thousand people
-  watch. It is not a meeting. In a meeting everyone is a participant, everyone
+  One or a few people present, and anywhere from hundreds to thousands people
+  watch. It is different from a meeting. In a meeting everyone is a participant, everyone
   can talk, and you join by having the link. In a webinar the audience is an
-  audience: they watch, they can ask questions in a panel, and crucially most
-  of them had to sign up in advance.
+  audience: they watch, they can ask questions in a panel, the anser for Polls.
+
+  Make it concrete. Take Northline - the business we are using all the way
+  through today. They sell training courses to other companies. Their whole
+  sales motion is one webinar: a free ninety-minute masterclass, open to
+  anyone, taught properly, and at the end of it an offer for the paid course.
+  Two hundred people sign up, sixty turn up, and somewhere in that sixty are
+  the eight companies that buy a team licence this quarter.
+
+  That is why the webinar matters to them and not just to marketing. It is the
+  top of the funnel and the product at the same time - the paid course sessions
+  are webinars too. Every question we ask for the rest of this hour is asked on
+  Northline's behalf: who signed up, who actually came, and which of them paid.
 
   That signing up is the part that matters to us, so let me walk the shape of
   it. A webinar has a date, a time and a host. It publishes a registration
