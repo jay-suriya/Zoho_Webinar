@@ -23222,10 +23222,15 @@ function MassEmailModal({
 
 // ─── REGISTRATION LINK MODAL ─────────────────────────────────────────────────
 function RegistrationLinkModal({
-  onClose
+  onClose,
+  initialSources
 }) {
-  const [sourceTrackingEnabled, setSourceTrackingEnabled] = useState(false);
-  const [sources, setSources] = useState([]);
+  // Sources created by the webinar itself arrive as initialSources - sending an invite
+  // from CRM creates one called Email. Tracking switches itself on when there is
+  // something to track, otherwise the table it lives in would be hidden.
+  const seeded = initialSources || [];
+  const [sourceTrackingEnabled, setSourceTrackingEnabled] = useState(seeded.length > 0);
+  const [sources, setSources] = useState(seeded);
   const [showCreateSourceModal, setShowCreateSourceModal] = useState(false);
   const [showEmbedModal, setShowEmbedModal] = useState(false);
   const [embedSource, setEmbedSource] = useState("Default");
@@ -27029,6 +27034,8 @@ function WebinarDetailApp({
   // real channel mix.
   const startedWithoutSources = !(hasInvited || isCompletedInit);
   const [emailSourceCreated, setEmailSourceCreated] = useState(false);
+  // Source-tracking links for this webinar, shown in View Registration Link.
+  const [linkSources, setLinkSources] = useState([]);
   const [successMsg, setSuccessMsg] = useState("");
   const [isCompleted, setIsCompleted] = useState(isCompletedInit || false);
   const [isCanceled, setIsCanceled] = useState(false);
@@ -27141,8 +27148,19 @@ function WebinarDetailApp({
     setInvited(invitedPeople);
     setInvitedCount(100);
     setInviteSent(true);
-    // the invite has gone from CRM, so Email is now a real channel for this webinar
+    // The invite has gone from CRM, so Email is now a real channel for this webinar:
+    // it gets a source of its own in View Registration Link, so every registration the
+    // invitation produces is tracked against it the way LinkedIn or Twitter would be.
     setEmailSourceCreated(true);
+    setLinkSources(prev => prev.some(s => s.name === "Email") ? prev : prev.concat([{
+      id: "email-auto",
+      name: "Email",
+      createdBy: "Jay",
+      createdOn: "Mon, Aug 11, 2025 11:00 AM IST",
+      visitedCount: 0,
+      registeredCount: 0,
+      enabled: true
+    }]));
     const st = window.WEBINAR_TPL && window.WEBINAR_TPL.lastStamp;
     setSuccessMsg(st && st.tailored
       ? "Invitation sent \u2014 " + st.count + " " + st.module + " on the " + st.module + " templates"
@@ -27583,7 +27601,8 @@ function WebinarDetailApp({
     onClose: () => setShowEmailModal(false),
     onSent: handleSent
   }), showRegLinkModal && /*#__PURE__*/React.createElement(RegistrationLinkModal, {
-    onClose: () => setShowRegLinkModal(false)
+    onClose: () => setShowRegLinkModal(false),
+    initialSources: linkSources
   }));
 }
 window._renderDetailApp = function (record, isCompleted, hasInvited) {
