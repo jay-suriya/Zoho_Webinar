@@ -229,7 +229,8 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .co-tab:hover{background:#f4f7fd}
 .co-tab.sel{color:#2C5CC5;font-weight:600;border-bottom-color:#2C5CC5}
 .co-list{max-height:180px;overflow-y:auto;padding:2px 0}
-.co-search{padding:8px 10px;border-bottom:1px solid #f0f0f4}
+.cs-dd:has(.co-search){max-height:260px;min-width:230px}
+.co-search{padding:8px 10px;border-bottom:1px solid #f0f0f4;position:sticky;top:0;background:#fff;z-index:1}
 .co-search input{width:100%;box-sizing:border-box;padding:6px 9px;border:1px solid #d5d5dd;border-radius:3px;font-size:12.5px;font-family:inherit;outline:none}
 .co-search input:focus{border-color:#2C5CC5}
 .co-empty{padding:14px 12px;font-size:12.5px;color:#999;text-align:center}
@@ -4169,6 +4170,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
   <div class="cs-wrap" style="border:none;flex:1;min-width:0;">
     <div class="cs-btn" onclick="csToggle(this)" style="border:none;width:100%;min-width:0;box-sizing:border-box;">Rao Priya</div>
     <div class="cs-dd">
+      <div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div>
       <div class="cs-opt sel" onclick="csSelect(this)">Rao Priya</div>
       <div class="cs-opt" onclick="csSelect(this)">Jay Acme</div>
       <div class="cs-opt" onclick="csSelect(this)">Mark Acme</div>
@@ -4188,7 +4190,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 </div>
 <div class="form-group"><label>Organizer</label>
 <div class="cs-wrap"><div class="cs-btn" onclick="csToggle(this)">Jayasuriya</div>
-<div class="cs-dd"><div class="cs-opt sel" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div></div></div></div>
+<div class="cs-dd"><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="cs-opt sel" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div></div></div></div>
 </div>
 <!-- ONDEMAND: Allow video play/pause (hidden by default) — own row so Organizer stays aligned under Video File -->
 <div class="form-row hidden" id="playPauseRow">
@@ -8749,9 +8751,11 @@ function coOrgTab(tab, src){
 }
 /* filter the directory that is currently showing */
 function coOrgFilter(input){
-  var dd=input.closest('.co-dd');
-  var list=dd.querySelector('.co-list:not(.hidden)');
-  if(!list) return;
+  /* works for the tabbed co-organiser list and for a plain picklist that only has a
+     search box, where the options are direct children of the dropdown */
+  var dd=input.closest('.cs-dd');
+  if(!dd) return;
+  var list=dd.querySelector('.co-list:not(.hidden)') || dd;
   var q=(input.value||'').trim().toLowerCase();
   var shown=0;
   list.querySelectorAll('.cs-opt').forEach(function(o){
