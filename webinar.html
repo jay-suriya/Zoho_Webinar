@@ -234,8 +234,21 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .co-search input{width:100%;box-sizing:border-box;padding:6px 9px;border:1px solid #d5d5dd;border-radius:3px;font-size:12.5px;font-family:inherit;outline:none}
 .co-search input:focus{border-color:#2C5CC5}
 .co-empty{padding:14px 12px;font-size:12.5px;color:#999;text-align:center}
+.coorg-wrap{min-width:200px}
+.coorg-chips{display:flex;flex-wrap:wrap;gap:6px}
+.coorg-chips:not(:empty){margin-bottom:6px}
+.coorg-chip{display:inline-flex;align-items:center;gap:6px;background:#eef2fb;border:1px solid #d5dff2;border-radius:12px;padding:3px 6px 3px 10px;font-size:12.5px;color:#2b3a55}
+.coorg-chip span{cursor:pointer;color:#8a93a8;font-size:14px;line-height:1}
+.coorg-chip span:hover{color:#d93025}
+.coorg-add{display:inline-block;font-size:13px;color:#2C5CC5;font-weight:600;cursor:pointer;padding:6px 0}
+.coorg-add:hover{text-decoration:underline}
 .co-add{border-top:1px solid #e6e6ea;padding:9px 12px;font-size:13px;color:#2C5CC5;font-weight:600;cursor:pointer}
 .co-add:hover{background:#f4f7fd}
+.co-addbox{border-top:1px solid #e6e6ea;padding:8px 10px;display:flex;gap:6px;align-items:center}
+.co-addbox input{flex:1;min-width:0;padding:6px 8px;border:1px solid #d5d5dd;border-radius:3px;font-size:12.5px;font-family:inherit;outline:none}
+.co-addbox input:focus{border-color:#2C5CC5}
+.co-addbox button{padding:6px 10px;border:none;border-radius:3px;background:#2C5CC5;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
+.co-addbox button.ghost{background:transparent;color:#777}
 .cb-row{display:flex;align-items:center;gap:0;flex:1;padding:0 32px;}
 .cb-row label{font-size:13px;font-weight:400;color:#555;min-width:160px;max-width:160px;text-align:right;flex-shrink:0;padding-right:16px;}
 .cb{width:18px;height:18px;border:2px solid #999;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
@@ -4202,12 +4215,12 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 </div></div>
 <!-- LIVE: Co-Organizer -->
 <div class="form-group" id="coOrgGroup"><label>Co-Organizer</label>
-<div class="cs-wrap"><div class="cs-btn" onclick="csToggle(this)">None</div>
-<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="co-list" data-src="crm"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div><div class="cs-opt" onclick="csSelect(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="csSelect(this)">Suriya</div><div class="cs-opt" onclick="csSelect(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div></div></div></div>
+<div class="cs-wrap coorg-wrap"><div class="coorg-chips"></div><div class="coorg-add" onclick="csToggle(this)">+ Add co-organisers</div>
+<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="co-list" data-src="crm"><div class="cs-opt" onclick="coOrgPick(this)">Jayasuriya</div><div class="cs-opt" onclick="coOrgPick(this)">Morrison Troy</div><div class="cs-opt" onclick="coOrgPick(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="coOrgPick(this)">Suriya</div><div class="cs-opt" onclick="coOrgPick(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div><div class="co-addbox hidden" onclick="event.stopPropagation()"><input type="text" placeholder="Name or email" onkeydown="coOrgAddKey(event,this)" onclick="event.stopPropagation()"><button type="button" onclick="coOrgAddSave(event,this)">Add</button><button type="button" class="ghost" onclick="coOrgAddCancel(event)">Cancel</button></div></div></div></div>
 <!-- ONDEMAND: Co-Organizer moves here -->
 <div class="form-group hidden" id="coOrgGroup2"><label>Co-Organizer</label>
-<div class="cs-wrap"><div class="cs-btn" onclick="csToggle(this)">None</div>
-<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="co-list" data-src="crm"><div class="cs-opt sel" onclick="csSelect(this)">None</div><div class="cs-opt" onclick="csSelect(this)">Jayasuriya</div><div class="cs-opt" onclick="csSelect(this)">Morrison Troy</div><div class="cs-opt" onclick="csSelect(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="csSelect(this)">Suriya</div><div class="cs-opt" onclick="csSelect(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div></div></div></div>
+<div class="cs-wrap coorg-wrap"><div class="coorg-chips"></div><div class="coorg-add" onclick="csToggle(this)">+ Add co-organisers</div>
+<div class="cs-dd co-dd"><div class="co-tabs"><div class="co-tab sel" onclick="coOrgTab(this,'crm')">CRM Users</div><div class="co-tab" onclick="coOrgTab(this,'webinar')">Webinar Users</div></div><div class="co-search" onclick="event.stopPropagation()"><input type="text" placeholder="Search users" oninput="coOrgFilter(this)" onclick="event.stopPropagation()" onkeydown="event.stopPropagation()"></div><div class="co-empty hidden">No users found</div><div class="co-list" data-src="crm"><div class="cs-opt" onclick="coOrgPick(this)">Jayasuriya</div><div class="cs-opt" onclick="coOrgPick(this)">Morrison Troy</div><div class="cs-opt" onclick="coOrgPick(this)">Rao Priya</div></div><div class="co-list hidden" data-src="webinar"><div class="cs-opt" onclick="coOrgPick(this)">Suriya</div><div class="cs-opt" onclick="coOrgPick(this)">Mark Acme</div></div><div class="co-add" onclick="coOrgAdd(event)">+ Add New Co-Organiser</div><div class="co-addbox hidden" onclick="event.stopPropagation()"><input type="text" placeholder="Name or email" onkeydown="coOrgAddKey(event,this)" onclick="event.stopPropagation()"><button type="button" onclick="coOrgAddSave(event,this)">Add</button><button type="button" class="ghost" onclick="coOrgAddCancel(event)">Cancel</button></div></div></div></div>
 </div>
 <!-- Webinar Cost — own row below Repeat Webinar, stays aligned regardless of Repeat Webinar summary length -->
 <div class="form-row" id="webinarCostRow">
@@ -8745,6 +8758,30 @@ function coOrgTab(tab, src){
   var box=dd.querySelector('.co-search input');
   if(box){ box.value=''; coOrgFilter(box); }
 }
+/* A co-organiser is added rather than chosen: each pick becomes a chip and the field
+   keeps its "+ Add co-organisers" action so more can follow. */
+function coOrgPick(opt){
+  var dd=opt.closest('.cs-dd');
+  var wrap=dd.closest('.coorg-wrap');
+  var chips=wrap.querySelector('.coorg-chips');
+  var name=(opt.textContent||'').trim();
+  var already=Array.from(chips.querySelectorAll('.coorg-chip')).some(function(c){
+    return c.getAttribute('data-name')===name;
+  });
+  if(!already){
+    var chip=document.createElement('span');
+    chip.className='coorg-chip';
+    chip.setAttribute('data-name', name);
+    chip.innerHTML=name.replace(/</g,'&lt;')+' <span onclick="coOrgRemove(event,this)">&times;</span>';
+    chips.appendChild(chip);
+  }
+  dd.classList.remove('open');
+}
+function coOrgRemove(e, x){
+  if(e) e.stopPropagation();
+  var chip=x.closest('.coorg-chip');
+  if(chip) chip.remove();
+}
 /* filter the directory that is currently showing */
 function coOrgFilter(input){
   /* works for the tabbed co-organiser list and for a plain picklist that only has a
@@ -8764,18 +8801,42 @@ function coOrgFilter(input){
 }
 function coOrgAdd(e){
   if(e) e.stopPropagation();
-  var name=(window.prompt('Name or email of the co-organiser') || '').trim();
-  if(!name) return;
+  var foot=e.target.closest('.co-add');
+  var dd=foot.closest('.co-dd');
+  foot.classList.add('hidden');
+  var box=dd.querySelector('.co-addbox');
+  box.classList.remove('hidden');
+  var input=box.querySelector('input');
+  input.value='';
+  input.focus();
+}
+function coOrgAddCancel(e){
+  if(e) e.stopPropagation();
   var dd=e.target.closest('.co-dd');
+  dd.querySelector('.co-addbox').classList.add('hidden');
+  dd.querySelector('.co-add').classList.remove('hidden');
+}
+function coOrgAddSave(e, el){
+  if(e) e.stopPropagation();
+  var dd=el.closest('.co-dd');
+  var input=dd.querySelector('.co-addbox input');
+  var name=(input.value||'').trim();
+  if(!name){ input.focus(); return; }
   var list=dd.querySelector('.co-list:not(.hidden)');
   var opt=document.createElement('div');
   opt.className='cs-opt';
   opt.textContent=name;
-  opt.setAttribute('onclick','csSelect(this)');
+  opt.setAttribute('onclick','coOrgPick(this)');
   list.appendChild(opt);
-  var box=dd.querySelector('.co-search input');
-  if(box){ box.value=''; coOrgFilter(box); }
-  csSelect(opt);
+  var search=dd.querySelector('.co-search input');
+  if(search){ search.value=''; coOrgFilter(search); }
+  coOrgAddCancel({ stopPropagation: function(){}, target: el });
+  coOrgPick(opt);
+}
+function coOrgAddKey(e, el){
+  e.stopPropagation();
+  if(e.key === 'Enter') coOrgAddSave(e, el);
+  if(e.key === 'Escape') coOrgAddCancel({ stopPropagation: function(){}, target: el });
 }
 function closeAllDD(){document.querySelectorAll('.cs-dd.open').forEach(function(d){d.classList.remove('open')});document.querySelectorAll('.dd-menu.open').forEach(function(d){d.classList.remove('open')});document.querySelectorAll('.ms-dd.open').forEach(function(d){d.classList.remove('open')})}
 

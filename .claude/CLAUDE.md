@@ -125,6 +125,19 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-14 — **Co-Organizer is an add action, not a picklist box.** The field no longer
+  renders a `.cs-btn` reading "None". It shows **+ Add co-organisers**, and each pick becomes
+  a removable chip above the action, which stays put so more can be added — a webinar can
+  have several, which the old single-value box could not express. `None` left the CRM list
+  (meaningless once the field holds chips) and the options call `coOrgPick` instead of
+  `csSelect`, since selecting must append rather than overwrite a button label. Both fields
+  updated, live and on-demand. **The inline add replaced `window.prompt`**: a prompt blocks
+  the whole renderer until dismissed, the same trap that froze a tab earlier in this session,
+  so + Add New Co-Organiser now swaps the footer for a text field with Add / Cancel, and
+  Enter and Escape work. Verified: picking one from each directory gives chips Jayasuriya
+  and Suriya, the trigger still reads "+ Add co-organisers", an inline add appends
+  priya@northline.com, and the chip × removes just that one. Why: the user asked for
+  "+ Add co-organisers" in place of the picklist box.
 - 2026-09-14 — **On-demand: Allow video play/pause moves under Video File.** It had a row of
   its own below Webinar Owner / Organizer, so the on-demand form read Video File, then
   Organizer, then the toggle — the setting sat two rows away from the file it governs. It
