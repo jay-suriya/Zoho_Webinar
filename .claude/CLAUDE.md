@@ -125,6 +125,17 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-15 — **Co-Organizer looks like Organizer again.** The blue "+ Add co-organisers"
+  link stood out against a form of picklists, so the field is a box using the same `.cs-btn`
+  shell — same border, height, 160px min-width and caret as Organizer — that opens the Add
+  Co-organisers panel instead of an inline list. It shows its value the way a picklist does:
+  **Add co-organisers** in placeholder grey when empty, the names when not, and
+  "Jayasuriya, Morrison Troy +2" past two, with the full list on the `title` so nothing is
+  lost. The chips stayed but are hidden — they remain the store the panel reads on reopen and
+  writes on Done, which keeps the panel as the only place selection is edited. Checked:
+  empty state, two names, four names collapsing to +2, and clearing back to the placeholder.
+  Div depth over the row re-checked at 0 before looking at anything. Why: the user asked for
+  it to be similar to the Organizer field.
 - 2026-09-14 — **Fixed the layout the co-organiser field broke.** Swapping the picklist for
   the chips-and-action markup left **one `</div>` too many** in each of the two fields. The
   stray close ended `#repeatRow` early, so `coOrgGroup2` and every row after it fell out of

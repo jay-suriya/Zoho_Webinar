@@ -254,8 +254,9 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .coorg-chip{display:inline-flex;align-items:center;gap:6px;background:#eef2fb;border:1px solid #d5dff2;border-radius:12px;padding:3px 6px 3px 10px;font-size:12.5px;color:#2b3a55}
 .coorg-chip span{cursor:pointer;color:#8a93a8;font-size:14px;line-height:1}
 .coorg-chip span:hover{color:#d93025}
-.coorg-add{display:inline-block;font-size:13px;color:#2C5CC5;font-weight:600;cursor:pointer;padding:6px 0}
-.coorg-add:hover{text-decoration:underline}
+.coorg-box{min-width:160px}
+.coorg-box.empty{color:#8C91AB}
+.coorg-box:hover{border-color:#797883}
 .cb-row{display:flex;align-items:center;gap:0;flex:1;padding:0 32px;}
 .cb-row label{font-size:13px;font-weight:400;color:#555;min-width:160px;max-width:160px;text-align:right;flex-shrink:0;padding-right:16px;}
 .cb{width:18px;height:18px;border:2px solid #999;border-radius:3px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
@@ -4222,10 +4223,10 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 </div></div>
 <!-- LIVE: Co-Organizer -->
 <div class="form-group" id="coOrgGroup"><label>Co-Organizer</label>
-<div class="coorg-wrap"><div class="coorg-chips"></div><div class="coorg-add" onclick="coOrgOpen(this)">+ Add co-organisers</div></div></div>
+<div class="coorg-wrap"><div class="cs-btn coorg-box empty" onclick="coOrgOpen(this)">Add co-organisers</div><div class="coorg-chips hidden"></div></div></div>
 <!-- ONDEMAND: Co-Organizer moves here -->
 <div class="form-group hidden" id="coOrgGroup2"><label>Co-Organizer</label>
-<div class="coorg-wrap"><div class="coorg-chips"></div><div class="coorg-add" onclick="coOrgOpen(this)">+ Add co-organisers</div></div></div>
+<div class="coorg-wrap"><div class="cs-btn coorg-box empty" onclick="coOrgOpen(this)">Add co-organisers</div><div class="coorg-chips hidden"></div></div></div>
 </div>
 <!-- Webinar Cost — own row below Repeat Webinar, stays aligned regardless of Repeat Webinar summary length -->
 <div class="form-row" id="webinarCostRow">
@@ -8910,21 +8911,27 @@ function coOrgUnselect(e, i){
    "Manage co-organisers", because there is now something to manage rather than add. */
 function coOrgDone(){
   if(!_coOrgField){ coOrgClose(); return; }
+  /* the chips are the store; the box shows the value, like any other picklist */
   var chips=_coOrgField.querySelector('.coorg-chips');
   chips.innerHTML = _coOrgSel.map(function(s){
-    return '<span class="coorg-chip" data-name="'+s.name+'" data-email="'+s.email+'" data-invited="'+(s.invited?'1':'0')+'">'+
-             s.name + ' <span onclick="coOrgRemove(event,this)">&times;</span></span>';
+    return '<span class="coorg-chip" data-name="'+s.name+'" data-email="'+s.email+'" data-invited="'+(s.invited?'1':'0')+'"></span>';
   }).join('');
-  var act=_coOrgField.querySelector('.coorg-add');
-  act.textContent = _coOrgSel.length ? 'Manage co-organisers' : '+ Add co-organisers';
+  coOrgPaint(_coOrgField);
   coOrgClose();
 }
-function coOrgRemove(e, x){
-  if(e) e.stopPropagation();
-  var wrap=x.closest('.coorg-wrap');
-  x.closest('.coorg-chip').remove();
-  var act=wrap.querySelector('.coorg-add');
-  if(!wrap.querySelectorAll('.coorg-chip').length) act.textContent='+ Add co-organisers';
+/* Two names read fine in a field this width; beyond that it becomes "A, B +2". */
+function coOrgPaint(wrap){
+  var names=Array.from(wrap.querySelectorAll('.coorg-chip')).map(function(c){ return c.getAttribute('data-name'); });
+  var box=wrap.querySelector('.coorg-box');
+  if(!names.length){
+    box.textContent='Add co-organisers';
+    box.classList.add('empty');
+    box.removeAttribute('title');
+    return;
+  }
+  box.classList.remove('empty');
+  box.textContent = names.length<=2 ? names.join(', ') : names.slice(0,2).join(', ')+' +'+(names.length-2);
+  box.setAttribute('title', names.join(', '));
 }
 function coOrgModalFilter(){ coOrgRenderUsers(); }
 
