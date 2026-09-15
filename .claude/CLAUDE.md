@@ -125,6 +125,21 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-15 — **Co-Organizer is an inline dropdown with search, not a modal.** I had built
+  the Add Co-organisers panel as a dialog; the ask was a dropdown like Organizer's, so the
+  modal is gone and the field opens its own `.cs-dd` in place. Inside: a **CRM / Zoho
+  Webinar** source picklist and a **search** on one row, the people below as checkbox rows
+  showing name and email, and an **Invite by email address** row (Name + Email + Invite) at
+  the foot. It is multi-select, so there is no OK to press — toggling a row updates the box
+  immediately, the way a picklist shows its value: "Jayasuriya, Morrison Troy", then
+  "+2" past two with the full list on the `title`. An invited address belongs to neither
+  directory, so it is appended to whichever list is showing rather than disappearing once
+  added. Everything inside the dropdown stops propagation, or the first click or keystroke
+  closes it. Removed with the modal: `coOrgOpen`, `coOrgDone`, `coOrgModal` and its markup.
+  Checked: search narrows to Morrison Troy, two picks from CRM plus one from Zoho Webinar
+  plus one email invite reads "Jayasuriya, Morrison Troy +2", and an invite without a name
+  is still refused. Why: the user clarified they wanted a dropdown with search, like the
+  Organizer field.
 - 2026-09-15 — **Co-Organizer looks like Organizer again.** The blue "+ Add co-organisers"
   link stood out against a form of picklists, so the field is a box using the same `.cs-btn`
   shell — same border, height, 160px min-width and caret as Organizer — that opens the Add
