@@ -224,6 +224,11 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 /* Co-organiser picker: the people come from two places, so the list is tabbed and
    carries its own "add" action at the foot. */
 .cs-dd:has(.co-search){max-height:260px;min-width:230px}
+.wz-foot{display:flex;gap:12px;justify-content:flex-end;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid #e8ebf2}
+.wz-cancel{padding:11px 26px;background:#fff;color:#444;border:1px solid #d5d8e9;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.wz-cancel:hover{background:#f5f6fa}
+.wz-next{padding:11px 32px;background:#C2185B;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.wz-next:hover{background:#9c1349}
 .co-search{padding:8px 10px;border-bottom:1px solid #f0f0f4;position:sticky;top:0;background:#fff;z-index:1}
 .co-search input{width:100%;box-sizing:border-box;padding:6px 9px;border:1px solid #d5d5dd;border-radius:3px;font-size:12.5px;font-family:inherit;outline:none}
 .co-search input:focus{border-color:#2C5CC5}
@@ -2036,6 +2041,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
             </div>
             <div id="setup-integration-subtitle" style="font-size:13px;color:#999;margin-bottom:32px;padding-left:50px;">Connect your Zoho Webinar account with Zoho CRM.</div>
 
+            <div class="wz-step" data-step="1">
             <!-- Email (greyed) -->
             <div style="margin-bottom:18px;">
               <label style="display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:6px;">Email</label>
@@ -2062,6 +2068,9 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               <div style="font-size:11.5px;color:#888;margin-top:6px;">Only one organisation can be connected to CRM at a time.</div>
             </div>
 
+<div class="wz-foot"><button onclick="setupWizardCancel()" class="wz-cancel">Cancel</button><button onclick="setupStep(2)" class="wz-next">Next</button></div></div>
+
+            <div class="wz-step hidden" data-step="2">
             <div style="margin-bottom:12px;">
               <label style="display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:10px;">Sync past webinars?</label>
               <!-- The radios are the control. This hidden field keeps the id and the
@@ -2079,9 +2088,9 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               </div>
             </div>
 
-            <!-- Divider -->
-            <div style="height:1px;background:#e8ebf2;margin:36px 0;"></div>
+<div class="wz-foot"><button onclick="setupWizardCancel()" class="wz-cancel">Cancel</button><button onclick="setupStep(3)" class="wz-next">Next</button></div></div>
 
+            <div class="wz-step hidden" data-step="3">
             <!-- ============ SECTION 2: Modules a webinar invite can be sent to ============ -->
             <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;">
               <div>
@@ -2097,11 +2106,10 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               <div id="im2-list" style="max-height:300px;overflow-y:auto;"></div>
             </div>
 
-            <!-- SECTION 3 wrapper (now shown together with section 1 on the same page) -->
-            <div id="setup-section-3" style="display:block;">
+<div class="wz-foot"><button onclick="setupWizardCancel()" class="wz-cancel">Cancel</button><button onclick="setupStep(4)" class="wz-next">Next</button></div></div>
 
-            <!-- Divider -->
-            <div style="height:1px;background:#e8ebf2;margin:44px 0;"></div>
+            <!-- SECTION 4: attribution -->
+            <div class="wz-step hidden" data-step="4" id="setup-section-3">
 
             <!-- ============ SECTION 3: Attribution ============ -->
             <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px;">
@@ -2235,10 +2243,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
               </div>
             </div>
 
-            <!-- Section 3 action bar -->
-            <div style="display:flex;gap:12px;align-items:center;margin-top:36px;">
-              <button onclick="setupActivateIntegration()" style="padding:11px 32px;background:#C2185B;color:#fff;border:none;border-radius:6px;font-size:14px;font-weight:700;cursor:pointer;margin-left:auto;" onmouseover="this.style.background='#9c1349'" onmouseout="this.style.background='#C2185B'">Enable Integration</button>
-            </div>
+            <div class="wz-foot"><button onclick="setupWizardCancel()" class="wz-cancel">Cancel</button><button onclick="setupActivateIntegration()" class="wz-next">Enable Integration</button></div>
             </div><!-- /section-3 -->
           </div>
 
@@ -2337,7 +2342,29 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
             // Section 1 Next — reads the Sync past webinars? Yes/No answer, then goes straight to Webinar Deal Attribution
             // Sync past webinars? is a Yes/No radio pair; this keeps the radios and the
             // hidden value in step whichever way the answer is set.
-            function setupSyncPastSet(v) {
+            /* The setup page is a four-step wizard: connection, sync past webinars, who can
+   participate, attribution. Each step has Cancel and Next; the last enables the
+   integration. Steps are shown one at a time rather than being separate pages, so every
+   answer is still in the DOM when setupActivateIntegration() reads it at the end. */
+function setupStep(n) {
+  var panel = document.getElementById('integ-setup-panel');
+  if (!panel) return;
+  var steps = panel.querySelectorAll('.wz-step');
+  for (var i = 0; i < steps.length; i++) {
+    steps[i].classList.toggle('hidden', Number(steps[i].getAttribute('data-step')) !== n);
+  }
+  window._setupStep = n;
+  if (typeof imRender === 'function' && n === 3) imRender();
+  var scroller = panel.closest('[style*="overflow"]') || panel.parentElement;
+  if (scroller && scroller.scrollTo) scroller.scrollTo({ top: 0, behavior: 'auto' });
+  panel.scrollIntoView({ block: 'start' });
+}
+/* Cancel abandons setup and goes back to where the user came from. */
+function setupWizardCancel() {
+  setupStep(1);
+  integShowPanel(window._webinarIntegEnabled ? 'integ-enabled-panel' : 'integ-intro-panel');
+}
+function setupSyncPastSet(v) {
               var h = document.getElementById('setup-sync-past-select');
               if (h) h.value = v;
               var r = document.querySelector('input[name="setup-sync-past"][value="' + v + '"]');
@@ -7843,6 +7870,7 @@ function integShowPanel(id) {
     }
   });
   if (id === 'integ-intro-panel') ixReveal();
+  if (id === 'integ-setup-panel' && typeof setupStep === 'function') setupStep(1);
   if (id === 'integ-setup-panel' && typeof window.imRender === 'function') imRender();
   if (id === 'integ-enabled-panel') {
     if (typeof window.imRender === 'function') imRender();

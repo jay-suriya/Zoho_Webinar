@@ -125,6 +125,22 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-15 — **The setup page is a four-step wizard.** Marketplace ▸ Zoho ▸ For webinars ▸
+  Set up → Setup used to present connection, sync, participating modules and attribution on
+  one long scroll with a single Enable Integration at the foot. It now advances one step at a
+  time, each with **Cancel** and **Next**: **1** email + organisation, **2** sync past
+  webinars, **3** Who Can Participate From CRM, **4** Webinar Deal Attribution, whose Next is
+  **Enable Integration**. Cancel abandons setup and returns to the introduction page, or to
+  the enabled panel if the integration is already on. The steps are `.wz-step` blocks shown
+  and hidden in place rather than separate pages — deliberately, because
+  `setupActivateIntegration()` reads the answers out of the DOM at the end, so every earlier
+  field has to still exist. Verified the whole run: each step shows alone with the right
+  buttons, the module list renders when step 3 appears (`imRender` is called there, since it
+  populates on display), answering No to sync on step 2 survives to the end
+  (`setup-sync-past-select` still "no"), and the last button enables the integration and
+  lands on the enabled panel. `integShowPanel` resets to step 1 whenever the setup panel is
+  opened, so a second visit does not resume mid-wizard. Why: the user asked for this
+  step-by-step flow.
 - 2026-09-15 — **Co-Organizer is now a plain copy of Organizer.** Same `.cs-btn` shell,
   same 160x32 box, the same `.co-search` box inside the dropdown and the same `csSelect`
   behaviour — the only differences are the default value (**None**) and the extra None
