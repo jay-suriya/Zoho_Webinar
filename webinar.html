@@ -224,6 +224,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 /* Co-organiser picker: the people come from two places, so the list is tabbed and
    carries its own "add" action at the foot. */
 .cs-dd:has(.co-search){max-height:260px;min-width:230px}
+.wz-step + .wz-step{margin-top:8px;padding-top:28px;border-top:1px solid #e8ebf2}
 .wz-foot{display:flex;gap:12px;justify-content:flex-end;align-items:center;margin-top:36px;padding-top:24px;border-top:1px solid #e8ebf2}
 .wz-cancel{padding:11px 26px;background:#fff;color:#444;border:1px solid #d5d8e9;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
 .wz-cancel:hover{background:#f5f6fa}
@@ -2349,15 +2350,23 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 function setupStep(n) {
   var panel = document.getElementById('integ-setup-panel');
   if (!panel) return;
+  /* Steps accumulate rather than replace each other: everything answered so far stays on
+     the page so the user can scroll back and reconsider it. Only the step being answered
+     carries Cancel and Next - a footer under an earlier section would suggest it is still
+     the one being decided. */
   var steps = panel.querySelectorAll('.wz-step');
+  var current = null;
   for (var i = 0; i < steps.length; i++) {
-    steps[i].classList.toggle('hidden', Number(steps[i].getAttribute('data-step')) !== n);
+    var sn = Number(steps[i].getAttribute('data-step'));
+    steps[i].classList.toggle('hidden', sn > n);
+    var foot = steps[i].querySelector('.wz-foot');
+    if (foot) foot.classList.toggle('hidden', sn !== n);
+    if (sn === n) current = steps[i];
   }
   window._setupStep = n;
   if (typeof imRender === 'function' && n === 3) imRender();
-  var scroller = panel.closest('[style*="overflow"]') || panel.parentElement;
-  if (scroller && scroller.scrollTo) scroller.scrollTo({ top: 0, behavior: 'auto' });
-  panel.scrollIntoView({ block: 'start' });
+  if (current && n > 1) current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  else panel.scrollIntoView({ block: 'start' });
 }
 /* Cancel abandons setup and goes back to where the user came from. */
 function setupWizardCancel() {
