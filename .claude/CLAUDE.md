@@ -125,6 +125,16 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-15 — **Wizard steps accumulate instead of replacing each other.** Next used to
+  hide the step you had just answered, which meant a decision could not be re-read while
+  making the next one. Now every answered step stays on the page — you scroll up through
+  connection, sync and participating modules while deciding attribution — and only the step
+  being answered carries **Cancel** and **Next**; earlier footers are hidden, because a pair
+  of buttons under a settled section suggests it is still the one in play. A hairline rule
+  separates consecutive steps, and Next smooth-scrolls the newly revealed one to the top.
+  Verified the progression: 1 shown+buttons → 1 shown, 2 shown+buttons → 1, 2 shown, 3
+  shown+buttons → 1, 2, 3 shown, 4 shown+buttons. Why: the user wants earlier decisions
+  re-readable while later ones are being made.
 - 2026-09-15 — **The setup page is a four-step wizard.** Marketplace ▸ Zoho ▸ For webinars ▸
   Set up → Setup used to present connection, sync, participating modules and attribution on
   one long scroll with a single Enable Integration at the foot. It now advances one step at a
