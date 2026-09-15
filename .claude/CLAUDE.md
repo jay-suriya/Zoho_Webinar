@@ -125,6 +125,21 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-15 — **Co-Organizer is now a plain copy of Organizer.** Same `.cs-btn` shell,
+  same 160x32 box, the same `.co-search` box inside the dropdown and the same `csSelect`
+  behaviour — the only differences are the default value (**None**) and the extra None
+  option. Everything built for it over the previous four turns is deleted: the chips, the
+  multi-select, the CRM / Zoho Webinar source switch, the invite-by-email row, the Manage
+  label, the modal, and all the `.coorg-*` CSS and `coOrg*` functions except `coOrgFilter`,
+  which Webinar Owner and Organizer share. `coOrgGroup` / `coOrgGroup2` remain, since those
+  ids are how the live and on-demand variants are swapped. Verified the two fields now
+  report identical shape — class, width, height, search present — and that search narrows to
+  Morrison Troy and picking writes the value and closes. **Worth reading before changing
+  this field again:** the brief was "a picklist with search, like Organizer" and it took
+  four rounds — a tabbed dropdown, then a modal, then a box, then this — because each
+  instruction was treated as an addition rather than as a correction of the previous
+  reading. When a request names an existing control to copy, copy it and stop.
+  Why: the user asked for an exact replica of the Organizer field.
 - 2026-09-15 — **Co-Organizer is an inline dropdown with search, not a modal.** I had built
   the Add Co-organisers panel as a dialog; the ask was a dropdown like Organizer's, so the
   modal is gone and the field opens its own `.cs-dd` in place. Inside: a **CRM / Zoho
