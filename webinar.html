@@ -250,7 +250,14 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .coorg-nores{padding:24px;text-align:center;font-size:13px;color:#98a1ae}
 .coorg-mail{padding:18px 0 4px}
 .coorg-mail-hd{font-size:14.5px;font-weight:700;color:#1e2b3a;margin-bottom:12px}
-.coorg-mail-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.coorg-mail-grid{display:grid;grid-template-columns:1fr 1fr 62px;gap:12px;align-items:center}
+.coorg-mail-head{margin-bottom:7px}
+.coorg-mail-head label{margin-bottom:0}
+.coorg-mailrow{margin-bottom:10px}
+.coorg-pm{display:flex;gap:6px}
+.coorg-pm button{width:28px;height:28px;border:1px solid #cfd4dc;border-radius:5px;background:#fff;color:#5a6472;font-size:16px;line-height:1;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center}
+.coorg-pm button:hover:not(:disabled){border-color:#a3195b;color:#a3195b}
+.coorg-pm button:disabled{opacity:.35;cursor:not-allowed}
 .coorg-mail-grid label{display:block;font-size:13.5px;font-weight:600;color:#1e2b3a;margin-bottom:7px}
 .coorg-mail-grid label b{color:#e0483a;font-weight:600}
 .coorg-mail-grid input{width:100%;box-sizing:border-box;height:42px;padding:0 13px;border:1px solid #cfd4dc;border-radius:6px;font-size:14px;font-family:inherit;outline:none}
@@ -4771,20 +4778,13 @@ function setupSyncPastSet(v) {
 
     <div class="coorg-mail">
       <div class="coorg-mail-hd">Invite by Email Address</div>
-      <div class="coorg-mail-grid">
-        <div>
-          <label>Email Address <b>*</b></label>
-          <input type="text" id="coOrgMail" placeholder="kate.williams@zylker.com" onkeydown="if(event.key===&quot;Enter&quot;)coOrgInvite()">
-        </div>
-        <div>
-          <label>Name <b>*</b></label>
-          <input type="text" id="coOrgName" placeholder="Kate Williams" onkeydown="if(event.key===&quot;Enter&quot;)coOrgInvite()">
-        </div>
+      <div class="coorg-mail-grid coorg-mail-head">
+        <label>Email Address <b>*</b></label>
+        <label>Name <b>*</b></label>
+        <span></span>
       </div>
-      <div class="coorg-mail-row">
-        <span id="coOrgMailErr" class="coorg-err hidden"></span>
-        <button type="button" class="coorg-invitebtn" onclick="coOrgInvite()">Invite</button>
-      </div>
+      <div id="coOrgMailRows"></div>
+      <div id="coOrgMailErr" class="coorg-err hidden"></div>
     </div>
   </div>
 
@@ -8880,9 +8880,8 @@ function coOrgOpen(el){
   var dd = btn.nextElementSibling;
   dd.querySelectorAll('.cs-opt').forEach(function(o,i){ o.classList.toggle('sel', i===0); });
   document.getElementById('coOrgSearch').value = '';
-  document.getElementById('coOrgMail').value = '';
-  document.getElementById('coOrgName').value = '';
   document.getElementById('coOrgMailErr').classList.add('hidden');
+  coOrgRenderMailRows();
   coOrgRender();
   document.getElementById('coOrgModal').classList.add('open');
 }
@@ -8942,33 +8941,75 @@ function coOrgToggle(row){
   }
   coOrgRender();
 }
-/* An address alone is not recognisable in the field weeks later, so the name is required
-   too - which is why this is two fields rather than a comma-separated list of addresses. */
-function coOrgInvite(){
-  var mailEl = document.getElementById('coOrgMail'), nameEl = document.getElementById('coOrgName');
+/* Invitations are rows rather than a one-at-a-time form: a co-organiser invited by email
+   needs a name as well as an address - an address alone is unrecognisable in the field
+   weeks later - and several can be added at once with the + control. Rows are read on
+   Done, so there is no separate Invite step to forget to press. */
+function coOrgMailRow(email, name){
+  return '<div class="coorg-mail-grid coorg-mailrow">' +
+           '<input type="text" class="coorg-in-mail" placeholder="kate.williams@zylker.com" value="' + (email||'') + '">' +
+           '<input type="text" class="coorg-in-name" placeholder="Kate Williams" value="' + (name||'') + '">' +
+           '<span class="coorg-pm">' +
+             '<button type="button" onclick="coOrgAddRow(this)" title="Add another">+</button>' +
+             '<button type="button" onclick="coOrgRemoveRow(this)" title="Remove">&minus;</button>' +
+           '</span>' +
+         '</div>';
+}
+function coOrgRenderMailRows(rows){
+  var host = document.getElementById('coOrgMailRows');
+  rows = (rows && rows.length) ? rows : [{ email:'', name:'' }];
+  host.innerHTML = rows.map(function(r){ return coOrgMailRow(r.email, r.name); }).join('');
+  coOrgSyncRemove();
+}
+/* the only row cannot be removed - there would be nothing left to type into */
+function coOrgSyncRemove(){
+  var rows = document.querySelectorAll('#coOrgMailRows .coorg-mailrow');
+  rows.forEach(function(r){
+    r.querySelector('.coorg-pm button:last-child').disabled = rows.length === 1;
+  });
+}
+function coOrgAddRow(btn){
+  btn.closest('.coorg-mailrow').insertAdjacentHTML('afterend', coOrgMailRow('', ''));
+  coOrgSyncRemove();
+  var next = btn.closest('.coorg-mailrow').nextElementSibling;
+  if (next) next.querySelector('.coorg-in-mail').focus();
+}
+function coOrgRemoveRow(btn){
+  var rows = document.querySelectorAll('#coOrgMailRows .coorg-mailrow');
+  if (rows.length === 1) return;
+  btn.closest('.coorg-mailrow').remove();
+  coOrgSyncRemove();
+}
+/* Returns the invitations, or null with a message shown if a row is half-filled or wrong. */
+function coOrgCollectInvites(){
   var err = document.getElementById('coOrgMailErr');
-  var email = (mailEl.value||'').trim(), name = (nameEl.value||'').trim();
-  var show = function(m){ err.textContent = m; err.classList.remove('hidden'); };
-  if (!email) { show('Enter an email address.'); mailEl.focus(); return; }
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { show('That does not look like an email address.'); mailEl.focus(); return; }
-  if (!name) { show('Enter a name.'); nameEl.focus(); return; }
-  if (_coOrgSel.some(function(s){ return s.email === email; })) { show(email + ' is already added.'); return; }
+  var out = [], bad = null;
+  document.querySelectorAll('#coOrgMailRows .coorg-mailrow').forEach(function(r){
+    var email = (r.querySelector('.coorg-in-mail').value||'').trim();
+    var name  = (r.querySelector('.coorg-in-name').value||'').trim();
+    if (!email && !name) return;
+    if (!email) { bad = bad || 'Enter an email address for ' + name + '.'; return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { bad = bad || email + ' does not look like an email address.'; return; }
+    if (!name) { bad = bad || 'Enter a name for ' + email + '.'; return; }
+    out.push({ name: name, email: email, invited: true });
+  });
+  if (bad) { err.textContent = bad; err.classList.remove('hidden'); return null; }
   err.classList.add('hidden');
-  _coOrgSel.push({ name: name, email: email, invited: true });
-  mailEl.value = ''; nameEl.value = ''; mailEl.focus();
-  coOrgRender();
+  return out;
 }
 function coOrgDone(){
   if (!_coOrgField) { coOrgClose(); return; }
+  var typed = coOrgCollectInvites();
+  if (typed === null) return;            /* a row is wrong; stay open and say so */
+  typed.forEach(function(t){
+    if (!_coOrgSel.some(function(x){ return x.email === t.email; })) _coOrgSel.push(t);
+  });
   _coOrgField.querySelector('.coorg-chips').innerHTML = _coOrgSel.map(function(s){
     return '<span class="coorg-chip" data-name="' + s.name + '" data-email="' + s.email +
            '" data-invited="' + (s.invited?'1':'0') + '"></span>';
   }).join('');
   var act = _coOrgField.querySelector('.coorg-add');
-  act.textContent = _coOrgSel.length
-    ? _coOrgSel.map(function(s){ return s.name; }).slice(0,2).join(', ') +
-      (_coOrgSel.length > 2 ? ' +' + (_coOrgSel.length - 2) : '')
-    : '+ Add co-organisers';
+  act.textContent = _coOrgSel.length ? 'Manage co-organisers' : '+ Add co-organisers';
   act.setAttribute('title', _coOrgSel.map(function(s){ return s.name; }).join(', '));
   coOrgClose();
 }
