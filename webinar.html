@@ -265,7 +265,6 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .coorg-mail-grid input:focus{border-color:#2C5CC5}
 .coorg-mail-row{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:12px}
 .coorg-err{font-size:12.5px;color:#d93025;margin-right:auto}
-.coorg-src{margin-left:8px;font-size:11px;color:#8a90a2}
 .coorg-invitebtn{padding:8px 20px;border:1px solid #a3195b;border-radius:6px;background:#fff;color:#a3195b;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
 .coorg-invitebtn:hover{background:#fdf2f7}
 .coorg-ft{border-top:1px solid #edeff3;padding:16px 24px;display:flex;justify-content:flex-end}
@@ -8939,12 +8938,7 @@ function coOrgRender(){
                  '<div class="cb' + (coOrgIsSel(p) ? ' checked' : '') + '"></div>' +
                  '<div><div class="coorg-nm">' + p.name +
                    (p.invited ? '<span class="coorg-inv">invited</span>' : '') + '</div>' +
-                   '<div class="coorg-em">' + (p.email||'') +
-                     /* in Selected the two copies of one person look identical, so say
-                        which directory each came from and the right one can be unticked */
-                     (_coOrgView === 'selected' && p.src ?
-                        '<span class="coorg-src">' + CO_ORG_GROUP_LABEL[p.src] + '</span>' : '') +
-                   '</div></div>' +
+                   '<div class="coorg-em">' + (p.email||'') + '</div></div>' +
                '</div>';
       }).join('');
     }).join('');
@@ -9030,12 +9024,7 @@ function coOrgDuplicate(picked){
     seen[k] = p;
   });
   if (!dup) return '';
-  var where = function(p){
-    if (p.invited) return 'the invitation below';
-    return CO_ORG_GROUP_LABEL[p.src] || 'the list';
-  };
-  return 'Duplicate exists: ' + (dup.b.name || dup.b.email) + ' is already added from ' +
-         where(dup.a) + '. Remove one of the two before continuing.';
+  return 'Duplicate exists: ' + (dup.b.email || dup.b.name) + ' has been added twice.';
 }
 
 function coOrgDone(){
@@ -9046,7 +9035,6 @@ function coOrgDone(){
   if (clash) {                           /* same person from two sources; stay open */
     var e = document.getElementById('coOrgMailErr');
     e.textContent = clash; e.classList.remove('hidden');
-    coOrgView('selected');               /* show what is selected so both are visible */
     return;
   }
   typed.forEach(function(t){
