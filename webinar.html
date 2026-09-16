@@ -265,6 +265,7 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 .coorg-mail-grid input:focus{border-color:#2C5CC5}
 .coorg-mail-row{display:flex;align-items:center;justify-content:flex-end;gap:12px;margin-top:12px}
 .coorg-err{font-size:12.5px;color:#d93025;margin-right:auto}
+.coorg-src{margin-left:8px;font-size:11px;color:#8a90a2}
 .coorg-invitebtn{padding:8px 20px;border:1px solid #a3195b;border-radius:6px;background:#fff;color:#a3195b;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
 .coorg-invitebtn:hover{background:#fdf2f7}
 .coorg-ft{border-top:1px solid #edeff3;padding:16px 24px;display:flex;justify-content:flex-end}
@@ -8852,6 +8853,9 @@ function csSelect(opt){
    they come from two directories or from an email invitation, which a single-value
    picklist cannot express. Selection lives on the field as hidden chips; the panel reads
    them on open and writes them on Done, so Cancel leaves the field untouched. */
+/* Rao Priya and Jayasuriya hold accounts in both products, which is the ordinary case for
+   anyone who runs webinars: they are a CRM user and a Zoho Webinar user. Both entries are
+   selectable, and Done is where the clash is caught. */
 var CO_ORG_DIRECTORY = {
   crm: [
     { name: 'Rao Priya',      email: 'rao.priya@northline.com' },
@@ -8860,6 +8864,8 @@ var CO_ORG_DIRECTORY = {
     { name: 'Morrison Troy',  email: 'morrison.troy@northline.com' }
   ],
   webinar: [
+    { name: 'Rao Priya',      email: 'rao.priya@northline.com' },
+    { name: 'Jayasuriya',     email: 'jayasuriya@northline.com' },
     { name: 'Luxe Martin',    email: 'martin@zmail.com' },
     { name: 'Suriya',         email: 'suriya@northline.com' },
     { name: 'Mark Acme',      email: 'mark@northline.com' }
@@ -8872,9 +8878,12 @@ function coOrgOpen(el){
   _coOrgField = el.closest('.coorg-wrap');
   _coOrgSel = Array.from(_coOrgField.querySelectorAll('.coorg-chip')).map(function(c){
     return { name: c.getAttribute('data-name'), email: c.getAttribute('data-email') || '',
+             src: c.getAttribute('data-src') || '',
              invited: c.getAttribute('data-invited') === '1' };
   });
   _coOrgSrc = 'crm'; _coOrgView = 'all';
+  document.getElementById('coOrgTabAll').classList.add('sel');
+  document.getElementById('coOrgTabSel').classList.remove('sel');
   var btn = document.querySelector('#coOrgModal .coorg-srcbtn');
   btn.textContent = 'CRM users';
   var dd = btn.nextElementSibling;
@@ -8896,8 +8905,12 @@ function coOrgView(v){
   document.getElementById('coOrgTabSel').classList.toggle('sel', v === 'selected');
   coOrgRender();
 }
+/* Identity is the directory entry, not the person: the same human in CRM and in Zoho
+   Webinar are two rows and both can be ticked. Whether that is a mistake is decided on
+   Done, not silently here. */
+function coOrgKey(p){ return (p.src || '') + '|' + (p.email || p.name); }
 function coOrgIsSel(p){
-  return _coOrgSel.some(function(s){ return (s.email && s.email === p.email) || s.name === p.name; });
+  return _coOrgSel.some(function(s){ return coOrgKey(s) === coOrgKey(p); });
 }
 function coOrgRender(){
   var q = (document.getElementById('coOrgSearch').value || '').trim().toLowerCase();
@@ -8912,6 +8925,7 @@ function coOrgRender(){
   } else {
     var people = (CO_ORG_DIRECTORY[_coOrgSrc] || []).filter(match);
     var invited = _coOrgSel.filter(function(s){ return s.invited; }).filter(match);
+    people = people.map(function(p){ return { name: p.name, email: p.email, src: _coOrgSrc }; });
     groups = [{ label: CO_ORG_GROUP_LABEL[_coOrgSrc], people: people }];
     if (invited.length) groups.push({ label: 'Invited by email', people: invited });
   }
@@ -8920,11 +8934,17 @@ function coOrgRender(){
     .map(function(g){
       return '<div class="coorg-grp">' + g.label + '</div>' + g.people.map(function(p){
         return '<div class="coorg-row" onclick="coOrgToggle(this)" data-name="' + p.name +
-               '" data-email="' + (p.email||'') + '" data-invited="' + (p.invited?'1':'0') + '">' +
+               '" data-email="' + (p.email||'') + '" data-src="' + (p.src||'') +
+               '" data-invited="' + (p.invited?'1':'0') + '">' +
                  '<div class="cb' + (coOrgIsSel(p) ? ' checked' : '') + '"></div>' +
                  '<div><div class="coorg-nm">' + p.name +
                    (p.invited ? '<span class="coorg-inv">invited</span>' : '') + '</div>' +
-                   '<div class="coorg-em">' + (p.email||'') + '</div></div>' +
+                   '<div class="coorg-em">' + (p.email||'') +
+                     /* in Selected the two copies of one person look identical, so say
+                        which directory each came from and the right one can be unticked */
+                     (_coOrgView === 'selected' && p.src ?
+                        '<span class="coorg-src">' + CO_ORG_GROUP_LABEL[p.src] + '</span>' : '') +
+                   '</div></div>' +
                '</div>';
       }).join('');
     }).join('');
@@ -8933,12 +8953,13 @@ function coOrgRender(){
 }
 function coOrgToggle(row){
   var p = { name: row.getAttribute('data-name'), email: row.getAttribute('data-email'),
-            invited: row.getAttribute('data-invited') === '1' };
+            src: row.getAttribute('data-src') || '', invited: row.getAttribute('data-invited') === '1' };
   if (coOrgIsSel(p)) {
-    _coOrgSel = _coOrgSel.filter(function(s){ return !((s.email && s.email === p.email) || s.name === p.name); });
+    _coOrgSel = _coOrgSel.filter(function(s){ return coOrgKey(s) !== coOrgKey(p); });
   } else {
     _coOrgSel.push(p);
   }
+  document.getElementById('coOrgMailErr').classList.add('hidden');
   coOrgRender();
 }
 /* Invitations are rows rather than a one-at-a-time form: a co-organiser invited by email
@@ -8997,16 +9018,43 @@ function coOrgCollectInvites(){
   err.classList.add('hidden');
   return out;
 }
+/* The same person is one co-organiser however many places they were picked from: the
+   email address is the person, the directory is only where we found them. Returns the
+   message to show, or '' when every pick is distinct. */
+function coOrgDuplicate(picked){
+  var seen = {}, dup = null;
+  picked.forEach(function(p){
+    var k = (p.email || p.name || '').toLowerCase();
+    if (!k) return;
+    if (seen[k]) { dup = dup || { a: seen[k], b: p }; return; }
+    seen[k] = p;
+  });
+  if (!dup) return '';
+  var where = function(p){
+    if (p.invited) return 'the invitation below';
+    return CO_ORG_GROUP_LABEL[p.src] || 'the list';
+  };
+  return 'Duplicate exists: ' + (dup.b.name || dup.b.email) + ' is already added from ' +
+         where(dup.a) + '. Remove one of the two before continuing.';
+}
+
 function coOrgDone(){
   if (!_coOrgField) { coOrgClose(); return; }
   var typed = coOrgCollectInvites();
   if (typed === null) return;            /* a row is wrong; stay open and say so */
+  var clash = coOrgDuplicate(_coOrgSel.concat(typed));
+  if (clash) {                           /* same person from two sources; stay open */
+    var e = document.getElementById('coOrgMailErr');
+    e.textContent = clash; e.classList.remove('hidden');
+    coOrgView('selected');               /* show what is selected so both are visible */
+    return;
+  }
   typed.forEach(function(t){
     if (!_coOrgSel.some(function(x){ return x.email === t.email; })) _coOrgSel.push(t);
   });
   _coOrgField.querySelector('.coorg-chips').innerHTML = _coOrgSel.map(function(s){
     return '<span class="coorg-chip" data-name="' + s.name + '" data-email="' + s.email +
-           '" data-invited="' + (s.invited?'1':'0') + '"></span>';
+           '" data-src="' + (s.src||'') + '" data-invited="' + (s.invited?'1':'0') + '"></span>';
   }).join('');
   var act = _coOrgField.querySelector('.coorg-add');
   act.textContent = _coOrgSel.length ? 'Manage co-organisers' : '+ Add co-organisers';
