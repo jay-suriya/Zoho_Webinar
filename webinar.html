@@ -9030,7 +9030,7 @@ function coOrgOpen(el){
   dd.querySelectorAll('.cs-opt').forEach(function(o,i){ o.classList.toggle('sel', i===0); });
   document.getElementById('coOrgSearch').value = '';
   document.getElementById('coOrgMailErr').classList.add('hidden');
-  coOrgRenderMailRows();
+  coOrgRenderMailRows(_coOrgSel.filter(function(s){ return s.invited; }));
   coOrgRender();
   document.getElementById('coOrgModal').classList.add('open');
 }
@@ -9059,15 +9059,17 @@ function coOrgRender(){
   };
   /* Selected shows everyone chosen, whichever directory they came from, because after
      picking from both you want one list to check rather than two tabs to flick between. */
+  /* People typed into "Invite by email address" are not directory entries, so they are not
+     listed here as checkbox rows in either view - they stay in their own rows at the foot of
+     the panel, one box per invitation. */
+  var picked = _coOrgSel.filter(function(s){ return !s.invited; });
   var groups;
   if (_coOrgView === 'selected') {
-    groups = [{ label: 'Selected', people: _coOrgSel.filter(match) }];
+    groups = [{ label: 'Selected', people: picked.filter(match) }];
   } else {
     var people = (CO_ORG_DIRECTORY[_coOrgSrc] || []).filter(match);
-    var invited = _coOrgSel.filter(function(s){ return s.invited; }).filter(match);
     people = people.map(function(p){ return { name: p.name, email: p.email, src: _coOrgSrc }; });
     groups = [{ label: CO_ORG_GROUP_LABEL[_coOrgSrc], people: people }];
-    if (invited.length) groups.push({ label: 'Invited by email', people: invited });
   }
   var total = groups.reduce(function(n,g){ return n + g.people.length; }, 0);
   document.getElementById('coOrgList').innerHTML = groups.filter(function(g){ return g.people.length; })
@@ -9077,14 +9079,13 @@ function coOrgRender(){
                '" data-email="' + (p.email||'') + '" data-src="' + (p.src||'') +
                '" data-invited="' + (p.invited?'1':'0') + '">' +
                  '<div class="cb' + (coOrgIsSel(p) ? ' checked' : '') + '"></div>' +
-                 '<div><div class="coorg-nm">' + p.name +
-                   (p.invited ? '<span class="coorg-inv">invited</span>' : '') + '</div>' +
+                 '<div><div class="coorg-nm">' + p.name + '</div>' +
                    '<div class="coorg-em">' + (p.email||'') + '</div></div>' +
                '</div>';
       }).join('');
     }).join('');
   document.getElementById('coOrgNone').classList.toggle('hidden', total > 0);
-  document.getElementById('coOrgTabSel').textContent = 'Selected (' + _coOrgSel.length + ')';
+  document.getElementById('coOrgTabSel').textContent = 'Selected (' + picked.length + ')';
 }
 function coOrgToggle(row){
   var p = { name: row.getAttribute('data-name'), email: row.getAttribute('data-email'),
@@ -9172,15 +9173,16 @@ function coOrgDone(){
   if (!_coOrgField) { coOrgClose(); return; }
   var typed = coOrgCollectInvites();
   if (typed === null) return;            /* a row is wrong; stay open and say so */
+  /* The rows are the invitations, so they replace the previous ones rather than adding to
+     them - otherwise editing an address on reopen would leave the old one behind. */
+  _coOrgSel = _coOrgSel.filter(function(x){ return !x.invited; });
   var clash = coOrgDuplicate(_coOrgSel.concat(typed));
   if (clash) {                           /* same person from two sources; stay open */
     var e = document.getElementById('coOrgMailErr');
     e.textContent = clash; e.classList.remove('hidden');
     return;
   }
-  typed.forEach(function(t){
-    if (!_coOrgSel.some(function(x){ return x.email === t.email; })) _coOrgSel.push(t);
-  });
+  typed.forEach(function(t){ _coOrgSel.push(t); });
   _coOrgField.querySelector('.coorg-chips').innerHTML = _coOrgSel.map(function(s){
     return '<span class="coorg-chip" data-name="' + s.name + '" data-email="' + s.email +
            '" data-src="' + (s.src||'') + '" data-invited="' + (s.invited?'1':'0') + '"></span>';

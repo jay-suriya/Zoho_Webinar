@@ -125,6 +125,20 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-16 — **An invited address stays in its own box; it is never a checkbox row.**
+  A person typed into **Invite by email address** is not a directory entry, so listing them
+  back as a ticked row — the old "Invited by email" group, and a row in **Selected** — made
+  them look like somebody who had been picked from a list. They now live only in their own
+  rows at the foot of the panel: reopening the panel rebuilds one box per invitation
+  (`coOrgRenderMailRows` is seeded from the chips marked invited), so what you see is how many
+  were added. Both list views drop them, and **Selected (n)** counts directory picks only,
+  which is what that list now holds. `coOrgDone()` also **replaces** the previous invitations
+  with whatever the rows currently say instead of appending — otherwise editing an address on
+  reopen left the old one behind as a second chip. The field still carries everyone: a
+  directory pick and two invitations are three chips and "Manage co-organisers". Duplicate
+  detection is unchanged and still spans both halves — a typed address matching a ticked
+  person, or two identical rows, both refuse on Done. Why: the user asked for the invited
+  ones to show in the boxes only.
 - 2026-09-16 — **New PRD: the build specification, at `docs/prd/master/`.** 10.3k words, 66
   figures, all re-captured from `master` — it supersedes `docs/prd/current/`, which predates
   the setup wizard, the co-organiser panel and Customize Registration Page. Fourteen sections
