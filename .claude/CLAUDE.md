@@ -125,6 +125,19 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-16 — **Email invitations become +/- rows; the field reads Manage co-organisers.**
+  The **Invite** button is gone. Each invitation is a row of **Email Address** + **Name**
+  with **+** and **−** beside it: + inserts another row below and focuses it, − removes that
+  row, and − is disabled on the only row since there would be nothing left to type into.
+  Rows are read when **Done** is pressed, so there is no separate Invite step to forget —
+  and a half-filled row keeps the panel open with the reason ("Enter a name for
+  kate.williams@zylker.com."), rather than silently dropping what was typed. After Done with
+  anything selected the field reads **Manage co-organisers** instead of the names; the names
+  are still on the `title` and the selection is still the hidden chips. Verified: one row on
+  open with − disabled, three after two +, two after one −, the half-row refusal, and a
+  directory pick plus a typed invitation both landing as chips with the field reading
+  Manage co-organisers. Why: the user asked for the button gone, +/− controls, and the
+  Manage label.
 - 2026-09-16 — **Co-Organizer: picklist out, Add Co-organisers panel in** — this time built
   against the screenshots rather than a description. The field is a **+ Add co-organisers**
   action that opens a panel laid out like the reference: a source picklist (**CRM users /
