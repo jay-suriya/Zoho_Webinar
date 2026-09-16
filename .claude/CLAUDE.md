@@ -125,6 +125,26 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-16 — **Customize Registration Page, with an eye that previews the public page**
+  (branch `templates-flow`). A new picklist in Registration Setup, directly under
+  **Registration Form** in the right column, offering **Standard Template** and **Custom
+  Created**. Each option reveals an **eye** on hover (`.rp-row:hover .rp-eye`, the same
+  reveal-on-hover idea as the Registration Form rows' Preview tag) which opens
+  `#regPagePreview` — a full-screen render of the registration page as a registrant sees
+  it, built from the supplied screenshot: dark bar with the webinar title, desktop/mobile
+  toggle and ×; the Meeting-branded card; left column with the title, Date/Time and a
+  "Starts in" countdown; right column "Webinar Registration" with the fields, the consent
+  paragraph and the Register button; the footer with Mobile apps, Powered by Zoho Webinar
+  and the five links. The eye calls `stopPropagation` — it previews, it does not pick the
+  option. The preview reads the **title, date and time being set on the form**, so it
+  reflects the webinar being created rather than fixed sample text, and the two layouts
+  differ in their fields (`RP_FIELDS`): standard is First/Last Name + Email, Custom Created
+  adds Phone Number, Company and Portfolio Size. Mobile narrows the card to 420px and
+  stacks the two columns. The row follows Registration Form's visibility — Without
+  Registration hides it, since there is no registration page to customize. Verified rows
+  run 586 → 632 → 678 with no gap, the picklist writes the chosen label, and both previews
+  and the mobile view render. Why: the user asked for the field, the hover eye and a
+  preview of the registration page.
 - 2026-09-16 — **Add Co-organisers refuses the same person twice** (branch
   `templates-flow`). A CRM user is very often a Zoho Webinar user as well, so
   `CO_ORG_DIRECTORY` now lists **Rao Priya** and **Jayasuriya** under both sources and the

@@ -440,6 +440,81 @@ td{padding:12px 14px;font-size:13px;border-bottom:1px solid #f0f0f0}
 }
 .rf-row:hover .rf-preview-tag { display: inline-block; }
 
+/* === Customize Registration Page: the eye reveals itself on the row === */
+.rp-row { display: flex; align-items: center; justify-content: space-between; padding-right: 8px; }
+.rp-eye {
+  display: none;
+  align-items: center;
+  color: #616E88;
+  cursor: pointer;
+  pointer-events: all;
+  flex-shrink: 0;
+  padding: 2px;
+}
+.rp-eye:hover { color: #5464F2; }
+.rp-row:hover .rp-eye { display: inline-flex; }
+
+/* === Registration page preview: the public page, as a registrant sees it === */
+#regPagePreview { position: fixed; inset: 0; z-index: 9200; background: #f4f5f9; display: none; }
+#regPagePreview.open { display: flex; flex-direction: column; }
+.rpp-bar {
+  height: 56px; background: #1d2b45; color: #fff; display: flex; align-items: center;
+  padding: 0 20px; flex-shrink: 0;
+}
+.rpp-bar-title { font-size: 15px; font-weight: 600; }
+.rpp-devices { margin: 0 auto; display: flex; gap: 6px; }
+.rpp-dev {
+  width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; cursor: pointer; color: #c7cede;
+}
+.rpp-dev.sel { background: #fff; color: #1d2b45; }
+.rpp-x { font-size: 24px; line-height: 1; cursor: pointer; color: #c7cede; }
+.rpp-x:hover { color: #fff; }
+.rpp-scroll { flex: 1; overflow: auto; padding: 24px; }
+.rpp-page {
+  max-width: 1080px; margin: 0 auto; background: #fff; border: 1px solid #e3e5ee;
+  border-radius: 4px; overflow: hidden;
+}
+.rpp-page.mobile { max-width: 420px; }
+.rpp-head { padding: 22px 26px; border-bottom: 1px solid #edeef3; display: flex; align-items: center; gap: 10px; }
+.rpp-logo { font-size: 26px; font-weight: 700; color: #1a1a1a; letter-spacing: -.3px; }
+.rpp-body { display: flex; }
+.rpp-page.mobile .rpp-body { display: block; }
+.rpp-left { flex: 1; padding: 26px 30px 60px; }
+.rpp-right { width: 42%; background: #f7f8fc; border-left: 1px solid #edeef3; padding: 24px 28px 60px; }
+.rpp-page.mobile .rpp-right { width: auto; border-left: none; border-top: 1px solid #edeef3; }
+.rpp-wtitle { font-size: 26px; font-weight: 700; color: #16181d; margin-bottom: 22px; }
+.rpp-lbl { font-size: 15px; font-weight: 600; color: #16181d; margin-bottom: 10px; }
+.rpp-meta { display: flex; gap: 34px; }
+.rpp-datebox { display: flex; align-items: stretch; border-radius: 4px; overflow: hidden; text-align: center; }
+.rpp-mon { background: #1d2b45; color: #fff; font-size: 12px; font-weight: 700; padding: 4px 10px; }
+.rpp-day { background: #eef0f5; color: #16181d; font-size: 20px; font-weight: 700; padding: 2px 10px; }
+.rpp-when { font-size: 15px; font-weight: 600; color: #16181d; }
+.rpp-when a { display: block; color: #4470d2; font-weight: 400; font-size: 14px; margin-top: 4px; }
+.rpp-count { display: flex; align-items: center; gap: 6px; }
+.rpp-cnum {
+  background: #f1f2f6; border-radius: 4px; padding: 6px 12px; font-size: 18px;
+  font-weight: 700; color: #16181d; text-align: center;
+}
+.rpp-cunit { font-size: 11px; color: #7a8096; text-align: center; margin-top: 4px; }
+.rpp-form { background: #fff; border: 1px solid #ebecf2; border-radius: 4px; padding: 20px 22px 22px; }
+.rpp-fld { margin-bottom: 16px; }
+.rpp-fld:last-child { margin-bottom: 0; }
+.rpp-fname { font-size: 13.5px; color: #16181d; margin-bottom: 6px; }
+.rpp-fname i { color: #e8384f; font-style: normal; margin-left: 3px; }
+.rpp-in { height: 38px; border: 1px solid #d8dae3; border-radius: 4px; background: #fff; }
+.rpp-consent { font-size: 12.5px; color: #5c6479; line-height: 1.55; margin: 16px 2px 0; }
+.rpp-reg {
+  display: block; margin: 18px auto 0; background: #d9736c; color: #fff; border: none;
+  border-radius: 20px; padding: 10px 30px; font-size: 14px; font-weight: 600; cursor: default;
+}
+.rpp-foot {
+  border-top: 1px solid #edeef3; padding: 18px 26px; display: flex; align-items: center;
+  gap: 10px; font-size: 13px; color: #5c6479; flex-wrap: wrap;
+}
+.rpp-foot .rpp-links { margin-left: auto; display: flex; gap: 10px; color: #4470d2; flex-wrap: wrap; }
+.rpp-foot .rpp-links span { color: #c9ccd8; }
+
 /* === Form preview modal field rows === */
 .rfp-field { margin-bottom: 14px; }
 .rfp-label { font-size: 13px; font-weight: 600; color: #333; margin-bottom: 5px; }
@@ -4390,6 +4465,14 @@ function setupSyncPastSet(v) {
 <div class="cs-dd" id="rfDropdown"><div class="cs-opt rf-row sel" onmouseenter="rfTooltipShow(event,'default','Default Form')" onmouseleave="rfTooltipHide()" onclick="rfPick(this,'Default Form')"><span>Default Form</span><span class="rf-preview-tag" onclick="rfOpenBuilderPreview(event,'default','Default Form')">Preview</span></div><div class="cs-opt rf-row" onmouseenter="rfTooltipShow(event,'realestate','Real Estate Form')" onmouseleave="rfTooltipHide()" onclick="rfPick(this,'Real Estate Form')"><span>Real Estate Form</span><span class="rf-preview-tag" onclick="rfOpenBuilderPreview(event,'realestate','Real Estate Form')">Preview</span></div><div class="cs-opt rf-row" onmouseenter="rfTooltipShow(event,'stocktrading','Stock Trading Form')" onmouseleave="rfTooltipHide()" onclick="rfPick(this,'Stock Trading Form')"><span>Stock Trading Form</span><span class="rf-preview-tag" onclick="rfOpenBuilderPreview(event,'stocktrading','Stock Trading Form')">Preview</span></div><div class="cs-opt blue-btn" onclick="openFormBuilder()">+ Create New Form</div></div><div id="rfTooltipBox" style="display:none;position:fixed;z-index:8000;background:#fff;border:1px solid #e0e0e0;border-radius:8px;box-shadow:0 6px 24px rgba(0,0,0,.14);padding:16px 18px;width:240px;pointer-events:none;"></div></div></div>
 </div>
 
+<!-- Customize Registration Page: which layout the public page uses -->
+<div class="form-row" id="regPageRow">
+<div class="form-group"></div>
+<div class="form-group" id="regPageGroup"><label>Customize Registration Page</label>
+<div class="cs-wrap"><div class="cs-btn" id="regPageBtn" onclick="csToggle(this)" style="min-width:190px">Standard Template</div>
+<div class="cs-dd"><div class="cs-opt rp-row sel" onclick="rpPick(this,'Standard Template')"><span>Standard Template</span><span class="rp-eye" title="Preview" onclick="rpPreview(event,'standard')"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 8s2.6-4.5 7-4.5S15 8 15 8s-2.6 4.5-7 4.5S1 8 1 8Z"/><circle cx="8" cy="8" r="2"/></svg></span></div><div class="cs-opt rp-row" onclick="rpPick(this,'Custom Created')"><span>Custom Created</span><span class="rp-eye" title="Preview" onclick="rpPreview(event,'custom')"><svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 8s2.6-4.5 7-4.5S15 8 15 8s-2.6 4.5-7 4.5S1 8 1 8Z"/><circle cx="8" cy="8" r="2"/></svg></span></div></div></div></div>
+</div>
+
 <!-- WITH REGISTRATION FIELDS -->
 <div id="withRegFields">
 <div class="form-row">
@@ -4956,6 +5039,63 @@ function setupSyncPastSet(v) {
       style="padding:7px 18px;background:#7B1857;color:#fff;border:none;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;">Save</button>
   </div>
 </div>
+</div>
+
+<!-- REGISTRATION PAGE PREVIEW: the public page as a registrant sees it -->
+<div id="regPagePreview">
+  <div class="rpp-bar">
+    <div class="rpp-bar-title" id="rppBarTitle">Webinar</div>
+    <div class="rpp-devices">
+      <div class="rpp-dev sel" id="rppDevDesktop" onclick="rpDevice('desktop')" title="Desktop">
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="2" width="14" height="9" rx="1"/><path d="M5.5 14h5"/></svg>
+      </div>
+      <div class="rpp-dev" id="rppDevMobile" onclick="rpDevice('mobile')" title="Mobile">
+        <svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4.5" y="1.5" width="7" height="13" rx="1.2"/><path d="M7 12.6h2"/></svg>
+      </div>
+    </div>
+    <div class="rpp-x" onclick="rpPreviewClose()">&#215;</div>
+  </div>
+  <div class="rpp-scroll">
+    <div class="rpp-page" id="rppPage">
+      <div class="rpp-head">
+        <svg width="34" height="34" viewBox="0 0 32 32" fill="none" stroke="#2f6fd0" stroke-width="2.2"><circle cx="10" cy="10" r="5"/><circle cx="22" cy="10" r="5"/><circle cx="10" cy="22" r="5"/><circle cx="22" cy="22" r="5"/></svg>
+        <span class="rpp-logo">Meeting</span>
+      </div>
+      <div class="rpp-body">
+        <div class="rpp-left">
+          <div class="rpp-wtitle" id="rppTitle">Webinar</div>
+          <div class="rpp-meta">
+            <div>
+              <div class="rpp-lbl">Date/Time</div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div class="rpp-datebox"><div class="rpp-mon" id="rppMon">SEP</div><div class="rpp-day" id="rppDay">16</div></div>
+                <div class="rpp-when"><span id="rppWeekday">Wednesday</span><a id="rppTime">01:00 PM - IST</a></div>
+              </div>
+            </div>
+            <div style="border-left:1px solid #ebecf2;padding-left:34px">
+              <div class="rpp-lbl">Starts in</div>
+              <div class="rpp-count">
+                <div><div class="rpp-cnum">49</div><div class="rpp-cunit">Mins</div></div>
+                <div style="font-weight:700;color:#16181d">:</div>
+                <div><div class="rpp-cnum">56</div><div class="rpp-cunit">Secs</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="rpp-right">
+          <div class="rpp-lbl" style="margin-bottom:14px">Webinar Registration</div>
+          <div class="rpp-form" id="rppForm"></div>
+          <div class="rpp-consent">By clicking 'Register', you acknowledge that the webinar organizer may use this information to share updates regarding this webinar as well as for future communications.</div>
+          <button class="rpp-reg" type="button">Register</button>
+        </div>
+      </div>
+      <div class="rpp-foot">
+        <span style="font-weight:600;color:#16181d">Mobile apps</span>
+        <span>Powered by <span style="color:#4470d2">Zoho Webinar</span></span>
+        <div class="rpp-links"><a>Scan QR code</a><span>|</span><a>System requirements</a><span>|</span><a>Report Abuse</a><span>|</span><a>Privacy Policy</a><span>|</span><a>Terms of Service</a></div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL: FORM BUILDER -->
@@ -8774,6 +8914,7 @@ function resetAll(){
   document.getElementById('withRegFields').classList.remove('hidden');
   document.getElementById('withoutRegFields').classList.add('hidden');
   document.getElementById('regFormGroup').classList.remove('hidden');
+    document.getElementById('regPageRow').classList.remove('hidden');
   document.getElementById('remindersSection').classList.remove('hidden');
   document.getElementById('followupsSection').classList.remove('hidden');
   /* Restore all Preference fields */
@@ -9129,6 +9270,7 @@ function onWebinarTypeChange(val){
     document.getElementById('withRegFields').classList.remove('hidden');
     document.getElementById('withoutRegFields').classList.add('hidden');
     document.getElementById('regFormGroup').classList.remove('hidden');
+    document.getElementById('regPageRow').classList.remove('hidden');
 
     /* Auto-fill title */
     document.getElementById('wTitle').value='Lead Webinar';
@@ -9209,6 +9351,7 @@ function onRegTypeChange(val){
     document.getElementById('withRegFields').classList.remove('hidden');
     document.getElementById('withoutRegFields').classList.add('hidden');
     document.getElementById('regFormGroup').classList.remove('hidden');
+    document.getElementById('regPageRow').classList.remove('hidden');
     document.getElementById('remindersSection').classList.remove('hidden');
     document.getElementById('followupsSection').classList.remove('hidden');
     // Restore repeatExtraFields if repeat type was already selected
@@ -9222,6 +9365,7 @@ function onRegTypeChange(val){
     document.getElementById('withRegFields').classList.add('hidden');
     document.getElementById('withoutRegFields').classList.remove('hidden');
     document.getElementById('regFormGroup').classList.add('hidden');
+    document.getElementById('regPageRow').classList.add('hidden');
     document.getElementById('remindersSection').classList.add('hidden');
     document.getElementById('followupsSection').classList.add('hidden');
     // Always hide Registration Mode + Open Registration for Without Registration
@@ -9648,6 +9792,54 @@ var _rfT=null, _rfKey=null;
 
 /* Shared selected form state — source of truth */
 window._selectedRegForm = 'Default Form';
+
+/* === CUSTOMIZE REGISTRATION PAGE ===
+   Which layout the public registration page uses. The eye on each option previews that
+   page the way a registrant would see it, so the choice is made by looking rather than
+   by guessing what "Custom Created" means. */
+var RP_FIELDS = {
+  standard: [['First Name', true], ['Last Name', true], ['Email Address', true]],
+  custom:   [['First Name', true], ['Last Name', true], ['Email Address', true],
+             ['Phone Number', true], ['Company', false], ['Portfolio Size', false]]
+};
+function rpPick(el, label){
+  window._selectedRegPage = label;
+  document.getElementById('regPageBtn').textContent = label;
+  document.querySelectorAll('#regPageGroup .rp-row').forEach(function(o){ o.classList.remove('sel'); });
+  if (el) el.classList.add('sel');
+  closeAllDD();
+}
+function rpPreview(evt, kind){
+  evt.stopPropagation();                 /* the eye previews; it does not pick the option */
+  closeAllDD();
+  var title = (document.getElementById('wTitle') || {}).value || 'Webinar';
+  document.getElementById('rppBarTitle').textContent = title;
+  document.getElementById('rppTitle').textContent = title;
+  /* the preview carries the date and time being set on the form, not a fixed one */
+  var d = (document.getElementById('wDate') || {}).value;
+  var dt = d ? new Date(d + 'T00:00:00') : new Date();
+  document.getElementById('rppMon').textContent =
+    ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][dt.getMonth()];
+  document.getElementById('rppDay').textContent = dt.getDate();
+  document.getElementById('rppWeekday').textContent =
+    ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dt.getDay()];
+  var timeBtn = document.querySelector('#wDate ~ .cs-wrap .cs-btn');
+  document.getElementById('rppTime').textContent =
+    ((timeBtn ? timeBtn.textContent.trim() : '10:00 AM')) + ' - IST';
+  document.getElementById('rppForm').innerHTML = (RP_FIELDS[kind] || RP_FIELDS.standard)
+    .map(function(f){
+      return '<div class="rpp-fld"><div class="rpp-fname">' + f[0] +
+             (f[1] ? '<i>*</i>' : '') + '</div><div class="rpp-in"></div></div>';
+    }).join('');
+  rpDevice('desktop');
+  document.getElementById('regPagePreview').classList.add('open');
+}
+function rpDevice(kind){
+  document.getElementById('rppPage').classList.toggle('mobile', kind === 'mobile');
+  document.getElementById('rppDevDesktop').classList.toggle('sel', kind !== 'mobile');
+  document.getElementById('rppDevMobile').classList.toggle('sel', kind === 'mobile');
+}
+function rpPreviewClose(){ document.getElementById('regPagePreview').classList.remove('open'); }
 
 /* Select form option from Registration Form picker */
 function rfPick(el, label){
