@@ -125,6 +125,20 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-16 — **Add Co-organisers refuses the same person twice** (branch
+  `templates-flow`). A CRM user is very often a Zoho Webinar user as well, so
+  `CO_ORG_DIRECTORY` now lists **Rao Priya** and **Jayasuriya** under both sources and the
+  clash is reachable. Selection identity changed to make it reachable: `coOrgKey()` is
+  `src|email`, so the two copies of one person are two tickable rows rather than one that
+  silently deduped. `coOrgDone()` then runs `coOrgDuplicate()` over the selected rows plus
+  the typed invitations and, on a match by email, keeps the panel open, shows "Duplicate
+  exists: <name> is already added from <CRM users|Webinar users|the invitation below>.
+  Remove one of the two before continuing." in `#coOrgMailErr`, and switches to the
+  **Selected** tab so both copies are on screen. In that tab each row now carries its
+  source as a grey tag (`.coorg-src`) — without it the duplicates are indistinguishable
+  and you cannot tell which one to untick. Chips gained `data-src` so the source survives
+  closing and reopening the panel, and the error clears as soon as a row is toggled.
+  Why: the user asked for a duplicate error when the same person is picked from both.
 - 2026-09-16 — **Email invitations become +/- rows; the field reads Manage co-organisers.**
   The **Invite** button is gone. Each invitation is a row of **Email Address** + **Name**
   with **+** and **−** beside it: + inserts another row below and focuses it, − removes that
