@@ -1,0 +1,485 @@
+[
+ {
+  "file": "01-marketplace-zoho.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "integShowPanel('integ-grid-panel')"
+  ]
+ },
+ {
+  "file": "02-intro-hero.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()"
+  ]
+ },
+ {
+  "file": "03-intro-features.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()",
+   "document.querySelector('#integ-intro-panel').scrollTop=620"
+  ]
+ },
+ {
+  "file": "04-intro-solves.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()",
+   "document.querySelector('#integ-intro-panel').scrollTop=1500"
+  ]
+ },
+ {
+  "file": "05-wizard-step1.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()",
+   "__clickContains('Setup','button')||__click('Setup')"
+  ]
+ },
+ {
+  "file": "06-wizard-step2.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()",
+   "integShowPanel('integ-setup-panel')",
+   "setupStep(2)"
+  ]
+ },
+ {
+  "file": "07-wizard-step3.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()",
+   "integShowPanel('integ-setup-panel')",
+   "setupStep(3)"
+  ]
+ },
+ {
+  "file": "08-wizard-step4.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "integShowPanel('integ-setup-panel')",
+   "setupStep(4)",
+   "document.getElementById('integ-setup-panel').scrollTop=430"
+  ],
+  "wait": 1400
+ },
+ {
+  "file": "09-wizard-attribution-models.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "integShowPanel('integ-setup-panel')",
+   "setupStep(4)",
+   "document.getElementById('integ-setup-panel').scrollTop=828"
+  ],
+  "wait": 1400
+ },
+ {
+  "file": "10-enabled-panel.png",
+  "steps": [
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()",
+   "integShowPanel('integ-setup-panel')",
+   "setupStep(4)",
+   "setupActivateIntegration()"
+  ]
+ },
+ {
+  "file": "11-case1-no-account.png",
+  "steps": [
+   "window._selectedCase=1",
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()"
+  ]
+ },
+ {
+  "file": "12-case4-not-admin.png",
+  "steps": [
+   "window._selectedCase=4",
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()"
+  ]
+ },
+ {
+  "file": "13-case5-trial-expired.png",
+  "steps": [
+   "window._selectedCase=5",
+   "openSettingsModal();integOpenZoho()",
+   "mpSetupWebinar()"
+  ]
+ },
+ {
+  "file": "14-create-form-details.png",
+  "steps": [
+   "goToForm()",
+   "document.getElementById('wTitle').value='Q4 Market Outlook'"
+  ]
+ },
+ {
+  "file": "15-coorg-field.png",
+  "steps": [
+   "goToForm()",
+   "__scrollForm(240)"
+  ]
+ },
+ {
+  "file": "16-coorg-panel-open.png",
+  "steps": [
+   "goToForm()",
+   "coOrgOpen(document.querySelector('#coOrgGroup .coorg-add'))"
+  ]
+ },
+ {
+  "file": "17-coorg-panel-webinar-users.png",
+  "steps": [
+   "goToForm()",
+   "coOrgOpen(document.querySelector('#coOrgGroup .coorg-add'))",
+   "coOrgSource('webinar')"
+  ]
+ },
+ {
+  "file": "18-coorg-panel-search.png",
+  "steps": [
+   "goToForm()",
+   "coOrgOpen(document.querySelector('#coOrgGroup .coorg-add'))",
+   "document.getElementById('coOrgSearch').value='mor';coOrgRender()"
+  ]
+ },
+ {
+  "file": "19-coorg-panel-selected.png",
+  "steps": [
+   "goToForm()",
+   "coOrgOpen(document.querySelector('#coOrgGroup .coorg-add'))",
+   "[].slice.call(document.querySelectorAll('#coOrgList .coorg-row')).slice(0,3).forEach(function(r){coOrgToggle(r)})",
+   "coOrgView('selected')"
+  ]
+ },
+ {
+  "file": "20-coorg-invite-rows.png",
+  "steps": [
+   "goToForm()",
+   "coOrgOpen(document.querySelector('#coOrgGroup .coorg-add'))",
+   "coOrgAddRow(document.querySelector('#coOrgMailRows .coorg-pm button'))",
+   "coOrgAddRow(document.querySelectorAll('#coOrgMailRows .coorg-pm button')[0])"
+  ]
+ },
+ {
+  "file": "21-coorg-duplicate-error.png",
+  "steps": [
+   "goToForm()",
+   "coOrgOpen(document.querySelector('#coOrgGroup .coorg-add'))",
+   "coOrgToggle([].slice.call(document.querySelectorAll('#coOrgList .coorg-row')).filter(function(r){return r.getAttribute('data-name')==='Rao Priya'})[0])",
+   "coOrgSource('webinar')",
+   "coOrgToggle([].slice.call(document.querySelectorAll('#coOrgList .coorg-row')).filter(function(r){return r.getAttribute('data-name')==='Rao Priya'})[0])",
+   "coOrgDone()"
+  ]
+ },
+ {
+  "file": "22-coorg-manage-label.png",
+  "steps": [
+   "goToForm()",
+   "coOrgOpen(document.querySelector('#coOrgGroup .coorg-add'))",
+   "coOrgToggle(document.querySelectorAll('#coOrgList .coorg-row')[0])",
+   "coOrgToggle(document.querySelectorAll('#coOrgList .coorg-row')[1])",
+   "coOrgDone()",
+   "__scrollForm(240)"
+  ]
+ },
+ {
+  "file": "23-repeat-webinar-modal.png",
+  "steps": [
+   "goToForm()",
+   "openRepeatModal()"
+  ]
+ },
+ {
+  "file": "24-registration-setup.png",
+  "steps": [
+   "goToForm()",
+   "__scrollForm(430)"
+  ]
+ },
+ {
+  "file": "25-registration-form-picker.png",
+  "steps": [
+   "goToForm()",
+   "__scrollForm(400)",
+   "document.getElementById('regFormBtn').click()"
+  ]
+ },
+ {
+  "file": "26-registration-form-preview.png",
+  "steps": [
+   "goToForm()",
+   "rfOpenBuilderPreview({stopPropagation:function(){}},'default','Default Form')"
+  ]
+ },
+ {
+  "file": "27-customize-reg-page-picklist.png",
+  "steps": [
+   "goToForm()",
+   "__scrollForm(400)",
+   "document.getElementById('regPageBtn').click()",
+   "document.querySelectorAll('#regPageGroup .rp-eye').forEach(function(e){e.style.display='inline-flex'})"
+  ]
+ },
+ {
+  "file": "28-reg-page-preview-standard.png",
+  "steps": [
+   "goToForm()",
+   "document.getElementById('wTitle').value='Q4 Market Outlook'",
+   "document.getElementById('wDate').value='2026-09-16'",
+   "rpPreview({stopPropagation:function(){}},'standard')"
+  ]
+ },
+ {
+  "file": "29-reg-page-preview-custom.png",
+  "steps": [
+   "goToForm()",
+   "document.getElementById('wTitle').value='Q4 Market Outlook'",
+   "rpPreview({stopPropagation:function(){}},'custom')"
+  ]
+ },
+ {
+  "file": "30-reg-page-preview-mobile.png",
+  "steps": [
+   "goToForm()",
+   "document.getElementById('wTitle').value='Q4 Market Outlook'",
+   "rpPreview({stopPropagation:function(){}},'standard')",
+   "rpDevice('mobile')"
+  ]
+ },
+ {
+  "file": "31-push-to-crm-config.png",
+  "steps": [
+   "goToForm()",
+   "openCRMConfig()"
+  ]
+ },
+ {
+  "file": "32-preferences-reminders.png",
+  "steps": [
+   "goToForm()",
+   "__scrollForm(900)"
+  ]
+ },
+ {
+  "file": "34-slot-select-template.png",
+  "steps": [
+   "goToForm()",
+   "openSlotTemplatePicker('conf')"
+  ]
+ },
+ {
+  "file": "35-ondemand-form.png",
+  "steps": [
+   "goToForm()",
+   "__pick('Webinar Type','OnDemand Webinar')"
+  ]
+ },
+ {
+  "file": "36-without-registration.png",
+  "steps": [
+   "goToForm()",
+   "__pick('Registration Type','Without Registration')",
+   "__scrollForm(430)"
+  ]
+ },
+ {
+  "file": "37-save-validation.png",
+  "steps": [
+   "goToForm()",
+   "__clickContains('Save','button')"
+  ]
+ },
+ {
+  "file": "38-webinar-list.png",
+  "steps": [
+   "goToList()"
+  ]
+ },
+ {
+  "file": "39-detail-scheduled.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, false)"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "40-detail-details-panel.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, false)",
+   "__scrollDetail(320)"
+  ],
+  "wait": 1400
+ },
+ {
+  "file": "41-send-invite-picker.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, false)",
+   "__click('Send Invite','button')"
+  ],
+  "wait": 1400
+ },
+ {
+  "file": "42-send-invite-confirm.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, false)",
+   "__click('Send Invite','button')",
+   "(function(){var t=[].slice.call(document.querySelectorAll('table')).filter(function(x){return x.offsetParent}).pop();var c=[].slice.call(t.querySelectorAll('input[type=checkbox]'));c.slice(1,5).forEach(function(x){x.click()});return c.length})()",
+   "(function(){var a=[].slice.call(document.querySelectorAll('button')).filter(function(b){return b.textContent.trim()==='Add'&&b.offsetParent});if(a.length)a[a.length-1].click();return a.length})()"
+  ],
+  "wait": 1400
+ },
+ {
+  "file": "43-mass-email.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, false)",
+   "__click('Send Invite','button')",
+   "(function(){var t=[].slice.call(document.querySelectorAll('table')).filter(function(x){return x.offsetParent}).pop();var c=[].slice.call(t.querySelectorAll('input[type=checkbox]'));c.slice(1,5).forEach(function(x){x.click()});return c.length})()",
+   "(function(){var a=[].slice.call(document.querySelectorAll('button')).filter(function(b){return b.textContent.trim()==='Add'&&b.offsetParent});if(a.length)a[a.length-1].click();return a.length})()",
+   "__click('Next','button')"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "44-select-template.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, false)",
+   "__click('Send Invite','button')",
+   "(function(){var t=[].slice.call(document.querySelectorAll('table')).filter(function(x){return x.offsetParent}).pop();var c=[].slice.call(t.querySelectorAll('input[type=checkbox]'));c.slice(1,5).forEach(function(x){x.click()});return c.length})()",
+   "(function(){var a=[].slice.call(document.querySelectorAll('button')).filter(function(b){return b.textContent.trim()==='Add'&&b.offsetParent});if(a.length)a[a.length-1].click();return a.length})()",
+   "__click('Next','button')",
+   "__click('Select Template','button')||__clickContains('Select Template')"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "45-invited-section.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, true)",
+   "__scrollDetail(700)"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "46-registration-link-empty.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, false)",
+   "__click('View Registration Link','button')"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "47-registration-link-email-source.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, false)",
+   "__click('Send Invite','button')",
+   "(function(){var t=[].slice.call(document.querySelectorAll('table')).filter(function(x){return x.offsetParent}).pop();var c=[].slice.call(t.querySelectorAll('input[type=checkbox]'));c.slice(1,5).forEach(function(x){x.click()});return c.length})()",
+   "(function(){var a=[].slice.call(document.querySelectorAll('button')).filter(function(b){return b.textContent.trim()==='Add'&&b.offsetParent});if(a.length)a[a.length-1].click();return a.length})()",
+   "__click('Next','button')",
+   "__clickContains('Send','button')",
+   "__click('View Registration Link','button')"
+  ],
+  "wait": 1600
+ },
+ {
+  "file": "48-polls-pre.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, false)",
+   "__clickContains('Create Poll','button')"
+  ],
+  "wait": 1400
+ },
+ {
+  "file": "49-completed-overview.png",
+  "steps": [
+   "openWebinarDetail({name:'Product Reveal Webinar',category:'Completed Webinar',date:'Wed, Sep 3, 2025 02:00 PM IST',duration:'1 hr 0 mins',organiser:'Jay',type:'Live Webinar',webinarCost:2500}, true, true)"
+  ],
+  "wait": 1600
+ },
+ {
+  "file": "50-registration-summary.png",
+  "steps": [
+   "openWebinarDetail({name:'Product Reveal Webinar',category:'Completed Webinar',date:'Wed, Sep 3, 2025 02:00 PM IST',duration:'1 hr 0 mins',organiser:'Jay',type:'Live Webinar',webinarCost:2500}, true, true)",
+   "__scrollDetail(1500)"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "51-registration-by-source.png",
+  "steps": [
+   "openWebinarDetail({name:'Product Reveal Webinar',category:'Completed Webinar',date:'Wed, Sep 3, 2025 02:00 PM IST',duration:'1 hr 0 mins',organiser:'Jay',type:'Live Webinar',webinarCost:2500}, true, true)",
+   "__scrollDetail(2300)"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "52-attendees-list.png",
+  "steps": [
+   "openWebinarDetail({name:'Product Reveal Webinar',category:'Completed Webinar',date:'Wed, Sep 3, 2025 02:00 PM IST',duration:'1 hr 0 mins',organiser:'Jay',type:'Live Webinar',webinarCost:2500}, true, true)",
+   "__scrollDetail(3100)"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "53-polls-completed.png",
+  "steps": [
+   "openWebinarDetail({name:'Product Reveal Webinar',category:'Completed Webinar',date:'Wed, Sep 3, 2025 02:00 PM IST',duration:'1 hr 0 mins',organiser:'Jay',type:'Live Webinar',webinarCost:2500}, true, true)",
+   "__scrollDetail(4000)"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "54-qa.png",
+  "steps": [
+   "openWebinarDetail({name:'Product Reveal Webinar',category:'Completed Webinar',date:'Wed, Sep 3, 2025 02:00 PM IST',duration:'1 hr 0 mins',organiser:'Jay',type:'Live Webinar',webinarCost:2500}, true, true)",
+   "__scrollDetail(4800)"
+  ],
+  "wait": 1500
+ },
+ {
+  "file": "55-revenue-roi.png",
+  "steps": [
+   "openWebinarDetail({name:'Product Reveal Webinar',category:'Completed Webinar',date:'Wed, Sep 3, 2025 02:00 PM IST',duration:'1 hr 0 mins',organiser:'Jay',type:'Live Webinar',webinarCost:2500}, true, true)",
+   "__clickContains('Webinar Revenue')",
+   "__scrollDetail(5400)"
+  ],
+  "wait": 1600
+ },
+ {
+  "file": "56-ondemand-completed.png",
+  "steps": [
+   "openWebinarDetail({name:'On Demand Webinar',category:'On-Demand Webinar',date:'Mon, Mar 10, 2025 10:00 AM IST',duration:'1 hr 0 mins',organiser:'Jay',type:'On-Demand Webinar',webinarCost:800}, true, true)"
+  ],
+  "wait": 1600
+ },
+ {
+  "file": "57-templates-list.png",
+  "steps": [
+   "openSettingsModal()",
+   "openTemplatesPage()",
+   "tplPageSetModule&&tplPageSetModule('Zoho Webinar')"
+  ],
+  "wait": 1400
+ },
+ {
+  "file": "58-template-gallery.png",
+  "steps": [
+   "openSettingsModal()",
+   "openTemplatesPage()",
+   "openUsecaseGallery('sendInvite')"
+  ],
+  "wait": 1400
+ },
+ {
+  "file": "59-template-gallery-reminder.png",
+  "steps": [
+   "openSettingsModal()",
+   "openTemplatesPage()",
+   "openUsecaseGallery('reminder1')"
+  ],
+  "wait": 1400
+ }
+]
