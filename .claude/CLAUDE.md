@@ -125,6 +125,27 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-16 — **Co-Organizer: picklist out, Add Co-organisers panel in** — this time built
+  against the screenshots rather than a description. The field is a **+ Add co-organisers**
+  action that opens a panel laid out like the reference: a source picklist (**CRM users /
+  Webinar users**), a **Search** box, then **All** and **Selected (n)** as two view tabs on
+  the same row; below, the people grouped under an uppercase heading naming the directory,
+  each row a checkbox with the name and the email beneath it in the CRM pink. The
+  invite-by-email block matches the second screenshot exactly: **Email Address \*** and
+  **Name \*** side by side with red asterisks and the `kate.williams@zylker.com` /
+  `Kate Williams` placeholders, an Invite button, and **Done** in its own footer bar.
+  Selecting three checkboxes turns the tab into **Selected (3)**, and that view lists
+  everyone chosen across both directories together — after picking from both you want one
+  list to check rather than two tabs to flick between. Invited addresses appear under their
+  own "Invited by email" group so they are not mistaken for directory users. Selection lives
+  on the field as hidden chips: the panel reads them on open and writes on **Done**, so
+  Cancel genuinely discards — verified, along with the field reading
+  "Rao Priya, Mann Michael +1" afterwards and reopening showing Selected (3).
+  **Process note:** the first attempt at this was abandoned mid-edit with the file broken
+  (`repeatRow` at depth −2) and was discarded with `git checkout -- webinar.html` rather
+  than patched on top. Starting again from a clean file was faster than untangling it, and
+  the depth check after the field swap caught nothing this time because there was nothing to
+  catch. Why: the user asked for this panel and supplied two screenshots.
 - 2026-09-15 — **Wizard steps accumulate instead of replacing each other.** Next used to
   hide the step you had just answered, which meant a decision could not be re-read while
   making the next one. Now every answered step stays on the page — you scroll up through
