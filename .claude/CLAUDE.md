@@ -125,6 +125,25 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-16 — **New PRD: the build specification, at `docs/prd/master/`.** 10.3k words, 66
+  figures, all re-captured from `master` — it supersedes `docs/prd/current/`, which predates
+  the setup wizard, the co-organiser panel and Customize Registration Page. Fourteen sections
+  in flow order with a clickable contents list, and two appendices that are the point of the
+  document: **every field in the create form** for all three variants (live, on-demand,
+  without registration) with type, required, default and verbatim picklist values, pulled out
+  of the DOM rather than typed; and the rule sets read straight from the page's JS —
+  `TPL_TYPE_LINKS`, `TPL_REQUIRED_LINK`, `TPL_MERGE_SOURCES`, `IM_MODULES`, `CO_ORG_DIRECTORY`,
+  `RP_FIELDS`. Delivered as `prd.html` (6.7 MB, self-contained), a `.docx`, and a **Zoho Writer
+  document** created by importing the deployed URL — Slate serves `docs/` paths, so publishing
+  to master made the file public enough for Writer's URL import, which is the way round the
+  15 KB limit on Writer's create-from-text. Writer reports 9,586 words imported; images and
+  whether the index stayed clickable are **unverified** — this machine's Chrome is not signed
+  into Zoho. `shots.json` holds the click path for all 66 figures, and the README lists the
+  five capture traps that cost time (React renders a tick late; `setupStep` pre-scrolls the
+  panel; the completed record's scroller maxes at 3812 and Webinar Revenue is not in the rail;
+  the Send Invite picker needs **Add** before **Next**; identical md5s mean a silent failure).
+  Why: the user asked for a PRD a developer can build from, plus a Writer copy with a
+  clickable index.
 - 2026-09-16 — **Customize Registration Page, with an eye that previews the public page**
   (branch `templates-flow`). A new picklist in Registration Setup, directly under
   **Registration Form** in the right column, offering **Standard Template** and **Custom
