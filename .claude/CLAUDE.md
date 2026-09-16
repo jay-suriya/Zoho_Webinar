@@ -132,12 +132,11 @@ Reverse-chronological. Each entry: date, one-line summary, why.
   `src|email`, so the two copies of one person are two tickable rows rather than one that
   silently deduped. `coOrgDone()` then runs `coOrgDuplicate()` over the selected rows plus
   the typed invitations and, on a match by email, keeps the panel open, shows "Duplicate
-  exists: <name> is already added from <CRM users|Webinar users|the invitation below>.
-  Remove one of the two before continuing." in `#coOrgMailErr`, and switches to the
-  **Selected** tab so both copies are on screen. In that tab each row now carries its
-  source as a grey tag (`.coorg-src`) — without it the duplicates are indistinguishable
-  and you cannot tell which one to untick. Chips gained `data-src` so the source survives
-  closing and reopening the panel, and the error clears as soon as a row is toggled.
+  exists: <email> has been added twice." in `#coOrgMailErr` — an error and nothing more,
+  at the user's instruction: no switching to the Selected tab, no source tag on the rows.
+  Chips gained `data-src` so the source survives closing and reopening the panel (it is
+  what makes the two copies distinct selections), and the error clears as soon as a row is
+  toggled.
   Why: the user asked for a duplicate error when the same person is picked from both.
 - 2026-09-16 — **Email invitations become +/- rows; the field reads Manage co-organisers.**
   The **Invite** button is gone. Each invitation is a row of **Email Address** + **Name**
