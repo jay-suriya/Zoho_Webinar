@@ -1,0 +1,28 @@
+flowchart TB
+    subgraph R1[" "]
+    direction LR
+    A([Zoho Webinar module<br/>webinar list page]) --> C[Create Webinar]
+    C --> D[Create Webinar form<br/>Webinar Details, Registration Setup,<br/>Preferences, Reminders, Follow-Ups]
+    D --> E{Webinar Type?}
+    E -- Live Webinar --> F[Webinar Date &amp; Time<br/>Webinar Duration<br/>Webinar Timezone]
+    E -- OnDemand Webinar --> G[Webinar Date &amp; Time<br/>Video File<br/>Webinar Timezone<br/>Allow video play/pause]
+    end
+    subgraph R2[" "]
+    direction LR
+    H{Registration<br/>Type?}
+    H -- With Registration --> I[Registration Form<br/>Customize Registration Page<br/>Moderation Type<br/>Set Registration Limit<br/>country/domain restrictions<br/>Send Confirmation to Registrants]
+    H -- Without Registration --> J[Who can Join]
+    I --> K{Push Webinar<br/>Registrants to CRM?}
+    K -- ticked --> L[Manage Config<br/>CRM field mapping]
+    K -- unticked --> M[Save]
+    L --> M
+    J --> M
+    M --> N{Webinar title<br/>entered?}
+    N -- no --> O[/Save refused - validation shown<br/>returns to the form/]
+    N -- yes --> P([Scheduled Webinar<br/>webinar detail page])
+    end
+    F -- to Registration Setup --> H
+    G -- to Registration Setup --> H
+    R1 ~~~ R2
+    style R1 fill:#FFFFFF,stroke:#FFFFFF
+    style R2 fill:#FFFFFF,stroke:#FFFFFF

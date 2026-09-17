@@ -289,8 +289,14 @@ with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED) as z:
     z.writestr('word/styles.xml', styles)
     z.writestr('word/numbering.xml', numbering)
     z.writestr('word/_rels/document.xml.rels', doc_rels)
+    # A figure may be used more than once; each use gets its own relationship, but the
+    # file itself must be written only once or the zip carries duplicate entries.
+    written = set()
     for fn, path in media:
+        if fn in written:
+            continue
+        written.add(fn)
         z.write(path, f'word/media/{fn}')
 
 print(f'wrote {OUT}: {os.path.getsize(OUT)/1024/1024:.2f} MB, '
-      f'{fig} figures, {len(media)} images embedded')
+      f'{fig} figures, {len(written)} images embedded')

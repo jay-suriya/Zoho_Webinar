@@ -1,0 +1,8 @@
+flowchart TD
+    A([CRM Settings > Setup Home > Marketplace > Zoho ><br/>Zoho Meetings card > For webinars > Set up])
+    A --> B{Account situation?<br/>DEMO case switcher}
+    B -- no Zoho Webinar account --> M1[/Modal: create a Zoho Webinar account<br/>STOPS HERE/]
+    B -- not an admin --> M2[/Modal: not an admin<br/>Cancel is the only button - STOPS HERE/]
+    B -- trial expired --> M3[/Modal: trial expired<br/>STOPS HERE/]
+    B -- single org / valid account --> C[Introduction page]
+    C -- Setup - top right --> D([Four-step setup wizard<br/>see flow-01-integration-setup-wizard])

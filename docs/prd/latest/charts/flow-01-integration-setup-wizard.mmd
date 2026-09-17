@@ -1,0 +1,14 @@
+flowchart LR
+    C([Introduction page<br/>Setup - top right])
+    C --> S1[Step 1<br/>Email + Organisation<br/>Cancel and Next]
+    S1 -- Next --> S2[Step 2<br/>Sync past webinars?<br/>Yes / No radios, Yes preselected<br/>Cancel and Next]
+    S2 -- Next --> S3[Step 3<br/>Who Can Participate From CRM<br/>module checkbox list<br/>Leads and Contacts locked on<br/>Cancel and Next]
+    S3 -- Next --> S4[Step 4<br/>Webinar Deal Attribution<br/>six models, Linear preselected<br/>Cancel and Enable Integration]
+    S4 -- Enable Integration --> E([Enabled page<br/>same settings +<br/>dirty-state Save bar])
+    S1 -- Cancel --> C
+    S2 -- Cancel --> C
+    S3 -- Cancel --> C
+    S4 -- Cancel --> C
+    N["Note: steps accumulate on screen -<br/>earlier steps stay visible, only the<br/>current step shows Cancel and Next"]
+    classDef note fill:#FFFDF0,stroke:#D6D6E3,color:#616E88;
+    class N note;

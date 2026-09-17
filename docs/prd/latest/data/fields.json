@@ -1,0 +1,2159 @@
+{
+ "live_withreg": [
+  {
+   "label": "Webinar title",
+   "required": true,
+   "visible": true,
+   "type": "Text",
+   "def": "(Enter webinar title)",
+   "options": []
+  },
+  {
+   "label": "Webinar Type",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Live Webinar",
+   "options": [
+    [
+     "Live Webinar",
+     "OnDemand Webinar"
+    ]
+   ]
+  },
+  {
+   "label": "Webinar Date & Time",
+   "required": false,
+   "visible": true,
+   "type": "Compound (1 input + 1 picklist)",
+   "def": "10:00 AM",
+   "options": [
+    [
+     "9:00 AM",
+     "10:00 AM",
+     "11:00 AM",
+     "12:00 PM",
+     "1:00 PM",
+     "2:00 PM"
+    ]
+   ]
+  },
+  {
+   "label": "Webinar Duration",
+   "required": false,
+   "visible": true,
+   "type": "Compound picklist (2 parts)",
+   "def": "1 hr + 00 min",
+   "options": [
+    [
+     "1 hr",
+     "1 hr",
+     "2 hr",
+     "3 hr",
+     "4 hr",
+     "5 hr",
+     "6 hr",
+     "7 hr",
+     "8 hr",
+     "9 hr",
+     "10 hr",
+     "11 hr",
+     "12 hr",
+     "13 hr",
+     "14 hr",
+     "15 hr",
+     "16 hr",
+     "17 hr",
+     "18 hr",
+     "19 hr",
+     "20 hr",
+     "21 hr",
+     "22 hr",
+     "23 hr",
+     "24 hr"
+    ],
+    [
+     "00 min",
+     "15 min",
+     "30 min",
+     "45 min"
+    ]
+   ]
+  },
+  {
+   "label": "Video File",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Choose File",
+   "options": [
+    [
+     "From Zoho Webinar Recordings",
+     "Upload Files / Documents",
+     "Zoho WorkDrive",
+     "Other Cloud Services"
+    ]
+   ]
+  },
+  {
+   "label": "Webinar Timezone",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "(-6) Central",
+   "options": [
+    [
+     "(-5) Eastern",
+     "(-6) Central",
+     "(-7) Mountain",
+     "(-8) Pacific",
+     "(+0) UTC",
+     "(+5:30) IST"
+    ]
+   ]
+  },
+  {
+   "label": "Allow video play/pause",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Webinar Owner",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Rao Priya",
+   "options": [
+    [
+     "Rao Priya",
+     "Jay Acme",
+     "Mark Acme",
+     "Suriya"
+    ]
+   ]
+  },
+  {
+   "label": "Organizer",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Jayasuriya",
+   "options": [
+    [
+     "Jayasuriya",
+     "Morrison Troy"
+    ]
+   ]
+  },
+  {
+   "label": "Repeat Webinar",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "None \u270e",
+   "options": []
+  },
+  {
+   "label": "Co-Organizer",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "+ Add co-organisers",
+   "options": []
+  },
+  {
+   "label": "Co-Organizer",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ Add co-organisers",
+   "options": []
+  },
+  {
+   "label": "Webinar Cost",
+   "required": false,
+   "visible": true,
+   "type": "Text",
+   "def": "(0.00)",
+   "options": []
+  },
+  {
+   "label": "Description",
+   "required": false,
+   "visible": true,
+   "type": "Textarea",
+   "def": "()",
+   "options": []
+  },
+  {
+   "label": "Registration Mode",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Register and attend each event individually",
+   "options": [
+    [
+     "Register and attend each event individually",
+     "Register once and attend any event"
+    ]
+   ]
+  },
+  {
+   "label": "Open Registration for",
+   "required": false,
+   "visible": false,
+   "type": "Compound picklist (2 parts)",
+   "def": "All Webinars + 2 occurrences",
+   "options": [
+    [
+     "All Webinars",
+     "Only selected number of occurrences"
+    ],
+    [
+     "1 occurrence",
+     "2 occurrences",
+     "3 occurrences",
+     "4 occurrences",
+     "5 occurrences",
+     "6 occurrences"
+    ]
+   ]
+  },
+  {
+   "label": "Registration Type",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "With Registration",
+   "options": [
+    [
+     "With Registration",
+     "Without Registration"
+    ]
+   ]
+  },
+  {
+   "label": "Registration Form",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Default Form",
+   "options": [
+    [
+     "Default Form",
+     "Real Estate Form",
+     "Stock Trading Form",
+     "+ Create New Form"
+    ]
+   ]
+  },
+  {
+   "label": "Customize Registration Page",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Standard Template",
+   "options": [
+    [
+     "Standard Template",
+     "Custom Created"
+    ]
+   ]
+  },
+  {
+   "label": "Moderation Type",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Automatic Moderation",
+   "options": [
+    [
+     "Automatic Moderation",
+     "Manual Moderation"
+    ]
+   ]
+  },
+  {
+   "label": "Set Registration Limit",
+   "required": false,
+   "visible": true,
+   "type": "Text",
+   "def": "",
+   "options": []
+  },
+  {
+   "label": "Push Webinar Registrants to CRM",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Allow/deny registrants from specific countries",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "No Restrictions",
+   "options": [
+    [
+     "No Restrictions",
+     "Allow registrants from Countries",
+     "Block registrants from Countries"
+    ]
+   ]
+  },
+  {
+   "label": "Select Allowed Countries",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select countries... USA India China United Kingdom",
+   "options": []
+  },
+  {
+   "label": "Allow/Block Specific Domains",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "No Restriction",
+   "options": [
+    [
+     "No Restriction",
+     "Allow specific email domains",
+     "Block specific email domains"
+    ]
+   ]
+  },
+  {
+   "label": "Post_Registration Custom Redirection",
+   "required": false,
+   "visible": true,
+   "type": "Text",
+   "def": "(https://)",
+   "options": []
+  },
+  {
+   "label": "Post Redirection URL",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "(https://)",
+   "options": []
+  },
+  {
+   "label": "Add Allowed Domains",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ADD +ADD Domains to Allow: 0 \u2715",
+   "options": []
+  },
+  {
+   "label": "Allow access to join link only through mail",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Allow only authenticated Zoho Users with a Zoho account",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Send Confirmation to Registrants",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Confirmation Email Template",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "Select TemplateWebinar Confirmation Template",
+   "options": []
+  },
+  {
+   "label": "Allow only authenticated Zoho Users with a Zoho account",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Who can Join",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Anyone can Join",
+   "options": [
+    [
+     "Anyone can Join",
+     "Only Authenticated Users can Join"
+    ]
+   ]
+  },
+  {
+   "label": "Add Allowed Domains",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ADD Domains to Allow: 3 \u27151. Zoho.com2. Zoho.in3.",
+   "options": []
+  },
+  {
+   "label": "Allow/deny registrants from specific countries",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "None",
+   "options": [
+    [
+     "None",
+     "Allow registrants from Countries",
+     "Block registrants from Countries"
+    ]
+   ]
+  },
+  {
+   "label": "Select Allowed Countries",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select countries... USA India China United Kingdom",
+   "options": []
+  },
+  {
+   "label": "Send thank you email to attendees",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "2 minutes after webinar ends",
+   "options": [
+    [
+     "2 minutes after webinar ends",
+     "5 mins after webinar ends",
+     "10 mins after webinar ends"
+    ]
+   ]
+  },
+  {
+   "label": "Thank You Email Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select TemplateAttendees Follow-up Template",
+   "options": []
+  },
+  {
+   "label": "Allow attendees to ask questions",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Allow anonymous questions",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Show questions to all",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Automatic session recording",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Video recording",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Display attendee list to all",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Use Emoji reactions",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Post webinar Re-direction",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Post Redirection URL",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "(https://)",
+   "options": []
+  },
+  {
+   "label": "Auto Reply for questions",
+   "required": false,
+   "visible": false,
+   "type": "Textarea",
+   "def": "(Type your auto reply message here...)",
+   "options": []
+  },
+  {
+   "label": "1st Reminder",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "15 mins before the webinar",
+   "options": [
+    [
+     "2 mins before the webinar",
+     "5 mins before the webinar",
+     "10 mins before the webinar",
+     "15 mins before the webinar",
+     "30 mins before the webinar",
+     "1 hour before the webinar",
+     "2 hours before the webinar",
+     "6 hours before the webinar",
+     "12 hours before the webinar",
+     "1 day before the webinar",
+     "1 week before the webinar"
+    ]
+   ]
+  },
+  {
+   "label": "1st Reminder Template",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "Select Template1st Reminder Template",
+   "options": []
+  },
+  {
+   "label": "2nd Reminder",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "None",
+   "options": [
+    [
+     "None",
+     "2 mins before the webinar",
+     "5 mins before the webinar",
+     "10 mins before the webinar",
+     "15 mins before the webinar",
+     "30 mins before the webinar",
+     "1 hour before the webinar",
+     "2 hours before the webinar",
+     "6 hours before the webinar",
+     "12 hours before the webinar",
+     "1 day before the webinar",
+     "1 week before the webinar"
+    ]
+   ]
+  },
+  {
+   "label": "2nd Reminder Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select Template2nd Reminder Template",
+   "options": []
+  },
+  {
+   "label": "3rd Reminder",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "None",
+   "options": [
+    [
+     "None",
+     "2 mins before the webinar",
+     "5 mins before the webinar",
+     "10 mins before the webinar",
+     "15 mins before the webinar",
+     "30 mins before the webinar",
+     "1 hour before the webinar",
+     "2 hours before the webinar",
+     "6 hours before the webinar",
+     "12 hours before the webinar",
+     "1 day before the webinar",
+     "1 week before the webinar"
+    ]
+   ]
+  },
+  {
+   "label": "3rd Reminder Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select Template3rd Reminder Template",
+   "options": []
+  },
+  {
+   "label": "Send Follow-up Email to Attendees",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "2 mins after the webinar ends",
+   "options": [
+    [
+     "None",
+     "2 mins after the webinar ends",
+     "5 mins after the webinar ends",
+     "10 mins after the webinar ends",
+     "15 mins after the webinar ends",
+     "1 hour after the webinar ends",
+     "2 hours after the webinar ends",
+     "6 hours after the webinar ends",
+     "1 day after the webinar ends"
+    ]
+   ]
+  },
+  {
+   "label": "Send Follow-up Email to Absentees",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "2 mins after the webinar ends",
+   "options": [
+    [
+     "None",
+     "2 mins after the webinar ends",
+     "5 mins after the webinar ends",
+     "10 mins after the webinar ends",
+     "15 mins after the webinar ends",
+     "1 hour after the webinar ends",
+     "2 hours after the webinar ends",
+     "6 hours after the webinar ends",
+     "1 day after the webinar ends"
+    ]
+   ]
+  },
+  {
+   "label": "Attendees Follow-up Template",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "Select TemplateAttendees Follow-up Template",
+   "options": []
+  },
+  {
+   "label": "Absentees Follow-up Template",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "Select TemplateAbsentees Follow-up Template",
+   "options": []
+  },
+  {
+   "label": "Include Recording for Attendees",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Include Recording for Absentees",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Form Name",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "Leads",
+   "options": []
+  },
+  {
+   "label": "Description",
+   "required": false,
+   "visible": false,
+   "type": "Textarea",
+   "def": "()",
+   "options": []
+  }
+ ],
+ "live_noreg": [
+  {
+   "label": "Webinar title",
+   "required": true,
+   "visible": true,
+   "type": "Text",
+   "def": "(Enter webinar title)",
+   "options": []
+  },
+  {
+   "label": "Webinar Type",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Live Webinar",
+   "options": [
+    [
+     "Live Webinar",
+     "OnDemand Webinar"
+    ]
+   ]
+  },
+  {
+   "label": "Webinar Date & Time",
+   "required": false,
+   "visible": true,
+   "type": "Compound (1 input + 1 picklist)",
+   "def": "10:00 AM",
+   "options": [
+    [
+     "9:00 AM",
+     "10:00 AM",
+     "11:00 AM",
+     "12:00 PM",
+     "1:00 PM",
+     "2:00 PM"
+    ]
+   ]
+  },
+  {
+   "label": "Webinar Duration",
+   "required": false,
+   "visible": true,
+   "type": "Compound picklist (2 parts)",
+   "def": "1 hr + 00 min",
+   "options": [
+    [
+     "1 hr",
+     "1 hr",
+     "2 hr",
+     "3 hr",
+     "4 hr",
+     "5 hr",
+     "6 hr",
+     "7 hr",
+     "8 hr",
+     "9 hr",
+     "10 hr",
+     "11 hr",
+     "12 hr",
+     "13 hr",
+     "14 hr",
+     "15 hr",
+     "16 hr",
+     "17 hr",
+     "18 hr",
+     "19 hr",
+     "20 hr",
+     "21 hr",
+     "22 hr",
+     "23 hr",
+     "24 hr"
+    ],
+    [
+     "00 min",
+     "15 min",
+     "30 min",
+     "45 min"
+    ]
+   ]
+  },
+  {
+   "label": "Video File",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Choose File",
+   "options": [
+    [
+     "From Zoho Webinar Recordings",
+     "Upload Files / Documents",
+     "Zoho WorkDrive",
+     "Other Cloud Services"
+    ]
+   ]
+  },
+  {
+   "label": "Webinar Timezone",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "(-6) Central",
+   "options": [
+    [
+     "(-5) Eastern",
+     "(-6) Central",
+     "(-7) Mountain",
+     "(-8) Pacific",
+     "(+0) UTC",
+     "(+5:30) IST"
+    ]
+   ]
+  },
+  {
+   "label": "Allow video play/pause",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Webinar Owner",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Rao Priya",
+   "options": [
+    [
+     "Rao Priya",
+     "Jay Acme",
+     "Mark Acme",
+     "Suriya"
+    ]
+   ]
+  },
+  {
+   "label": "Organizer",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Jayasuriya",
+   "options": [
+    [
+     "Jayasuriya",
+     "Morrison Troy"
+    ]
+   ]
+  },
+  {
+   "label": "Repeat Webinar",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "None \u270e",
+   "options": []
+  },
+  {
+   "label": "Co-Organizer",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "+ Add co-organisers",
+   "options": []
+  },
+  {
+   "label": "Co-Organizer",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ Add co-organisers",
+   "options": []
+  },
+  {
+   "label": "Webinar Cost",
+   "required": false,
+   "visible": true,
+   "type": "Text",
+   "def": "(0.00)",
+   "options": []
+  },
+  {
+   "label": "Description",
+   "required": false,
+   "visible": true,
+   "type": "Textarea",
+   "def": "()",
+   "options": []
+  },
+  {
+   "label": "Registration Mode",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Register and attend each event individually",
+   "options": [
+    [
+     "Register and attend each event individually",
+     "Register once and attend any event"
+    ]
+   ]
+  },
+  {
+   "label": "Open Registration for",
+   "required": false,
+   "visible": false,
+   "type": "Compound picklist (2 parts)",
+   "def": "All Webinars + 2 occurrences",
+   "options": [
+    [
+     "All Webinars",
+     "Only selected number of occurrences"
+    ],
+    [
+     "1 occurrence",
+     "2 occurrences",
+     "3 occurrences",
+     "4 occurrences",
+     "5 occurrences",
+     "6 occurrences"
+    ]
+   ]
+  },
+  {
+   "label": "Registration Type",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Without Registration",
+   "options": [
+    [
+     "With Registration",
+     "Without Registration"
+    ]
+   ]
+  },
+  {
+   "label": "Registration Form",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Default Form",
+   "options": [
+    [
+     "Default Form",
+     "Real Estate Form",
+     "Stock Trading Form",
+     "+ Create New Form"
+    ]
+   ]
+  },
+  {
+   "label": "Customize Registration Page",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Standard Template",
+   "options": [
+    [
+     "Standard Template",
+     "Custom Created"
+    ]
+   ]
+  },
+  {
+   "label": "Moderation Type",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Automatic Moderation",
+   "options": [
+    [
+     "Automatic Moderation",
+     "Manual Moderation"
+    ]
+   ]
+  },
+  {
+   "label": "Set Registration Limit",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "",
+   "options": []
+  },
+  {
+   "label": "Push Webinar Registrants to CRM",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Allow/deny registrants from specific countries",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "No Restrictions",
+   "options": [
+    [
+     "No Restrictions",
+     "Allow registrants from Countries",
+     "Block registrants from Countries"
+    ]
+   ]
+  },
+  {
+   "label": "Select Allowed Countries",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select countries... USA India China United Kingdom",
+   "options": []
+  },
+  {
+   "label": "Allow/Block Specific Domains",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "No Restriction",
+   "options": [
+    [
+     "No Restriction",
+     "Allow specific email domains",
+     "Block specific email domains"
+    ]
+   ]
+  },
+  {
+   "label": "Post_Registration Custom Redirection",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "(https://)",
+   "options": []
+  },
+  {
+   "label": "Post Redirection URL",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "(https://)",
+   "options": []
+  },
+  {
+   "label": "Add Allowed Domains",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ADD +ADD Domains to Allow: 0 \u2715",
+   "options": []
+  },
+  {
+   "label": "Allow access to join link only through mail",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Allow only authenticated Zoho Users with a Zoho account",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Send Confirmation to Registrants",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Confirmation Email Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select TemplateWebinar Confirmation Template",
+   "options": []
+  },
+  {
+   "label": "Allow only authenticated Zoho Users with a Zoho account",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Who can Join",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Anyone can Join",
+   "options": [
+    [
+     "Anyone can Join",
+     "Only Authenticated Users can Join"
+    ]
+   ]
+  },
+  {
+   "label": "Add Allowed Domains",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ADD Domains to Allow: 3 \u27151. Zoho.com2. Zoho.in3.",
+   "options": []
+  },
+  {
+   "label": "Allow/deny registrants from specific countries",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "None",
+   "options": [
+    [
+     "None",
+     "Allow registrants from Countries",
+     "Block registrants from Countries"
+    ]
+   ]
+  },
+  {
+   "label": "Select Allowed Countries",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select countries... USA India China United Kingdom",
+   "options": []
+  },
+  {
+   "label": "Send thank you email to attendees",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "2 minutes after webinar ends",
+   "options": [
+    [
+     "2 minutes after webinar ends",
+     "5 mins after webinar ends",
+     "10 mins after webinar ends"
+    ]
+   ]
+  },
+  {
+   "label": "Thank You Email Template",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "Select TemplateAttendees Follow-up Template",
+   "options": []
+  },
+  {
+   "label": "Allow attendees to ask questions",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Video recording",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Allow anonymous questions",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Display attendee list to all",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Show questions to all",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Use Emoji reactions",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Automatic session recording",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Post webinar Re-direction",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Post Redirection URL",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "(https://)",
+   "options": []
+  },
+  {
+   "label": "Auto Reply for questions",
+   "required": false,
+   "visible": false,
+   "type": "Textarea",
+   "def": "(Type your auto reply message here...)",
+   "options": []
+  },
+  {
+   "label": "1st Reminder",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "15 mins before the webinar",
+   "options": [
+    [
+     "2 mins before the webinar",
+     "5 mins before the webinar",
+     "10 mins before the webinar",
+     "15 mins before the webinar",
+     "30 mins before the webinar",
+     "1 hour before the webinar",
+     "2 hours before the webinar",
+     "6 hours before the webinar",
+     "12 hours before the webinar",
+     "1 day before the webinar",
+     "1 week before the webinar"
+    ]
+   ]
+  },
+  {
+   "label": "1st Reminder Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select Template1st Reminder Template",
+   "options": []
+  },
+  {
+   "label": "2nd Reminder",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "None",
+   "options": [
+    [
+     "None",
+     "2 mins before the webinar",
+     "5 mins before the webinar",
+     "10 mins before the webinar",
+     "15 mins before the webinar",
+     "30 mins before the webinar",
+     "1 hour before the webinar",
+     "2 hours before the webinar",
+     "6 hours before the webinar",
+     "12 hours before the webinar",
+     "1 day before the webinar",
+     "1 week before the webinar"
+    ]
+   ]
+  },
+  {
+   "label": "2nd Reminder Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select Template2nd Reminder Template",
+   "options": []
+  },
+  {
+   "label": "3rd Reminder",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "None",
+   "options": [
+    [
+     "None",
+     "2 mins before the webinar",
+     "5 mins before the webinar",
+     "10 mins before the webinar",
+     "15 mins before the webinar",
+     "30 mins before the webinar",
+     "1 hour before the webinar",
+     "2 hours before the webinar",
+     "6 hours before the webinar",
+     "12 hours before the webinar",
+     "1 day before the webinar",
+     "1 week before the webinar"
+    ]
+   ]
+  },
+  {
+   "label": "3rd Reminder Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select Template3rd Reminder Template",
+   "options": []
+  },
+  {
+   "label": "Send Follow-up Email to Attendees",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "2 mins after the webinar ends",
+   "options": [
+    [
+     "None",
+     "2 mins after the webinar ends",
+     "5 mins after the webinar ends",
+     "10 mins after the webinar ends",
+     "15 mins after the webinar ends",
+     "1 hour after the webinar ends",
+     "2 hours after the webinar ends",
+     "6 hours after the webinar ends",
+     "1 day after the webinar ends"
+    ]
+   ]
+  },
+  {
+   "label": "Send Follow-up Email to Absentees",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "2 mins after the webinar ends",
+   "options": [
+    [
+     "None",
+     "2 mins after the webinar ends",
+     "5 mins after the webinar ends",
+     "10 mins after the webinar ends",
+     "15 mins after the webinar ends",
+     "1 hour after the webinar ends",
+     "2 hours after the webinar ends",
+     "6 hours after the webinar ends",
+     "1 day after the webinar ends"
+    ]
+   ]
+  },
+  {
+   "label": "Attendees Follow-up Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select TemplateAttendees Follow-up Template",
+   "options": []
+  },
+  {
+   "label": "Absentees Follow-up Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select TemplateAbsentees Follow-up Template",
+   "options": []
+  },
+  {
+   "label": "Include Recording for Attendees",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Include Recording for Absentees",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Form Name",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "Leads",
+   "options": []
+  },
+  {
+   "label": "Description",
+   "required": false,
+   "visible": false,
+   "type": "Textarea",
+   "def": "()",
+   "options": []
+  }
+ ],
+ "ondemand": [
+  {
+   "label": "Webinar title",
+   "required": true,
+   "visible": true,
+   "type": "Text",
+   "def": "Lead Webinar",
+   "options": []
+  },
+  {
+   "label": "Webinar Type",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "OnDemand Webinar",
+   "options": [
+    [
+     "Live Webinar",
+     "OnDemand Webinar"
+    ]
+   ]
+  },
+  {
+   "label": "Webinar Date & Time",
+   "required": false,
+   "visible": true,
+   "type": "Compound (1 input + 1 picklist)",
+   "def": "10:00 AM",
+   "options": [
+    [
+     "9:00 AM",
+     "10:00 AM",
+     "11:00 AM",
+     "12:00 PM",
+     "1:00 PM",
+     "2:00 PM"
+    ]
+   ]
+  },
+  {
+   "label": "Webinar Duration",
+   "required": false,
+   "visible": false,
+   "type": "Compound picklist (2 parts)",
+   "def": "1 hr + 00 min",
+   "options": [
+    [
+     "1 hr",
+     "1 hr",
+     "2 hr",
+     "3 hr",
+     "4 hr",
+     "5 hr",
+     "6 hr",
+     "7 hr",
+     "8 hr",
+     "9 hr",
+     "10 hr",
+     "11 hr",
+     "12 hr",
+     "13 hr",
+     "14 hr",
+     "15 hr",
+     "16 hr",
+     "17 hr",
+     "18 hr",
+     "19 hr",
+     "20 hr",
+     "21 hr",
+     "22 hr",
+     "23 hr",
+     "24 hr"
+    ],
+    [
+     "00 min",
+     "15 min",
+     "30 min",
+     "45 min"
+    ]
+   ]
+  },
+  {
+   "label": "Video File",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Choose File",
+   "options": [
+    [
+     "From Zoho Webinar Recordings",
+     "Upload Files / Documents",
+     "Zoho WorkDrive",
+     "Other Cloud Services"
+    ]
+   ]
+  },
+  {
+   "label": "Webinar Timezone",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "(-6) Central",
+   "options": [
+    [
+     "(-5) Eastern",
+     "(-6) Central",
+     "(-7) Mountain",
+     "(-8) Pacific",
+     "(+0) UTC",
+     "(+5:30) IST"
+    ]
+   ]
+  },
+  {
+   "label": "Allow video play/pause",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Webinar Owner",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Rao Priya",
+   "options": [
+    [
+     "Rao Priya",
+     "Jay Acme",
+     "Mark Acme",
+     "Suriya"
+    ]
+   ]
+  },
+  {
+   "label": "Organizer",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Jayasuriya",
+   "options": [
+    [
+     "Jayasuriya",
+     "Morrison Troy"
+    ]
+   ]
+  },
+  {
+   "label": "Repeat Webinar",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "None \u270e",
+   "options": []
+  },
+  {
+   "label": "Co-Organizer",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ Add co-organisers",
+   "options": []
+  },
+  {
+   "label": "Co-Organizer",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ Add co-organisers",
+   "options": []
+  },
+  {
+   "label": "Webinar Cost",
+   "required": false,
+   "visible": true,
+   "type": "Text",
+   "def": "(0.00)",
+   "options": []
+  },
+  {
+   "label": "Description",
+   "required": false,
+   "visible": true,
+   "type": "Textarea",
+   "def": "()",
+   "options": []
+  },
+  {
+   "label": "Registration Mode",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Register and attend each event individually",
+   "options": [
+    [
+     "Register and attend each event individually",
+     "Register once and attend any event"
+    ]
+   ]
+  },
+  {
+   "label": "Open Registration for",
+   "required": false,
+   "visible": false,
+   "type": "Compound picklist (2 parts)",
+   "def": "All Webinars + 2 occurrences",
+   "options": [
+    [
+     "All Webinars",
+     "Only selected number of occurrences"
+    ],
+    [
+     "1 occurrence",
+     "2 occurrences",
+     "3 occurrences",
+     "4 occurrences",
+     "5 occurrences",
+     "6 occurrences"
+    ]
+   ]
+  },
+  {
+   "label": "Registration Type",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "With Registration",
+   "options": [
+    [
+     "With Registration",
+     "Without Registration"
+    ]
+   ]
+  },
+  {
+   "label": "Registration Form",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Default Form",
+   "options": [
+    [
+     "Default Form",
+     "Real Estate Form",
+     "Stock Trading Form",
+     "+ Create New Form"
+    ]
+   ]
+  },
+  {
+   "label": "Customize Registration Page",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Standard Template",
+   "options": [
+    [
+     "Standard Template",
+     "Custom Created"
+    ]
+   ]
+  },
+  {
+   "label": "Moderation Type",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "Automatic Moderation",
+   "options": [
+    [
+     "Automatic Moderation",
+     "Manual Moderation"
+    ]
+   ]
+  },
+  {
+   "label": "Set Registration Limit",
+   "required": false,
+   "visible": true,
+   "type": "Text",
+   "def": "",
+   "options": []
+  },
+  {
+   "label": "Push Webinar Registrants to CRM",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Allow/deny registrants from specific countries",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "No Restrictions",
+   "options": [
+    [
+     "No Restrictions",
+     "Allow registrants from Countries",
+     "Block registrants from Countries"
+    ]
+   ]
+  },
+  {
+   "label": "Select Allowed Countries",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select countries... USA India China United Kingdom",
+   "options": []
+  },
+  {
+   "label": "Allow/Block Specific Domains",
+   "required": false,
+   "visible": true,
+   "type": "Picklist",
+   "def": "No Restriction",
+   "options": [
+    [
+     "No Restriction",
+     "Allow specific email domains",
+     "Block specific email domains"
+    ]
+   ]
+  },
+  {
+   "label": "Post_Registration Custom Redirection",
+   "required": false,
+   "visible": true,
+   "type": "Text",
+   "def": "(https://)",
+   "options": []
+  },
+  {
+   "label": "Post Redirection URL",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "(https://)",
+   "options": []
+  },
+  {
+   "label": "Add Allowed Domains",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ADD +ADD Domains to Allow: 0 \u2715",
+   "options": []
+  },
+  {
+   "label": "Allow access to join link only through mail",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Allow only authenticated Zoho Users with a Zoho account",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Send Confirmation to Registrants",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Confirmation Email Template",
+   "required": false,
+   "visible": true,
+   "type": "Custom control",
+   "def": "Select TemplateWebinar Confirmation Template",
+   "options": []
+  },
+  {
+   "label": "Allow only authenticated Zoho Users with a Zoho account",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Who can Join",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "Anyone can Join",
+   "options": [
+    [
+     "Anyone can Join",
+     "Only Authenticated Users can Join"
+    ]
+   ]
+  },
+  {
+   "label": "Add Allowed Domains",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "+ADD Domains to Allow: 3 \u27151. Zoho.com2. Zoho.in3.",
+   "options": []
+  },
+  {
+   "label": "Allow/deny registrants from specific countries",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "None",
+   "options": [
+    [
+     "None",
+     "Allow registrants from Countries",
+     "Block registrants from Countries"
+    ]
+   ]
+  },
+  {
+   "label": "Select Allowed Countries",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select countries... USA India China United Kingdom",
+   "options": []
+  },
+  {
+   "label": "Send thank you email to attendees",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "2 minutes after webinar ends",
+   "options": [
+    [
+     "2 minutes after webinar ends",
+     "5 mins after webinar ends",
+     "10 mins after webinar ends"
+    ]
+   ]
+  },
+  {
+   "label": "Thank You Email Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select TemplateAttendees Follow-up Template",
+   "options": []
+  },
+  {
+   "label": "Allow anonymous questions",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Show questions to all",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Automatic session recording",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Video recording",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Display attendee list to all",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Use Emoji reactions",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "checked",
+   "options": []
+  },
+  {
+   "label": "Post webinar Re-direction",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Post Redirection URL",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "(https://)",
+   "options": []
+  },
+  {
+   "label": "Allow attendees to ask questions",
+   "required": false,
+   "visible": true,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Auto Reply for questions",
+   "required": false,
+   "visible": false,
+   "type": "Textarea",
+   "def": "(Type your auto reply message here...)",
+   "options": []
+  },
+  {
+   "label": "1st Reminder",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "15 mins before the webinar",
+   "options": [
+    [
+     "2 mins before the webinar",
+     "5 mins before the webinar",
+     "10 mins before the webinar",
+     "15 mins before the webinar",
+     "30 mins before the webinar",
+     "1 hour before the webinar",
+     "2 hours before the webinar",
+     "6 hours before the webinar",
+     "12 hours before the webinar",
+     "1 day before the webinar",
+     "1 week before the webinar"
+    ]
+   ]
+  },
+  {
+   "label": "1st Reminder Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select Template1st Reminder Template",
+   "options": []
+  },
+  {
+   "label": "2nd Reminder",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "None",
+   "options": [
+    [
+     "None",
+     "2 mins before the webinar",
+     "5 mins before the webinar",
+     "10 mins before the webinar",
+     "15 mins before the webinar",
+     "30 mins before the webinar",
+     "1 hour before the webinar",
+     "2 hours before the webinar",
+     "6 hours before the webinar",
+     "12 hours before the webinar",
+     "1 day before the webinar",
+     "1 week before the webinar"
+    ]
+   ]
+  },
+  {
+   "label": "2nd Reminder Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select Template2nd Reminder Template",
+   "options": []
+  },
+  {
+   "label": "3rd Reminder",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "None",
+   "options": [
+    [
+     "None",
+     "2 mins before the webinar",
+     "5 mins before the webinar",
+     "10 mins before the webinar",
+     "15 mins before the webinar",
+     "30 mins before the webinar",
+     "1 hour before the webinar",
+     "2 hours before the webinar",
+     "6 hours before the webinar",
+     "12 hours before the webinar",
+     "1 day before the webinar",
+     "1 week before the webinar"
+    ]
+   ]
+  },
+  {
+   "label": "3rd Reminder Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select Template3rd Reminder Template",
+   "options": []
+  },
+  {
+   "label": "Send Follow-up Email to Attendees",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "2 mins after the webinar ends",
+   "options": [
+    [
+     "None",
+     "2 mins after the webinar ends",
+     "5 mins after the webinar ends",
+     "10 mins after the webinar ends",
+     "15 mins after the webinar ends",
+     "1 hour after the webinar ends",
+     "2 hours after the webinar ends",
+     "6 hours after the webinar ends",
+     "1 day after the webinar ends"
+    ]
+   ]
+  },
+  {
+   "label": "Send Follow-up Email to Absentees",
+   "required": false,
+   "visible": false,
+   "type": "Picklist",
+   "def": "2 mins after the webinar ends",
+   "options": [
+    [
+     "None",
+     "2 mins after the webinar ends",
+     "5 mins after the webinar ends",
+     "10 mins after the webinar ends",
+     "15 mins after the webinar ends",
+     "1 hour after the webinar ends",
+     "2 hours after the webinar ends",
+     "6 hours after the webinar ends",
+     "1 day after the webinar ends"
+    ]
+   ]
+  },
+  {
+   "label": "Attendees Follow-up Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select TemplateAttendees Follow-up Template",
+   "options": []
+  },
+  {
+   "label": "Absentees Follow-up Template",
+   "required": false,
+   "visible": false,
+   "type": "Custom control",
+   "def": "Select TemplateAbsentees Follow-up Template",
+   "options": []
+  },
+  {
+   "label": "Include Recording for Attendees",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Include Recording for Absentees",
+   "required": false,
+   "visible": false,
+   "type": "Checkbox",
+   "def": "unchecked",
+   "options": []
+  },
+  {
+   "label": "Form Name",
+   "required": false,
+   "visible": false,
+   "type": "Text",
+   "def": "Leads",
+   "options": []
+  },
+  {
+   "label": "Description",
+   "required": false,
+   "visible": false,
+   "type": "Textarea",
+   "def": "()",
+   "options": []
+  }
+ ]
+}
