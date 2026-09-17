@@ -77,3 +77,16 @@ them — they had already been copied forward four times, byte-identical every t
 
 `build_docx.py` wrote a duplicate zip entry when the same figure was used twice. Each use
 still gets its own relationship, but the media file is now written once.
+
+## Zoho Writer copy
+
+Imported 2026-09-17 by URL — `zoho-writer` MCP `Create_Document` with
+`url: https://zoho-webinar-aqxbqcax.onslate.com/docs/prd/latest/prd.html`, which is why
+`docs/prd/latest/` had to be merged to `master` first (Slate auto-deploys master and serves
+`docs/` paths; the URL must be public for Writer to fetch it).
+
+    https://writer.zoho.com/writer/open/wfgxzef9f2d11f3c8452d87f4e306418272f7
+
+Writer reports 8,391 words / 1,511 sentences against the source's ~9.8k words. Whether the
+figures, flowcharts and the clickable contents survived the import is **unverified** — this
+machine's Chrome is not signed into Zoho.
