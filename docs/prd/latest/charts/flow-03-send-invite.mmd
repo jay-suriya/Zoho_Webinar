@@ -1,0 +1,29 @@
+flowchart TB
+    subgraph S1[1. Open the picker]
+        direction LR
+        A([Scheduled Webinar detail page]) --> B{Webinar is Scheduled?}
+        B -- no: completed or cancelled --> Z[/Send Invite not shown/]
+        B -- yes --> C[Send Invite]
+        C --> D[Record picker:<br/>module dropdown]
+        D --> E{Module enabled in<br/>Who Can Participate<br/>From CRM?}
+        E -- no --> F[/Module not listed/]
+        E -- yes --> G[Leads and Contacts<br/>always listed]
+    end
+    subgraph S2[2. Select records - two steps]
+        direction LR
+        H[View filter,<br/>tick record rows] --> I{Add pressed?}
+        I -- no: Next does nothing --> H
+        I -- yes --> J[Selected records list<br/>with Remove ALL]
+        J -- Cancel --> Y([Picker closed,<br/>no invite sent])
+    end
+    subgraph S3[3. Compose and send]
+        direction LR
+        L[Mass Email compose] --> M{Select Template:<br/>Webinar Invitation<br/>template chosen?}
+        M -- no --> L
+        M -- yes --> O[Invitation Template set]
+        O --> P[Send]
+        P --> Q[Invited related list populated;<br/>Email source row created in<br/>View Registration Link,<br/>Enable Source Tracking on]
+        Q --> S([Invites sent])
+    end
+    G --> H
+    J -- Next --> L

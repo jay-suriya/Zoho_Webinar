@@ -1,0 +1,53 @@
+[
+ {
+  "file": "70-webinar-owner-open.png",
+  "steps": [
+   "goToForm()",
+   "__scrollForm(120)",
+   "(function(){var ls=document.querySelectorAll('#page-form label');for(var i=0;i<ls.length;i++){if(ls[i].textContent.trim()==='Webinar Owner'){var g=ls[i].closest('.form-group');csToggle(g.querySelector('.cs-btn'));return true}}return false})()"
+  ]
+ },
+ {
+  "file": "71-webinar-cost.png",
+  "steps": [
+   "goToForm()",
+   "__scrollForm(260)",
+   "(function(){var i=document.getElementById('webinarCostInput');i.value='2500';i.focus();return true})()"
+  ]
+ },
+ {
+  "file": "72-push-to-crm-row.png",
+  "steps": [
+   "goToForm()",
+   "__scrollForm(640)"
+  ]
+ },
+ {
+  "file": "73-scheduled-summary.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, true)",
+   "__scrollDetail(380)"
+  ]
+ },
+ {
+  "file": "74-session-files.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, true)",
+   "__clickRelated('Session Files')"
+  ]
+ },
+ {
+  "file": "75-actions-menu.png",
+  "steps": [
+   "openWebinarDetail({name:'Real Estate Webinar',category:'Scheduled Webinar',date:'Mon, Aug 11, 2025 11:00 AM IST',duration:'1 hr 30 mins',organiser:'Jay',type:'Live Webinar',status:'startsIn',registrationLimit:200}, false, true)",
+   "__clickContains('Actions','button')"
+  ]
+ },
+ {
+  "file": "76-completed-invited.png",
+  "steps": [
+   "openWebinarDetail({name:'Product Reveal Webinar',category:'Completed Webinar',date:'Wed, Sep 3, 2025 02:00 PM IST',duration:'1 hr 0 mins',organiser:'Jay',type:'Live Webinar',webinarCost:2500}, true, true)",
+   "__clickRelated('Invited')"
+  ]
+ }
+]
