@@ -32,10 +32,37 @@ def dims(path):
     h = int(re.search(r'pixelHeight:\s*(\d+)', out).group(1))
     return w, h
 
-# ---------- inline runs ----------
-def runs(text, base=''):
-    text = re.sub(r'\[([^\]]+)\]\([^)]*\)', r'\1', text)   # links -> plain label
+# ---------- anchors, bookmarks and links ----------
+# The contents page links to headings, so every heading gets a bookmark and every
+# [label](#anchor) becomes a real internal hyperlink. Anchor slugs are generated the
+# same way build_prd.py generates HTML heading ids, so one source drives both outputs.
+LINK_RE = re.compile(r'\[([^\]]+)\]\(([^)]+)\)')
+_bm_names, _bm_id, _ext = {}, [0], []
 
+def slug(txt):
+    return re.sub(r'[^a-z0-9]+', '-', txt.lower()).strip('-')
+
+def bmname(sl):
+    # Word bookmark names: start with a letter/underscore, no spaces, <= 40 chars.
+    if sl not in _bm_names:
+        _bm_names[sl] = ('_' + re.sub(r'[^A-Za-z0-9_]', '_', sl))[:40]
+    return _bm_names[sl]
+
+def bookmark(sl):
+    _bm_id[0] += 1
+    n = bmname(sl)
+    return (f'<w:bookmarkStart w:id="{_bm_id[0]}" w:name="{n}"/>',
+            f'<w:bookmarkEnd w:id="{_bm_id[0]}"/>')
+
+def ext_rel(url):
+    rid = f'rIdExt{len(_ext) + 1}'
+    _ext.append((rid, url))
+    return rid
+
+LINKFMT = '<w:color w:val="5464F2"/><w:u w:val="single"/>'
+
+# ---------- inline runs ----------
+def _plain_runs(text, base=''):
     """Turn **bold**, *italic* and `code` into w:r elements."""
     parts = re.split(r'(\*\*[^*]+\*\*|(?<!\*)\*[^*]+\*(?!\*)|`[^`]+`)', text)
     out = []
@@ -52,6 +79,23 @@ def runs(text, base=''):
             body = p[1:-1]
         rpr = f'<w:rPr>{"".join(props)}</w:rPr>' if props else ''
         out.append(f'<w:r>{rpr}<w:t xml:space="preserve">{esc(body)}</w:t></w:r>')
+    return ''.join(out) or '<w:r><w:t/></w:r>'
+
+def runs(text, base=''):
+    """_plain_runs, plus [label](#anchor) as an internal link and [label](url) external."""
+    out, pos = [], 0
+    for m in LINK_RE.finditer(text):
+        if m.start() > pos:
+            out.append(_plain_runs(text[pos:m.start()], base))
+        label, target = m.group(1), m.group(2)
+        inner = _plain_runs(label, base + LINKFMT)
+        if target.startswith('#'):
+            out.append(f'<w:hyperlink w:anchor="{bmname(target[1:])}">{inner}</w:hyperlink>')
+        else:
+            out.append(f'<w:hyperlink r:id="{ext_rel(target)}">{inner}</w:hyperlink>')
+        pos = m.end()
+    if pos < len(text):
+        out.append(_plain_runs(text[pos:], base))
     return ''.join(out) or '<w:r><w:t/></w:r>'
 
 def para(text, style=None, extra=''):
@@ -168,7 +212,10 @@ while i < len(lines):
     elif s.startswith('#'):
         flush_para(); flush_table()
         lvl = len(s) - len(s.lstrip('#'))
-        body.append(para(s[lvl:].strip(), f'Heading{min(lvl,4)}'))
+        htxt = s[lvl:].strip()
+        bs, be = bookmark(slug(htxt))
+        body.append(f'<w:p><w:pPr><w:pStyle w:val="Heading{min(lvl,4)}"/></w:pPr>'
+                    f'{bs}{runs(htxt)}{be}</w:p>')
     elif s.startswith('>'):
         flush_para(); flush_table()
         kind, cbuf = 'NOTE', []
@@ -280,7 +327,11 @@ doc_rels = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'
   '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'
   '<Relationship Id="rIdStyles" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'
   '<Relationship Id="rIdNum" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering" Target="numbering.xml"/>'
-  + ''.join(rels) + '</Relationships>')
+  + ''.join(rels)
+  + ''.join(f'<Relationship Id="{rid}" '
+            'Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink" '
+            f'Target="{esc(url)}" TargetMode="External"/>' for rid, url in _ext)
+  + '</Relationships>')
 
 with zipfile.ZipFile(OUT, 'w', zipfile.ZIP_DEFLATED) as z:
     z.writestr('[Content_Types].xml', content_types)
