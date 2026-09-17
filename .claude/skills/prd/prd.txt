@@ -1,0 +1,461 @@
+================================================================================
+PRD SKILL — WORKING SPECIFICATION
+Status: DRAFT. We finalise this file first, then build the skill from it.
+Last updated: 2026-09-17 (skill BUILT — see 5. STATUS)
+================================================================================
+
+WHAT THIS IS
+--------------------------------------------------------------------------------
+The spec for ONE PRD skill — the only one. The old skill has been removed; this
+file is what replaces it.
+
+It must be a FRAMEWORK, not a one-off: usable on any future project, not just
+webinar.html. So everything below is split into two kinds of thing —
+
+  * what the skill knows permanently  (the document's shape and method)
+  * what the skill learns per project (the product, the persona, the flows)
+
+
+================================================================================
+1. FIXED DECISIONS
+================================================================================
+
+1.1  DELIVERY TARGET: ZOHO WRITER
+     Every PRD this skill produces is designed to land in a Zoho Writer
+     document. The first section is a clickable index, so the heading structure
+     has to survive the import. This is a constraint on the whole pipeline, not
+     just the last step.
+
+1.2  SOURCE OF TRUTH: THE HTML MOCK
+     The PRD is written FROM the mock — webinar.html, the master file — never
+     from memory, a description or a Figma. Every assertion must be checkable
+     against the mock.
+     Generalised: any future project's PRD is written from that project's built
+     prototype.
+
+1.3  APPENDICES AND TABLES ARE EXTRACTED, NEVER TYPED
+     Field tables come out of the DOM. Rule sets are read from the prototype's
+     own constants. This is what stops the document drifting from the product.
+
+1.4  WHERE THE SKILL LIVES
+     Authored and committed at  .claude/skills/prd/  in the project (reviewable,
+     version-controlled, visible in VS Code), then symlinked to
+     ~/.claude/skills/prd  so every future project picks it up automatically.
+     One source, available everywhere.
+
+1.5  ONE SKILL ONLY
+     Verified 2026-09-17: there is no global prd skill and no plugin prd skill.
+     .claude/skills/prd/ is the only one. Old SKILL.md removed.
+
+1.6  *** THE SELF-SUFFICIENCY RULE — THE TEST THE DOCUMENT MUST PASS ***
+     EVERY FLOW MUST BE UNDERSTANDABLE FROM THE DOCUMENT ALONE.
+     A developer reading it must never need to open the mock to answer a
+     question. If they have to, the document has failed.
+     This rule is what forces 2.5 and section 3 below.
+
+
+1.7  *** ALWAYS ASK WHETHER TO LOOK AT A REFERENCE DOC ***
+     Before writing, the skill ALWAYS ASKS the user whether there is a reference
+     document to follow, and whether to go and read it. It never assumes, and it
+     never skips the question.
+     If the user gives one, read it first and match its conventions.
+     Reference doc for house style, read 2026-09-17:
+       "Messages Workflow Doc" (WhatsApp Workflow, 23 pages, 2013 words)
+       https://writer.zoho.in/writer/open/dt5lhf99aa4b27a26476f8efc0986cd06cba0
+       Opens in signed-in Chrome. WebFetch is refused with an
+       "unsupported browser" wall — drive a real browser instead.
+
+
+================================================================================
+2. THE DOCUMENT STRUCTURE
+================================================================================
+
+2.0  STEP 0 — ASK FOR THE INDEXES FIRST
+     Before writing anything, the skill ASKS THE USER for the list of indexes
+     and sub-indexes. The user supplies them. The skill does not invent the
+     structure.
+
+2.1  SECTION 1 — CONTENTS
+     The first section of the document is the index list itself, built from what
+     the user supplied. Clickable in the Writer document.
+
+2.2  SECTION 2 — THE OPENING TRIO  (fixed, always these three, in this order)
+
+       1. What is #product  — the product being integrated with CRM.
+                              A small intro.
+       2. Who uses it       — the range of customers, and the purpose of usage.
+       3. Why this integration, and what it solves.
+
+2.3  SECTION 3 ONWARDS — ONE SECTION PER INDEX, EXPLAINED AS A FLOW
+
+     THE GOVERNING RULE: THE EXPLANATION FOLLOWS THE FLOW.
+
+     A section is a walkthrough in the order the user actually moves through the
+     product — indexes then sub-indexes, in order, with screenshots along the
+     way.
+
+       - Proceed STEP BY STEP IN FLOW ORDER, not as a catalogue of controls.
+       - EACH STEP CARRIES ITS SCREENSHOT, placed where the reader reaches it.
+       - IF AN INDEX CONTAINS MULTIPLE FLOWS, EACH FLOW GETS ITS OWN HEADING
+         and is explained in full before the next begins.
+       - Sub-indexes are the sub-headings, in the order the user supplied them.
+
+2.4  *** WHAT EVERY FLOW MUST CARRY *** (this is the self-sufficiency rule, 1.6,
+     made concrete)
+
+     (a) SCREENSHOTS — at every step, placed where the reader reaches it.
+
+     (b) A FLOWCHART — so the developer can see the whole path at once and
+         construct the code from it. See section 3.
+
+     (c) THE FIELDS, IN FULL, INLINE IN THE FLOW — not only in an appendix.
+         For every field the step presents:
+
+              Field | Type | Required | Default | Options
+
+         - TYPE is named explicitly (text, picklist, multi-select, radio,
+           checkbox, toggle, date, time, date+time, file, lookup, textarea...).
+         - IF THE FIELD HAS OPTIONS, EVERY OPTION IS LISTED — verbatim, in the
+           order the product shows them. Never "picklist (29 options)". The
+           options themselves, pulled from the DOM.
+         - Required-ness and default are stated, not implied.
+
+     (d) THE RULES — what is enforced, what is refused, what blocks a save,
+         error strings quoted verbatim.
+
+     (e) Prose that says what each step does AND WHY IT IS SHAPED THAT WAY.
+         (Reference example: docs/prd/master §4, Co-organisers.)
+
+     (f) Callouts, used only where there is something real to say — never
+         padded to fill a template:
+              > NOTE:     implementation truth a dev would otherwise get wrong
+              > OPEN:     what is not modelled or not decided
+              > USECASE:  a worked example, where one helps
+
+2.5  CLOSING SECTIONS
+     - Things we still need to decide — grouped Blocking / Product /
+       Engineering / Design, plus "Assumptions this document makes" and
+       "Mock defects — do not reproduce".
+     - Appendices — the exhaustive cross-reference, extracted per 1.3.
+       NOTE: with 2.4(c) putting full field tables inline, the appendix's job
+       changes — it becomes the one place to look up any field across the whole
+       product, plus the rule sets read from the prototype's constants.
+       See open item 9.7.
+
+
+2.6  HOUSE STYLE — TAKEN FROM THE REFERENCE DOC (see 1.7)
+     Observed conventions, to follow unless the user says otherwise:
+
+     (a) TITLE, THEN THE DESIGN LINK. The document opens with its title and a
+         "Figma Link" line before anything else — the design source is one click
+         from the top.
+
+     (b) TABLE OF CONTENTS, DECIMAL-NUMBERED AND HYPERLINKED.
+             1. Triggers
+                1.1 Incoming Message Triggers
+                1.2 Outgoing Message Triggers
+             2. Conditions
+             3. Actions
+         Sub-indexes are indented under their index. Every entry is a link.
+
+     (c) INTRODUCTION states what the thing does, then "It can handle cases such
+         as:" with a bulleted list of real scenarios.
+
+     (d) EACH SECTION OPENS BY SAYING HOW IT DIVIDES:
+             "The Trigger section is divided into four categories: 1... 2..."
+         The reader knows the shape of the section before the detail starts.
+
+     (e) AN EXPLICIT FLOW-DIAGRAM SUB-SECTION, titled
+             "<Section> - Options Flow Diagram"
+         with the line "To get the complete context of the flow, please refer to
+         the flow diagram." This CONFIRMS section 3: flow diagrams are house
+         style already, not something we are inventing.
+
+     (f) PER OPTION, ALWAYS THE SAME FOUR BEATS:
+             1. the option name, bold
+             2. what it does / when it fires
+             3. "Sample Use case:" — a concrete scenario in prose
+             4. a SCREENSHOT OF THE REAL UI WITH THE DROPDOWN OPEN, showing
+                every option in place
+         Note (3): "Sample Use case" is already a convention, and build_prd.py
+         already has the > USECASE: marker for it. They line up.
+         Note (4): this is how options get shown visually — the picklist is
+         captured OPEN. That is in addition to listing them as text, not instead.
+
+     (g) FIELD TABLES, green header row:
+             Trigger Name | Field Name | Field Type
+         with numbered lists inside the cells.
+
+     (h) THE SAME FIELDS THEN RESTATED AS A GLOSSARY, type in parentheses:
+             "Message Content - What the message says (Multiline text)"
+             "Message Received From - Who sent it (LookUp)"
+         The table gives the shape; the glossary gives the meaning.
+
+     (i) OPERATOR / OPTION TABLES enumerate everything:
+             Field Name | Filter | Contact or Lead Name | Options
+         Every operator listed (Is, Isn't, Contains, Doesn't Contain, Starts
+         with, Ends with, Anyone) and every option listed. No counts.
+
+     (j) CONDITIONAL UI SPELLED OUT under a heading like "Operator Behavior":
+             "If the user selects any option other than 'Anyone', a text box
+              will appear... After entering the value, the user must specify
+              the module."
+         What appears, when, and what the user must do next.
+
+     (k) SCOPING STATEMENTS ARE MADE OPENLY:
+             "Since all the fields, except X and Y, follow the same flow based
+              on their field type, I will explain the flow of these two fields
+              in this document."
+         The document says what it is NOT covering, and why.
+
+     (l) AN "In short" PARAGRAPH closes a comparison, naming the one real
+         difference between two similar things.
+
+     (m) Explanatory annotation is set in blue; UI names are bold.
+
+     WHERE WE GO FURTHER THAN THE REFERENCE (industry standard, and 1.6):
+       - Field tables also carry REQUIRED and DEFAULT, not just name and type.
+       - Options are listed as TEXT as well as shown in an open-dropdown
+         screenshot, so they can be copied, searched and diffed.
+       - > NOTE: and > OPEN: callouts, and the closing "what we still need to
+         decide" section, which the reference has no equivalent of.
+
+
+================================================================================
+3. FLOWCHARTS AND THE FLOWCHART AGENT
+================================================================================
+
+3.1  WHY
+     A flowchart lets the developer see the entire path at once — the branches,
+     the blocking conditions, the states — and build the code from it. Prose and
+     screenshots show the happy path a step at a time; the chart shows the
+     shape.
+
+3.2  SCOPE — one flowchart per flow, wherever a flow is chartable.
+     Chart the decision points, not the decoration: entry point, each step,
+     every branch (with its condition), every terminal state, and what blocks
+     progress.
+
+3.3  THE FLOWCHART AGENT
+     A dedicated subagent — ".claude/agents/flowchart.md" — whose only job is
+     producing the chart for a flow. The skill hands it the flow (steps,
+     branches, conditions) and it returns a rendered image the document embeds.
+     It builds the chart on an ONLINE SERVICE rather than drawing by hand.
+
+3.4  WHICH ONLINE SERVICE — NOT YET DECIDED. Candidates:
+
+     (a) mermaid.ink — write Mermaid, encode it in a URL, fetch a rendered
+         PNG/SVG. No account, no browser, scriptable, diffable source.
+         RECOMMENDED unless you want something hand-editable.
+     (b) mermaid.live — the same language with a visual editor to tweak in.
+     (c) draw.io / diagrams.net — hand-editable, richer styling, but needs the
+         browser driven and the file exported.
+     (d) Excalidraw — hand-drawn look, shareable link.
+     (e) Miro — an MCP is available in this session (currently unauthenticated);
+         collaborative, but heavier and account-bound.
+
+     Whatever we pick must produce an IMAGE FILE, because the chart has to
+     survive the import into Zoho Writer. A link alone is not enough.
+
+3.5  KEEP THE CHART SOURCE. The chart's source text (Mermaid or equivalent) is
+     saved next to the figures so a chart can be regenerated when the flow
+     changes, rather than redrawn.
+
+3.6  OPEN: does the agent also get used to REVIEW a flow — i.e. can it tell us
+     the prose missed a branch? Worth considering; not decided.
+
+
+================================================================================
+4. THE MARKER LANGUAGE  (already in build_prd.py — keep, and extend)
+================================================================================
+
+     # / ## / ###        headings
+     ![[file.jpg]]       figure, auto-numbered "Figure N"
+     ![[file.jpg|cap]]   figure with an explicit caption
+     > NOTE: ...         build-detail callout
+     > OPEN: ...         unresolved-question callout
+     > USECASE: ...      worked example
+     | a | b |           table (first row of a run is the header)
+     - item / 1. item    bullets and numbered items
+     inline              **bold**  *italic*  `code`  [text](url)
+
+     TO ADD: a flowchart marker. Either treat a chart as an ordinary figure
+     (simplest — it is already a PNG), or give it its own marker so it can be
+     captioned and numbered as "Flow N" separately from "Figure N".
+     See open item 9.8.
+
+
+================================================================================
+5. SKILL ARCHITECTURE
+================================================================================
+
+     .claude/skills/prd/
+       SKILL.md              the method: structure, workflow, writing rules
+       prd.txt               THIS FILE — the spec we are finalising
+       references/
+         structure.md        section skeleton + flow anatomy, in full
+         markers.md          the source markup language
+         capture.md          driving a prototype, capturing figures, the traps
+         fields.md           how to extract field/type/options from the DOM
+         flowcharts.md       how to brief the flowchart agent; chart conventions
+       scripts/
+         shoot.mjs           headless-Chrome capture driver, reads shots.json
+         build_prd.py        prd-source.md -> self-contained prd.html
+         build_docx.py       prd-source.md -> .docx with real Heading styles
+
+     .claude/agents/
+       flowchart.md          the flowchart agent (section 3)
+
+     SKILL.md stays short — method and workflow. Long material lives in
+     references/ and is read only when that phase is reached.
+
+     STATUS 2026-09-17: BUILT. SKILL.md, all five references/, scripts/ and
+     .claude/agents/flowchart.md are written. Symlinked to ~/.claude/skills/prd
+     and ~/.claude/agents/flowchart.md — both resolve back into this repo.
+     Verified: all three scripts compile; build_docx.py is stdlib-only (it
+     writes the zip itself, no python-docx needed); a smoke build produced a
+     prd.html with a base64 figure numbered "Figure 1" and a smoke.docx whose
+     headings are real Heading1/Heading2 styles with the image in word/media/.
+
+
+================================================================================
+6. PROJECT-AGNOSTIC vs PROJECT-SPECIFIC
+================================================================================
+
+     LIVES IN THE SKILL (never changes) | LEARNED PER PROJECT
+     -----------------------------------+-------------------------------------
+     Section skeleton + opening trio    | The index list (asked in Step 0)
+     Flow-order rule, flow anatomy      | The product, persona, domain terms
+     Self-sufficiency rule (1.6)        | The prototype file and entry points
+     Field-table format + extraction    | Which fields exist, and their options
+     Flowchart conventions + the agent  | The actual flows and their branches
+     The marker language, build scripts | shots.json — the click paths
+     Capture method + the trap list     | Which constants to extract
+
+     Project context is read from the project's own CLAUDE.md where one exists
+     (this repo already carries persona, concepts and terminology). The skill
+     asks only about what is missing.
+
+
+================================================================================
+7. WORKFLOW THE SKILL RUNS
+================================================================================
+
+     1. Ask for the indexes and sub-indexes. Confirm the list before writing.
+     2. Read project context — CLAUDE.md, design rules; ask about gaps.
+     3. Walk the prototype flow by flow, in index order. For each flow, record
+        BOTH:
+          - the click path for every screenshot -> shots.json
+          - the flow's steps, branches and conditions -> the flowchart brief
+     4. Extract the fields for each step from the DOM — name, type, required,
+        default, and every option verbatim.
+     5. Capture — serve the mock, run shoot.mjs shots.json, downscale to web
+        JPEGs, COMPARE MD5s (identical hashes mean a step silently failed).
+     6. Generate the flowcharts via the flowchart agent; save chart source and
+        rendered image.
+     7. Write prd-source.md in flow order — screenshots, flowchart and field
+        tables placed at the step they belong to.
+     8. Extract the appendices from the DOM and the prototype's constants.
+     9. Build prd.html and .docx.
+    10. Deliver to Zoho Writer and hand back the link.
+
+
+================================================================================
+8. WHAT WE ALREADY KNOW ABOUT THE MACHINERY
+================================================================================
+
+     - build_prd.py was BYTE-IDENTICAL across all three docs/prd generations
+       AND the old skill — four copies of the same 6656-byte file. It never
+       changed; it was copied forward. The skill owns it once now.
+     - build_docx.py likewise (14315 bytes, three copies).
+     - shots.json is the reusable invention: a declarative list of
+         [{ "file": "01-x.png", "steps": ["expr", "expr"] }]
+       giving the click path to every figure. This is what makes captures
+       reproducible.
+     - docs/prd/master/screens (66 PNG) and screens-web (66 JPG) are KEPT —
+       we will need them.
+     - PRECEDENT FOR 2.4(c): docs/prd/current's field tables already list every
+       picklist's actual options rather than a count. A first pass wrote
+       "Picklist (29 options)" and it was rightly rejected. That is now the
+       standing rule.
+
+     CAPTURE TRAPS (from docs/prd/master/README.md — these cost real time):
+     - Identical md5s across a batch mean a step silently failed. Check every
+       run.
+     - openSettingsModal() alone shows the settings grid, not the integration
+       panels — follow it with integOpenZoho().
+     - React pages render a tick late; an --eval reading innerText immediately
+       gets "". Return a Promise and wait ~1.2s.
+     - setupStep(n) smooth-scrolls the new step into view, so the panel is
+       already scrolled — set scrollTop explicitly for a top-of-step shot.
+     - The create form's scroller maxes at ~770px: Preferences, Reminders and
+       Follow-Ups all land in one screenful.
+     - The completed record's scroller maxes at ~3812px. Use the related-list
+       rail (__clickRelated) to reach Polls and Q&A; Webinar Revenue is NOT in
+       the rail — scroll to ~1380 after clicking its band.
+     - The Send Invite picker has two internal steps: tick rows, Add (commits),
+       then Next. Clicking Next first does nothing.
+
+
+================================================================================
+9. STILL OPEN — TO FINALISE BEFORE BUILDING
+================================================================================
+
+9.1  >>> THE USER MAY HAVE MORE TO SPECIFY. <<<
+
+9.2  ZOHO WRITER DELIVERY MECHANISM — three candidates:
+       (a) zoho-writer MCP Create_Document — blocked last time by a 15 KB
+           create-from-text limit.
+       (b) .docx imported by hand — proven, one manual step, keeps headings
+           and images.
+       (c) deploy prd.html, import by URL — what actually worked last time.
+     Recommendation: (b) as the default, (a) proved out as a convenience.
+     NOT YET CONFIRMED.
+
+9.3  WHICH ONLINE FLOWCHART SERVICE (3.4). DECIDED: mermaid.ink.
+     VERIFIED WORKING 2026-09-17 — base64 the .mmd into the URL, get a PNG back.
+     HTTP 200, 23 KB, legible. Two things learned:
+       - A malformed diagram returns an ERROR BODY WITH HTTP 200, so always
+         check `file` says "PNG image data".
+       - `flowchart TD` on a linear flow goes absurdly tall: a 7-node chart came
+         back 1200 x 2805, unusable on a page. Use LR for linear/long flows,
+         aim for 3:2 to 2:1 landscape, width=1000.
+
+9.4  FIGURES ON A NON-VISUAL PROJECT — required / pluggable / optional?
+     Recommendation: build for the web-mock case now, generalise later.
+
+9.5  Do the three existing docs/prd/* generations keep their forked scripts, or
+     get pointed at the skill's copies?
+
+9.6  Does the skill write a fresh PRD each time, or update an existing one in
+     place? And when the mock changes, does it re-capture everything or only
+     the affected shots?
+
+9.7  With full field tables now inline in each flow (2.4c), does Appendix A
+     ("every field in the create form") still earn its place, or does it become
+     pure duplication? Options: keep it as the cross-product lookup, cut it, or
+     reduce it to the rule sets only.
+
+9.8  Flowchart marker (section 4): plain figure, or its own "Flow N" numbering?
+
+
+================================================================================
+10. VERIFICATION (how we will know the skill works)
+================================================================================
+
+     - Run it end to end on webinar.html for a SMALL index list (2-3 indexes):
+       it asks for indexes first; Contents renders; the opening trio is present;
+       each section reads in flow order with figures at the right steps.
+     - THE SELF-SUFFICIENCY TEST (1.6): pick a flow, read only the document, and
+       answer — what fields does this step have, what type is each, what are the
+       options, what blocks a save? If the mock has to be opened, it failed.
+     - node scripts/shoot.mjs on a 3-shot json -> three distinct PNGs
+       (md5s MUST differ).
+     - The flowchart agent returns a rendered image for a flow, and its source
+       is saved alongside.
+     - build_prd.py -> an html that opens standalone, figures inlined and
+       numbered.
+     - build_docx.py -> a docx whose headings are real Heading styles; imported
+       into Writer with the index clickable AND THE FLOWCHARTS VISIBLE.
+     - Symlink check: ~/.claude/skills/prd resolves into the repo, and the skill
+       is listed from a different project directory.
