@@ -376,10 +376,10 @@ fields above except Registration Type — and reveals three others instead:
 | Display attendee list to all | Checkbox | — | — |
 | Use Emoji reactions | Checkbox | — | — |
 | Post webinar Re-direction | Checkbox | — | — |
-| 1st Reminder | Picklist | 15 mins before the webinar | 2/5/10/15/30 mins, 1/2/6/12 hrs, 1/2 days before the webinar |
+| 1st Reminder | Picklist | 15 mins before the webinar | 2/5/10/15/30 mins, 1/2/6/12 hours, 1 day, 1 week before the webinar |
 | 2nd Reminder | Picklist | **None** | **None**, then the same eleven intervals |
 | 3rd Reminder | Picklist | **None**, then the same eleven intervals |
-| Send Follow-up Email to Attendees | Picklist | 2 mins after the webinar ends | None, 2/5/10/15/30 mins, 1/2/6/12 hrs, 1/2 days after the webinar ends |
+| Send Follow-up Email to Attendees | Picklist | 2 mins after the webinar ends | None, 2/5/10/15 mins, 1/2/6 hours, 1 day after the webinar ends |
 | Send Follow-up Email to Absentees | Picklist | 2 mins after the webinar ends | same as above |
 | Include Recording for Attendees | Checkbox | unchecked | — |
 | Include Recording for Absentees | Checkbox | unchecked | — |
@@ -1107,9 +1107,9 @@ at all, not merely disabled.
 | Moderation Type | Automatic Moderation · Manual Moderation |
 | Allow/deny registrants from specific countries | No Restrictions · Allow registrants from Countries · Block registrants from Countries |
 | Allow/Block Specific Domains | No Restriction · Allow specific email domains · Block specific email domains |
-| 1st Reminder | 2 mins · 5 mins · 10 mins · 15 mins · 30 mins · 1 hr · 2 hrs · 6 hrs · 12 hrs · 1 day · 2 days — *before the webinar* |
+| 1st Reminder | 2 mins · 5 mins · 10 mins · 15 mins · 30 mins · 1 hour · 2 hours · 6 hours · 12 hours · 1 day · 1 week — *before the webinar* |
 | 2nd / 3rd Reminder | **None** + the same eleven intervals |
-| Send Follow-up to Attendees / Absentees | **None** · 2 mins · 5 mins · 10 mins · 15 mins · 30 mins · 1 hr · 2 hrs · 6 hrs · 12 hrs · 1 day · 2 days — *after the webinar ends* |
+| Send Follow-up to Attendees / Absentees | **None** · 2 mins · 5 mins · 10 mins · 15 mins · 1 hour · 2 hours · 6 hours · 1 day — *after the webinar ends* (note: no 30 mins and no 12 hours here, unlike the reminder list) |
 
 ## Integration constants
 
