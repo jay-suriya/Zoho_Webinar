@@ -20163,10 +20163,22 @@ function DealsTableEditable({ title, deals, editable, onPanelOpen, showBulkActio
 }
 const STAGE_OPTIONS = ["Qualification", "Needs Analysis", "Value Proposition", "Identify Decision Makers", "Perception Analysis", "Proposal Sent", "Negotiation", "Closed Won", "Closed Lost"];
 
+// Linear attribution is the default model: a deal's revenue is split evenly across the
+// webinars that influenced it, so this webinar's share is the amount over that count.
+// touchpoints on a deal is how many webinars touched it; 1 means this one closed it alone.
+function dealAttributedAmount(d) {
+  const amt = parseFloat(String(d.amount).replace(/[^0-9.]/g, '')) || 0;
+  const n = d.touchpoints || 1;
+  const share = Math.round((amt / n) * 100) / 100;
+  // no thousands separator, so it sits beside the raw Amount strings without looking odd
+  return "$" + String(share);
+}
+
 // Column definitions for Deals tables (Deals Won + Deals in Pipeline)
 const DEAL_COL_DEFS = {
   dealName:    { label: "Deal Name",    get: d => d.dealName },
   amount:      { label: "Amount",       get: d => d.amount },
+  attributedAmount: { label: "Attributed Amount", get: d => dealAttributedAmount(d) },
   stage:       { label: "Stage",        get: d => d.stage },
   accountName: { label: "Account Name", get: d => d.accountName },
   contactName: { label: "Contact Name", get: d => d.contactName },
@@ -20176,9 +20188,9 @@ const DEAL_COL_DEFS = {
   source:      { label: "Source",       get: d => d.source || "LinkedIn" }
 };
 const DEAL_LOCKED_KEYS = ["dealName", "amount"]; // can't be hidden
-const DEALS_WON_DEFAULT_COLS      = ["dealName", "amount", "stage", "accountName", "contactName"];
-const DEALS_PIPELINE_DEFAULT_COLS = ["dealName", "amount", "stage", "accountName", "contactName", "probability"];
-const DEAL_ALL_COL_KEYS = ["dealName", "amount", "stage", "accountName", "contactName", "probability", "createdDate", "owner", "source"];
+const DEALS_WON_DEFAULT_COLS      = ["dealName", "amount", "attributedAmount", "stage", "accountName", "contactName"];
+const DEALS_PIPELINE_DEFAULT_COLS = ["dealName", "amount", "attributedAmount", "stage", "accountName", "contactName", "probability"];
+const DEAL_ALL_COL_KEYS = ["dealName", "amount", "attributedAmount", "stage", "accountName", "contactName", "probability", "createdDate", "owner", "source"];
 
 // Reusable column picker panel for the deals tables (mirrors ColPickerPanel pattern but scoped to deals)
 function DealColPickerPanel({ draft, setDraft, dragIdx, setDragIdx, onSave, onClose }) {
@@ -21811,6 +21823,7 @@ function OverviewTab({
     id: 1,
     dealName: "Jayas Enterprises",
     amount: "$1000",
+    touchpoints: 1,
     stage: "Closed Won",
     accountName: "Jayas Co",
     contactName: "Contact1",
@@ -21821,6 +21834,7 @@ function OverviewTab({
     id: 2,
     dealName: "Suriya Solutions",
     amount: "$1500",
+    touchpoints: 3,
     stage: "Closed Won",
     accountName: "Suriya Ltd",
     contactName: "Contact2",
@@ -21831,6 +21845,7 @@ function OverviewTab({
     id: 3,
     dealName: "Sekar Industries",
     amount: "$2000",
+    touchpoints: 2,
     stage: "Closed Won",
     accountName: "Sekar Inc",
     contactName: "Contact3",
@@ -21841,6 +21856,7 @@ function OverviewTab({
     id: 7,
     dealName: "Ravi Tech",
     amount: "$3200",
+    touchpoints: 1,
     stage: "Closed Won",
     accountName: "Ravi Corp",
     contactName: "Ravi M.",
@@ -21851,6 +21867,7 @@ function OverviewTab({
     id: 8,
     dealName: "Priya Analytics",
     amount: "$2800",
+    touchpoints: 4,
     stage: "Closed Won",
     accountName: "PA Group",
     contactName: "Priya S.",
@@ -21861,6 +21878,7 @@ function OverviewTab({
     id: 9,
     dealName: "Anand Retail",
     amount: "$1800",
+    touchpoints: 2,
     stage: "Closed Won",
     accountName: "Anand Co",
     contactName: "Anand K.",
@@ -21871,6 +21889,7 @@ function OverviewTab({
     id: 10,
     dealName: "Meena Cloud",
     amount: "$4500",
+    touchpoints: 3,
     stage: "Closed Won",
     accountName: "Meena Tech",
     contactName: "Meena R.",
@@ -21882,6 +21901,7 @@ function OverviewTab({
     id: 4,
     dealName: "Jayas Digital",
     amount: "$1200",
+    touchpoints: 1,
     stage: "Proposal Sent",
     accountName: "Jayas Co",
     contactName: "Contact1",
@@ -21892,6 +21912,7 @@ function OverviewTab({
     id: 5,
     dealName: "Suriya Logistics",
     amount: "$900",
+    touchpoints: 3,
     stage: "Negotiation",
     accountName: "Suriya Ltd",
     contactName: "Contact2",
@@ -21902,6 +21923,7 @@ function OverviewTab({
     id: 6,
     dealName: "Sekar Consulting",
     amount: "$750",
+    touchpoints: 2,
     stage: "Proposal Sent",
     accountName: "Sekar Inc",
     contactName: "Contact3",
@@ -21912,6 +21934,7 @@ function OverviewTab({
     id: 11,
     dealName: "Karan Fintech",
     amount: "$2200",
+    touchpoints: 1,
     stage: "Proposal Sent",
     accountName: "Karan Group",
     contactName: "Karan P.",
@@ -21922,6 +21945,7 @@ function OverviewTab({
     id: 12,
     dealName: "Divya Healthcare",
     amount: "$3100",
+    touchpoints: 4,
     stage: "Negotiation",
     accountName: "Divya Med",
     contactName: "Divya N.",
@@ -21932,6 +21956,7 @@ function OverviewTab({
     id: 13,
     dealName: "Ramesh Motors",
     amount: "$1400",
+    touchpoints: 2,
     stage: "Negotiation",
     accountName: "Ramesh Auto",
     contactName: "Ramesh T.",
@@ -21942,6 +21967,7 @@ function OverviewTab({
     id: 14,
     dealName: "Lakshmi Pharma",
     amount: "$5000",
+    touchpoints: 3,
     stage: "Closed Won",
     accountName: "Lakshmi Labs",
     contactName: "Lakshmi B.",
@@ -21952,6 +21978,7 @@ function OverviewTab({
     id: 15,
     dealName: "Arjun Software",
     amount: "$2600",
+    touchpoints: 1,
     stage: "Closed Lost",
     accountName: "Arjun Tech",
     contactName: "Arjun V.",
@@ -21962,6 +21989,7 @@ function OverviewTab({
     id: 16,
     dealName: "Pooja Exports",
     amount: "$1700",
+    touchpoints: 3,
     stage: "Closed Lost",
     accountName: "Pooja Intl",
     contactName: "Pooja G.",
@@ -21972,6 +22000,7 @@ function OverviewTab({
     id: 17,
     dealName: "Vishnu Constructions",
     amount: "$3800",
+    touchpoints: 2,
     stage: "Closed Lost",
     accountName: "Vishnu Builders",
     contactName: "Vishnu C.",
@@ -21982,6 +22011,7 @@ function OverviewTab({
     id: 18,
     dealName: "Nithya Events",
     amount: "$1100",
+    touchpoints: 1,
     stage: "Waiting for Manager",
     accountName: "Nithya Co",
     contactName: "Nithya A.",
@@ -21992,6 +22022,7 @@ function OverviewTab({
     id: 19,
     dealName: "Sathish Realty",
     amount: "$4200",
+    touchpoints: 4,
     stage: "Waiting for Manager",
     accountName: "Sathish Props",
     contactName: "Sathish R.",
@@ -22002,6 +22033,7 @@ function OverviewTab({
     id: 20,
     dealName: "Deepa Media",
     amount: "$2900",
+    touchpoints: 2,
     stage: "Waiting for Manager",
     accountName: "Deepa Studios",
     contactName: "Deepa L.",
@@ -22012,6 +22044,7 @@ function OverviewTab({
     id: 21,
     dealName: "Mani Telecom",
     amount: "$1600",
+    touchpoints: 3,
     stage: "Waiting for Manager",
     accountName: "Mani Networks",
     contactName: "Mani S.",

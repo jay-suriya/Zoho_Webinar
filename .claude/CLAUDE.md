@@ -125,6 +125,26 @@ re-flowing those features so they work naturally *from inside* Zoho CRM.
 
 Reverse-chronological. Each entry: date, one-line summary, why.
 
+- 2026-09-29 — **Deals Won and Deals in Pipeline show an Attributed Amount.** The two tables
+  in a completed webinar's **Webinar Revenue** section printed only the deal's full `amount`,
+  which is the wrong number for a webinar detail page: the deal is the account's, but only a
+  share of it belongs to *this* webinar. A new **Attributed Amount** column sits immediately
+  right of Amount in both tables — in `DEAL_COL_DEFS`, and inserted after `"amount"` in
+  `DEALS_WON_DEFAULT_COLS`, `DEALS_PIPELINE_DEFAULT_COLS` and `DEAL_ALL_COL_KEYS`, so it is
+  on by default and can be hidden or reordered in the column picker like any other. It is
+  **not** added to `DEAL_LOCKED_KEYS`; Deal Name and Amount remain the only two that cannot
+  be hidden. The share is computed by `dealAttributedAmount()` under **Linear** — the model
+  the integration selects by default — from a new `touchpoints` field giving how many webinars
+  influenced that deal, so `$1500` over 3 touchpoints reads `$500` and a deal with one
+  touchpoint reads its full amount. All 21 deals in `dealsWon` and `dealsInPipeline` carry a
+  count (cycled 1,3,2,1,4,2,3), which is why several rows show the full amount — those are
+  single-touch deals, not a bug. Formatting deliberately has **no thousands separator**: the
+  existing `amount` values are hand-written strings like `"$1000"`, and `toLocaleString`
+  rendered `$1,000` right beside `$1000` in the same row. **Known inconsistency left alone:**
+  the ROI tiles above (Revenue (Won), In Pipeline, Revenue / Attendee) still total the full
+  `amount`, so they do not agree with the attributed column beneath them — changing them would
+  alter the figures the PRD documents, and the ask was for a column. Why: the user asked for
+  an attributed amount beside Amount in both deals tables.
 - 2026-09-16 — **An invited address stays in its own box; it is never a checkbox row.**
   A person typed into **Invite by email address** is not a directory entry, so listing them
   back as a ticked row — the old "Invited by email" group, and a row in **Selected** — made
